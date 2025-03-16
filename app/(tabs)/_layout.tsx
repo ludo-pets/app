@@ -1,23 +1,29 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { Platform } from 'react-native';
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+//temporarily using this imports to test the game tab bar
+import { Platform, Text } from 'react-native';
+import { PlatformPressable } from "@react-navigation/elements"
+import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const Colors = {
+    light: {
+      tint: '#000',
+    },
+    dark: {
+      tint: '#fff',
+    },
+  };
+  const colorScheme = "light";
 
   return (
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
+        tabBarButton: (props:BottomTabBarButtonProps ) => (<PlatformPressable  {...props} onPressIn={ (ev) => (props.onPressIn && props.onPressIn(ev)) }/>),
+        tabBarBackground: undefined,
         tabBarStyle: Platform.select({
           ios: {
             // Use a transparent background on iOS to show the blur effect
@@ -30,14 +36,14 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarIcon: ({ color }) => (<Text></Text>),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="NailTrim"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Nail Trim',
+          tabBarIcon: ({ color }) => (<Text> &#127918;</Text>),
         }}
       />
     </Tabs>
