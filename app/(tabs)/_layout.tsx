@@ -20,7 +20,7 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: "#000",
         headerShown: false,
         tabBarButton: (props:BottomTabBarButtonProps ) => (<PlatformPressable  {...props} onPressIn={ (ev) => (props.onPressIn && props.onPressIn(ev)) }/>),
         tabBarBackground: undefined,
