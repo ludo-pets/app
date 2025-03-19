@@ -4,3 +4,4 @@ export interface Nail {
     rotation: `${string}deg`;
     isTrimmed: boolean;
 }
+export type NailProgress = { [key: number]: number };
