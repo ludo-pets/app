@@ -7,12 +7,13 @@ import Svg, { Circle } from "react-native-svg";
 
 const { width, height } = Dimensions.get("window");
 const nailsSet: Nail[] = [
-    { id: 1, position: { x: 14, y: 73 }, rotation: "0deg", isTrimmed: false },
-    { id: 2, position: { x: 18, y: 67 }, rotation: "0deg", isTrimmed: false },
-    { id: 3, position: { x: 30, y: 65 }, rotation: "50deg", isTrimmed: false },
-    { id: 4, position: { x: 48, y: 67 }, rotation: "45deg", isTrimmed: false },
+    { id: 1, position: { x: 15, y: 74 }, rotation: "90deg", isTrimmed: false },
+    { id: 2, position: { x: 20, y: 68 }, rotation: "0deg", isTrimmed: false },
+    { id: 3, position: { x: 29, y: 66 }, rotation: "50deg", isTrimmed: false },
+    { id: 4, position: { x: 49, y: 69}, rotation: "45deg", isTrimmed: false },
 ];
 const trimmer_initial_position = { x: 0, y: 0 };
+let trimmer_current_position = { x: 0, y: 0 };
 const nailSize = width / 6;
 const pawSize = width;
 
@@ -29,7 +30,7 @@ export default function NailTrimGame() {
     const intervalRef = useRef<{ [key: string]: NodeJS.Timeout | null }>({});
 
     const handleGesture = (e: PanGestureHandlerGestureEvent) => {
-        setTrimmer({ x: e.nativeEvent.translationX, y: e.nativeEvent.translationY });
+        setTrimmer({ x:trimmer_current_position.x + e.nativeEvent.translationX, y: trimmer_current_position.y + e.nativeEvent.translationY });
 
         nails.forEach((nail) => {
             if (nail.isTrimmed) return;
@@ -38,15 +39,13 @@ export default function NailTrimGame() {
             const nailY = (height * nail.position.y) / 100;
             const nailCenterX = nailX + nailSize / 2;
             const nailCenterY = nailY + nailSize / 2;
-            const trimmerCenterX = e.nativeEvent.translationX + nailSize / 2;
-            const trimmerCenterY = e.nativeEvent.translationY + nailSize / 2;
+            const trimmerCenterX = e.nativeEvent.translationX + trimmer_current_position.x + nailSize / 2;
+            const trimmerCenterY = e.nativeEvent.translationY + trimmer_current_position.y +nailSize / 2;
             const distance = Math.sqrt(
                 (nailCenterX - trimmerCenterX) ** 2 + (nailCenterY - trimmerCenterY) ** 2
             );
 
             if (distance < nailSize / 2) {
-                console.log("trimming nail", nail.id);
-
                 if (!trimmerTimeout.current[nail.id]) {
                     let progress = 0;
                     const intervalTIme = CUT_TIME / 50;
@@ -75,7 +74,6 @@ export default function NailTrimGame() {
                     clearInterval(intervalRef.current[nail.id]!);
                     trimmerTimeout.current[nail.id] = null;
                     setNailProgress((prev) => ({ ...prev, [nail.id]: 0 }));
-                    console.log("timeout canceled for nail", nail.id);
                 }
             }
         });
@@ -107,6 +105,7 @@ export default function NailTrimGame() {
                 nail && (
                     <Animated.View key={nail.id} style={{ position: "absolute" }}>
                         <Animated.Image
+
                             style={{
                                 position: "absolute",
                                 width: nailSize,
@@ -116,6 +115,7 @@ export default function NailTrimGame() {
                                 resizeMode: "contain",
                                 transform: nail.id == 4 ? [{ rotate: nail.rotation }] : undefined,
                             }}
+
                             source={
                                 nail.isTrimmed
                                     ? require("@/assets/images/minigames/nail-trimmer/nail-short.png")
@@ -124,23 +124,25 @@ export default function NailTrimGame() {
                         />
                         {nailProgress[nail.id] > 0 && !nail.isTrimmed && (
                             <Svg 
-                                height={nailSize * 1.5} 
-                                width={nailSize * 1.5} 
-                                viewBox={`0 0 ${nailSize * 1.5} ${nailSize * 1.5}`}
+                                height={nailSize } 
+                                width={nailSize } 
+                                viewBox={`0 0 ${nailSize * 2} ${nailSize * 2}`}
+                                
                                 style={{
                                     position: "absolute",
-                                    top: (height * nail.position.y) / 100 * 0.85,
-                                    left: (width * nail.position.x) / 100* 0.95
+                                    top: (height * nail.position.y) / 100 * 0.95,
+                                    left: (width * nail.position.x) / 100,
+                                    overflow: "visible",
                                 }}>
                                 <Circle 
-                                    cx={nailSize * 1.5 / 2}
-                                    cy={nailSize* 1.5 / 2}
-                                    r={nailSize * 1.5 / 2 - 2}
+                                    cx={nailSize / 2}
+                                    cy={nailSize / 2}
+                                    r={nailSize / 2 - 2}
                                     stroke="lightblue"
                                     strokeWidth="10"
                                     fill="none"
-                                    strokeDasharray={Math.PI * nailSize * 1.5}
-                                    strokeDashoffset={Math.PI * nailSize * 1.5- (Math.PI * nailSize * 1.5 * nailProgress[nail.id]) / 100}
+                                    strokeDasharray={Math.PI * nailSize }
+                                    strokeDashoffset={Math.PI * nailSize - (Math.PI * nailSize * nailProgress[nail.id]) / 100}
                                     strokeLinecap="round"/>
                             </Svg>
                         )}
@@ -149,7 +151,8 @@ export default function NailTrimGame() {
             ))}
             <PanGestureHandler 
                 onGestureEvent={(e) => handleGesture(e)}
-                onHandlerStateChange={(e: PanGestureHandlerGestureEvent)=> e.nativeEvent.state == State.END && setTrimmer(trimmer_initial_position)}
+                onHandlerStateChange={(e: PanGestureHandlerGestureEvent)=> {
+                    if(e.nativeEvent.state == State.END)  trimmer_current_position = trimmer}}
                 >
                 <Animated.Image
                     source={require("@/assets/images/minigames/nail-trimmer/trimmer-open.png")}
