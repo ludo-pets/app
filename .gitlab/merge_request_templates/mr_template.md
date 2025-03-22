@@ -2,11 +2,11 @@
 
 %{first_multiline_commit}
 
-## *Screenshots*
+## _Screenshots_
 
-| Antes | Depois  |
-| ------ | ------ |
-|        |        |
+| Antes | Depois |
+| ----- | ------ |
+|       |        |
 
 ## Como configurar e validar localmente?
 
@@ -20,7 +20,7 @@ Exemplo:
 ```
 !-->
 
-## *Checklist* de aceitação do MR
+## _Checklist_ de aceitação do MR
 
 Avalie se o MR está em conformidade com [MR acceptance checklist](https://docs.gitlab.com/development/code_review/#acceptance-checklist).
 Isso evita riscos na qualidade, performance, confiabilidade e segurança.
