@@ -6,7 +6,7 @@ export default function StartGameDialog({startGame}: {startGame: (value: boolean
         <Animated.View style={style.overlay}>
             <Animated.View style={style.startDialog}>
                 <Text style={style.dialogText}>
-                    Arraste o cortador para cima das unhas de seu gatinho para corta-las
+                    Arraste o cortador para cima das unhas de seu gatinho para cortá-las
                 </Text>
                 <TouchableOpacity
                     style={style.dialogButton}
@@ -54,7 +54,7 @@ const style = StyleSheet.create({
         borderRadius: 10,
         boxShadow: "2px 2px 4px 0px rgba(0,0,0,0.2)",
         alignItems: "center",
-        width: "50%",
+        width: "60%",
         fontFamily: "Roboto",
     },
     dialogText: {
@@ -64,5 +64,10 @@ const style = StyleSheet.create({
         width: "80%",
         wordWrap: "break-word",
     },
-    buttonText: {}
+    buttonText: {
+        fontFamily: "Roboto",
+        fontSize: 25,
+        fontWeight: 500,
+        color: "#5B5B5B",
+    }
 })

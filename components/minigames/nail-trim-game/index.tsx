@@ -45,13 +45,16 @@ const styles = StyleSheet.create({
         alignItems:"center",
         justifyContent:"center",
         paddingRight: 10,
-        paddingLeft:10
+        paddingLeft:10,
+        position: "relative",
     },
     icon:{
         width: width / 10,
         height: width / 10,
         flexGrow: 1,
-        opacity:0.6
+        opacity:0.6,
+        position: "absolute",
+        left: width / 20,
     },
     title: {
         flexGrow: 50,

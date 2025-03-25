@@ -14,7 +14,7 @@ const nailsSet: Nail[] = [
     { id: 4, position: { x: 49, y: 69}, rotation: "45deg", isTrimmed: false },
 ];
 const trimmer_initial_position = { x: width /4, y: height /6 };
-let trimmer_current_position = { x: 0, y: 0 };
+let trimmer_current_position = trimmer_initial_position;
 const nailSize = width / 6;
 const pawSize = width;
 
