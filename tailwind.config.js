@@ -1,8 +1,18 @@
 /** @type {import('tailwindcss').Config} */
-export default {
-    content: ['./src/**/*.{html,js,ts,jsx,tsx}'],
+// eslint-disable-next-line no-undef
+module.exports = {
+    content: ['./app/**/*.{js,jsx,ts,tsx}'],
     theme: {
-        extend: {},
+        extend: {
+            colors: {
+                'ludo-primary': {
+                    'white-ice': '#FFFAF1',
+                    'light-green': '#CFE2A8',
+                    'ligh-blue': '#C0DFF3',
+                    'black-text': '#5B5B5B',
+                },
+            },
+        },
     },
     plugins: [],
 }
