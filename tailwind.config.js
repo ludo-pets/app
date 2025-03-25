@@ -2,7 +2,7 @@
 // eslint-disable-next-line no-undef
 module.exports = {
     content: ['./app/**/*.{js,jsx,ts,tsx}'],
-    presets: [require("nativewind/preset")],
+    presets: [require('nativewind/preset')],
     theme: {
         extend: {
             colors: {
@@ -10,7 +10,7 @@ module.exports = {
                     'white-ice': '#FFFAF1',
                     'light-green': '#CFE2A8',
                     'ligh-blue': '#C0DFF3',
-                    'black-text': '#5B5B5B',
+                    black1: '#5B5B5B',
                 },
             },
         },
