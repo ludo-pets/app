@@ -7,14 +7,20 @@ import Svg, { Circle } from "react-native-svg";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const { width, height } = Dimensions.get("window");
+
+//trimmer
+const trimmer_initial_position = { x: width /4, y: height /6 };
+let trimmer_current_position = trimmer_initial_position;
+const openTrimmer = require("@/assets/images/minigames/nail-trimmer/trimmer-open.png");
+const closeTrimmer = require("@/assets/images/minigames/nail-trimmer/trimmer-closed.png");
+//paw
 const nailsSet: Nail[] = [
     { id: 1, position: { x: 15, y: 74 }, rotation: "90deg", isTrimmed: false },
     { id: 2, position: { x: 20, y: 68 }, rotation: "0deg", isTrimmed: false },
     { id: 3, position: { x: 29, y: 66 }, rotation: "50deg", isTrimmed: false },
     { id: 4, position: { x: 49, y: 69}, rotation: "45deg", isTrimmed: false },
 ];
-const trimmer_initial_position = { x: width /4, y: height /6 };
-let trimmer_current_position = trimmer_initial_position;
+
 const nailSize = width / 6;
 const pawSize = width;
 
@@ -25,7 +31,7 @@ export default function GameBoard() {
     const [nails, setNails] = useState<Nail[]>(nailsSet);
     const [trimmer, setTrimmer] = useState(trimmer_initial_position);
     const [nailProgress, setNailProgress] = useState<NailProgress>({});
-
+    const [isTrimming, setIsTrimming] = useState(false);
     
     const trimmerTimeout = useRef<{ [key: string]: NodeJS.Timeout | null }>({});
     const intervalRef = useRef<{ [key: string]: NodeJS.Timeout | null }>({});
@@ -59,11 +65,16 @@ export default function GameBoard() {
                     }, intervalTIme);
 
                     trimmerTimeout.current[nail.id] = setTimeout(() => {
+                        setIsTrimming(true);
+                        setTimeout(() => {
+                            setIsTrimming(false);
+                        }, 200);
                         setNails((prevNails) =>
                             prevNails.map((prevNail) =>
                                 prevNail.id === nail.id ? { ...prevNail, isTrimmed: true } : prevNail
                             )
                         );
+
                         clearInterval(intervalRef.current[nail.id]!);
                         trimmerTimeout.current[nail.id] = null;
                         setNailProgress((prev) => ({ ...prev, [nail.id]: 100 }));
@@ -147,7 +158,7 @@ export default function GameBoard() {
                     if(e.nativeEvent.state == State.END)  trimmer_current_position = trimmer}}
                 >
                 <Animated.Image
-                    source={require("@/assets/images/minigames/nail-trimmer/trimmer-open.png")}
+                    source={isTrimming ? closeTrimmer : openTrimmer}
                     style={{
                         ...styles.trimmerImage,
                         zIndex: 4,
