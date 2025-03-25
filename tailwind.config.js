@@ -10,6 +10,7 @@ module.exports = {
                     'white-ice': '#FFFAF1',
                     'light-green': '#CFE2A8',
                     'ligh-blue': '#C0DFF3',
+                    pink1: '#FFAFD4',
                     black1: '#5B5B5B',
                 },
             },
