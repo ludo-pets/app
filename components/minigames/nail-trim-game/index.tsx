@@ -3,7 +3,6 @@ import GameBoard from "./GameBoard";
 import StartGameDialog from "./StatGameDialog";
 import { Animated, Dimensions, StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { Image } from "react-native-svg";
 const { width, height } = Dimensions.get("window");
 export default function NailTrimGame() {
     const [started, setStarted] = useState(false);
