@@ -6,7 +6,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Image } from "react-native-svg";
 const { width, height } = Dimensions.get("window");
 export default function NailTrimGame() {
-    //const [started, setStarted] = useState(false);
+    const [started, setStarted] = useState(false);
     return(
         <GestureHandlerRootView
         style={styles["game-container"]}
@@ -16,7 +16,11 @@ export default function NailTrimGame() {
                 <Animated.Image style={styles.icon} source={{uri:"https://img.icons8.com/?size=100&id=26194&format=png&color=000000"}}/>
                 <h1 style={styles.title}>Minigames</h1>
             </Animated.View>
-            {/* <StartGameDialog /> */}
+
+            {/**placeholder do componente de iniciar um minigame enquanto não temos o componente*/}
+            {!started && <StartGameDialog startGame={setStarted}/>}
+
+
             <GameBoard/>
         </GestureHandlerRootView>
     );
@@ -46,7 +50,8 @@ const styles = StyleSheet.create({
     icon:{
         width: width / 10,
         height: width / 10,
-        flexGrow: 1
+        flexGrow: 1,
+        opacity:0.6
     },
     title: {
         flexGrow: 50,
