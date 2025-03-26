@@ -20,6 +20,7 @@ export default function NailTrimGame() {
             {!started && <StartGameDialog startGame={setStarted}/>}
 
 
+
             <GameBoard/>
         </GestureHandlerRootView>
     );

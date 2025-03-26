@@ -15,10 +15,10 @@ const openTrimmer = require("@/assets/images/minigames/nail-trimmer/trimmer-open
 const closeTrimmer = require("@/assets/images/minigames/nail-trimmer/trimmer-closed.png");
 //paw
 const nailsSet: Nail[] = [
-    { id: 1, position: { x: 15, y: 74 }, rotation: "90deg", isTrimmed: false },
-    { id: 2, position: { x: 20, y: 68 }, rotation: "0deg", isTrimmed: false },
-    { id: 3, position: { x: 29, y: 66 }, rotation: "50deg", isTrimmed: false },
-    { id: 4, position: { x: 49, y: 69}, rotation: "45deg", isTrimmed: false },
+    { id: 1, position: { x: 14, y: 80 }, rotation: "85deg", isTrimmed: false },
+    { id: 2, position: { x: 18, y: 74 }, rotation: "0deg", isTrimmed: false },
+    { id: 3, position: { x: 29, y: 72 }, rotation: "50deg", isTrimmed: false },
+    { id: 4, position: { x: 49, y: 75}, rotation: "45deg", isTrimmed: false },
 ];
 
 const nailSize = width / 6;
@@ -100,7 +100,7 @@ export default function GameBoard() {
                     position: "absolute",
                     width: pawSize,
                     height: pawSize,
-                    bottom: -pawSize / 5,
+                    bottom: -height / 10,
                     zIndex: 3,
                 }}
             />
