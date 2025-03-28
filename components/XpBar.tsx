@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { View, Text, StyleSheet, Animated } from "react-native";
+import { View, Text, StyleSheet, Animated, Image } from "react-native";
 
 const XpBar = () => {
   const [xp, setXp] = useState(0); 
@@ -13,9 +13,12 @@ const XpBar = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>{xp}/100</Text>
-      <View style={styles.barBackground}>
-        <Animated.View style={[styles.barFill, { width: barWidth }]} />
+      <Image style={styles.img} source={require('../assets/images/paw-xp-bar.png')}/>
+      <View style={styles.bar}>
+        <Text style={styles.text}>{xp}/100</Text>
+        <View style={styles.barBackground}>
+          <Animated.View style={[styles.barFill, { width: barWidth }]} />
+        </View>
       </View>
     </View>
   );
@@ -24,14 +27,21 @@ const XpBar = () => {
 const styles = StyleSheet.create({
   container: {
     display: "flex",
-    justifyContent: "center",
+    flexDirection: "row",
     width: "90%",
+    marginHorizontal: "auto",
+  },
+  img: {
+    marginRight: 10,
   },
   text: {
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 5,
     alignSelf: "flex-end",
+  },
+  bar: {
+    width: 270
   },
   barBackground: {
     width: "100%",
