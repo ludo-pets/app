@@ -13,6 +13,12 @@ module.exports = {
                     pink1: '#FFAFD4',
                     black1: '#5B5B5B',
                 },
+                'pet-primary': {
+                    'light-brown': '#7D5D56',
+                    'medium-gray': '#BEBEBE',
+                    'beige': '#F4EDE1',
+                    'light-yellow': '#FFD997'
+                }
             },
         },
     },
