@@ -1,11 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GameBoard from "./GameBoard";
 import StartGameDialog from "./StatGameDialog";
 import { Animated, Dimensions, StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import EndGameDialog from "./EndGameDialog";
 const { width, height } = Dimensions.get("window");
 export default function NailTrimGame() {
     const [started, setStarted] = useState(false);
+    const [ended, setEnded] = useState(false);
+    const [score, setScore] = useState(0);
+
+    // const addScore = () => {
+    //     setScore(score + 1);
+    // }
+    
+    useEffect(() => {
+        console.log("Score: ", score);
+    }, [score]);
+
     return(
         <GestureHandlerRootView
         style={styles["game-container"]}
@@ -18,10 +30,11 @@ export default function NailTrimGame() {
 
             {/**placeholder do componente de iniciar um minigame enquanto não temos o componente*/}
             {!started && <StartGameDialog startGame={setStarted}/>}
+            {!ended && <EndGameDialog startGame={setStarted}/>}
 
 
 
-            <GameBoard/>
+            <GameBoard />
         </GestureHandlerRootView>
     );
 }

@@ -13,6 +13,7 @@ const trimmer_initial_position = { x: width /4, y: height /6 };
 let trimmer_current_position = trimmer_initial_position;
 const openTrimmer = require("@/assets/images/minigames/nail-trimmer/trimmer-open.png");
 const closeTrimmer = require("@/assets/images/minigames/nail-trimmer/trimmer-closed.png");
+const trimmerSound = require("@/assets/images/minigames/nail-trimmer/trimmer-sound.mp3");
 //paw
 const nailsSet: Nail[] = [
     { id: 1, position: { x: 14, y: 80 }, rotation: "85deg", isTrimmed: false },
@@ -27,7 +28,7 @@ const pawSize = width;
 const CUT_TIME = 1000;
 
 
-export default function GameBoard() {
+export default function GameBoard({setScore}: {setScore: () => void}) {
     const [nails, setNails] = useState<Nail[]>(nailsSet);
     const [trimmer, setTrimmer] = useState(trimmer_initial_position);
     const [nailProgress, setNailProgress] = useState<NailProgress>({});
@@ -65,6 +66,8 @@ export default function GameBoard() {
                     }, intervalTIme);
 
                     trimmerTimeout.current[nail.id] = setTimeout(() => {
+                        // when cut is done
+                        new Audio(trimmerSound).play();
                         setIsTrimming(true);
                         setTimeout(() => {
                             setIsTrimming(false);
@@ -74,7 +77,7 @@ export default function GameBoard() {
                                 prevNail.id === nail.id ? { ...prevNail, isTrimmed: true } : prevNail
                             )
                         );
-
+                        setScore();
                         clearInterval(intervalRef.current[nail.id]!);
                         trimmerTimeout.current[nail.id] = null;
                         setNailProgress((prev) => ({ ...prev, [nail.id]: 100 }));

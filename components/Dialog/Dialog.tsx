@@ -3,7 +3,7 @@ import { Animated, Dimensions, StyleSheet, TouchableOpacity } from "react-native
 import Button from "./Dialog.Button";
 import Text from "./Dialog.Text";
 import ButtonArea from "./Dialog.ButtonArea";
-
+import Icon from "./Dialog.Icon";
 export type DialogContainerProps= { 
     children: ReactNode
 }
@@ -54,4 +54,5 @@ export default {
     Button,
     ButtonArea,
     Text,
+    Icon,
 }

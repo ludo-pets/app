@@ -1,13 +1,13 @@
 import { StyleSheet, Text } from "react-native";
 
-export type DialogTextProps = {content: string}
+export type DialogTextProps = {content: string, style?: object, color?: string}
 
-export default function DialogText({content}:DialogTextProps ){ 
+export default function DialogText({content, style, color}:DialogTextProps ){ 
     return(
-        <Text style={style.dialogText}>{content}</Text>
+        <Text style={{...styles.dialogText, ...style, color}}>{content}</Text>
     );
 }
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
     dialogText: {
         fontFamily: "Roboto",
         fontSize: 25,
