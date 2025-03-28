@@ -1,10 +1,8 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { House, Storefront, Joystick, Exam, UserCircle } from "phosphor-react-native";
-import { View } from 'react-native';
-import tw from 'twrnc';
+import { View, StyleSheet } from 'react-native';
 
-const DummyScreen = () => <View style={tw`flex-1 bg-white`} />;
-
+const DummyScreen = () => <View style={styles.dummyScreen} />;
 
 const homeName = 'Home';
 const minigameName = 'Minigames';
@@ -19,6 +17,7 @@ export default function Navbar() {
         <Tab.Navigator
             initialRouteName={homeName}
             screenOptions={({ route }) => ({
+                headerShown: false,
                 tabBarIcon: ({ focused }) => {
                     let IconComponent;
 
@@ -43,15 +42,15 @@ export default function Navbar() {
                     }
 
                     return (
-                        <View style={tw`${focused ? 'bg-purple-200 rounded-full w-15 h-8 flex items-center justify-center' : ''}`}>
+                        <View style={focused ? styles.focusedIconContainer : {}}>
                             <IconComponent color="black" size={32} weight="regular" />
                         </View>
                     );
                 },
                 tabBarShowLabel: false,
                 tabBarInactiveTintColor: 'gray',
-                tabBarStyle: tw`bg-gray-100 h-15 py-2`,
-                tabBarItemStyle: tw`flex justify-center`,
+                tabBarStyle: styles.tabBar,
+                tabBarItemStyle: styles.tabBarItem,
             })}
         >
             <Tab.Screen name={homeName} component={DummyScreen} />
@@ -62,3 +61,27 @@ export default function Navbar() {
         </Tab.Navigator>
     );
 }
+
+const styles = StyleSheet.create({
+    dummyScreen: {
+        flex: 1,
+        backgroundColor: 'white'
+    },
+    focusedIconContainer: {
+        backgroundColor: '#e9d5ff',
+        borderRadius: 50,
+        width: 60,
+        height: 32,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    tabBar: {
+        backgroundColor: '#f3f4f6',
+        height: 50,
+        paddingVertical: 8,
+    },
+    tabBarItem: {
+        justifyContent: 'center',
+        marginTop: 5
+    }
+});
