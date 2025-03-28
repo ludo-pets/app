@@ -3,7 +3,7 @@ import Dialog from "../../Dialog/Dialog";
 import Svg, { Image } from "react-native-svg";
 import "@/global.css";
 const { width, height } = Dimensions.get("window");
-export default function EndGameDialog({startGame}: {startGame: (value: boolean) => void}){
+export default function EndGameDialog({endGame}: {endGame: (value: boolean) => void}){
     return(
         <Dialog.Container> 
             <Dialog.Icon 
@@ -34,7 +34,7 @@ export default function EndGameDialog({startGame}: {startGame: (value: boolean) 
             />
             <Dialog.ButtonArea>
                 <Dialog.Button
-                    action={() => startGame(true)}
+                    action={() => endGame(true)}
                     text="Avançar"
                     color="#fff"
                     background="#FFAFD4"
