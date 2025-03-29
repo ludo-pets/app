@@ -9,13 +9,7 @@ const Profile = () => {
     const pet = require('@/assets/images/profile/cat_default.png');
     const [isChecked, setIsChecked] = useState(false);
 
-    const buttonShadowStyle: ViewStyle = {
-        shadowColor: 'blue', 
-        shadowOffset: { width: 0, height: 4 }, 
-        shadowOpacity: 0.25, 
-        shadowRadius: 3.5, 
-        elevation: 5, 
-    };
+   
 
     const toggleCheckbox = () => {
         setIsChecked(!isChecked);
@@ -46,10 +40,10 @@ const Profile = () => {
                     </View>
 
                     <View style={styles.colorContainer}>
-                        <View style={[styles.colorBox, { backgroundColor: '#D2B48C' }]}></View>
-                        <View style={[styles.colorBox, { backgroundColor: '#A9A9A9' }]}></View>
-                        <View style={[styles.colorBox, { backgroundColor: '#F5F5DC' }]}></View>
-                        <View style={[styles.colorBox, { backgroundColor: '#FFFFE0' }]}></View>  
+                        <View style={[styles.colorBox, { backgroundColor: '#7d5d56' }]}></View>
+                        <View style={[styles.colorBox, { backgroundColor: '#bebebe' }]}></View>
+                        <View style={[styles.colorBox, { backgroundColor: '#f4ede1' }]}></View>
+                        <View style={[styles.colorBox, { backgroundColor: '#ffd997' }]}></View>  
                     </View>
 
                     <View style={styles.infoContainer}>                
@@ -77,13 +71,13 @@ const Profile = () => {
 
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity 
-                        style={[styles.saveButton, buttonShadowStyle]}
+                        style={[styles.saveButton, styles.buttonShadowStyle]}
                     >                        
                         <Text style={styles.saveButtonText}>Salvar</Text>
                     </TouchableOpacity>
                     
                     <TouchableOpacity 
-                        style={[styles.logoutButton, buttonShadowStyle]}
+                        style={[styles.logoutButton, styles.buttonShadowStyle]}
                     >                        
                         <Text style={styles.logoutButtonText}>Sair</Text>
                         <MaterialIcons name="exit-to-app" size={24} color="#5B5B5B" />
@@ -147,8 +141,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         gap: 24,
-        height: 83,
-        paddingTop: 16
+        paddingTop: 13,
     },
     colorBox: {
         width: 40,
@@ -163,8 +156,8 @@ const styles = StyleSheet.create({
     infoContainer: {
         width: '100%',
         justifyContent: 'flex-start',
-        paddingTop: 32,
-        gap: 16
+        gap: 16,
+        paddingTop: 25,
     },
     coinsContainer: {
         flexDirection: 'row',
@@ -226,7 +219,6 @@ const styles = StyleSheet.create({
     logoutButton: {
         flexDirection: 'row',
         gap: 12,
-        borderWidth: 1,
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
@@ -245,6 +237,14 @@ const styles = StyleSheet.create({
         height: 58,
         width: '100%',
         backgroundColor: '#ccc'
+    },
+
+    buttonShadowStyle: {
+        shadowColor: 'blue', 
+        shadowOffset: { width: 0, height: 4 }, 
+        shadowOpacity: 0.25, 
+        shadowRadius: 3.5, 
+        elevation: 5, 
     }
 });
 
