@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Camada_2" data-name="Camada 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 304.32 324.52">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+      }
+
+      .cls-1, .cls-2 {
+        stroke-miterlimit: 10;
+        stroke-width: 14px;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        stroke: #000;
+        stroke-linecap: round;
+      }
+
+      .cls-2 {
+        fill: #fff;
+      }
+
+      .cls-3 {
+        stroke-linejoin: round;
+        stroke-width: 8px;
+      }
+    </style>
+  </defs>
+  <g id="icones">
+    <g>
+      <line class="cls-2" x1="32.01" y1="317.3" x2="276.5" y2="317.3"/>
+      <line class="cls-2" x1="223.79" y1="7" x2="276.5" y2="7"/>
+      <line class="cls-2" x1="106.68" y1="94.93" x2="239.72" y2="94.93"/>
+      <path class="cls-1" d="M32.01,7C.15,33.08-2.79,293.68,32.01,317.3"/>
+      <path class="cls-1" d="M223.79,7c-10.71,8.76-18.12,44.05-21.93,87.93"/>
+      <path class="cls-1" d="M32.01,7c27.77,5.05,27.77,290.28,0,310.3"/>
+      <path class="cls-1" d="M87.55,7c9.92,1.8,16.3,39.42,19.13,87.93"/>
+      <path class="cls-1" d="M223.79,7c9.92,1.8,13.07,39.42,15.94,87.93"/>
+      <path class="cls-1" d="M276.5,7c27.77,5.05,27.77,290.5,0,310.52"/>
+      <line class="cls-2" x1="32.01" y1="7" x2="87.55" y2="7"/>
+    </g>
+    <g>
+      <path class="cls-3" d="M191.02,230.11c-.28,0,0-3.51,0-5.4,0-10.01-8.12-18.13-18.13-18.13s-18.13,8.12-18.13,18.13c0,1.89.28,5.4,0,5.4-10.01,0-18.13,8.12-18.13,18.13s8.12,18.13,18.13,18.13,12.11-4.63,18.13-4.67c6.47-.05,8.12,4.67,18.13,4.67s18.13-8.12,18.13-18.13-8.12-18.13-18.13-18.13Z"/>
+      <ellipse class="cls-3" cx="155.39" cy="176.08" rx="8.92" ry="14.27"/>
+      <ellipse class="cls-3" cx="190.39" cy="176.08" rx="8.92" ry="14.27"/>
+      <ellipse class="cls-3" cx="215.86" cy="206.58" rx="14.27" ry="8.92" transform="translate(-26.54 381.26) rotate(-79.52)"/>
+      <ellipse class="cls-3" cx="130.34" cy="206.58" rx="8.92" ry="14.27" transform="translate(-40.65 32.15) rotate(-12.18)"/>
+    </g>
+  </g>
+</svg>

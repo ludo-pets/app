@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Camada_2" data-name="Camada 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 236.79 64.14">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #ba8ca1;
+      }
+
+      .cls-2 {
+        fill: #cf9db1;
+      }
+
+      .cls-3 {
+        stroke-width: 1.39px;
+      }
+
+      .cls-3, .cls-4 {
+        fill: none;
+        stroke: #704259;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .cls-4 {
+        stroke-width: 1.39px;
+      }
+    </style>
+  </defs>
+  <g id="Camada_4" data-name="Camada 4">
+    <g>
+      <polygon class="cls-2" points="197.79 .69 197.79 28.43 47.49 28.43 37.76 35.71 .69 35.71 .69 63.44 50.62 63.44 189.3 63.44 236.09 28.43 236.09 .69 197.79 .69"/>
+      <polygon class="cls-1" points="236.09 .69 47.49 .69 .69 35.71 189.3 35.71 236.09 .69"/>
+      <polyline class="cls-4" points="199.26 28.43 47.58 28.43 37.76 35.71"/>
+      <path class="cls-3" d="M235.66,1.02s-41.63,31.15-46.36,34.69c0,0-188.61,0-188.61,0"/>
+      <line class="cls-3" x1="47.49" y1=".69" x2="47.49" y2="28.43"/>
+      <polygon class="cls-3" points="212.44 1.02 47.64 .69 .94 35.52 .69 63.44 189.3 63.44 236.09 28.43 236.09 .69 212.44 1.02"/>
+    </g>
+  </g>
+</svg>

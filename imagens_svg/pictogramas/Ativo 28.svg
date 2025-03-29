@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Camada_2" data-name="Camada 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 317.38 327.31">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #000;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 14px;
+      }
+    </style>
+  </defs>
+  <g id="icones">
+    <circle class="cls-1" cx="80.35" cy="80.35" r="73.35" transform="translate(-33.28 80.35) rotate(-45)"/>
+    <path class="cls-1" d="M196.88,262.04c0,32.18-26.09,58.27-58.27,58.27s-58.27-26.09-58.27-58.27"/>
+    <path class="cls-1" d="M196.88,81.85c0-22.12,17.93-40.05,40.05-40.05,22.12,0,40.05,17.93,40.05,40.05"/>
+    <line class="cls-1" x1="196.88" y1="81.85" x2="196.88" y2="262.04"/>
+    <line class="cls-1" x1="80.35" y1="153.7" x2="80.35" y2="262.04"/>
+    <line class="cls-1" x1="276.98" y1="81.85" x2="276.98" y2="203.28"/>
+    <path class="cls-1" d="M276.98,203.28c19.55,26.07,64.22,117.04,0,117.04s-17.32-91.6,0-117.04"/>
+    <circle class="cls-1" cx="80.35" cy="80.35" r="73.35" transform="translate(-33.28 80.35) rotate(-45)"/>
+  </g>
+</svg>

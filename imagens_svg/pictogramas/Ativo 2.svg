@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Camada_2" data-name="Camada 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 305.73 193.88">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        stroke-width: 12px;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        stroke: #000;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .cls-1, .cls-3 {
+        fill: none;
+      }
+
+      .cls-3 {
+        stroke-width: 14px;
+      }
+    </style>
+  </defs>
+  <g id="icones">
+    <rect class="cls-3" x="7" y="7" width="291.73" height="179.88"/>
+    <rect class="cls-1" x="48.24" y="40.69" width="44.97" height="30.48"/>
+    <rect class="cls-2" x="7" y="118.92" width="291.73" height="21.26"/>
+  </g>
+</svg>

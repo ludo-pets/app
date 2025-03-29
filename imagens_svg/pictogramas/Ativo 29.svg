@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Camada_2" data-name="Camada 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 324.3 278.74">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke-linejoin: round;
+      }
+
+      .cls-1, .cls-2 {
+        stroke: #000;
+        stroke-linecap: round;
+        stroke-width: 14px;
+      }
+
+      .cls-2 {
+        fill: #fff;
+        stroke-miterlimit: 10;
+      }
+    </style>
+  </defs>
+  <g id="icones">
+    <polygon class="cls-1" points="278.36 271.74 45.34 271.74 7 156.62 317.3 156.62 278.36 271.74"/>
+    <polygon class="cls-1" points="45.34 41.49 278.36 41.49 317.3 156.62 7 156.62 45.34 41.49"/>
+    <line class="cls-2" x1="204.2" y1="41.49" x2="204.2" y2="7"/>
+    <line class="cls-2" x1="120.1" y1="41.49" x2="120.1" y2="7"/>
+    <line class="cls-2" x1="118.19" y1="126.13" x2="118.19" y2="71.98"/>
+    <line class="cls-2" x1="162.15" y1="126.13" x2="162.15" y2="71.98"/>
+    <line class="cls-2" x1="74.22" y1="126.13" x2="74.22" y2="71.98"/>
+    <line class="cls-2" x1="206.11" y1="126.13" x2="206.12" y2="71.98"/>
+    <line class="cls-2" x1="250.08" y1="126.13" x2="250.08" y2="71.98"/>
+    <line class="cls-2" x1="118.19" y1="241.26" x2="118.19" y2="187.1"/>
+    <line class="cls-2" x1="162.15" y1="241.26" x2="162.15" y2="187.1"/>
+    <line class="cls-2" x1="74.22" y1="241.26" x2="74.22" y2="187.1"/>
+    <line class="cls-2" x1="206.11" y1="241.26" x2="206.12" y2="187.1"/>
+    <line class="cls-2" x1="250.08" y1="241.26" x2="250.08" y2="187.1"/>
+    <line class="cls-2" x1="120.1" y1="7" x2="204.2" y2="7"/>
+  </g>
+</svg>

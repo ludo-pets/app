@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Camada_2" data-name="Camada 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 324.3 185.18">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke-linejoin: round;
+      }
+
+      .cls-1, .cls-2 {
+        stroke: #000;
+        stroke-linecap: round;
+        stroke-width: 14px;
+      }
+
+      .cls-2 {
+        fill: #fff;
+        stroke-miterlimit: 10;
+      }
+    </style>
+  </defs>
+  <g id="icones">
+    <line class="cls-2" x1="7" y1="16.76" x2="122.73" y2="16.76"/>
+    <line class="cls-2" x1="202.2" y1="76.92" x2="317.3" y2="76.92"/>
+    <line class="cls-2" x1="317.3" y1="16.75" x2="317.3" y2="76.71"/>
+    <line class="cls-2" x1="162.47" y1="86.47" x2="162.47" y2="117.98"/>
+    <rect class="cls-1" x="122.73" y="7" width="79.47" height="79.47"/>
+    <circle class="cls-1" cx="162.47" cy="148.08" r="30.1"/>
+    <circle class="cls-1" cx="45.19" cy="46.85" r="0"/>
+    <circle class="cls-1" cx="82.34" cy="46.84" r="0"/>
+    <line class="cls-2" x1="122.73" y1="46.73" x2="162.47" y2="46.73"/>
+    <line class="cls-2" x1="7" y1="76.92" x2="122.73" y2="76.92"/>
+    <line class="cls-2" x1="202.2" y1="16.76" x2="317.3" y2="16.76"/>
+  </g>
+</svg>

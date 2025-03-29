@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Camada_2" data-name="Camada 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 314.94 314.95">
+  <defs>
+    <style>
+      .cls-1 {
+        stroke-linejoin: round;
+      }
+
+      .cls-1, .cls-2 {
+        fill: none;
+        stroke: #000;
+        stroke-linecap: round;
+        stroke-width: 12px;
+      }
+
+      .cls-2 {
+        stroke-miterlimit: 10;
+      }
+    </style>
+  </defs>
+  <g id="icones">
+    <line class="cls-2" x1="21.74" y1="274.01" x2="57.89" y2="237.86"/>
+    <line class="cls-2" x1="40.94" y1="293.21" x2="77.09" y2="257.06"/>
+    <line class="cls-2" x1="6" y1="258.27" x2="56.67" y2="308.95"/>
+    <line class="cls-2" x1="226.89" y1="88.06" x2="308.94" y2="6"/>
+    <line class="cls-2" x1="159.34" y1="150.77" x2="187.96" y2="179.4"/>
+    <line class="cls-2" x1="228.29" y1="48.53" x2="266.42" y2="86.66"/>
+    <line class="cls-2" x1="188.47" y1="121.64" x2="217.1" y2="150.26"/>
+    <line class="cls-2" x1="130.2" y1="179.91" x2="158.83" y2="208.53"/>
+    <line class="cls-2" x1="101.07" y1="209.04" x2="129.69" y2="237.67"/>
+    <rect class="cls-1" x="34.47" y="130.7" width="225.43" height="74.12" transform="translate(-75.51 153.21) rotate(-45)"/>
+  </g>
+</svg>

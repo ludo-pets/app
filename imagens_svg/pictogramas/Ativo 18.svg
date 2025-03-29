@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Camada_2" data-name="Camada 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 287.41 323.98">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4 {
+        stroke: #000;
+        stroke-linecap: round;
+      }
+
+      .cls-1, .cls-2, .cls-4 {
+        fill: none;
+        stroke-width: 14px;
+      }
+
+      .cls-2 {
+        stroke-dasharray: 27.07 27.07;
+      }
+
+      .cls-3 {
+        stroke-width: 5px;
+      }
+
+      .cls-3, .cls-4 {
+        stroke-linejoin: round;
+      }
+    </style>
+  </defs>
+  <g id="icones">
+    <g>
+      <path class="cls-3" d="M129.32,186.95c-.18,0,0-2.3,0-3.54,0-6.56-5.32-11.87-11.87-11.87s-11.87,5.32-11.87,11.87c0,1.24.18,3.54,0,3.54-6.56,0-11.87,5.32-11.87,11.87s5.32,11.87,11.87,11.87,7.94-3.03,11.87-3.06c4.24-.03,5.32,3.06,11.87,3.06s11.87-5.32,11.87-11.87-5.32-11.87-11.87-11.87Z"/>
+      <ellipse class="cls-3" cx="105.98" cy="151.56" rx="5.84" ry="9.35"/>
+      <ellipse class="cls-3" cx="128.9" cy="151.56" rx="5.84" ry="9.35"/>
+      <ellipse class="cls-3" cx="145.59" cy="171.54" rx="9.35" ry="5.84" transform="translate(-49.58 283.5) rotate(-79.52)"/>
+      <ellipse class="cls-3" cx="89.57" cy="171.54" rx="5.84" ry="9.35" transform="translate(-34.18 22.76) rotate(-12.18)"/>
+    </g>
+    <path class="cls-4" d="M185.83,181.67c0-37.71-30.57-68.28-68.28-68.28s-68.28,30.57-68.28,68.28c0,21.9,10.32,41.37,26.35,53.87h83.86c16.03-12.49,26.35-31.97,26.35-53.87Z"/>
+    <path class="cls-4" d="M179.17,235.54H55.94c-10.52,0-19.05,8.53-19.05,19.05s8.53,19.05,19.05,19.05h123.23c10.52,0,19.05-8.53,19.05-19.05s-8.53-19.05-19.05-19.05Z"/>
+    <polyline class="cls-4" points="228.1 100.59 228.1 316.98 7 316.98 7 100.59"/>
+    <polyline class="cls-4" points="280.41 100.59 280.41 316.98 228.1 316.98"/>
+    <g>
+      <line class="cls-1" x1="32.73" y1="50.96" x2="48.73" y2="50.96"/>
+      <line class="cls-2" x1="75.81" y1="50.96" x2="224.72" y2="50.96"/>
+      <line class="cls-1" x1="238.26" y1="50.96" x2="254.26" y2="50.96"/>
+    </g>
+    <line class="cls-1" x1="7" y1="100.59" x2="32.73" y2="50.81"/>
+    <line class="cls-1" x1="228.1" y1="100.59" x2="253.84" y2="50.81"/>
+    <line class="cls-1" x1="279.57" y1="100.59" x2="253.84" y2="50.81"/>
+    <polyline class="cls-4" points="32.73 50.95 32.73 7 253.84 7 253.84 50.95"/>
+  </g>
+</svg>
