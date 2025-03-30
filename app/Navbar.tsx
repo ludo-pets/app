@@ -1,18 +1,24 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { House, Storefront, Joystick, Exam, UserCircle } from "phosphor-react-native";
-import { View, StyleSheet } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import {
+    House,
+    Storefront,
+    Joystick,
+    Exam,
+    UserCircle,
+} from 'phosphor-react-native'
+import { View, StyleSheet } from 'react-native'
 
-const DummyScreen = () => <View style={styles.dummyScreen} />;
+const DummyScreen = () => <View style={styles.dummyScreen} />
 
-const homeName = 'Home';
-const minigameName = 'Minigames';
-const profileName = 'Profile';
-const quizName = 'Quiz';
-const storeName = 'Store';
+const homeName = 'Home'
+const minigameName = 'Minigames'
+const profileName = 'Profile'
+const quizName = 'Quiz'
+const storeName = 'Store'
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator()
 
-const iconsSize = 32;
+const iconsSize = 32
 
 const iconMap = {
     home: House,
@@ -20,18 +26,17 @@ const iconMap = {
     minigame: Joystick,
     quiz: Exam,
     profile: UserCircle,
-} as const;
-  
+} as const
 
 interface Props {
-    name: string;
-    color: string;
-    focused: boolean;
-    iconsSize: number;
+    name: string
+    color: string
+    focused: boolean
+    iconsSize: number
 }
 
-function CustomTabIcon({name, color, focused, iconsSize}: Props){
-    const IconComponent = iconMap[name as keyof typeof iconMap] || House;
+function CustomTabIcon({ name, color, focused, iconsSize }: Props) {
+    const IconComponent = iconMap[name as keyof typeof iconMap] || House
     return (
         <View style={focused ? styles.focusedIconContainer : {}}>
             <IconComponent color={color} size={iconsSize} weight="regular" />
@@ -51,19 +56,23 @@ export default function Navbar() {
                 tabBarItemStyle: styles.tabBarItem,
             })}
         >
-
             <Tab.Screen
                 name={homeName}
                 component={DummyScreen}
                 options={{
                     tabBarIcon: ({ color, focused }) => (
-                        <CustomTabIcon name="home" color="black" focused={focused} iconsSize={iconsSize} />
+                        <CustomTabIcon
+                            name="home"
+                            color={color}
+                            focused={focused}
+                            iconsSize={iconsSize}
+                        />
                     ),
                     tabBarLabelPosition: 'below-icon',
                     tabBarLabelStyle: {
                         fontSize: 12,
                     },
-                    tabBarLabel: 'Home'
+                    tabBarLabel: 'Home',
                 }}
             />
             <Tab.Screen
@@ -71,13 +80,18 @@ export default function Navbar() {
                 component={DummyScreen}
                 options={{
                     tabBarIcon: ({ color, focused }) => (
-                        <CustomTabIcon name="store" color="black" focused={focused} iconsSize={iconsSize} />
+                        <CustomTabIcon
+                            name="store"
+                            color="black"
+                            focused={focused}
+                            iconsSize={iconsSize}
+                        />
                     ),
                     tabBarLabelPosition: 'below-icon',
                     tabBarLabelStyle: {
                         fontSize: 12,
                     },
-                    tabBarLabel: 'Home'
+                    tabBarLabel: 'Home',
                 }}
             />
             <Tab.Screen
@@ -85,13 +99,18 @@ export default function Navbar() {
                 component={DummyScreen}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <CustomTabIcon name="minigames" color="black" focused={focused} iconsSize={iconsSize} />
+                        <CustomTabIcon
+                            name="minigames"
+                            color="black"
+                            focused={focused}
+                            iconsSize={iconsSize}
+                        />
                     ),
                     tabBarLabelPosition: 'below-icon',
                     tabBarLabelStyle: {
                         fontSize: 12,
                     },
-                    tabBarLabel: 'Home'
+                    tabBarLabel: 'Home',
                 }}
             />
             <Tab.Screen
@@ -99,13 +118,18 @@ export default function Navbar() {
                 component={DummyScreen}
                 options={{
                     tabBarIcon: ({ color, focused }) => (
-                        <CustomTabIcon name="quiz" color="black" focused={focused} iconsSize={iconsSize} />
+                        <CustomTabIcon
+                            name="quiz"
+                            color="black"
+                            focused={focused}
+                            iconsSize={iconsSize}
+                        />
                     ),
                     tabBarLabelPosition: 'below-icon',
                     tabBarLabelStyle: {
                         fontSize: 12,
                     },
-                    tabBarLabel: 'Home'
+                    tabBarLabel: 'Home',
                 }}
             />
             <Tab.Screen
@@ -113,23 +137,28 @@ export default function Navbar() {
                 component={DummyScreen}
                 options={{
                     tabBarIcon: ({ color, focused }) => (
-                        <CustomTabIcon name="profile" color="black" focused={focused} iconsSize={iconsSize} />
+                        <CustomTabIcon
+                            name="profile"
+                            color="black"
+                            focused={focused}
+                            iconsSize={iconsSize}
+                        />
                     ),
                     tabBarLabelPosition: 'below-icon',
                     tabBarLabelStyle: {
                         fontSize: 12,
                     },
-                    tabBarLabel: 'Home'
+                    tabBarLabel: 'Home',
                 }}
             />
         </Tab.Navigator>
-    );
+    )
 }
 
 const styles = StyleSheet.create({
     dummyScreen: {
         flex: 1,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
     },
     focusedIconContainer: {
         backgroundColor: '#E8DEF8',
@@ -137,7 +166,7 @@ const styles = StyleSheet.create({
         width: 60,
         height: 32,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     tabBar: {
         backgroundColor: '#f3f4f6',
@@ -146,6 +175,6 @@ const styles = StyleSheet.create({
     },
     tabBarItem: {
         justifyContent: 'center',
-        marginTop: 5
-    }
-});
+        marginTop: 5,
+    },
+})
