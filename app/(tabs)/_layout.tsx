@@ -7,7 +7,6 @@ import {
     UserCircle,
 } from 'phosphor-react-native'
 import { Tabs } from 'expo-router'
-import Colors from '@/constants/Colors'
 import { StyleSheet, View } from 'react-native'
 
 const iconsSize = 32
