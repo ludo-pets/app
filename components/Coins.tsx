@@ -1,7 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { Coins } from "@phosphor-icons/react"
-
+import { Coins } from "phosphor-react-native";
 
 interface CoinsProps {
 value?: number}

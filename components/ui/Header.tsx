@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
-import { Ionicons } from '@expo/vector-icons'
 import Coin from '../Coins'
+import { ArrowCircleLeft } from 'phosphor-react-native'
 
 interface HeaderProps {
     title: string
@@ -25,7 +25,7 @@ export default function Header({
                     onPress={onBackPress}
                     style={styles.backButton}
                 >
-                    <Ionicons name="arrow-back" size={24} color="black" />
+                    <ArrowCircleLeft size={32} />
                 </TouchableOpacity>
             )}
             <Text style={styles.title}>{title}</Text>
