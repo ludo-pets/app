@@ -5,14 +5,15 @@ const XpBar = () => {
   const [xp, setXp] = useState(0);
   const [level, setLevel] = useState(1); 
   const animatedValue = useRef(new Animated.Value(0)).current;
+  const xpBarSize = 95 + level * 5;
 
   const barWidth = animatedValue.interpolate({
-    inputRange: [0, 100],
+    inputRange: [0, xpBarSize],
     outputRange: ["0%", "100%"],
   });
 
   useEffect(() => {
-    if (xp >= 100) {
+    if (xp >= xpBarSize) {
       setLevel((prev) => prev + 1);
       setXp(0); 
       animatedValue.setValue(0); 
@@ -26,7 +27,7 @@ const XpBar = () => {
         <Text style={styles.levelText}>{level}</Text>
       </View>
       <View style={styles.bar}>
-        <Text style={styles.text}>{xp}/100</Text>
+        <Text style={styles.text}>{xp}/{xpBarSize}</Text>
         <View style={styles.barBackground}>
           <Animated.View style={[styles.barFill, { width: barWidth }]} />
         </View>
@@ -44,7 +45,8 @@ const styles = StyleSheet.create({
   },
   pawContainer: {
     position: "relative", 
-    marginRight: 10,
+    marginRight: 30,
+    marginLeft: 10
   },
   levelText: {
     position: "absolute",
