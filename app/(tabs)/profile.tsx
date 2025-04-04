@@ -32,8 +32,6 @@ export default function Profile() {
 
             <View style={styles.container}>
                 <View style={styles.petContainer}>
-                    <View style={styles.placeholderBox}></View>
-
                     <Image 
                         source={pet} 
                         style={styles.petImage}
