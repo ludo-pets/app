@@ -9,5 +9,5 @@ const firebaseConfig = {
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
-
-export { firebaseApp };
+const db = firebaseApp.firestore();
+export { firebaseApp, db };
