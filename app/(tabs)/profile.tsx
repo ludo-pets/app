@@ -1,8 +1,8 @@
-import { usePetStore } from '@/stores/petStore'
+import { useUserPetStore } from '@/stores/ludoStore'
 import { StyleSheet, View, Text } from 'react-native'
 
 export default function TabOneScreen() {
-    const pet = usePetStore((state) => state.pet)
+    const pet = useUserPetStore((state) => state.pet)
     
     return (
         <View style={styles.container}>

@@ -1,30 +1,18 @@
-import { usePetStore } from '@/stores/petStore'
-import { useUserStore } from '@/stores/userStore'
+import { useUserPetStore } from '@/stores/ludoStore'
 import { useEffect } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 
 export default function HomeScreen() {
-    const fetchPet = usePetStore((state) => state.fetchPet)
-    const pet = usePetStore((state) => state.pet)
-    const fetchUser = useUserStore((state) => state.fetchUser)
-    const user = useUserStore((state) => state.user)
+    const fetchUserAndPet = useUserPetStore((state) => state.fetchUserAndPet)
+    const user = useUserPetStore((state) => state.user)
+    const pet = useUserPetStore((state) => state.pet)
 
     useEffect(() => {
-        const fetchPets = async () => {
-            const petId = '3FxLz0T8S3GcOvbyo3xH'
-            await fetchPet(petId)
-        }
-        const fetchUsers = async () => {
-          const userId = 'lKlrZ2s9n2fM7QGvZOuu'
-          await fetchUser(userId)
-      }
-        if (!pet) {
-            fetchPets()
-        }
+        const userId = 'lKlrZ2s9n2fM7QGvZOuu'
         if (!user) {
-            fetchUsers()
+            fetchUserAndPet(userId)
         }
-    }, [fetchPet, fetchUser, pet])
+    }, [fetchUserAndPet, user])
 
     return (
         <View style={styles.container}>

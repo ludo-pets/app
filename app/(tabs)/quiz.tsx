@@ -1,11 +1,11 @@
-import { usePetStore } from '@/stores/petStore'
-import { useUserStore } from '@/stores/userStore'
+import { useUserPetStore } from '@/stores/ludoStore'
 import { StyleSheet, View, Text, Button } from 'react-native'
 
 export default function QuizScreen() {
-    const user = useUserStore((state) => state.user)
-    const userUpdate = useUserStore((state) => state.updateUser)
-    const pet = usePetStore((state) => state.pet)
+    const user = useUserPetStore((state) => state.user)
+    const userUpdate = useUserPetStore((state) => state.updateUser)
+    const petUpdate = useUserPetStore((state) => state.updatePet)
+    const pet = useUserPetStore((state) => state.pet)
 
     const handleEndQuiz = () => {
         console.log('Quiz finalizado')
@@ -13,6 +13,9 @@ export default function QuizScreen() {
         userUpdate(user?.id || '', {
           money: user?.money + 10,
           experience: user?.experience + 10,
+        })
+        petUpdate(pet?.id || '', {
+          name: 'Alaor',
         })
     }
 

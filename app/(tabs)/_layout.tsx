@@ -8,6 +8,7 @@ import {
 } from 'phosphor-react-native'
 import { Tabs } from 'expo-router'
 import { StyleSheet, View } from 'react-native'
+import { useUserPetStore } from '@/stores/ludoStore'
 
 const iconsSize = 32
 
@@ -36,6 +37,8 @@ function CustomTabIcon({ name, color, focused, iconsSize }: Props) {
 }
 
 export default function TabLayout() {
+    const pet = useUserPetStore((state) => state.pet)
+    console.log('Pet:', pet)
     return (
         <Tabs
             screenOptions={{

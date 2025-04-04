@@ -1,38 +1,43 @@
+import { IPet } from "@/dtos/IPet";
 import { IUser } from "@/dtos/IUser"
 import { db } from "@/firebaseConfig"
 import { doc, getDoc, updateDoc } from "firebase/firestore"
 
 
-export const getUserByIdService = async (
+export const getUserWithPetByIdService = async (
     userId: string
-): Promise<IUser | null> => {
+): Promise<{ user: IUser; pet: IPet } | null> => {
     try {
         const userRef = doc(db, 'User', userId)
         const userSnap = await getDoc(userRef)
-        
-        console.log('userSnap', userSnap)
-        
+
         if (!userSnap.exists()) {
             console.error('User não encontrado')
             return null
         }
 
-        if (userSnap.exists()) {
-            const data = userSnap.data()
-            const userData: IUser = {
-                id: userId,
-                email: data.email,
-                money: data.money,
-                level: data.level,
-                experience: data.experience,
-                notifications: data.notifications || '',
-            }
-            return userData
-        } else {
+        const userData = userSnap.data() // Referência ao pet
+        const petSnap = await getDoc(userData.pet)
+
+        if (!petSnap.exists()) {
+            console.error('Pet não encontrado')
             return null
         }
+
+        const petData: IPet = petSnap.data() as IPet
+
+        const user: IUser = {
+            id: userSnap.id,
+            email: userData.email,
+            money: userData.money,
+            level: userData.level,
+            experience: userData.experience,
+            notifications: userData.notifications,
+        }
+
+        return { user, pet: petData }
     } catch (error) {
-        console.error('Erro ao buscar User:', error)
+        console.error('Erro ao buscar User e Pet:', error)
         return null
     }
 }
