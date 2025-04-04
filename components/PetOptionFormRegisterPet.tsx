@@ -32,14 +32,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     margin: 10,
+    padding: 5,
   },
   petBoxActive: {
     borderWidth: 5,
     borderColor: "#80BEE7",
     borderStyle: "solid",
+    padding: 0,
   },
   imageContainer: {
-    width: "70%",
+    width: "90%",
     aspectRatio: 1,
     alignItems: "center",
     justifyContent: "center",
