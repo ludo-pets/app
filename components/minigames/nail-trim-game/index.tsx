@@ -5,13 +5,14 @@ import { Animated, Dimensions, StyleSheet, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import EndGameDialog from "./EndGameDialog";
 import { Nail } from "./types";
+
 const { width, height } = Dimensions.get("window");
 
 const catNailsSet: Nail[] = [
-    { id: 1, position: { x: 14, y: 10 }, rotation: "85deg", isTrimmed: false },
-    { id: 2, position: { x: 18, y: 74 }, rotation: "0deg", isTrimmed: false },
-    { id: 3, position: { x: 29, y: 72 }, rotation: "50deg", isTrimmed: false },
-    { id: 4, position: { x: 49, y: 75}, rotation: "45deg", isTrimmed: false },
+    { id: 1, position: { x: 0.215, y: 0.6 }, rotation: "85deg", isTrimmed: false },
+    { id: 2, position: { x: 0.248, y: 0.495 }, rotation: "0deg", isTrimmed: false },
+    { id: 3, position: { x: 0.335, y: 0.45 }, rotation: "50deg", isTrimmed: false },
+    { id: 4, position: { x: 0.48, y: 0.5}, rotation: "45deg", isTrimmed: false },
 ];
 
 export default function NailTrimGame() {
@@ -31,6 +32,8 @@ export default function NailTrimGame() {
         <GestureHandlerRootView
         style={styles["game-container"]}
         >
+
+
             {/**placeholder do header enquanto não temos o componente*/}
             <Animated.View style={styles.header}>
                 <Animated.Image style={styles.icon} source={{uri:"https://img.icons8.com/?size=100&id=26194&format=png&color=000000"}}/>
