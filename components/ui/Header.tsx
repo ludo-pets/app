@@ -2,6 +2,8 @@ import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import Coin from '../Coins'
 import { ArrowCircleLeft } from 'phosphor-react-native'
+import { router } from 'expo-router';
+
 
 interface HeaderProps {
     title: string
@@ -22,7 +24,7 @@ export default function Header({
         <View style={[styles.container, { backgroundColor }]}>
             {showBackButton && (
                 <TouchableOpacity
-                    onPress={onBackPress}
+                    onPress={onBackPress || (() => router.push('/(tabs)'))}
                     style={styles.backButton}
                 >
                     <ArrowCircleLeft size={32} />
