@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import GameBoard from "./GameBoard";
 import StartGameDialog from "./StatGameDialog";
-import { Animated, Dimensions, StyleSheet, View } from "react-native";
+import { Animated, Dimensions, StyleSheet, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import EndGameDialog from "./EndGameDialog";
 import { Nail } from "./types";
 const { width, height } = Dimensions.get("window");
 
 const catNailsSet: Nail[] = [
-    { id: 1, position: { x: 14, y: 80 }, rotation: "85deg", isTrimmed: false },
+    { id: 1, position: { x: 14, y: 10 }, rotation: "85deg", isTrimmed: false },
     { id: 2, position: { x: 18, y: 74 }, rotation: "0deg", isTrimmed: false },
     { id: 3, position: { x: 29, y: 72 }, rotation: "50deg", isTrimmed: false },
     { id: 4, position: { x: 49, y: 75}, rotation: "45deg", isTrimmed: false },
@@ -34,12 +34,11 @@ export default function NailTrimGame() {
             {/**placeholder do header enquanto não temos o componente*/}
             <Animated.View style={styles.header}>
                 <Animated.Image style={styles.icon} source={{uri:"https://img.icons8.com/?size=100&id=26194&format=png&color=000000"}}/>
-                <h1 style={styles.title}>Minigames</h1>
+                <Text style={styles.title}>Minigames</Text>
             </Animated.View>
 
-            {/**placeholder do componente de iniciar um minigame enquanto não temos o componente*/}
-            {!started && <StartGameDialog startGame={setStarted}/>}
-            {ended && <EndGameDialog endGame={setStarted}/>}
+            { !started && <StartGameDialog startGame={setStarted}/> }
+            { ended && <EndGameDialog endGame={setStarted }/>}
 
 
             {/**minigame do gato*/}

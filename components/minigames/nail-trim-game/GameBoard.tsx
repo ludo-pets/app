@@ -14,9 +14,8 @@ let trimmer_current_position = trimmer_initial_position;
 const openTrimmer = require("@/assets/images/minigames/nail-trimmer/trimmer-open.png");
 const closeTrimmer = require("@/assets/images/minigames/nail-trimmer/trimmer-closed.png");
 const trimmerSound = require("@/assets/images/minigames/nail-trimmer/trimmer-sound.mp3");
+
 //paw
-
-
 const nailSize = width / 6;
 const pawSize = width;
 
@@ -65,7 +64,7 @@ export default function GameBoard({addScore, pawImage, nailsSet}: GameBoardProps
                     }, intervalTIme);
 
                     trimmerTimeout.current[nail.id] = setTimeout(() => {
-                        // when cut is done
+
                         new Audio(trimmerSound).play();
                         setIsTrimming(true);
                         setTimeout(() => {
