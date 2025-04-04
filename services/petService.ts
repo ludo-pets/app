@@ -1,32 +1,16 @@
-import { doc, getDoc } from 'firebase/firestore'
+import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { db } from '../firebaseConfig' // mudar quando tiver a configuração do firebase
+import { IPet } from '@/dtos/IPet'
 
-export interface IPet {
-    id: string
-    name: string
-    color: string
-    type: 'Gato' | 'Cachorro'
-    items: Array<{
-        is_active: boolean
-        item_id: string // ID do item (ou DocumentReference)
-        quantity: number
-    }>
-    well_being: {
-        clean: number
-        fun: number
-        hunger: number
-        thirst: number
-    }
-}
-
-export const getPetById = async (petId: string): Promise<IPet | null> => {
+export const getPetByIdService = async (
+    petId: string
+): Promise<IPet | null> => {
     try {
         const petRef = doc(db, 'Pet', petId)
         const petSnap = await getDoc(petRef)
 
         if (petSnap.exists()) {
             const data = petSnap.data()
-            // Ajuste o casting para o seu tipo:
             const petData: IPet = {
                 id: petSnap.id,
                 name: data.name,
@@ -46,6 +30,21 @@ export const getPetById = async (petId: string): Promise<IPet | null> => {
         }
     } catch (error) {
         console.error('Erro ao buscar Pet:', error)
+        return null
+    }
+}
+
+export const updatePetService = async (
+    petId: string,
+    petData: Partial<IPet>
+) => {
+    try {
+        const petRef = doc(db, 'Pet', petId)
+        await updateDoc(petRef, { ...petData })
+        
+        return true
+    } catch (error) {
+        console.error('Erro ao atualizar Pet:', error)
         return null
     }
 }
