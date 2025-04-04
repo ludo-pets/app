@@ -19,11 +19,11 @@ export function FormRegisterPet() {
   const pets = [
     {
       id: 1,
-      image: require("../assets/images/pets/gato.svg"),
+      pet_type: "gato",
     },
     {
       id: 2,
-      image: require("../assets/images/pets/cachorro.svg"),
+      pet_type: "cachorro",
     },
   ];
 
@@ -71,7 +71,7 @@ export function FormRegisterPet() {
           {pets.map((pet) => (
             <PetOptionFormRegisterPet
               key={pet.id}
-              image={pet.image}
+              pet={pet.pet_type}
               selected={pet.id === selectedPet}
               onSelect={() => setSelectedPet(pet.id)}
             />

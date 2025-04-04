@@ -1,13 +1,15 @@
 import { Image, ImageSourcePropType, Pressable, StyleSheet, View } from "react-native";
+import Gato from "../assets/images/pets/gato.svg";
+import Cachorro from "../assets/images/pets/cachorro.svg";
 
 interface PetOptionFormRegisterPetProps {
-  image: ImageSourcePropType;
+  pet: string;
   onSelect: VoidFunction;
   selected: boolean;
 }
 
 export function PetOptionFormRegisterPet({
-  image,
+  pet,
   onSelect,
   selected,
 }: PetOptionFormRegisterPetProps) {
@@ -17,7 +19,7 @@ export function PetOptionFormRegisterPet({
       onPress={onSelect}
     >
       <View style={styles.imageContainer}>
-        <Image style={styles.imagemBox} source={image} />
+        {pet==='gato' ? <Gato /> : <Cachorro />}
       </View>
     </Pressable>
   );
