@@ -1,5 +1,6 @@
 import { useUserPetStore } from '@/stores/ludoStore'
 import { useEffect } from 'react'
+import Header from '@/components/ui/Header'
 import { StyleSheet, View, Text } from 'react-native'
 
 export default function HomeScreen() {
@@ -15,12 +16,23 @@ export default function HomeScreen() {
     }, [fetchUserAndPet, user])
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Home</Text>
-            <Text style={styles.title}>{pet?.name}</Text>
-            <Text style={styles.title}>{user?.email}</Text>
-            <View style={styles.separator} />
-        </View>
+        <>
+            <View>
+                <Header
+                    title="Minigame"
+                    showBackButton={true}
+                    onBackPress={() => console.log('Go Back')}
+                    coinsValue={100}
+                />
+            </View>
+            <View style={styles.container}>
+                <Text style={styles.title}>Home</Text>
+                <Text style={styles.title}>{pet?.name}</Text>
+                <Text style={styles.title}>{user?.email}</Text>
+                <View style={styles.separator} />
+                <View style={styles.separator} />
+            </View>
+        </>
     )
 }
 
