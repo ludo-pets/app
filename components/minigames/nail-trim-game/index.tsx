@@ -25,7 +25,6 @@ export default function NailTrimGame() {
     }
     useEffect(() => {
         if(score >= 4) setEnded(true); 
-        console.log("Score: ", score);
     }, [score]);
 
     return(

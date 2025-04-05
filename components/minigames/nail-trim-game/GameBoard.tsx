@@ -17,7 +17,8 @@ const pawSize = height / 2;
 const nailSize = pawSize / 6;
 
 const CUT_TIME = 3000;
-
+let entrou = true;
+let isNear = false;
 export type GameBoardProps = {
     addScore: () => void,
     pawImage: ImageSourcePropType,
@@ -46,11 +47,12 @@ export default function GameBoard({addScore, pawImage, nailsSet}: GameBoardProps
             const trimmerCenterY = trimmer.y;
             
             const distance = Math.sqrt(
-                (nailCenterX - trimmerCenterX) ** 2 + (nailCenterY - trimmerCenterY - (pawSize/3)) ** 2
+                (nailCenterX - trimmerCenterX) ** 2 + (nailCenterY - trimmerCenterY -(pawSize/3)) ** 2
             );
-            
-            if (distance < nailSize /2) {
-                if (!trimmerTimeout.current[nail.id]) {
+            isNear = distance <  40
+            if (isNear) {
+                if (!trimmerTimeout.current[nail.id] && entrou) {
+                    entrou = false;
                     let progress = 0;
                     const intervalTIme = CUT_TIME / 100;
                     const progressIncrement = 1;
@@ -63,7 +65,7 @@ export default function GameBoard({addScore, pawImage, nailsSet}: GameBoardProps
 
                     trimmerTimeout.current[nail.id] = setTimeout(() => {
 
-                
+                        
                         setIsTrimming(true);
                         setTimeout(() => {
                             setIsTrimming(false);
@@ -77,6 +79,7 @@ export default function GameBoard({addScore, pawImage, nailsSet}: GameBoardProps
                         clearInterval(intervalRef.current[nail.id]!);
                         trimmerTimeout.current[nail.id] = null;
                         setNailProgress((prev) => ({ ...prev, [nail.id]: 100 }));
+                        entrou = true;
                     }, CUT_TIME);
                 }
             } else {
@@ -85,6 +88,7 @@ export default function GameBoard({addScore, pawImage, nailsSet}: GameBoardProps
                     clearInterval(intervalRef.current[nail.id]!);
                     trimmerTimeout.current[nail.id] = null;
                     setNailProgress((prev) => ({ ...prev, [nail.id]: 0 }));
+                    entrou = true;
                 }
             }
         });
