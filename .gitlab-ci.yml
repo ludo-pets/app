@@ -13,7 +13,7 @@ export_pwa:
   script:
     - npm install -g vercel
     - npm ci
-    - npx expo export --platform web --dev false
+    - npx expo export --platform web
     - cp -r public/* dist/
   artifacts:
     paths:
