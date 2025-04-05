@@ -16,7 +16,7 @@ const closeTrimmer = require("@/assets/images/minigames/nail-trimmer/trimmer-clo
 const pawSize = height / 2;
 const nailSize = pawSize / 6;
 
-const CUT_TIME = 1000;
+const CUT_TIME = 3000;
 
 export type GameBoardProps = {
     addScore: () => void,
@@ -39,27 +39,21 @@ export default function GameBoard({addScore, pawImage, nailsSet}: GameBoardProps
             if (nail.isTrimmed) return;
             const nailX = nail.position.x;
             const nailY = nail.position.y;
-            const nailCenterX = nailX + nailSize / 2;
-            const nailCenterY = nailY + nailSize / 2;
-            const trimmerCenterX = e.nativeEvent.translationX + trimmer_current_position.x  + nailSize / 2;
-            const trimmerCenterY = e.nativeEvent.translationY + trimmer_current_position.y + nailSize / 2;
+            const nailCenterX = (width - pawSize) / 2 + nailX * pawSize + nailSize / 2;
+            const nailCenterY = (height - pawSize) + nailY * pawSize + nailSize / 2;
             
-            console.log("trimmer x: ", ((trimmerCenterX - nailSize /2) - ((width - pawSize) /2)));
-            console.log("trimmer y: ", (trimmerCenterX - nailSize /2));
-            console.log(nail.id +" nail x: ", (pawSize * nailX ));
-            console.log(nail.id +" nail y: ", ((height-pawSize) + nailCenterY /2 ))
+            const trimmerCenterX = trimmer.x;
+            const trimmerCenterY = trimmer.y;
             
-            
-
             const distance = Math.sqrt(
-                ((height -nailCenterX) - trimmerCenterX) ** 2 + ((height - pawSize) - trimmerCenterY) ** 2
+                (nailCenterX - trimmerCenterX) ** 2 + (nailCenterY - trimmerCenterY - (pawSize/3)) ** 2
             );
-
+            
             if (distance < nailSize /2) {
                 if (!trimmerTimeout.current[nail.id]) {
                     let progress = 0;
-                    const intervalTIme = CUT_TIME / 50;
-                    const progressIncrement = 100 / 50;
+                    const intervalTIme = CUT_TIME / 100;
+                    const progressIncrement = 1;
                     setNailProgress((prev) => ({ ...prev, [nail.id]: progress }));
 
                     intervalRef.current[nail.id] = setInterval(() => {
@@ -159,22 +153,27 @@ export default function GameBoard({addScore, pawImage, nailsSet}: GameBoardProps
                                     
                                     style={{
                                         position: "absolute",
-                                        top: 0,
-                                        left: 0,
-                                        
                                         overflow: "visible",
+                                        top: -nailSize /2,
+                                        left: 0,
+                                        zIndex: 15,
+                                
                                     }}
                                 >
                                     <Circle 
                                         cx={nailSize / 2}
                                         cy={nailSize / 2}
-                                        r={nailSize / 2 - 2}
+                                        r={(nailSize - 10)/2}
+
                                         stroke="lightblue"
                                         strokeWidth="10"
                                         fill="none"
                                         strokeDasharray={Math.PI * nailSize }
-                                        strokeDashoffset={Math.PI * nailSize - (Math.PI * nailSize * nailProgress[nail.id]) / 100}
+                                        strokeDashoffset={
+                                            2 * Math.PI * ((nailSize - 10)/2) - ((2 * Math.PI * ((nailSize - 10)/2))* nailProgress[nail.id] ) / 100
+                                        }
                                         strokeLinecap="round"
+
                                     />
                                 </Svg>
                             )}
@@ -201,14 +200,13 @@ const styles = StyleSheet.create({
     },
     pawContainer:{
         position: "relative",
-        backgroundColor: "#ddd",
         display: "flex",
         alignItems: "center",
         width: pawSize,
         height: pawSize,
     },
     trimmerContainer: {
-        zIndex: 10
+        zIndex: 5
     },
     mainBox:{
         display: "flex",
@@ -219,6 +217,5 @@ const styles = StyleSheet.create({
         height: "100%",
         margin: 0,
         padding: 0,
-        backgroundColor: "blue"
     }
 });

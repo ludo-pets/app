@@ -30,7 +30,7 @@ export default function EndGameDialog({endGame}: {endGame: (value: boolean) => v
                 }}
             />
             <Dialog.Text
-            content="Você ganhou 5 moedas e 30 pontos."
+            content="Você ganhou 5 moedas."
             />
             <Dialog.ButtonArea>
                 <Dialog.Button

@@ -32,14 +32,6 @@ export default function NailTrimGame() {
         <GestureHandlerRootView
         style={styles["game-container"]}
         >
-
-
-            {/**placeholder do header enquanto não temos o componente*/}
-            <Animated.View style={styles.header}>
-                <Animated.Image style={styles.icon} source={{uri:"https://img.icons8.com/?size=100&id=26194&format=png&color=000000"}}/>
-                <Text style={styles.title}>Minigames</Text>
-            </Animated.View>
-
             { !started && <StartGameDialog startGame={setStarted}/> }
             { ended && <EndGameDialog endGame={setStarted }/>}
 
