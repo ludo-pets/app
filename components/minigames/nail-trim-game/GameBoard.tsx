@@ -3,6 +3,8 @@ import { PanGestureHandler, PanGestureHandlerGestureEvent, State } from "react-n
 import { Nail, NailProgress } from './types';
 import { useRef, useState } from 'react';
 import Svg, { Circle } from "react-native-svg";
+import { Audio, AVPlaybackSource, AVPlaybackStatus, AVPlaybackStatusSuccess } from "expo-av";
+
 
 const { width, height } = Dimensions.get("window");
 
@@ -11,12 +13,12 @@ const trimmer_initial_position = { x: width /4, y: height /6 };
 let trimmer_current_position = trimmer_initial_position;
 const openTrimmer = require("@/assets/images/minigames/nail-trimmer/trimmer-open.png");
 const closeTrimmer = require("@/assets/images/minigames/nail-trimmer/trimmer-closed.png");;
-
+const trimmerSound: AVPlaybackSource = require("@/assets/images/minigames/nail-trimmer/trimmer-sound.mp3");
 //paw
 const pawSize = height / 2;
 const nailSize = pawSize / 6;
 
-const CUT_TIME = 3000;
+const CUT_TIME = 1000;
 let entrou = true;
 let isNear = false;
 export type GameBoardProps = {
@@ -30,9 +32,14 @@ export default function GameBoard({addScore, pawImage, nailsSet}: GameBoardProps
     const [trimmer, setTrimmer] = useState(trimmer_initial_position);
     const [nailProgress, setNailProgress] = useState<NailProgress>({});
     const [isTrimming, setIsTrimming] = useState(false);
-    
     const trimmerTimeout = useRef<{ [key: string]: NodeJS.Timeout | null }>({});
     const intervalRef = useRef<{ [key: string]: NodeJS.Timeout | null }>({});
+
+    const playSound = async (s: AVPlaybackSource) => {
+        const { sound } = await Audio.Sound.createAsync(s, { shouldPlay: true, isLooping: false });
+        await sound.playAsync();
+    }
+
     const handleGesture = (e: PanGestureHandlerGestureEvent) => {
         setTrimmer({ x:trimmer_current_position.x + e.nativeEvent.translationX, y: trimmer_current_position.y + e.nativeEvent.translationY });
 
@@ -75,6 +82,7 @@ export default function GameBoard({addScore, pawImage, nailsSet}: GameBoardProps
                                 prevNail.id === nail.id ? { ...prevNail, isTrimmed: true } : prevNail
                             )
                         );
+                        playSound(trimmerSound);
                         addScore();
                         clearInterval(intervalRef.current[nail.id]!);
                         trimmerTimeout.current[nail.id] = null;
@@ -93,6 +101,8 @@ export default function GameBoard({addScore, pawImage, nailsSet}: GameBoardProps
             }
         });
     };
+
+    
 
     return (
           
@@ -172,7 +182,7 @@ export default function GameBoard({addScore, pawImage, nailsSet}: GameBoardProps
                                         stroke="lightblue"
                                         strokeWidth="10"
                                         fill="none"
-                                        strokeDasharray={Math.PI * nailSize }
+                                        strokeDasharray={Math.PI * (nailSize + 10)}
                                         strokeDashoffset={
                                             2 * Math.PI * ((nailSize - 10)/2) - ((2 * Math.PI * ((nailSize - 10)/2))* nailProgress[nail.id] ) / 100
                                         }

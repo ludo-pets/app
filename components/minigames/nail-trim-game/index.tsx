@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import GameBoard from "./GameBoard";
-import StartGameDialog from "./StatGameDialog";
-import { Animated, Dimensions, StyleSheet, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { Dimensions, StyleSheet } from "react-native";
+
+import StartGameDialog from "./StatGameDialog";
 import EndGameDialog from "./EndGameDialog";
+import GameBoard from "./GameBoard";
 import { Nail } from "./types";
 
-const { width, height } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 
 const catNailsSet: Nail[] = [
     { id: 1, position: { x: 0.215, y: 0.6 }, rotation: "85deg", isTrimmed: false },
@@ -32,8 +33,14 @@ export default function NailTrimGame() {
         style={styles["game-container"]}
         >
             { !started && <StartGameDialog startGame={setStarted}/> }
-            { ended && <EndGameDialog endGame={setStarted }/>}
 
+
+            {
+            /**Na propriedade endGame vai a função que vai ser executada ao clicar no botão avançar 
+             * A função setStarted só ta de exemplo, podem mudar ela para outra função.
+            */
+            }
+            { ended && <EndGameDialog endGame={setStarted }/>}
 
             {/**minigame do gato*/}
             <GameBoard 
@@ -41,6 +48,13 @@ export default function NailTrimGame() {
                 addScore={addScore}
                 nailsSet={catNailsSet}
             />
+
+            {/**minigame do cachorro, quando tiver os assets do cachorro*/}
+            {/* <GameBoard 
+                pawImage={require("@/assets/images/minigames/nail-trimmer/paw-dog.png")}
+                addScore={addScore}
+                nailsSet={dogNailsSet}
+            /> */}
         </GestureHandlerRootView>
     );
 }
