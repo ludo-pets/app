@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
-import Coin from '../Coins'
+import Coin from './Coins'
 import { ArrowCircleLeft } from 'phosphor-react-native'
 import { router } from 'expo-router';
 
