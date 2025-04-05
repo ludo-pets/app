@@ -1,7 +1,6 @@
 import { Animated, Dimensions, StyleSheet, Text, TouchableOpacity } from "react-native";
 import Dialog from "@/components/Dialog/Dialog";
 import Svg, { Image } from "react-native-svg";
-import "@/global.css";
 const { width } = Dimensions.get("window");
 export default function EndGameDialog({endGame}: {endGame: (value: boolean) => void}){
     return(
