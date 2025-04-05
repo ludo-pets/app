@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
     House,
     Storefront,
@@ -8,6 +8,9 @@ import {
 } from 'phosphor-react-native'
 import { Tabs } from 'expo-router'
 import { StyleSheet, View } from 'react-native'
+import Header from '@/components/ui/Header'
+import { usePathname } from 'expo-router';
+
 
 const iconsSize = 32
 
@@ -36,7 +39,28 @@ function CustomTabIcon({ name, color, focused, iconsSize }: Props) {
 }
 
 export default function TabLayout() {
+
+
+  const pathname = usePathname();
+
+  const includeHeader = [
+    '/store',
+    '/quiz',
+    '/minigames',
+    '/profile',
+  ]
+
     return (
+        <>
+        {
+            includeHeader.includes(pathname) &&
+        <Header
+        title="Teste"
+        showBackButton={true}
+        onBackPress={() => console.log('Go Back')}
+        coinsValue={100}
+        />
+    }
         <Tabs
             screenOptions={{
                 headerTitleAlign: 'center',
@@ -69,7 +93,6 @@ export default function TabLayout() {
                 name="store"
                 options={{
                     title: 'Store',
-
                     tabBarIcon: ({ color, focused }) => (
                         <CustomTabIcon
                             name="store"
@@ -123,6 +146,7 @@ export default function TabLayout() {
                 }}
             />
         </Tabs>
+        </>
     )
 }
 
