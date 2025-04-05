@@ -1,5 +1,5 @@
 import { Animated, Dimensions, StyleSheet, Text, TouchableOpacity } from "react-native";
-import Dialog from "../../Dialog/Dialog";
+import Dialog from "@/components/Dialog/Dialog";
 
 const { width, height } = Dimensions.get("window");
 export default function StartGameDialog({startGame}: {startGame: (value: boolean) => void}){

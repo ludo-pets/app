@@ -3,7 +3,7 @@ import { PanGestureHandler, PanGestureHandlerGestureEvent, State } from "react-n
 import { Nail, NailProgress } from './types';
 import { useRef, useState } from 'react';
 import Svg, { Circle } from "react-native-svg";
-import { Audio, AVPlaybackSource, AVPlaybackStatus, AVPlaybackStatusSuccess } from "expo-av";
+import { Audio, AVPlaybackSource } from "expo-av";
 
 
 const { width, height } = Dimensions.get("window");
