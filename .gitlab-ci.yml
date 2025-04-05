@@ -23,7 +23,7 @@ export_pwa:
 deploy_pwa_vercel:
   stage: deploy
   script:
-    - vercel deploy --prebuilt --yes --prod --token $VERCEL_TOKEN
+    - vercel deploy --yes --prod --token $VERCEL_TOKEN
   dependencies:
     - export_pwa
 
