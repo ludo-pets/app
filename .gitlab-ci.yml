@@ -1,0 +1,29 @@
+stages:
+  - build
+  - deploy
+
+image: node:22
+
+cache:
+  paths:
+    - node_modules/
+
+export_pwa:
+  stage: build
+  script:
+    - npm install -g vercel
+    - npm ci
+    - npx expo export --platform web --dev false
+    - cp -r public/* dist/
+  artifacts:
+    paths:
+      - dist/
+
+
+deploy_pwa_vercel:
+  stage: deploy
+  script:
+    - vercel deploy --prebuilt --yes --prod --token $VERCEL_TOKEN
+  dependencies:
+    - export_pwa
+
