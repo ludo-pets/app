@@ -99,7 +99,7 @@ export function FormRegisterPet() {
                         Icon={pet.icon}
                         selected={pet.id === selectedPet?.id}
                         onSelect={() => setSelectedPet(pet)}
-                        color={selectedColorPet?.color || '#B6E683'}
+                        color={selectedColorPet?.color || '#FFD997'}
                     />
                 ))}
             </View>
@@ -134,7 +134,7 @@ export function FormRegisterPet() {
                 onPress={handlerSubmitForm}
                 style={styles.submitButtom}
             >
-                <Text className="font-interBold color-white">Avançar</Text>
+                <Text>Avançar</Text>
             </TouchableOpacity>
         </View>
     )
@@ -146,7 +146,6 @@ const styles = StyleSheet.create({
         paddingVertical: 19,
         alignItems: 'center',
         justifyContent: 'space-between',
-        // gap : 56,
         height: '60%',
         maxHeight: 445,
         width: '100%',
@@ -155,7 +154,6 @@ const styles = StyleSheet.create({
 
     optionBox: {
         flexDirection: 'row',
-        // gap : 32
         justifyContent: 'space-between',
         alignItems: 'center',
         width: '100%',
