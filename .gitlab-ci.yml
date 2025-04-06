@@ -13,17 +13,14 @@ export_pwa:
   script:
     - npm install -g vercel
     - npm ci
-    - npx expo export --platform web
-    - cp -r public/* dist/
+    - npx expo export --platform web --output-dir dist
   artifacts:
     paths:
       - dist/
 
-
 deploy_pwa_vercel:
   stage: deploy
   script:
-    - vercel deploy --yes --prod --token $VERCEL_TOKEN
+    - vercel deploy dist --yes --prod --token $VERCEL_TOKEN
   dependencies:
     - export_pwa
-
