@@ -6,6 +6,9 @@ import {
     Pressable,
     Alert,
     StyleSheet,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
 } from 'react-native'
 import { PetOptionFormRegisterPet } from './PetOptionFormRegisterPet'
 import { useState } from 'react'
@@ -65,13 +68,9 @@ export function FormRegisterPet() {
     function handlerSubmitForm() {
         if (!selectedPet || !selectedColorPet || !petName) {
             Alert.alert(
-                'Campos maus Preenchidos',
-                'Preencha todos os campos!',
-                [
-                    {
-                        text: 'OK',
-                    },
-                ]
+                'Oops!',
+                'Parece que você esqueceu de preencher alguma informação. Confira todos os campos.',
+                [{ text: 'OK' }]
             )
             return
         }
@@ -87,11 +86,14 @@ export function FormRegisterPet() {
 
     function handlerChangePetName(newName: string) {
         const newNameFormated = newName.replace(/[^a-zA-Z]/g, '')
-
         setPetName(newNameFormated)
     }
+
     return (
-        <View style={styles.formBox}>
+        <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={styles.formBox}
+        >
             <View style={styles.optionBox}>
                 {pets.map((pet) => (
                     <PetOptionFormRegisterPet
@@ -103,6 +105,7 @@ export function FormRegisterPet() {
                     />
                 ))}
             </View>
+
             <TextInput
                 style={styles.inputBox}
                 placeholder="Escolha um nome ..."
@@ -113,7 +116,7 @@ export function FormRegisterPet() {
 
             <View style={styles.colorOptionBox}>
                 {colors.map((color) => {
-                    const colorSelected = color.id == selectedColorPet?.id
+                    const colorSelected = color.id === selectedColorPet?.id
                     return (
                         <Pressable
                             key={color.id}
@@ -134,9 +137,9 @@ export function FormRegisterPet() {
                 onPress={handlerSubmitForm}
                 style={styles.submitButtom}
             >
-                <Text>Avançar</Text>
+                <Text style={styles.submitButtonText}>Avançar</Text>
             </TouchableOpacity>
-        </View>
+        </KeyboardAvoidingView>
     )
 }
 
@@ -173,12 +176,12 @@ const styles = StyleSheet.create({
     colorOptionBox: {
         flexDirection: 'row',
         gap: 10,
+        marginVertical: 16,
     },
 
     colorOption: {
         width: 32,
         height: 32,
-
         shadowColor: '#000000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
@@ -200,9 +203,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFAFD4',
         alignItems: 'center',
         justifyContent: 'center',
+        borderRadius: 8,
+    },
+    submitButtonText: {
         fontWeight: 'bold',
         lineHeight: 24,
         fontSize: 16,
-        borderRadius: 8,
+        color: '#FFF',
     },
 })
