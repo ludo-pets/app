@@ -32,10 +32,9 @@ build_apk:
   script:
     - npm install -g eas-cli firebase-tools
     - npm ci
-    - eas build --platform android --profile development --non-interactive --json > result.json
-    - node -e "console.log(require('./result.json').artifacts.android.buildUrl)" > apk_url.txt
-    - $env:APK_URL = Get-Content apk_url.txt
-    - curl -L "$env:APK_URL" -o app.apk
+    - eas build --platform android --profile production --non-interactive --json > result.json
+    - $APK_URL = (Get-Content result.json | ConvertFrom-Json)[0].artifacts.buildUrl
+    - Invoke-WebRequest -Uri $APK_URL -OutFile app.apk
     - firebase appdistribution:distribute app.apk `
         --app $env:FIREBASE_APP_ID `
         --token $env:FIREBASE_TOKEN `
