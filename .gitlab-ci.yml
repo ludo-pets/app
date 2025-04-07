@@ -1,7 +1,7 @@
 stages:
+  - android
   - build
   - deploy
-  - android
 
 image: node:22
 
