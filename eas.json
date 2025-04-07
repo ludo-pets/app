@@ -5,13 +5,16 @@
     },
     "build": {
       "development": {
+        "owner": "llopex",
         "developmentClient": true,
         "distribution": "internal"
       },
       "preview": {
+        "owner": "llopex",
         "distribution": "internal"
       },
       "production": {
+        "owner": "llopex",
         "android": {
           "buildType": "apk"
         },
@@ -19,7 +22,6 @@
           "simulator": true
         }
       }
-    },
-    "owner": "llopex"
+    }
   }
   
