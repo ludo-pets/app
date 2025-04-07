@@ -30,6 +30,7 @@ build_apk:
   stage: android
   image: node:22
   script:
+    - apt-get update && apt-get install -y jq
     - npm install -g eas-cli firebase-tools
     - npm ci
     - eas build --platform android --profile development --non-interactive --json > result.json
