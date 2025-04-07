@@ -1,7 +1,8 @@
 stages:
   - build
   - deploy
-
+  - android
+  
 image: node:22
 
 cache:
@@ -24,3 +25,16 @@ deploy_pwa_vercel:
     - vercel deploy dist --yes --prod --token $VERCEL_TOKEN
   dependencies:
     - export_pwa
+
+build_apk:
+  stage: android
+  image: node:22
+  script:
+    - npm install -g eas-cli firebase-tools
+    - eas build --platform android --profile development --non-interactive --json > result.json
+    - export APK_URL=$(cat result.json | jq -r '.artifacts.android.buildUrl')
+    - curl -L "$APK_URL" -o app.apk
+    - firebase appdistribution:distribute app.apk \
+        --app $FIREBASE_APP_ID \
+        --token $FIREBASE_TOKEN \
+        --groups "testadores"
