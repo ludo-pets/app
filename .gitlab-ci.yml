@@ -2,7 +2,7 @@ stages:
   - build
   - deploy
   - android
-  
+
 image: node:22
 
 cache:
@@ -31,6 +31,7 @@ build_apk:
   image: node:22
   script:
     - npm install -g eas-cli firebase-tools
+    - npm ci
     - eas build --platform android --profile development --non-interactive --json > result.json
     - export APK_URL=$(cat result.json | jq -r '.artifacts.android.buildUrl')
     - curl -L "$APK_URL" -o app.apk
