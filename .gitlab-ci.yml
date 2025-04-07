@@ -28,13 +28,13 @@ deploy_pwa_vercel:
 
 build_apk:
   stage: android
-  image: node:22
+  image: node:22-bullseye
   script:
+    - apt-get update && apt-get install -y jq
     - npm install -g eas-cli firebase-tools
     - npm ci
     - eas build --platform android --profile development --non-interactive --json > result.json
-    - node -e "console.log(require('./result.json').artifacts.android.buildUrl)" > apk_url.txt
-    - export APK_URL=$(cat apk_url.txt)
+    - export APK_URL=$(cat result.json | jq -r '.artifacts.android.buildUrl')
     - curl -L "$APK_URL" -o app.apk
     - firebase appdistribution:distribute app.apk \
         --app $FIREBASE_APP_ID \
