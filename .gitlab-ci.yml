@@ -36,6 +36,6 @@ build_apk:
     - $APK_URL = (Get-Content result.json | ConvertFrom-Json)[0].artifacts.buildUrl
     - Invoke-WebRequest -Uri $APK_URL -OutFile app.apk
     - firebase appdistribution:distribute app.apk `
-        --app $env:FIREBASE_APP_ID `
-        --token $env:FIREBASE_TOKEN `
-        --groups "testadores"
+    - app $env:FIREBASE_ANDROID_APP_ID `
+    - token $env:FIREBASE_CLI_TOKEN `
+    - groups "testadores"
