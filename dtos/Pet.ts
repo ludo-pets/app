@@ -9,9 +9,10 @@ export default interface Pet {
     };
     activeItems: string[];
     wellBeing : {
-        clean: number;
-        fun: number;
-        hunger: number;
-        thirst: number;
+        clean: Date;
+        fun: Date;
+        hunger: Date;
+        thirst: Date;
+        sleep: Date;
     };
 }
