@@ -6,5 +6,5 @@ export default interface User {
     experience: number;
     lastLessonConcluded: string;
     notifications: boolean;
-    pet: string
+    pet: string;
 }

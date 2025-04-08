@@ -6,8 +6,13 @@ export default interface Pet {
     purchasedItems: {
         id: string;
         quantity?: number;
+    }[];
+    activeItems: {
+        bed: string;
+        food: string;
+        toy: string;
+        wc: string;
     };
-    activeItems: string[];
     wellBeing : {
         clean: Date;
         fun: Date;
