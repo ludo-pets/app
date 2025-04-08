@@ -7,7 +7,7 @@ import EndGameDialog from './EndGameDialog'
 import GameBoard from './GameBoard'
 import { Nail } from './types'
 import { useUserPetStore } from '@/stores/ludoStore'
-import { useNavigation } from 'expo-router'
+import { useRouter } from 'expo-router'
 
 const { width } = Dimensions.get('window')
 
@@ -44,7 +44,7 @@ export default function NailTrimGame() {
     const [score, setScore] = useState(0)
     const user = useUserPetStore((state) => state.user)
     const userUpdate = useUserPetStore((state) => state.updateUser)
-    const navigation = useNavigation();
+    const router = useRouter();
     
 
     const addScore = () => {
@@ -54,14 +54,16 @@ export default function NailTrimGame() {
         if (score >= 4) setEnded(true)
     }, [score])
 
-    const endGame = () => {
+    const endGame = async () => {
         if (user) {
-            userUpdate(user.id, {
+            await userUpdate(user.id, {
                 money: user.money + 5,
             })
-            navigation.navigate('(tabs)' as never)
+            setStarted(false)
+            setEnded(false)
+            setScore(0)
+            router.push('/(tabs)')
         }
-        
     }
 
     return (

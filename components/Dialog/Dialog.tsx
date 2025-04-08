@@ -38,7 +38,7 @@ const style = StyleSheet.create({
         backgroundColor: "#fefefe",
         borderRadius: 25,
         display: "flex",
-        fontFamily: "Roboto",
+        fontFamily: 'Inter',
         flexDirection: "column",
         gap: 10,
         justifyContent: "space-around",

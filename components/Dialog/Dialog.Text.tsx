@@ -9,7 +9,7 @@ export default function DialogText({content, style, color}:DialogTextProps ){
 }
 const styles = StyleSheet.create({
     dialogText: {
-        fontFamily: "Roboto",
+      fontFamily: 'Inter',
         fontSize: 25,
         textAlign: "center",
         width: "80%",
