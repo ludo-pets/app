@@ -18,8 +18,8 @@ import {
   import { addPet } from '@/services/postPet';
   import { useNavigation } from '@react-navigation/native';
   
-  type PetOption = {
-    id: number;
+  export type PetOption = {
+    id?: number;
     icon: React.FC<SvgProps>;
     pet_type: 'cat' | 'dog';
   };
@@ -29,32 +29,34 @@ import {
     color: string;
   };
   
-  export function FormRegisterPet() {
-    const pets: PetOption[] = [
-        {
-          id: 1,
-          icon: Gato,
-          pet_type: 'cat',
-        },
-        {
-          id: 2,
-          icon: Cachorro,
-          pet_type: 'dog',
-        },
-      ];
+  export const petsTypes: PetOption[] = [
+    {
+      id: 1,
+      icon: Gato,
+      pet_type: 'cat',
+    },
+    {
+      id: 2,
+      icon: Cachorro,
+      pet_type: 'dog',
+    },
+  ];
 
-      const colors: ColorOption[] = [
-        { id: 1, color: '#7D5D56'},
-        { id: 2, color: '#BEBEBE'},
-        { id: 3, color: '#F4EDE1'},
-        { id: 4, color: '#FFD997'},
-      ];
+  export const colorsOptions: ColorOption[] = [
+    { id: 1, color: '#7D5D56'},
+    { id: 2, color: '#BEBEBE'},
+    { id: 3, color: '#F4EDE1'},
+    { id: 4, color: '#FFD997'},
+  ];
+  
+  export function FormRegisterPet() {
+    
       
     const navigation = useNavigation();
 
-    const [selectedPet, setSelectedPet] = useState<PetOption>(pets[0]);
+    const [selectedPet, setSelectedPet] = useState<PetOption>(petsTypes[0]);
     const [selectedColorPet, setSelectedColorPet] =
-      useState<ColorOption>(colors[0]);
+      useState<ColorOption>(colorsOptions[0]);
     const [petName, setPetName] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -94,8 +96,8 @@ import {
             onPress: () => {
               // Reset form state if needed
                navigation.navigate('(tabs)' as never);
-               setSelectedPet(pets[0]);
-               setSelectedColorPet(colors[0]);
+               setSelectedPet(petsTypes[0]);
+               setSelectedColorPet(colorsOptions[0]);
                setPetName('');
             },
           },
@@ -119,7 +121,7 @@ import {
       >
         {/* Pet Type Selection */}
         <View style={styles.optionBox}>
-          {pets.map((pet) => (
+          {petsTypes.map((pet) => (
             <PetOptionFormRegisterPet
               key={pet.id}
               Icon={pet.icon}
@@ -142,7 +144,7 @@ import {
   
         {/* Color Selection */}
         <View style={styles.colorOptionBox}>
-          {colors.map((color) => {
+          {colorsOptions.map((color) => {
             const colorSelected = color.id === selectedColorPet?.id;
             return (
               <Pressable

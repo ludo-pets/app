@@ -1,10 +1,15 @@
 import React, { useEffect, useState, useRef } from "react";
 import { View, Text, StyleSheet, Animated, Image } from "react-native";
 
-const XpBar = () => {
-  const [xp, setXp] = useState(0);
-  const [level, setLevel] = useState(1); 
+interface xpBarProps {
+  xp: number;
+  level: number;
+};
+
+const XpBar = ({ xp, level }: xpBarProps) => {
   const animatedValue = useRef(new Animated.Value(0)).current;
+  
+  // Calculate the XP bar size based on the level
   const xpBarSize = 95 + level * 5;
 
   const barWidth = animatedValue.interpolate({
@@ -13,12 +18,12 @@ const XpBar = () => {
   });
 
   useEffect(() => {
-    if (xp >= xpBarSize) {
-      setLevel((prev) => prev + 1);
-      setXp(0); 
-      animatedValue.setValue(0); 
-    }
-  }, [xp]);
+    Animated.timing(animatedValue, {
+      toValue: xp,
+      duration: 500,
+      useNativeDriver: false,
+    }).start();
+  }, [xp, animatedValue]);
 
   return (
     <View style={styles.container}>
@@ -39,20 +44,19 @@ const XpBar = () => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    width: "90%",
+    width: "100%",
     alignItems: "center",
     marginHorizontal: "auto",
   },
   pawContainer: {
-    position: "relative", 
-    marginRight: 30,
-    marginLeft: 10
+    position: "relative",
+    marginRight: 10,
   },
   levelText: {
     position: "absolute",
     top: "50%",
     left: "50%",
-    transform: [{ translateX: -4 }, { translateY: -3.4 }],
+    transform: [{ translateX: -5 }, { translateY: -3.4 }],
     fontSize: 14,
     fontWeight: "bold",
     color: "#5B5B5B",
@@ -65,7 +69,7 @@ const styles = StyleSheet.create({
     color: "#5B5B5B",
   },
   bar: {
-    width: 260,
+    width: "82%",
   },
   barBackground: {
     width: "100%",
