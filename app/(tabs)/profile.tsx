@@ -1,3 +1,4 @@
+import { useUserPetStore } from '@/stores/ludoStore'
 import {
     View,
     Text,
