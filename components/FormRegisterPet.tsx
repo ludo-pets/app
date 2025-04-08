@@ -54,10 +54,7 @@ import {
       useState<ColorOption>(colors[0]);
     const [petName, setPetName] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
-  
-    
-  
-    
+
   
     // Make the handler async to use await
     async function handlerSubmitForm() {
@@ -79,7 +76,6 @@ import {
         type: selectedPet.pet_type, // Changed from petType to type to match service
       };
   
-      console.log('🚀 ~ Submitting Pet Data:', petDataToCreate);
   
       // Call the service function to add the pet
       const newPet = await addPet(petDataToCreate);
@@ -93,9 +89,6 @@ import {
           {
             text: 'OK',
             onPress: () => {
-              // Optional: Navigate to another screen, e.g., the pet's detail screen
-              // navigation.navigate('PetDetails', { petId: newPet.id });
-              console.log('Pet created:', newPet);
               // Reset form state if needed
                setSelectedPet(pets[0]);
                setSelectedColorPet(colors[0]);
@@ -228,7 +221,7 @@ import {
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.25,
       shadowRadius: 3.84, // Adjusted shadow
-      borderRadius: 16, // Make it circular
+      borderRadius: 5, // Make it circular
       elevation: 5, // Add elevation for Android
     },
     colorOptionActive: {

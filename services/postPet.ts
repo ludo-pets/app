@@ -22,18 +22,22 @@ export const addPet = async (petData: CreatePetData): Promise<Pet | null> => {
       color: petData.color,
       type: petData.type,
       purchasedItems: [],
-      activeItems: [],
+      activeItems: {
+        toy: "abc",
+        wc: "abc",
+        food: "cba",
+        bed: "bbb",
+      },
       wellBeing: {
         clean: new Date(),
         fun: new Date(),
         hunger: new Date(),
         thirst: new Date(),
+        sleep: new Date(),
       },
     };
 
     const docRef = await addDoc(petCollectionRef, newPetDocData);
-
-    console.log("Pet added successfully with ID: ", docRef.id);
 
     const createdPet: Pet = {
         ...newPetDocData,
