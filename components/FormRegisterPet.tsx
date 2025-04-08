@@ -8,207 +8,258 @@ import {
     StyleSheet,
     KeyboardAvoidingView,
     Platform,
-    ScrollView,
-} from 'react-native'
-import { PetOptionFormRegisterPet } from './PetOptionFormRegisterPet'
-import { useState } from 'react'
-import Gato from '../assets/images/pets/gato.svg'
-import Cachorro from '../assets/images/pets/cachorro.svg'
-import { SvgProps } from 'react-native-svg'
-
-type PetOption = {
-    id: number
-    icon: React.FC<SvgProps>
-    pet_type: 'cat' | 'dog'
-}
-
-type ColorOption = {
-    id: number
-    color: string
-}
-
-export function FormRegisterPet() {
-    const [selectedPet, setSelectedPet] = useState<PetOption | null>(null)
-    const [selectedColorPet, setSelectedColorPet] =
-        useState<ColorOption | null>(null)
-    const [petName, setPetName] = useState<string>('')
-
+    ActivityIndicator,
+  } from 'react-native';
+  import { PetOptionFormRegisterPet } from './PetOptionFormRegisterPet';
+  import { useState } from 'react';
+  import Gato from '../assets/images/pets/gato.svg';
+  import Cachorro from '../assets/images/pets/cachorro.svg';
+  import { SvgProps } from 'react-native-svg';
+  import { addPet } from '@/services/postPet';
+  
+  type PetOption = {
+    id: number;
+    icon: React.FC<SvgProps>;
+    pet_type: 'cat' | 'dog';
+  };
+  
+  type ColorOption = {
+    id: number;
+    color: string;
+  };
+  
+  export function FormRegisterPet() {
     const pets: PetOption[] = [
         {
-            id: 1,
-            icon: Gato,
-            pet_type: 'cat',
+          id: 1,
+          icon: Gato,
+          pet_type: 'cat',
         },
         {
-            id: 2,
-            icon: Cachorro,
-            pet_type: 'dog',
+          id: 2,
+          icon: Cachorro,
+          pet_type: 'dog',
         },
-    ]
+      ];
 
-    const colors: ColorOption[] = [
-        {
-            id: 1,
-            color: '#7D5D56',
-        },
-        {
-            id: 2,
-            color: '#BEBEBE',
-        },
-        {
-            id: 3,
-            color: '#F4EDE1',
-        },
-        {
-            id: 4,
-            color: '#FFD997',
-        },
-    ]
+      const colors: ColorOption[] = [
+        { id: 1, color: '#7D5D56'},
+        { id: 2, color: '#BEBEBE'},
+        { id: 3, color: '#F4EDE1'},
+        { id: 4, color: '#FFD997'},
+      ];
 
-    function handlerSubmitForm() {
-        if (!selectedPet || !selectedColorPet || !petName) {
-            Alert.alert(
-                'Oops!',
-                'Parece que você esqueceu de preencher alguma informação. Confira todos os campos.',
-                [{ text: 'OK' }]
-            )
-            return
-        }
-
-        const payload = {
-            name: petName,
-            color: selectedColorPet.color,
-            petType: selectedPet.pet_type,
-        }
-
-        console.log('🚀 ~ handlerSubmitForm ~ payload:', payload)
+    const [selectedPet, setSelectedPet] = useState<PetOption>(pets[0]);
+    const [selectedColorPet, setSelectedColorPet] =
+      useState<ColorOption>(colors[0]);
+    const [petName, setPetName] = useState<string>('');
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+  
+    
+  
+    
+  
+    // Make the handler async to use await
+    async function handlerSubmitForm() {
+      if (!petName.trim()) {
+        Alert.alert(
+          'Oops!',
+          'Parece que você esqueceu de preencher alguma informação. Confira todos os campos.',
+          [{ text: 'OK' }]
+        );
+        return;
+      }
+  
+      // Set loading state to true
+      setIsLoading(true);
+  
+      const petDataToCreate = {
+        name: petName.trim(), // Trim whitespace
+        color: selectedColorPet.color,
+        type: selectedPet.pet_type, // Changed from petType to type to match service
+      };
+  
+      console.log('🚀 ~ Submitting Pet Data:', petDataToCreate);
+  
+      // Call the service function to add the pet
+      const newPet = await addPet(petDataToCreate);
+  
+      // Set loading state back to false
+      setIsLoading(false);
+  
+      if (newPet) {
+        // Success!
+        Alert.alert('Sucesso!', `Seu pet ${newPet.name} foi criado!`, [
+          {
+            text: 'OK',
+            onPress: () => {
+              // Optional: Navigate to another screen, e.g., the pet's detail screen
+              // navigation.navigate('PetDetails', { petId: newPet.id });
+              console.log('Pet created:', newPet);
+              // Reset form state if needed
+               setSelectedPet(pets[0]);
+               setSelectedColorPet(colors[0]);
+               setPetName('');
+            },
+          },
+        ]);
+      } else {
+        // Error handled in addPet function (showed an alert there)
+        console.error('Failed to create pet.');
+      }
     }
-
+  
     function handlerChangePetName(newName: string) {
-        const newNameFormated = newName.replace(/[^a-zA-Z]/g, '')
-        setPetName(newNameFormated)
+      const newNameFormated = newName.replace(/[^a-zA-Z\s]/g, ''); // Allow spaces too? Adjust regex if needed
+      setPetName(newNameFormated);
     }
-
+  
     return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={styles.formBox}
-        >
-            <View style={styles.optionBox}>
-                {pets.map((pet) => (
-                    <PetOptionFormRegisterPet
-                        key={pet.id}
-                        Icon={pet.icon}
-                        selected={pet.id === selectedPet?.id}
-                        onSelect={() => setSelectedPet(pet)}
-                        color={selectedColorPet?.color || '#FFD997'}
-                    />
-                ))}
-            </View>
-
-            <TextInput
-                style={styles.inputBox}
-                placeholder="Escolha um nome ..."
-                placeholderTextColor={'#79747E'}
-                onChangeText={(newName) => handlerChangePetName(newName)}
-                value={petName}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.formBox}
+      >
+        {/* Pet Type Selection */}
+        <View style={styles.optionBox}>
+          {pets.map((pet) => (
+            <PetOptionFormRegisterPet
+              key={pet.id}
+              Icon={pet.icon}
+              selected={pet.id === selectedPet?.id}
+              onSelect={() => setSelectedPet(pet)}
+              color={selectedColorPet?.color || '#FFD997'}
             />
-
-            <View style={styles.colorOptionBox}>
-                {colors.map((color) => {
-                    const colorSelected = color.id === selectedColorPet?.id
-                    return (
-                        <Pressable
-                            key={color.id}
-                            style={[
-                                { backgroundColor: color.color },
-                                styles.colorOption,
-                                colorSelected && styles.colorOptionActive,
-                            ]}
-                            onPress={() => {
-                                setSelectedColorPet(color)
-                            }}
-                        />
-                    )
-                })}
-            </View>
-
-            <TouchableOpacity
-                onPress={handlerSubmitForm}
-                style={styles.submitButtom}
-            >
-                <Text style={styles.submitButtonText}>Avançar</Text>
-            </TouchableOpacity>
-        </KeyboardAvoidingView>
-    )
-}
-
-const styles = StyleSheet.create({
+          ))}
+        </View>
+  
+        {/* Pet Name Input */}
+        <TextInput
+          style={[styles.inputBox, isLoading && styles.disabledInput]} // Style when disabled
+          placeholder="Escolha um nome ..."
+          placeholderTextColor={'#79747E'}
+          onChangeText={handlerChangePetName}
+          value={petName}
+          editable={!isLoading} // Disable input while loading
+        />
+  
+        {/* Color Selection */}
+        <View style={styles.colorOptionBox}>
+          {colors.map((color) => {
+            const colorSelected = color.id === selectedColorPet?.id;
+            return (
+              <Pressable
+                key={color.id}
+                style={[
+                  { backgroundColor: color.color },
+                  styles.colorOption,
+                  colorSelected && styles.colorOptionActive,
+                  isLoading && styles.disabledInput, // Visually disable
+                ]}
+                onPress={() => {
+                  if (!isLoading) {
+                     setSelectedColorPet(color);
+                  }
+                }}
+                disabled={isLoading} // Disable pressable while loading
+              />
+            );
+          })}
+        </View>
+  
+        {/* Submit Button */}
+        <TouchableOpacity
+          onPress={handlerSubmitForm}
+          style={[styles.submitButtom, isLoading && styles.submitButtonDisabled]} // Style when disabled
+          disabled={isLoading} // Disable button while loading
+        >
+          {isLoading ? (
+            <ActivityIndicator size="small" color="#FFF" /> // Show loader
+          ) : (
+            <Text style={styles.submitButtonText}>Avançar</Text> // Show text
+          )}
+        </TouchableOpacity>
+      </KeyboardAvoidingView>
+    );
+  }
+  
+  // --- Add styles for disabled states ---
+  const styles = StyleSheet.create({
     formBox: {
-        paddingHorizontal: 25,
-        paddingVertical: 19,
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        height: '60%',
-        maxHeight: 445,
-        width: '100%',
-        maxWidth: 400,
+      paddingHorizontal: 25,
+      paddingVertical: 19,
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      // Removed fixed height to be more flexible
+      // height: '60%',
+      // maxHeight: 445,
+      width: '100%',
+      maxWidth: 400,
     },
-
     optionBox: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        width: '100%',
+      flexDirection: 'row',
+      justifyContent: 'space-around', // Changed for better spacing
+      alignItems: 'center',
+      width: '100%',
+      marginBottom: 20, // Added margin
     },
-
     inputBox: {
-        width: '100%',
-        paddingHorizontal: 16,
-        paddingVertical: 8,
-        height: 40,
-        borderWidth: 1,
-        borderColor: '#D9D0E3',
-        borderRadius: 8,
-        borderStyle: 'solid',
+      width: '100%',
+      paddingHorizontal: 16,
+      paddingVertical: 8,
+      height: 40,
+      borderWidth: 1,
+      borderColor: '#D9D0E3',
+      borderRadius: 8,
+      borderStyle: 'solid',
+      marginBottom: 20, // Added margin
+      backgroundColor: '#FFF', // Added background
     },
-
     colorOptionBox: {
-        flexDirection: 'row',
-        gap: 10,
-        marginVertical: 16,
+      flexDirection: 'row',
+      flexWrap: 'wrap', // Allow wrapping if many colors
+      justifyContent: 'center', // Center colors
+      gap: 15, // Increased gap
+      marginBottom: 30, // Increased margin
     },
-
     colorOption: {
-        width: 32,
-        height: 32,
-        shadowColor: '#000000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 6.8,
-        borderRadius: 6,
+      width: 32,
+      height: 32,
+      shadowColor: '#000000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84, // Adjusted shadow
+      borderRadius: 16, // Make it circular
+      elevation: 5, // Add elevation for Android
     },
-
     colorOptionActive: {
-        borderWidth: 3,
-        borderColor: '#80BEE7',
-        borderStyle: 'solid',
+      borderWidth: 3,
+      borderColor: '#80BEE7',
+      borderStyle: 'solid',
     },
-
     submitButtom: {
-        paddingHorizontal: 24,
-        paddingVertical: 16,
-        width: 113,
-        height: 56,
-        backgroundColor: '#FFAFD4',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 8,
+      paddingHorizontal: 24,
+      paddingVertical: 10, // Adjusted padding
+      minWidth: 113, // Use minWidth
+      height: 48, // Adjusted height
+      backgroundColor: '#FFAFD4',
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 24, // Make it more rounded
+      elevation: 3,
     },
     submitButtonText: {
-        fontWeight: 'bold',
-        lineHeight: 24,
-        fontSize: 16,
-        color: '#FFF',
+      fontWeight: 'bold',
+      lineHeight: 24,
+      fontSize: 16,
+      color: '#FFF',
     },
-})
+    // Styles for disabled/loading states
+    disabledInput: {
+        opacity: 0.6,
+        backgroundColor: '#E0E0E0', // Lighter background when disabled
+    },
+    submitButtonDisabled: {
+        backgroundColor: '#E0A0C0', // Different color when disabled
+        opacity: 0.7,
+    },
+  });
