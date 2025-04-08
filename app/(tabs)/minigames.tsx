@@ -1,12 +1,11 @@
-import Header from '@/components/ui/Header'
-import { StyleSheet, Text, View } from 'react-native'
+import NailTrimGame from '@/components/minigames/nail-trim-game'
+import { StyleSheet, View } from 'react-native'
 
 export default function MinigameScreen() {
     return (
         <>
             <View style={styles.container}>
-                <Text style={styles.title}>Minigame</Text>
-                <View style={styles.separator} />
+              <NailTrimGame />
             </View>
         </>
     )

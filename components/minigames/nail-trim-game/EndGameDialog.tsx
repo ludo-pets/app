@@ -1,39 +1,29 @@
-import { Animated, Dimensions, StyleSheet, Text, TouchableOpacity } from "react-native";
-import Dialog from "@/components/Dialog/Dialog";
-import Svg, { Image } from "react-native-svg";
-const { width } = Dimensions.get("window");
-export default function EndGameDialog({endGame}: {endGame: (value: boolean) => void}){
-    return(
-        <Dialog.Container> 
-            <Dialog.Icon 
-                content={
-                    <Svg 
-                        width={width/ 3} 
-                        height={width / 3} 
-                        viewBox={`0 0 ${width / 3} ${width / 3}`}
-                        >
-                        <Image
-                            href={require("@/assets/images/minigames/nail-trimmer/trophy.svg")}
-                            width="100%"
-                            height="100%"
+import { Dimensions } from 'react-native'
+import Dialog from '@/components/Dialog/Dialog'
+const { width } = Dimensions.get('window')
+import TrophyIcon from '@/assets/images/minigames/nail-trimmer/trophy.svg'
 
-                        />
-                    </Svg>
-                }
+export default function EndGameDialog({
+    endGame,
+}: {
+    endGame: () => void
+}) {
+    return (
+        <Dialog.Container>
+            <Dialog.Icon
+                content={<TrophyIcon width={width / 3} height={width / 3} />}
             />
             <Dialog.Text
                 content="Parabéns!"
                 color="#FBBC05"
                 style={{
-                    fontweight: "800",
+                    fontweight: '800',
                 }}
             />
-            <Dialog.Text
-            content="Você ganhou 5 moedas."
-            />
+            <Dialog.Text content="Você ganhou 5 moedas." />
             <Dialog.ButtonArea>
                 <Dialog.Button
-                    action={() => endGame(true)}
+                    action={() => endGame()}
                     text="Avançar"
                     color="#fff"
                     background="#FFAFD4"

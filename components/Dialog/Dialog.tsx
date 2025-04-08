@@ -1,4 +1,4 @@
-import { Children, ReactNode } from "react";
+import { ReactNode } from "react";
 import { Animated, Dimensions, StyleSheet, TouchableOpacity } from "react-native";
 import Button from "./Dialog.Button";
 import Text from "./Dialog.Text";
@@ -8,7 +8,7 @@ export type DialogContainerProps= {
     children: ReactNode
 }
 
-const { width, height } = Dimensions.get("window");
+const { width, } = Dimensions.get("window");
 function Container({children}: DialogContainerProps){   
     return(
         <Animated.View style={style.overlay}>
@@ -38,8 +38,9 @@ const style = StyleSheet.create({
         backgroundColor: "#fefefe",
         borderRadius: 25,
         display: "flex",
+        fontFamily: "Roboto",
         flexDirection: "column",
-        gap: 20,
+        gap: 10,
         justifyContent: "space-around",
         alignItems: "center",
         top: "50%",

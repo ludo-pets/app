@@ -12,6 +12,8 @@ export default interface Pet {
         food: string;
         toy: string;
         wc: string;
+        floor: string;
+        wallpaper: string;
     };
     wellBeing : {
         clean: Date;
