@@ -1,4 +1,3 @@
-import Header from '@/components/ui/Header'
 import { StyleSheet, View, Text } from 'react-native'
 
 export default function HomeScreen() {
@@ -6,6 +5,7 @@ export default function HomeScreen() {
         <>
             <View style={styles.container}>
                 <Text style={styles.title}>Home</Text>
+                <View style={styles.separator} />
                 <View style={styles.separator} />
             </View>
         </>

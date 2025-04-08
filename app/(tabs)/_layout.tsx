@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
     House,
     Storefront,
@@ -8,6 +8,7 @@ import {
 } from 'phosphor-react-native'
 import { Tabs } from 'expo-router'
 import { StyleSheet, View } from 'react-native'
+import { useUserPetStore } from '@/stores/ludoStore'
 
 const iconsSize = 32
 
@@ -36,6 +37,16 @@ function CustomTabIcon({ name, color, focused, iconsSize }: Props) {
 }
 
 export default function TabLayout() {
+    const fetchUserAndPet = useUserPetStore((state) => state.fetchUserAndPet)
+    const user = useUserPetStore((state) => state.user)
+
+    useEffect(() => {
+        const userId = 'ludopetsages@gmail.com'
+        if (!user) {
+            fetchUserAndPet(userId)
+        }
+    }, [fetchUserAndPet, user])
+    
     return (
         <Tabs
             screenOptions={{
