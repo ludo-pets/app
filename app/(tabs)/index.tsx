@@ -1,20 +1,6 @@
-import { useUserPetStore } from '@/stores/ludoStore'
-import { useEffect } from 'react'
-import Header from '@/components/ui/Header'
 import { StyleSheet, View, Text } from 'react-native'
 
 export default function HomeScreen() {
-    const fetchUserAndPet = useUserPetStore((state) => state.fetchUserAndPet)
-    const user = useUserPetStore((state) => state.user)
-    const pet = useUserPetStore((state) => state.pet)
-
-    useEffect(() => {
-        const userId = 'ludopetsages@gmail.com'
-        if (!user) {
-            fetchUserAndPet(userId)
-        }
-    }, [fetchUserAndPet, user])
-
     return (
         <>
             <View style={styles.container}>
