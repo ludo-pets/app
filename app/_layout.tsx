@@ -40,7 +40,7 @@ function RootLayoutNav() {
     return (
         <Stack>
             <Stack.Screen
-                name="registerPetPage"
+                name="index"
                 options={{ headerShown: false }}
             />
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

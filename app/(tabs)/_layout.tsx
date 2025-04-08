@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
     House,
     Storefront,
@@ -37,7 +37,16 @@ function CustomTabIcon({ name, color, focused, iconsSize }: Props) {
 }
 
 export default function TabLayout() {
-    const pet = useUserPetStore((state) => state.pet)
+    const fetchUserAndPet = useUserPetStore((state) => state.fetchUserAndPet)
+    const user = useUserPetStore((state) => state.user)
+
+    useEffect(() => {
+        const userId = 'ludopetsages@gmail.com'
+        if (!user) {
+            fetchUserAndPet(userId)
+        }
+    }, [fetchUserAndPet, user])
+    
     return (
         <Tabs
             screenOptions={{

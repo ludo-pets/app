@@ -16,6 +16,7 @@ import {
   import Cachorro from '../assets/images/pets/cachorro.svg';
   import { SvgProps } from 'react-native-svg';
   import { addPet } from '@/services/postPet';
+  import { useNavigation } from '@react-navigation/native';
   
   type PetOption = {
     id: number;
@@ -48,6 +49,8 @@ import {
         { id: 3, color: '#F4EDE1'},
         { id: 4, color: '#FFD997'},
       ];
+      
+    const navigation = useNavigation();
 
     const [selectedPet, setSelectedPet] = useState<PetOption>(pets[0]);
     const [selectedColorPet, setSelectedColorPet] =
@@ -90,12 +93,14 @@ import {
             text: 'OK',
             onPress: () => {
               // Reset form state if needed
+               navigation.navigate('(tabs)' as never);
                setSelectedPet(pets[0]);
                setSelectedColorPet(colors[0]);
                setPetName('');
             },
           },
         ]);
+        navigation.navigate('(tabs)' as never);
       } else {
         // Error handled in addPet function (showed an alert there)
         console.error('Failed to create pet.');
