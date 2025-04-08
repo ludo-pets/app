@@ -38,7 +38,6 @@ function CustomTabIcon({ name, color, focused, iconsSize }: Props) {
 
 export default function TabLayout() {
     const pet = useUserPetStore((state) => state.pet)
-    console.log('Pet:', pet)
     return (
         <Tabs
             screenOptions={{

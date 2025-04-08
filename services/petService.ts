@@ -1,10 +1,10 @@
 import { doc, updateDoc } from 'firebase/firestore'
 import { db } from '../firebaseConfig' // mudar quando tiver a configuração do firebase
-import { IPet } from '@/dtos/IPet'
+import Pet from '@/dtos/Pet'
 
 export const updatePetService = async (
     petId: string,
-    petData: Partial<IPet>
+    petData: Partial<Pet>
 ) => {
     try {
         const petRef = doc(db, 'Pet', petId)

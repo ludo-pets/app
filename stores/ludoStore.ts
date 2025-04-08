@@ -1,6 +1,6 @@
 import { create } from 'zustand'
-import { IUser } from '@/dtos/IUser'
-import { IPet } from '@/dtos/IPet'
+import User from '@/dtos/User'
+import Pet from '@/dtos/Pet'
 import {
     getUserWithPetByIdService,
     updateUserService,
@@ -8,15 +8,15 @@ import {
 import { updatePetService } from '@/services/petService'
 
 interface UserPetState {
-    user: IUser | null
-    pet: IPet | null
+    user: User | null
+    pet: Pet | null
     loading: boolean
     error: string | null
     fetchUserAndPet: (userId: string) => Promise<void>
-    updateUser: (userId: string, userData: Partial<IUser>) => Promise<void>
-    updatePet: (petId: string, petData: Partial<IPet>) => Promise<void>
-    setUser: (user: IUser) => void
-    setPet: (pet: IPet) => void
+    updateUser: (userId: string, userData: Partial<User>) => Promise<void>
+    updatePet: (petId: string, petData: Partial<Pet>) => Promise<void>
+    setUser: (user: User) => void
+    setPet: (pet: Pet) => void
 }
 
 export const useUserPetStore = create<UserPetState>((set, get) => ({
@@ -39,7 +39,7 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
         }
     },
 
-    updateUser: async (userId: string, userData: Partial<IUser>) => {
+    updateUser: async (userId: string, userData: Partial<User>) => {
         set({ loading: true, error: null })
         try {
             const success = await updateUserService(userId, userData)
@@ -58,7 +58,7 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
         }
     },
 
-    updatePet: async (petId: string, petData: Partial<IPet>) => {
+    updatePet: async (petId: string, petData: Partial<Pet>) => {
         set({ loading: true, error: null })
         try {
             const success = await updatePetService(petId, petData)
@@ -77,6 +77,6 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
         }
     },
 
-    setUser: (user: IUser) => set({ user }),
-    setPet: (pet: IPet) => set({ pet }),
+    setUser: (user: User) => set({ user }),
+    setPet: (pet: Pet) => set({ pet }),
 }))

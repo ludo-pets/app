@@ -1,70 +1,71 @@
-import { IPet } from "@/dtos/IPet";
-import { IUser } from "@/dtos/IUser"
-import Pet from "@/dtos/Pet";
-import User from "@/dtos/User";
-import { db } from "@/firebaseConfig"
-import { doc, getDoc, updateDoc } from "firebase/firestore"
-
+import Pet from '@/dtos/Pet'
+import User from '@/dtos/User'
+import { db } from '@/firebaseConfig'
+import {
+    doc,
+    getDoc,
+    getDocs,
+    updateDoc,
+    collection,
+    query,
+    where,
+} from 'firebase/firestore'
 
 export const getUserWithPetByIdService = async (
-    userId: string
+    email: string
 ): Promise<{ user: User; pet: Pet } | null> => {
     try {
-        const userRef = doc(db, 'User', userId)
-        const userSnap = await getDoc(userRef)
-        console.log('user: ', userRef)
+        const userQuery = query(
+            collection(db, 'User'),
+            where('email', '==', email)
+        )
+        const userSnap = await getDocs(userQuery)
 
-        if (!userSnap.exists()) {
+        if (userSnap.empty) {
             console.error('User não encontrado')
             return null
         }
 
-        const userData = userSnap.data() // Referência ao pet\
-        
-        //const petRef = doc(db, 'Pet', userData.pet)
-        
-        const petSnap = await getDoc(userData.pet);
+        // Garante que apenas o primeiro documento seja retornado
+        const userDoc = userSnap.docs[0]
+        const userData = userDoc.data()
+
+        const petSnap = await getDoc(userData.pet)
 
         //const petSnap = await getDoc(petRef);
         if (!petSnap.exists()) {
-        console.error('Pet não encontrado');
-        return null;
+            console.error('Pet não encontrado')
+            return null
         }
 
-        const petData = petSnap.data() as any;
+        const petData = petSnap.data() as Pet
 
-
-        //const petData = petSnap.data()
-        console.log('Date format: ', petData.well_being.clean)
-        
         const pet: Pet = {
-            id:petSnap.id,
-            name:petData.name,
+            id: petSnap.id,
+            name: petData.name,
             color: petData.color,
             type: petData.type,
-            purchasedItems: petData.purchased_items,
-            activeItems: petData.active_items,
+            purchasedItems: petData.purchasedItems,
+            activeItems: petData.activeItems,
             wellBeing: {
-                clean: new Date(petData.well_being.clean),
-                fun: new Date(petData.well_being.fun),
-                hunger: new Date(petData.well_being.hunger),
-                thirst: new Date(petData.well_being.thirst),
-                sleep: new Date(petData.well_being.sleep)
-            }
+                clean: new Date(petData.wellBeing.clean),
+                fun: new Date(petData.wellBeing.fun),
+                hunger: new Date(petData.wellBeing.hunger),
+                thirst: new Date(petData.wellBeing.thirst),
+                sleep: new Date(petData.wellBeing.sleep),
+            },
         }
 
         const user: User = {
+            id: userData.id,
             email: userData.email,
             money: userData.money,
             level: userData.level,
             experience: userData.experience,
-            lastLessonConcluded: userData.last_lesson_concluded,
+            lastLessonConcluded: userData.lastLessonConcluded,
             notifications: userData.notifications,
-            pet: userData.pet
+            pet: userData.pet,
         }
-
-        console.log('user: ', user)
-        console.log('pet: ', pet)
 
         return { user, pet }
     } catch (error) {
@@ -75,12 +76,11 @@ export const getUserWithPetByIdService = async (
 
 export const updateUserService = async (
     userId: string,
-    userData: Partial<IUser>
+    userData: Partial<User>
 ) => {
     try {
         const userRef = doc(db, 'User', userId)
         await updateDoc(userRef, { ...userData })
-        
         return true
     } catch (error) {
         console.error('Erro ao atualizar User:', error)

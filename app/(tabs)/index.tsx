@@ -9,7 +9,7 @@ export default function HomeScreen() {
     const pet = useUserPetStore((state) => state.pet)
 
     useEffect(() => {
-        const userId = 'lKlrZ2s9n2fM7QGvZOuu'
+        const userId = 'ludopetsages@gmail.com'
         if (!user) {
             fetchUserAndPet(userId)
         }
@@ -27,8 +27,6 @@ export default function HomeScreen() {
             </View>
             <View style={styles.container}>
                 <Text style={styles.title}>Home</Text>
-                <Text style={styles.title}>{pet?.name}</Text>
-                <Text style={styles.title}>{user?.email}</Text>
                 <View style={styles.separator} />
                 <View style={styles.separator} />
             </View>
