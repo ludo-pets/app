@@ -27,9 +27,6 @@ export default function Profile() {
 
     return (
         <SafeAreaView style={styles.safeArea}>
-            <View style={styles.header}>
-                <Text style={styles.headerText}>Perfil</Text>
-            </View>
 
             <View style={styles.container}>
                 <View style={styles.petContainer}>
@@ -109,19 +106,6 @@ const createStyles = (isSmallScreen: boolean) => StyleSheet.create({
         flex: 1,
         backgroundColor: '#FEFEFE',
         height: '100%',
-    },
-    header: {
-        width: '100%',
-        height: 70,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderBottomWidth: 2,
-        borderBottomColor: '#5B5B5B',
-    },
-    headerText: {
-        fontSize: 32,
-        fontWeight: '600',
-        color: '#5B5B5B',
     },
     container: {
         flex: 1,
