@@ -29,11 +29,10 @@ const style = StyleSheet.create({
         boxShadow: '2px 2px 4px 0px rgba(0,0,0,0.2)',
         alignItems: 'center',
         width: '60%',
-        fontFamily: 'Roboto',
+        fontFamily: 'Inter',
     },
     buttonText: {
-        fontFamily: 'Roboto',
-
+        fontFamily: 'Inter',
         fontSize: 25,
         fontWeight: 500,
         color: '#5B5B5B',

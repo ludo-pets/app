@@ -1,12 +1,22 @@
-import { Image, View, StyleSheet } from 'react-native'
+import { Image, View, StyleSheet, Pressable, Text } from 'react-native'
 import { FormRegisterPet } from '../components/FormRegisterPet'
+import { useRouter } from 'expo-router'
 
 export default function registerPetPage() {
+    const router = useRouter()
+
     return (
         <View style={styles.containerBox}>
             <View style={styles.mainContent}>
                 <Image source={require('../assets/images/logo.png')} />
                 <FormRegisterPet />
+                <Pressable
+                    onPress={() => {
+                        router.push('/(tabs)')
+                    }}
+                >
+                    <Text style={styles.link}>Já tenho um pet</Text>
+                </Pressable>
             </View>
         </View>
     )
@@ -20,9 +30,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
-        backgroundColor: '#FEFEFE'
+        backgroundColor: '#FEFEFE',
     },
-
+    link: {
+        fontSize: 16,
+        fontWeight: '300',
+        color: '#5B5B5B',
+        textDecorationLine: 'underline',
+    },
     mainContent: {
         height: '100%',
         width: '100%',

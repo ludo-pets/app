@@ -242,7 +242,7 @@ import {
       backgroundColor: '#FFAFD4',
       alignItems: 'center',
       justifyContent: 'center',
-      borderRadius: 24, // Make it more rounded
+      borderRadius: 8, // Make it more rounded
       elevation: 3,
     },
     submitButtonText: {
