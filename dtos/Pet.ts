@@ -6,12 +6,12 @@ export default interface Pet {
     purchasedItems: {
         id: string;
         quantity?: number;
-    };
+    }[];
     activeItems: string[];
     wellBeing : {
-        clean: number;
-        fun: number;
-        hunger: number;
-        thirst: number;
+        clean: Date;
+        fun: Date;
+        hunger: Date;
+        thirst: Date;
     };
 }
