@@ -35,7 +35,4 @@ build_apk:
     - eas build --platform android --profile production --non-interactive --json > result.json
     - $APK_URL = (Get-Content result.json | ConvertFrom-Json)[0].artifacts.buildUrl
     - Invoke-WebRequest -Uri $APK_URL -OutFile app.apk
-    - firebase appdistribution:distribute app.apk `
-    - app $env:FIREBASE_ANDROID_APP_ID `
-    - token $env:FIREBASE_CLI_TOKEN `
-    - groups "testadores"
+    - firebase appdistribution:distribute app.apk --app $env:FIREBASE_ANDROID_APP_ID --token $env:FIREBASE_CLI_TOKEN --groups "testadores"
