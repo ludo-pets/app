@@ -16,7 +16,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.llopex.ludopets"
+      "package": "com.ages.ludopets"
     },
     "web": {
       "bundler": "metro",
