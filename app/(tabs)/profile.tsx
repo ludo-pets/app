@@ -1,4 +1,3 @@
-import { useUserPetStore } from '@/stores/ludoStore'
 import {
     View,
     Text,
@@ -9,8 +8,8 @@ import {
     useWindowDimensions,
 } from 'react-native'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
-import { useState } from 'react'
-import React from 'react'
+import React, { useState } from 'react'
+
 
 const editIcon = require('@/assets/images/profile/edit_icon.png')
 const coinIcon = require('@/assets/images/profile/pet_coin.png')

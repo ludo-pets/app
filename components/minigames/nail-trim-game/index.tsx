@@ -6,8 +6,9 @@ import StartGameDialog from './StatGameDialog'
 import EndGameDialog from './EndGameDialog'
 import GameBoard from './GameBoard'
 import { Nail } from './types'
-import { useUserPetStore } from '@/stores/ludoStore'
+import { useUserPetStore } from '@/stores/userPetStore'
 import { useRouter } from 'expo-router'
+import { useMinigameStore } from '@/stores/minigameStore'
 
 const { width } = Dimensions.get('window')
 
@@ -45,19 +46,27 @@ export default function NailTrimGame() {
     const user = useUserPetStore((state) => state.user)
     const userUpdate = useUserPetStore((state) => state.updateUser)
     const router = useRouter();
-    
+    const { minigame, fetchMinigame } = useMinigameStore();
+    const minigameId = "UUorkjz1g8ZCRDNTK3k2"
 
     const addScore = () => {
         setScore(score + 1)
     }
+
     useEffect(() => {
         if (score >= 4) setEnded(true)
     }, [score])
 
+    useEffect(() => {
+        if (!minigame) {
+            fetchMinigame(minigameId);
+        }
+    }, [minigame, minigameId, fetchMinigame]);
+
     const endGame = async () => {
-        if (user) {
+        if (user && minigame) {
             await userUpdate(user.id, {
-                money: user.money + 5,
+                money: user.money + minigame.givenMoney,
             })
             setStarted(false)
             setEnded(false)
@@ -73,7 +82,12 @@ export default function NailTrimGame() {
             {/**Na propriedade endGame vai a função que vai ser executada ao clicar no botão avançar
              * A função setStarted só ta de exemplo, podem mudar ela para outra função.
              */}
-            {ended && <EndGameDialog endGame={endGame} />}
+            {ended && minigame && (
+                <EndGameDialog
+                    endGame={endGame}
+                    givenMoney={minigame.givenMoney}
+                />
+            )}
 
             {/**minigame do gato*/}
             <GameBoard

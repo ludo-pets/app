@@ -8,7 +8,7 @@ import {
 } from 'phosphor-react-native'
 import { Tabs } from 'expo-router'
 import { StyleSheet, View } from 'react-native'
-import { useUserPetStore } from '@/stores/ludoStore'
+import { useUserPetStore } from '@/stores/userPetStore'
 
 const iconsSize = 32
 
