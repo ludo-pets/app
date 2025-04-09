@@ -1,16 +1,22 @@
 import React from 'react'
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import { CoinVertical } from 'phosphor-react-native'
 
 interface CoinsProps {
     value?: number
+    iconSize?: number
+    textSize?: number
 }
 
-export default function Coin({ value = 0 }: CoinsProps) {
+export default function Coin({
+    value = 0,
+    iconSize = 32,
+    textSize = 24,
+}: CoinsProps) {
     return (
         <View style={styles.container}>
-            <CoinVertical size={32} weight="fill" color="#FFD700" />
-            <Text style={styles.value}>{value}</Text>
+            <CoinVertical size={iconSize} weight="fill" color="#FFD700" />
+            <Text style={[styles.value, { fontSize: textSize }]}>{value}</Text>
         </View>
     )
 }
@@ -23,9 +29,8 @@ const styles = StyleSheet.create({
         padding: 8,
     },
     value: {
-        marginLeft: 8,
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#333',
+        marginLeft: 4,
+        fontWeight: '600',
+        color: '#5B5B5B',
     },
 })
