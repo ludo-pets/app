@@ -1,6 +1,6 @@
 import { StyleSheet, View, Image, TouchableWithoutFeedback, Dimensions } from 'react-native'
 
-const {height, width} = Dimensions.get('screen');
+const {height, width} = Dimensions.get('window');
 
 const Petlitteritem = () => {
   const onPress = () => {
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     width: '49%',
     height: '8%',
     position: 'absolute',
-    top: height/1.24,
+    bottom: height/66,
     left: width/1.96,
     justifyContent: 'center',
     alignItems: 'center',

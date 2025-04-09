@@ -1,6 +1,6 @@
 import { StyleSheet, View, Image, TouchableWithoutFeedback, Dimensions } from 'react-native'
 
-const {height, width} = Dimensions.get('screen');
+const {height, width} = Dimensions.get('window');
 
 const Fooditem = () => {
   const onPress = () => {
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     width: '26.5%',
     height: '9%',
     position: 'absolute',
-    top: height/1.55,
+    bottom: height/5.25,
     right: width/1.45,
     justifyContent: 'center',
     alignItems: 'center',

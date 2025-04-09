@@ -1,6 +1,6 @@
 import { StyleSheet, View, Image, TouchableWithoutFeedback, Dimensions } from 'react-native'
 
-const {height, width} = Dimensions.get('screen');
+const {height, width} = Dimensions.get('window');
 
 const Petitem = () => {
   const onPress = () => {
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     width: '42%',
     height: '20%',
     position: 'absolute',
-    top: height/1.679,
+    bottom: height/7.35,
     right: width/6.9,
     //backgroundColor: 'blue',
 }

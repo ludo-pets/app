@@ -1,6 +1,6 @@
 import { StyleSheet, View, Image, TouchableWithoutFeedback, Dimensions } from 'react-native'
 
-const {height, width} = Dimensions.get('screen');
+const {height, width} = Dimensions.get('window');
 
 const Toyitem = () => {
   const onPress = () => {
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     width: '47%',
     height: '41.7%',
     position: 'absolute',
-    top: height/4.3,
+    bottom: height/3.36,
     right: width/1.99,
     justifyContent: 'center',
     alignItems: 'center',

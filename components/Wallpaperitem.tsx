@@ -1,6 +1,6 @@
 import { StyleSheet, View, Image, Dimensions } from 'react-native'
 
-const {height, width} = Dimensions.get('screen');
+const {height, width} = Dimensions.get('window');
 
 const Flooritem = () => {
   return (

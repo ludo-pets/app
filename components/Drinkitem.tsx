@@ -1,6 +1,6 @@
 import { StyleSheet, View, Image, TouchableWithoutFeedback, Dimensions } from 'react-native'
 
-const {height, width} = Dimensions.get('screen');
+const {height, width} = Dimensions.get('window');
 
 const Drinkitem = () => {
   const onPress = () => {
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     width: '27.5%',
     height: '9.02%',
     position: 'absolute',
-    top: height/1.363,
+    bottom: height/9.963,
     right: width/1.45,
     justifyContent: 'center',
     alignItems: 'center',

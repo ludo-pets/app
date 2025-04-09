@@ -1,6 +1,6 @@
 import { StyleSheet, View, Image, TouchableWithoutFeedback, Dimensions } from 'react-native'
 
-const {height, width} = Dimensions.get('screen');
+const {height, width} = Dimensions.get('window');
 
 const Beditem = () => {
   const onPress = () => {
@@ -10,7 +10,7 @@ const Beditem = () => {
   return (
     <View style = {styles.cbox}>
       <TouchableWithoutFeedback onPress={onPress}>
-        <Image style = {{width: `100%`, height: `100%`,}} source={require('@/assets/images/homescreen/almofada.png')}/>
+        <Image style = {{width: `100%`, height: `100%`, resizeMode: 'contain'}} source={require('@/assets/images/homescreen/almofada.png')}/>
       </TouchableWithoutFeedback>
     </View>
   )
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     width: '44.2%',
     height: '15%',
     position: 'absolute',
-    top: height/2.123,
+    bottom: height/3.33,
     left: width/1.8,
     justifyContent: 'center',
     alignItems: 'center',
