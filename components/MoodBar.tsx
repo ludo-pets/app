@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, Text, StyleSheet, Animated, Image, Dimensions } from "react-native";
+import { View, Text, StyleSheet, Animated, Dimensions } from "react-native";
 import { PawPrint } from "@phosphor-icons/react";
 
 const { width: screenWidth } = Dimensions.get("window");
@@ -60,6 +60,8 @@ const styles = StyleSheet.create({
     width: screenWidth * 0.9,
     alignItems: "center",
     marginHorizontal: "auto",
+    position: "absolute",
+    top: 40,
   },
   circleContainer: {
     backgroundColor: "#FF69B4",
@@ -102,14 +104,16 @@ const styles = StyleSheet.create({
     color: "transparent",
   },
   bar: {
-    width: 240,
+    width: "87%",
     marginTop: 20
   },
   barBackground: {
     width: "100%",
-    height: 20,
+    borderWidth: 3,
+    borderColor: "white",
+    height: 24,
     backgroundColor: "#ddd",
-    borderRadius: 10,
+    borderRadius: 12,
     overflow: "hidden",
   },
   barFill: {
