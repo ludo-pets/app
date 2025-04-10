@@ -1,9 +1,8 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
-import Coin from '../Coins'
+import Coin from './Coins'
 import { ArrowCircleLeft } from 'phosphor-react-native'
-import { router } from 'expo-router';
-
+import { router } from 'expo-router'
 
 interface HeaderProps {
     title: string
@@ -20,11 +19,12 @@ export default function Header({
     onBackPress,
     coinsValue,
 }: HeaderProps) {
+
     return (
         <View style={[styles.container, { backgroundColor }]}>
             {showBackButton && (
                 <TouchableOpacity
-                    onPress={onBackPress || (() => router.push('/(tabs)'))}
+                    onPress={(() => router.back())}
                     style={styles.backButton}
                 >
                     <ArrowCircleLeft size={32} />
@@ -46,7 +46,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        paddingHorizontal: 16,
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
     },
@@ -56,7 +55,8 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 20,
-        fontWeight: 'bold',
+        fontWeight: '600',
+        color: '#5B5B5B',
     },
     coinsContainer: {
         position: 'absolute',

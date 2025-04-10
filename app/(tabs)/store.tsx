@@ -3,7 +3,7 @@ import { StyleSheet, View, Text } from 'react-native'
 export default function StoreScreen() {
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Store</Text>
+            <Text style={styles.title}>PetShop</Text>
             <View style={styles.separator} />
         </View>
     )
