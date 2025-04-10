@@ -15,25 +15,25 @@ const { width } = Dimensions.get('window')
 const catNailsSet: Nail[] = [
     {
         id: 1,
-        position: { x: 0.215, y: 0.6 },
+        position: { x: 0.215, y: 0.57 },
         rotation: '85deg',
         isTrimmed: false,
     },
     {
         id: 2,
-        position: { x: 0.248, y: 0.495 },
+        position: { x: 0.248, y: 0.465 },
         rotation: '0deg',
         isTrimmed: false,
     },
     {
         id: 3,
-        position: { x: 0.335, y: 0.45 },
+        position: { x: 0.335, y: 0.42 },
         rotation: '50deg',
         isTrimmed: false,
     },
     {
         id: 4,
-        position: { x: 0.48, y: 0.5 },
+        position: { x: 0.48, y: 0.47 },
         rotation: '45deg',
         isTrimmed: false,
     },
