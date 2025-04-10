@@ -1,14 +1,11 @@
+import Homescreen from '@/components/Homescreen'
 import { StyleSheet, View, Text } from 'react-native'
 
 export default function HomeScreen() {
     return (
-        <>
-            <View style={styles.container}>
-                <Text style={styles.title}>Home</Text>
-                <View style={styles.separator} />
-                <View style={styles.separator} />
-            </View>
-        </>
+        <View style={styles.container}>
+            <Homescreen/>
+        </View>
     )
 }
 
@@ -17,14 +14,5 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    title: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    separator: {
-        marginVertical: 30,
-        height: 1,
-        width: '80%',
-    },
+    }
 })
