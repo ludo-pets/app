@@ -7,8 +7,8 @@ import {
     Dimensions,
     Pressable,
 } from 'react-native'
-import { PawPrint } from '@phosphor-icons/react'
 import { router } from 'expo-router'
+import { PawPrint } from 'phosphor-react-native'
 
 const { width: screenWidth } = Dimensions.get('window')
 const MoodBar = ({ animalLevel = 0, animalMood = 0 }) => {
@@ -43,7 +43,7 @@ const MoodBar = ({ animalLevel = 0, animalMood = 0 }) => {
         >
             <View style={styles.circleContainer}>
                 <View style={styles.pawContainer}>
-                    <PawPrint size={90} color="white" />
+                    <PawPrint size={50} color="white" />
                     <Text style={styles.levelText}>{level}</Text>
                 </View>
             </View>

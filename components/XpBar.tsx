@@ -1,4 +1,4 @@
-import { PawPrint } from "@phosphor-icons/react";
+import { PawPrint } from "phosphor-react-native";
 import React, { useEffect, useState, useRef } from "react";
 import { View, Text, StyleSheet, Animated, Image } from "react-native";
 

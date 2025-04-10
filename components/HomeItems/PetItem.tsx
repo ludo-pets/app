@@ -1,6 +1,4 @@
-import { StyleSheet, View, Image, Dimensions, Pressable } from 'react-native'
-import Svg from 'react-native-svg'
-import { PetOptionFormRegisterPet } from '../PetOptionFormRegisterPet'
+import { StyleSheet, View, Dimensions, Pressable } from 'react-native'
 import Gato from '../../assets/images/pets/gato.svg'
 import Cachorro from '../../assets/images/pets/cachorro.svg'
 import { useUserPetStore } from '@/stores/userPetStore'
