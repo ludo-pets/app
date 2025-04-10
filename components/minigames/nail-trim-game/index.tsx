@@ -43,6 +43,7 @@ export default function NailTrimGame() {
     const [started, setStarted] = useState(false)
     const [ended, setEnded] = useState(false)
     const [score, setScore] = useState(0)
+    const [gameKey, setGameKey] = useState(0)
     const user = useUserPetStore((state) => state.user)
     const userUpdate = useUserPetStore((state) => state.updateUser)
     const router = useRouter();
@@ -68,6 +69,7 @@ export default function NailTrimGame() {
             await userUpdate(user.id, {
                 money: user.money + minigame.givenMoney,
             })
+            setGameKey(gameKey + 1)
             setStarted(false)
             setEnded(false)
             setScore(0)
@@ -91,6 +93,7 @@ export default function NailTrimGame() {
 
             {/**minigame do gato*/}
             <GameBoard
+                key={gameKey}
                 pawImage={require('@/assets/images/minigames/nail-trimmer/paw.png')}
                 addScore={addScore}
                 nailsSet={catNailsSet}
