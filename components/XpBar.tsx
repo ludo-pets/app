@@ -1,3 +1,4 @@
+import { PawPrint } from "@phosphor-icons/react";
 import React, { useEffect, useState, useRef } from "react";
 import { View, Text, StyleSheet, Animated, Image } from "react-native";
 
@@ -28,7 +29,7 @@ const XpBar = ({ xp, level }: xpBarProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.pawContainer}>
-        <Image source={require("../assets/images/paw-xp-bar.png")} />
+        <PawPrint size={60} color="#5B5B5B" />
         <Text style={styles.levelText}>{level}</Text>
       </View>
       <View style={styles.bar}>
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
   },
   pawContainer: {
     position: "relative",
-    marginRight: 10,
+    marginRight: 5,
   },
   levelText: {
     position: "absolute",
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
     color: "#5B5B5B",
   },
   bar: {
-    width: "82%",
+    width: "81%",
   },
   barBackground: {
     width: "100%",
