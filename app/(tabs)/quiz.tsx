@@ -1,4 +1,4 @@
-import { useUserPetStore } from '@/stores/ludoStore'
+import { useUserPetStore } from '@/stores/userPetStore'
 import { StyleSheet, View, Text, Button } from 'react-native'
 
 export default function QuizScreen() {

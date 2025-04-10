@@ -3,6 +3,6 @@ export default interface Lesson {
     concluded: boolean;
     name: string;
     questions: string[];
-    given_experience: number;
-    given_money: number;
+    givenExperience: number;
+    givenMoney: number;
 }
