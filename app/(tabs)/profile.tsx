@@ -18,6 +18,7 @@ import { colorsOptions, PetOption } from '@/components/FormRegisterPet'
 import Gato from '../../assets/images/pets/gato.svg'
 import Cachorro from '../../assets/images/pets/cachorro.svg'
 import { PetOptionFormRegisterPet } from '@/components/PetOptionFormRegisterPet'
+import { useUserPetStore } from '@/stores/userPetStore'
 
 const editIcon = require('@/assets/images/profile/edit_icon.png')
 const coinIcon = require('@/assets/images/profile/pet_coin.png')

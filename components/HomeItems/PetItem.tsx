@@ -3,7 +3,7 @@ import Svg from 'react-native-svg'
 import { PetOptionFormRegisterPet } from '../PetOptionFormRegisterPet'
 import Gato from '../../assets/images/pets/gato.svg'
 import Cachorro from '../../assets/images/pets/cachorro.svg'
-import { useUserPetStore } from '@/stores/ludoStore'
+import { useUserPetStore } from '@/stores/userPetStore'
 import { PetOption } from '../FormRegisterPet'
 import GenericIcon from '../GenericIcon'
 

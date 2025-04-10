@@ -1,6 +1,6 @@
 import Homescreen from '@/components/Homescreen'
 import MoodBar from '@/components/MoodBar'
-import { useUserPetStore } from '@/stores/ludoStore'
+import { useUserPetStore } from '@/stores/userPetStore'
 import { StyleSheet, View } from 'react-native'
 
 export default function HomeScreen() {
