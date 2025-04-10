@@ -19,11 +19,12 @@ export default function Header({
     onBackPress,
     coinsValue,
 }: HeaderProps) {
+
     return (
         <View style={[styles.container, { backgroundColor }]}>
             {showBackButton && (
                 <TouchableOpacity
-                    onPress={onBackPress || (() => router.push('/(tabs)'))}
+                    onPress={(() => router.back())}
                     style={styles.backButton}
                 >
                     <ArrowCircleLeft size={32} />

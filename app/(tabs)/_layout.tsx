@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
     House,
     Storefront,
@@ -6,10 +6,11 @@ import {
     Exam,
     UserCircle,
 } from 'phosphor-react-native'
-import { Tabs, useRouter } from 'expo-router'
+import { Tabs } from 'expo-router'
 import { StyleSheet, View } from 'react-native'
 import Header from '@/components/Header'
 import { usePathname } from 'expo-router'
+import { useUserPetStore } from '@/stores/ludoStore'
 
 const iconsSize = 32
 
@@ -39,8 +40,20 @@ function CustomTabIcon({ name, color, focused, iconsSize }: Props) {
 
 export default function TabLayout() {
     const pathname = usePathname()
+    
+    const fetchUserAndPet = useUserPetStore((state) => state.fetchUserAndPet)
+    const user = useUserPetStore((state) => state.user)
+
+    useEffect(() => {
+        const userId = 'ludopetsages@gmail.com'
+        if (!user) {
+            fetchUserAndPet(userId)
+        }
+    }, [fetchUserAndPet, user])
+
 
     const includeHeader = ['/store', '/quiz', '/minigames', '/profile']
+    const includeBackBtn = ['/minigames', '/quiz']
 
     const headerTitles: Record<string, string> = {
         '/store': 'PetShop',
@@ -50,14 +63,14 @@ export default function TabLayout() {
     }
 
     const headerTitle = headerTitles[pathname] || ''
-    const router = useRouter()
 
     return (
         <>
             {includeHeader.includes(pathname) && (
                 <Header
                     title={headerTitle}
-                    coinsValue={pathname === '/store' ? 100 : undefined}
+                    showBackButton={includeBackBtn.includes(pathname)}
+                    coinsValue={pathname === '/store' ? user?.money : undefined}
                     backgroundColor="#CFE2A8"
                 />
             )}
