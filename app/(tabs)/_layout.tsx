@@ -10,7 +10,7 @@ import { Tabs } from 'expo-router'
 import { StyleSheet, View } from 'react-native'
 import Header from '@/components/Header'
 import { usePathname } from 'expo-router'
-import { useUserPetStore } from '@/stores/ludoStore'
+import { useUserPetStore } from '@/stores/userPetStore'
 
 const iconsSize = 32
 
