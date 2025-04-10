@@ -1,8 +1,8 @@
 import { StyleSheet, View, Image, Dimensions } from 'react-native'
 
-const {height, width} = Dimensions.get('window');
+const {height} = Dimensions.get('window');
 
-const Flooritem = () => {
+const FloorItem = () => {
   return (
     <View style = {styles.cbox}>
         <Image style = {{width: `100%`, height: `100%`}} source={require('@/assets/images/homescreen/chao_verde.png')}/>
@@ -10,7 +10,7 @@ const Flooritem = () => {
   )
 }
 
-export default Flooritem
+export default FloorItem
 
 const styles = StyleSheet.create({
   cbox: {

@@ -2,32 +2,29 @@ import { StyleSheet, View, Image, TouchableWithoutFeedback, Dimensions } from 'r
 
 const {height, width} = Dimensions.get('window');
 
-const Petlitteritem = () => {
+const PetItem = () => {
   const onPress = () => {
-    console.log("this isn't called sandbox!")
+    console.log("don't touch the cat!")
   };
 
   return (
     <View style = {styles.cbox}>
       <TouchableWithoutFeedback onPress={onPress}>
-        <Image style = {{width: `100%`, height: `100%`}} source={require('@/assets/images/homescreen/caixa_de_areia.png')}/>
+        <Image style = {{width: `100%`, height: `100%`, resizeMode: `contain`}} source={require('@/assets/images/homescreen/gaaato.png')}/>
       </TouchableWithoutFeedback>
     </View>
   )
 }
 
-export default Petlitteritem
+export default PetItem
 
 const styles = StyleSheet.create({
   cbox: {
-    width: '49%',
-    height: '8%',
+    width: '42%',
+    height: '20%',
     position: 'absolute',
-    bottom: height/66,
-    left: width/1.96,
-    justifyContent: 'center',
-    alignItems: 'center',
-    display: 'flex',
+    bottom: height/7.35,
+    right: width/6.9,
     //backgroundColor: 'blue',
 }
 })

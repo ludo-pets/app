@@ -1,12 +1,12 @@
 import { StyleSheet, View } from 'react-native'
-import Petitem from '@/components/Petitem'
-import Petlitteritem from '@/components/Petlitteritem'
-import Beditem from '@/components/Beditem'
-import Flooritem from '@/components/Flooritem'
-import Toyitem from '@/components/Toyitem'
-import Fooditem from '@/components/Fooditem'
-import Drinkitem from '@/components/Drinkitem'
-import Wallpaperitem from '@/components/Wallpaperitem'
+import Petitem from '@/components/HomeItems/PetItem'
+import WcItem from '@/components/HomeItems/WcItem'
+import Beditem from '@/components/HomeItems/BedItem'
+import Flooritem from '@/components/HomeItems/FloorItem'
+import Toyitem from '@/components/HomeItems/ToyItem'
+import Fooditem from '@/components/HomeItems/FoodItem'
+import Drinkitem from '@/components/HomeItems/DrinkItem'
+import Wallpaperitem from '@/components/HomeItems/WallpaperItem'
 
 const Homescreen = () => {
   return (
@@ -14,7 +14,7 @@ const Homescreen = () => {
       <Wallpaperitem/>
       <Flooritem/>
       <Petitem/>
-      <Petlitteritem/>
+      <WcItem/>
       <Beditem/>
       <Toyitem/>
       <Fooditem/>

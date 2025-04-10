@@ -2,7 +2,7 @@ import { StyleSheet, View, Image, TouchableWithoutFeedback, Dimensions } from 'r
 
 const {height, width} = Dimensions.get('window');
 
-const Drinkitem = () => {
+const DrinkItem = () => {
   const onPress = () => {
     console.log("water.")
   };
@@ -16,7 +16,7 @@ const Drinkitem = () => {
   )
 }
 
-export default Drinkitem
+export default DrinkItem
 
 const styles = StyleSheet.create({
   cbox: {

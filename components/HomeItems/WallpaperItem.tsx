@@ -1,8 +1,6 @@
-import { StyleSheet, View, Image, Dimensions } from 'react-native'
+import { StyleSheet, View, Image } from 'react-native'
 
-const {height, width} = Dimensions.get('window');
-
-const Flooritem = () => {
+const WallpaperItem = () => {
   return (
     <View style = {styles.cbox}>
         <Image style = {{width: `100%`, height: `100%`}} source={require('@/assets/images/homescreen/fundohs.png')}/>
@@ -10,7 +8,7 @@ const Flooritem = () => {
   )
 }
 
-export default Flooritem
+export default WallpaperItem
 
 const styles = StyleSheet.create({
   cbox: {

@@ -2,29 +2,29 @@ import { StyleSheet, View, Image, TouchableWithoutFeedback, Dimensions } from 'r
 
 const {height, width} = Dimensions.get('window');
 
-const Toyitem = () => {
+const WcItem = () => {
   const onPress = () => {
-    console.log("toy.")
+    console.log("this isn't called sandbox!")
   };
 
   return (
     <View style = {styles.cbox}>
       <TouchableWithoutFeedback onPress={onPress}>
-        <Image style = {{width: `100%`, height: `100%`, resizeMode: `contain`}} source={require('@/assets/images/homescreen/brinquedo.png')}/>
+        <Image style = {{width: `100%`, height: `100%`}} source={require('@/assets/images/homescreen/caixa_de_areia.png')}/>
       </TouchableWithoutFeedback>
     </View>
   )
 }
 
-export default Toyitem
+export default WcItem
 
 const styles = StyleSheet.create({
   cbox: {
-    width: '47%',
-    height: '41.7%',
+    width: '49%',
+    height: '8%',
     position: 'absolute',
-    bottom: height/3.36,
-    right: width/1.99,
+    bottom: height/66,
+    left: width/1.96,
     justifyContent: 'center',
     alignItems: 'center',
     display: 'flex',
