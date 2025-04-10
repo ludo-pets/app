@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
     marginHorizontal: "auto",
     position: "absolute",
     top: 40,
+    zIndex: 99,
   },
   circleContainer: {
     backgroundColor: "#FF69B4",

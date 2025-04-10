@@ -1,30 +1,49 @@
-import { StyleSheet, View, Image, TouchableWithoutFeedback, Dimensions } from 'react-native'
+import { StyleSheet, View, Image, Dimensions, Pressable } from 'react-native'
+import Svg from 'react-native-svg'
+import { PetOptionFormRegisterPet } from '../PetOptionFormRegisterPet'
+import Gato from '../../assets/images/pets/gato.svg'
+import Cachorro from '../../assets/images/pets/cachorro.svg'
+import { useUserPetStore } from '@/stores/ludoStore'
+import { PetOption } from '../FormRegisterPet'
+import GenericIcon from '../GenericIcon'
 
-const {height, width} = Dimensions.get('window');
+const { height, width } = Dimensions.get('window')
 
 const PetItem = () => {
-  const onPress = () => {
-    console.log("don't touch the cat!")
-  };
+    const onPress = () => {
+        console.log("don't touch the cat!")
+    }
 
-  return (
-    <View style = {styles.cbox}>
-      <TouchableWithoutFeedback onPress={onPress}>
-        <Image style = {{width: `100%`, height: `100%`, resizeMode: `contain`}} source={require('@/assets/images/homescreen/gaaato.png')}/>
-      </TouchableWithoutFeedback>
-    </View>
-  )
+    const petInfo = useUserPetStore((state) => state.pet)
+
+    const pets: PetOption[] = [
+        {
+            icon: petInfo?.type === 'cat' ? Gato : Cachorro,
+            pet_type: petInfo?.type || 'cat',
+        },
+    ]
+
+    return (
+        <View style={styles.cbox}>
+            <Pressable onPress={onPress}>
+                <GenericIcon
+                    Icon={pets[0].icon}
+                    fill={petInfo?.color || '#B6E683'}
+                    stroke={'#000'}
+                />
+            </Pressable>
+        </View>
+    )
 }
 
 export default PetItem
 
 const styles = StyleSheet.create({
-  cbox: {
-    width: '42%',
-    height: '20%',
-    position: 'absolute',
-    bottom: height/7.35,
-    right: width/6.9,
-    //backgroundColor: 'blue',
-}
+    cbox: {
+        width: '35%',
+        height: '15%',
+        position: 'absolute',
+        bottom: height / 6,
+        right: width / 11,
+    },
 })
