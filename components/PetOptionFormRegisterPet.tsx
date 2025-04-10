@@ -44,8 +44,6 @@ const styles = StyleSheet.create({
       aspectRatio: 1,
       alignItems: 'center',
       justifyContent: 'center',
-      margin: 10,
-      padding: 5,
   },
     petBoxActive: {
         borderWidth: 5,

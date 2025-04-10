@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     width: 60,
     height: 60,
-    borderWidth: 3,
+    borderWidth: 2,
     borderColor: "white",
     justifyContent: "center",
     alignItems: "center",
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   },
   barBackground: {
     width: "100%",
-    borderWidth: 3,
+    borderWidth: 2,
     borderColor: "white",
     height: 24,
     backgroundColor: "#ddd",

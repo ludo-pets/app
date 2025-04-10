@@ -75,10 +75,6 @@ export default function Profile() {
 
     return (
         <SafeAreaView style={styles.safeArea}>
-            <View style={styles.header}>
-                <Text style={styles.headerText}>Perfil</Text>
-            </View>
-
             <View style={styles.container}>
                 <XpBar xp={user?.experience || 0} level={user?.level || 1} />
                 <View style={styles.petContainer}>
@@ -195,7 +191,6 @@ const createStyles = (isSmallScreen: boolean) =>
             flexWrap: 'wrap', // Allow wrapping if many colors
             justifyContent: 'center', // Center colors
             gap: 15, // Increased gap
-            marginBottom: 30, // Increased margin
         },
         colorOption: {
             width: 32,
@@ -245,10 +240,11 @@ const createStyles = (isSmallScreen: boolean) =>
         container: {
             flex: 1,
             width: '85%',
+            height: '100%',
             alignSelf: 'center',
             justifyContent: 'space-between',
-            paddingVertical: isSmallScreen ? 8 : 20,
-            gap: isSmallScreen ? 20 : 20,
+            paddingVertical: isSmallScreen ? 12 : 20,
+            gap: isSmallScreen ? 12 : 20,
         },
         petContainer: {
             width: '100%',
