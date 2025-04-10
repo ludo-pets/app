@@ -1,9 +1,11 @@
+import MoodBar from '@/components/MoodBar'
 import { StyleSheet, View, Text } from 'react-native'
 
 export default function HomeScreen() {
     return (
         <>
             <View style={styles.container}>
+                <MoodBar animalLevel={2} animalMood={70} />
                 <Text style={styles.title}>Home</Text>
                 <View style={styles.separator} />
                 <View style={styles.separator} />
