@@ -38,6 +38,10 @@ function CustomTabIcon({ name, color, focused, iconsSize }: Props) {
     )
 }
 
+export const unstable_settings = {
+  initialRouteName: 'home',
+}
+
 export default function TabLayout() {
     const pathname = usePathname()
 

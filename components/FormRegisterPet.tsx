@@ -92,14 +92,14 @@ export function FormRegisterPet() {
                     text: 'OK',
                     onPress: () => {
                         // Reset form state if needed
-                        navigation.navigate('/home' as never)
+                        navigation.navigate('/(tabs)' as never)
                         setSelectedPet(petsTypes[0])
                         setSelectedColorPet(colorsOptions[0])
                         setPetName('')
                     },
                 },
             ])
-            navigation.navigate('/home' as never)
+            navigation.navigate('/(tabs)' as never)
         } else {
             // Error handled in addPet function (showed an alert there)
             console.error('Failed to create pet.')
