@@ -44,8 +44,16 @@ const MoodBar = ({ animalLevel = 0, animalMood = 0 }) => {
         >
             <View style={styles.circleContainer}>
                 <View style={styles.pawContainer}>
-                    <PawPrint size={50} color="white" />
-                    <Text style={Platform.OS==='ios' ? styles.levelTextIos : styles.levelTextAndroid}>{level}</Text>
+                    <PawPrint size={60} color="white" />
+                    <Text
+                        style={
+                            Platform.OS === 'ios'
+                                ? styles.levelTextIos
+                                : styles.levelTextAndroid
+                        }
+                    >
+                        {level}
+                    </Text>
                 </View>
             </View>
             <View style={styles.bar}>
@@ -77,54 +85,43 @@ const styles = StyleSheet.create({
     },
     circleContainer: {
         backgroundColor: '#FF69B4',
-        borderRadius: 30,
-        width: 60,
-        height: 60,
+        borderRadius: 35,
+        width: 70,
+        height: 70,
         borderWidth: 2,
         borderColor: 'white',
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 1,
         marginRight: -16,
-        position: "relative",
+        position: 'relative',
     },
     pawContainer: {
-        position: 'absolute',
         width: 50,
         height: 50,
         justifyContent: 'center',
         alignItems: 'center',
     },
-    pawImage: {
-        width: 40,
-        height: 40,
-        tintColor: 'white',
-    },
 
     levelTextIos: {
         position: 'absolute',
-        top: '63%',
-        left: '50%',
-        fontFamily: "Courier Mono",
-        transform: [{ translateX: "-45%" }, { translateY: "-50%" }],
+        top: '50%',
+        left: '40%',
+        fontFamily: 'Courier Mono',
         fontSize: 14,
         fontWeight: 'bold',
         color: 'white',
-        textAlignVertical: 'center',
-        includeFontPadding: false,
     },
-    
+
     levelTextAndroid: {
         position: 'absolute',
-        top: '50%',
+        top: '65%',
         left: '50%',
-        fontFamily: "Courier Mono",
-        transform: [{ translateX: "-45%" }, { translateY: "-50%" }],
+        fontFamily: 'Courier Mono',
+        transform: [{ translateX: '-50%' }, { translateY: '-50%' }],
         fontSize: 14,
         fontWeight: 'bold',
         color: 'white',
-        textAlignVertical: 'center',
-        includeFontPadding: false,
     },
 
     text: {
