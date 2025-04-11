@@ -19,6 +19,7 @@ import Gato from '../../assets/images/pets/gato.svg'
 import Cachorro from '../../assets/images/pets/cachorro.svg'
 import { PetOptionFormRegisterPet } from '@/components/PetOptionFormRegisterPet'
 import { useUserPetStore } from '@/stores/userPetStore'
+import { useRouter } from 'expo-router'
 
 const editIcon = require('@/assets/images/profile/edit_icon.png')
 const coinIcon = require('@/assets/images/profile/pet_coin.png')
@@ -36,6 +37,8 @@ export default function Profile() {
     const handlerChangePetName = (text: string) => {
         setPetName(text)
     }
+    const router = useRouter()
+
 
     useEffect(() => {
         if (petInfo) {
@@ -80,7 +83,7 @@ export default function Profile() {
                 <View style={styles.petContainer}>
                     <PetOptionFormRegisterPet
                         Icon={pets[0].icon}
-                        onSelect={() => {}}
+                        onSelect={() => { }}
                         selected={false}
                         onlyPet={false}
                         color={petColor || '#7D5D56'}
@@ -118,7 +121,7 @@ export default function Profile() {
                                         { backgroundColor: color.color },
                                         styles.colorOption,
                                         colorSelected &&
-                                            styles.colorOptionActive,
+                                        styles.colorOptionActive,
                                     ]}
                                     onPress={() => {
                                         if (!isEditing) {
@@ -165,7 +168,7 @@ export default function Profile() {
                         </TouchableOpacity>
                     )}
 
-                    <TouchableOpacity style={styles.logoutButton}>
+                    <TouchableOpacity onPress={() => router.push('/register')} style={styles.logoutButton}>
                         <Text style={styles.logoutButtonText}>Sair</Text>
                         <MaterialIcons
                             name="exit-to-app"
