@@ -22,7 +22,7 @@ interface UserPetState {
 export const useUserPetStore = create<UserPetState>((set, get) => ({
     user: null,
     pet: null,
-    loading: false,
+    loading: true,
     error: null,
 
     fetchUserAndPet: async (userId: string) => {

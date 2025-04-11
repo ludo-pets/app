@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
         padding: 5,
     },
     petBoxProfile: {
-        width: '60%',
+        width: '50%',
         aspectRatio: 1,
         alignItems: 'center',
         justifyContent: 'center',
@@ -59,11 +59,5 @@ const styles = StyleSheet.create({
         aspectRatio: 1,
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    imagemBox: {
-        width: '100%',
-        height: '100%',
-        resizeMode: 'contain',
-        // tintColor: "#444B8E",
-    },
+    }
 })

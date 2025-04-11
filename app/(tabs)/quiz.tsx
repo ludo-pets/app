@@ -23,7 +23,6 @@ export default function QuizScreen() {
         <View style={styles.container}>
             <Text style={styles.title}>Quiz</Text>
             <View style={styles.separator} />
-            <Button title="Finalizar Quiz" onPress={handleEndQuiz} />
         </View>
     )
 }
