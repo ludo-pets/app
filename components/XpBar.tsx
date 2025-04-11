@@ -67,8 +67,8 @@ const styles = StyleSheet.create({
     circleContainer: {
         backgroundColor: 'transparent',
         borderRadius: 35,
-        width: 70,
-        height: 70,
+        width: 65,
+        height: 65,
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 1,
@@ -88,7 +88,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#5b5b5b',
     },
-
     levelTextAndroid: {
         position: 'absolute',
         top: '65%',
@@ -99,7 +98,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#5b5b5b',
     },
-
     text: {
         fontSize: 16,
         fontWeight: 'bold',

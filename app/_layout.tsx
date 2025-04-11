@@ -9,14 +9,14 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 export { ErrorBoundary } from 'expo-router'
 
 export const unstable_settings = {
-    initialRouteName: '/register',
+    initialRouteName: '(tabs)',
 }
 
 SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
     const [loaded, error] = useFonts({
-        Inter: require('../assets/fonts/Inter.ttf'),
+        Inter: require('@/assets/fonts/Inter.ttf'),
         ...FontAwesome.font,
     })
 
@@ -42,7 +42,7 @@ function RootLayoutNav() {
         <SafeAreaView style={{ flex: 1, backgroundColor: 'transparent' }}>
             <Stack>
                 <Stack.Screen
-                    name="register"
+                    name="index"
                     options={{ headerShown: false }}
                 />
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

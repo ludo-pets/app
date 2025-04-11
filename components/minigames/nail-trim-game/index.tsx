@@ -73,7 +73,7 @@ export default function NailTrimGame() {
             setStarted(false)
             setEnded(false)
             setScore(0)
-            router.push('/(tabs)')
+            router.push('/home')
         }
     }
 

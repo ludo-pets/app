@@ -12,8 +12,8 @@ import {
 } from 'react-native'
 import { PetOptionFormRegisterPet } from './PetOptionFormRegisterPet'
 import { useState } from 'react'
-import Gato from '../assets/images/pets/gato.svg'
-import Cachorro from '../assets/images/pets/cachorro.svg'
+import Gato from '@/assets/images/pets/gato.svg'
+import Cachorro from '@/assets/images/pets/cachorro.svg'
 import { SvgProps } from 'react-native-svg'
 import { addPet } from '@/services/postPet'
 import { useNavigation } from '@react-navigation/native'
@@ -92,14 +92,14 @@ export function FormRegisterPet() {
                     text: 'OK',
                     onPress: () => {
                         // Reset form state if needed
-                        navigation.navigate('(tabs)' as never)
+                        navigation.navigate('/home' as never)
                         setSelectedPet(petsTypes[0])
                         setSelectedColorPet(colorsOptions[0])
                         setPetName('')
                     },
                 },
             ])
-            navigation.navigate('(tabs)' as never)
+            navigation.navigate('/home' as never)
         } else {
             // Error handled in addPet function (showed an alert there)
             console.error('Failed to create pet.')
