@@ -1,4 +1,4 @@
-import { StyleSheet, View, Dimensions, Pressable } from 'react-native'
+import { StyleSheet, View, Dimensions, Pressable, Platform } from 'react-native'
 import Gato from '@/assets/images/pets/gato.svg'
 import Cachorro from '@/assets/images/pets/cachorro.svg'
 import { useUserPetStore } from '@/stores/userPetStore'
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
         width: '35%',
         height: '15%',
         position: 'absolute',
-        bottom: height / 6,
+        bottom: Platform.OS === 'ios' ? height / 8.0 : height / 6,
         right: width / 11,
     },
 })

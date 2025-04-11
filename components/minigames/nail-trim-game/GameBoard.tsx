@@ -47,7 +47,7 @@ export default function GameBoard({
     const [isTrimming, setIsTrimming] = useState(false)
     const trimmerTimeout = useRef<{ [key: string]: NodeJS.Timeout | null }>({})
     const intervalRef = useRef<{ [key: string]: NodeJS.Timeout | null }>({})
-    const yOffset = Platform.OS === 'ios' ? pawSize / 2 : pawSize / 3
+    const yOffset = Platform.OS === 'ios' ? pawSize / 1.5 : pawSize / 3
 
     const playSound = async (s: AVPlaybackSource) => {
         const { sound } = await Audio.Sound.createAsync(s, {

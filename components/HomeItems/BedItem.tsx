@@ -4,6 +4,7 @@ import {
     Image,
     TouchableWithoutFeedback,
     Dimensions,
+    Platform,
 } from 'react-native'
 
 const { height, width } = Dimensions.get('window')
@@ -36,7 +37,7 @@ const styles = StyleSheet.create({
         width: '44.2%',
         height: '15%',
         position: 'absolute',
-        bottom: height / 3.33,
+        bottom: Platform.OS === 'ios' ? height / 4.00 : height / 3.33,
         left: width / 1.8,
         justifyContent: 'center',
         alignItems: 'center',
