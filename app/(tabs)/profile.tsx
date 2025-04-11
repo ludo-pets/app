@@ -78,8 +78,8 @@ export default function Profile() {
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
-                <XpBar xp={user?.experience || 0} level={user?.level || 1} />
                 <View style={styles.petContainer}>
+                    <XpBar />
                     <PetOptionFormRegisterPet
                         Icon={pets[0].icon}
                         onSelect={() => {}}
