@@ -1,14 +1,15 @@
-import { StyleSheet, View, Text } from 'react-native'
+import Homescreen from '@/components/Homescreen'
+import MoodBar from '@/components/MoodBar'
+import { useUserPetStore } from '@/stores/userPetStore'
+import { StyleSheet, View } from 'react-native'
 
 export default function HomeScreen() {
+    const user = useUserPetStore((state) => state.user)
     return (
-        <>
-            <View style={styles.container}>
-                <Text style={styles.title}>Home</Text>
-                <View style={styles.separator} />
-                <View style={styles.separator} />
-            </View>
-        </>
+        <View style={styles.container}>
+            <MoodBar animalLevel={user?.level} animalMood={70} />
+            <Homescreen />
+        </View>
     )
 }
 
@@ -17,14 +18,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    title: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    separator: {
-        marginVertical: 30,
-        height: 1,
-        width: '80%',
+        position: 'relative',
     },
 })

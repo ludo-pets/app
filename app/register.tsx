@@ -2,7 +2,7 @@ import { Image, View, StyleSheet, Pressable, Text } from 'react-native'
 import { FormRegisterPet } from '../components/FormRegisterPet'
 import { useRouter } from 'expo-router'
 
-export default function registerPetPage() {
+export default function RegisterPetPage() {
     const router = useRouter()
 
     return (

@@ -9,7 +9,7 @@ export const updatePetService = async (
     try {
         const petRef = doc(db, 'Pet', petId)
         await updateDoc(petRef, { ...petData })
-        
+
         return true
     } catch (error) {
         console.error('Erro ao atualizar Pet:', error)

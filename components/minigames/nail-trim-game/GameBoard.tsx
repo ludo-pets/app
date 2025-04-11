@@ -1,118 +1,143 @@
-import { Dimensions, Image, Animated, ImageSourcePropType, StyleSheet } from "react-native";
-import { PanGestureHandler, PanGestureHandlerGestureEvent, State } from "react-native-gesture-handler";
-import { Nail, NailProgress } from './types';
-import { useRef, useState } from 'react';
-import Svg, { Circle } from "react-native-svg";
-import { Audio, AVPlaybackSource } from "expo-av";
+import {
+    Dimensions,
+    Image,
+    Animated,
+    ImageSourcePropType,
+    StyleSheet,
+} from 'react-native'
+import {
+    PanGestureHandler,
+    PanGestureHandlerGestureEvent,
+    State,
+} from 'react-native-gesture-handler'
+import { Nail, NailProgress } from './types'
+import { useRef, useState } from 'react'
+import Svg, { Circle } from 'react-native-svg'
+import { Audio, AVPlaybackSource } from 'expo-av'
 
-
-const { width, height } = Dimensions.get("window");
+const { width, height } = Dimensions.get('window')
 
 //trimmer
-const trimmer_initial_position = { x: width /4, y: height /6 };
-let trimmer_current_position = trimmer_initial_position;
-const openTrimmer = require("@/assets/images/minigames/nail-trimmer/trimmer-open.png");
-const closeTrimmer = require("@/assets/images/minigames/nail-trimmer/trimmer-closed.png");;
-const trimmerSound: AVPlaybackSource = require("@/assets/images/minigames/nail-trimmer/trimmer-sound.mp3");
+const trimmer_initial_position = { x: width / 4, y: height / 6 }
+let trimmer_current_position = trimmer_initial_position
+const openTrimmer = require('@/assets/images/minigames/nail-trimmer/trimmer-open.png')
+const closeTrimmer = require('@/assets/images/minigames/nail-trimmer/trimmer-closed.png')
+const trimmerSound: AVPlaybackSource = require('@/assets/images/minigames/nail-trimmer/trimmer-sound.mp3')
 //paw
-const pawSize = height / 2;
-const nailSize = pawSize / 6;
+const pawSize = height / 2
+const nailSize = pawSize / 6
 
-const CUT_TIME = 1000;
-let entrou = true;
-let isNear = false;
+const CUT_TIME = 1000
+let entrou = true
+let isNear = false
 export type GameBoardProps = {
-    addScore: () => void,
-    pawImage: ImageSourcePropType,
-    nailsSet: Nail[],
-
+    addScore: () => void
+    pawImage: ImageSourcePropType
+    nailsSet: Nail[]
 }
-export default function GameBoard({addScore, pawImage, nailsSet}: GameBoardProps) {
-    const [nails, setNails] = useState<Nail[]>(nailsSet);
-    const [trimmer, setTrimmer] = useState(trimmer_initial_position);
-    const [nailProgress, setNailProgress] = useState<NailProgress>({});
-    const [isTrimming, setIsTrimming] = useState(false);
-    const trimmerTimeout = useRef<{ [key: string]: NodeJS.Timeout | null }>({});
-    const intervalRef = useRef<{ [key: string]: NodeJS.Timeout | null }>({});
+export default function GameBoard({
+    addScore,
+    pawImage,
+    nailsSet,
+}: GameBoardProps) {
+    const [nails, setNails] = useState<Nail[]>(nailsSet)
+    const [trimmer, setTrimmer] = useState(trimmer_initial_position)
+    const [nailProgress, setNailProgress] = useState<NailProgress>({})
+    const [isTrimming, setIsTrimming] = useState(false)
+    const trimmerTimeout = useRef<{ [key: string]: NodeJS.Timeout | null }>({})
+    const intervalRef = useRef<{ [key: string]: NodeJS.Timeout | null }>({})
 
     const playSound = async (s: AVPlaybackSource) => {
-        const { sound } = await Audio.Sound.createAsync(s, { shouldPlay: true, isLooping: false });
-        await sound.playAsync();
+        const { sound } = await Audio.Sound.createAsync(s, {
+            shouldPlay: true,
+            isLooping: false,
+        })
+        await sound.playAsync()
     }
 
     const handleGesture = (e: PanGestureHandlerGestureEvent) => {
-        setTrimmer({ x:trimmer_current_position.x + e.nativeEvent.translationX, y: trimmer_current_position.y + e.nativeEvent.translationY });
+        setTrimmer({
+            x: trimmer_current_position.x + e.nativeEvent.translationX,
+            y: trimmer_current_position.y + e.nativeEvent.translationY,
+        })
 
         nails.forEach((nail) => {
-            if (nail.isTrimmed) return;
-            const nailX = nail.position.x;
-            const nailY = nail.position.y;
-            const nailCenterX = (width - pawSize) / 2 + nailX * pawSize + nailSize / 2;
-            const nailCenterY = (height - pawSize) + nailY * pawSize + nailSize / 2;
-            
-            const trimmerCenterX = trimmer.x;
-            const trimmerCenterY = trimmer.y;
-            
+            if (nail.isTrimmed) return
+            const nailX = nail.position.x
+            const nailY = nail.position.y
+            const nailCenterX =
+                (width - pawSize) / 2 + nailX * pawSize + nailSize / 2
+            const nailCenterY =
+                height - pawSize + nailY * pawSize + nailSize / 2
+
+            const trimmerCenterX = trimmer.x
+            const trimmerCenterY = trimmer.y
+
             const distance = Math.sqrt(
-                (nailCenterX - trimmerCenterX) ** 2 + (nailCenterY - trimmerCenterY -(pawSize/3)) ** 2
-            );
-            isNear = distance <  40
+                (nailCenterX - trimmerCenterX) ** 2 +
+                    (nailCenterY - trimmerCenterY - pawSize / 3) ** 2
+            )
+            isNear = distance < 40
             if (isNear) {
                 if (!trimmerTimeout.current[nail.id] && entrou) {
-                    entrou = false;
-                    let progress = 0;
-                    const intervalTIme = CUT_TIME / 100;
-                    const progressIncrement = 1;
-                    setNailProgress((prev) => ({ ...prev, [nail.id]: progress }));
+                    entrou = false
+                    let progress = 0
+                    const intervalTIme = CUT_TIME / 100
+                    const progressIncrement = 1
+                    setNailProgress((prev) => ({
+                        ...prev,
+                        [nail.id]: progress,
+                    }))
 
                     intervalRef.current[nail.id] = setInterval(() => {
-                        progress += progressIncrement;
-                        setNailProgress((prev) => ({ ...prev, [nail.id]: progress }));
-                    }, intervalTIme);
+                        progress += progressIncrement
+                        setNailProgress((prev) => ({
+                            ...prev,
+                            [nail.id]: progress,
+                        }))
+                    }, intervalTIme)
 
                     trimmerTimeout.current[nail.id] = setTimeout(() => {
-
-                        
-                        setIsTrimming(true);
+                        setIsTrimming(true)
                         setTimeout(() => {
-                            setIsTrimming(false);
-                        }, 200);
+                            setIsTrimming(false)
+                        }, 200)
                         setNails((prevNails) =>
                             prevNails.map((prevNail) =>
-                                prevNail.id === nail.id ? { ...prevNail, isTrimmed: true } : prevNail
+                                prevNail.id === nail.id
+                                    ? { ...prevNail, isTrimmed: true }
+                                    : prevNail
                             )
-                        );
-                        playSound(trimmerSound);
-                        addScore();
-                        clearInterval(intervalRef.current[nail.id]!);
-                        trimmerTimeout.current[nail.id] = null;
-                        setNailProgress((prev) => ({ ...prev, [nail.id]: 100 }));
-                        entrou = true;
-                    }, CUT_TIME);
+                        )
+                        playSound(trimmerSound)
+                        addScore()
+                        clearInterval(intervalRef.current[nail.id]!)
+                        trimmerTimeout.current[nail.id] = null
+                        setNailProgress((prev) => ({ ...prev, [nail.id]: 100 }))
+                        entrou = true
+                    }, CUT_TIME)
                 }
             } else {
                 if (trimmerTimeout.current[nail.id]) {
-                    clearTimeout(trimmerTimeout.current[nail.id]!);
-                    clearInterval(intervalRef.current[nail.id]!);
-                    trimmerTimeout.current[nail.id] = null;
-                    setNailProgress((prev) => ({ ...prev, [nail.id]: 0 }));
-                    entrou = true;
+                    clearTimeout(trimmerTimeout.current[nail.id]!)
+                    clearInterval(intervalRef.current[nail.id]!)
+                    trimmerTimeout.current[nail.id] = null
+                    setNailProgress((prev) => ({ ...prev, [nail.id]: 0 }))
+                    entrou = true
                 }
             }
-        });
-    };
-
-    
+        })
+    }
 
     return (
-          
-        <Animated.View style={ styles.mainBox}>
-            
-            <PanGestureHandler 
+        <Animated.View style={styles.mainBox}>
+            <PanGestureHandler
                 onGestureEvent={(e) => handleGesture(e)}
-                onHandlerStateChange={(e: PanGestureHandlerGestureEvent)=> {
-                    if(e.nativeEvent.state == State.END)  trimmer_current_position = trimmer}}
-                >
+                onHandlerStateChange={(e: PanGestureHandlerGestureEvent) => {
+                    if (e.nativeEvent.state == State.END)
+                        trimmer_current_position = trimmer
+                }}
+            >
                 <Animated.Image
                     source={isTrimming ? closeTrimmer : openTrimmer}
                     style={{
@@ -126,110 +151,112 @@ export default function GameBoard({addScore, pawImage, nailsSet}: GameBoardProps
             </PanGestureHandler>
 
             <Animated.View style={styles.pawContainer}>
-
-                <Animated.Image
-                    source={pawImage}
-                    style={styles.paw}
-                />
-                {nails.map((nail) => (
-                    nail && (
-                        <Animated.View 
-                        key={nail.id} 
-                        style={{
-                            position: "absolute",
-                            width: nailSize,
-                            height: nailSize,
-                            top: pawSize * nail.position.y,
-                            left: pawSize * nail.position.x,
-
-                        }}>
-                            <Animated.Image
-
+                <Animated.Image source={pawImage} style={styles.paw} />
+                {nails.map(
+                    (nail) =>
+                        nail && (
+                            <Animated.View
+                                key={nail.id}
                                 style={{
-                                    transform: nail.id == 4 ? [{ rotate: nail.rotation }] : undefined,
+                                    position: 'absolute',
                                     width: nailSize,
                                     height: nailSize,
-                                    resizeMode: "contain",
-                                    
+                                    top: pawSize * nail.position.y,
+                                    left: pawSize * nail.position.x,
                                 }}
-
-                                source={
-                                    nail.isTrimmed
-                                    ? require("@/assets/images/minigames/nail-trimmer/nail-short.png")
-                                    : require("@/assets/images/minigames/nail-trimmer/nail-long.png")
-                                }
-                            />
-                            {nailProgress[nail.id] > 0 && !nail.isTrimmed && (
-                                <Svg 
-                                    height={nailSize } 
-                                    width={nailSize } 
-                                    viewBox={`0 0 ${nailSize * 2} ${nailSize * 2}`}
-                                    
+                            >
+                                <Animated.Image
                                     style={{
-                                        position: "absolute",
-                                        overflow: "visible",
-                                        top: -nailSize /2,
-                                        left: 0,
-                                        zIndex: 15,
-                                
+                                        transform:
+                                            nail.id == 4
+                                                ? [{ rotate: nail.rotation }]
+                                                : undefined,
+                                        width: nailSize,
+                                        height: nailSize,
+                                        resizeMode: 'contain',
                                     }}
-                                >
-                                    <Circle 
-                                        cx={nailSize / 2}
-                                        cy={nailSize / 2}
-                                        r={(nailSize - 10)/2}
-
-                                        stroke="lightblue"
-                                        strokeWidth="10"
-                                        fill="none"
-                                        strokeDasharray={Math.PI * (nailSize + 10)}
-                                        strokeDashoffset={
-                                            2 * Math.PI * ((nailSize - 10)/2) - ((2 * Math.PI * ((nailSize - 10)/2))* nailProgress[nail.id] ) / 100
-                                        }
-                                        strokeLinecap="round"
-
-                                    />
-                                </Svg>
-                            )}
-                        </Animated.View>
-                    )
-                ))}
+                                    source={
+                                        nail.isTrimmed
+                                            ? require('@/assets/images/minigames/nail-trimmer/nail-short.png')
+                                            : require('@/assets/images/minigames/nail-trimmer/nail-long.png')
+                                    }
+                                />
+                                {nailProgress[nail.id] > 0 &&
+                                    !nail.isTrimmed && (
+                                        <Svg
+                                            height={nailSize}
+                                            width={nailSize}
+                                            viewBox={`0 0 ${nailSize * 2} ${nailSize * 2}`}
+                                            style={{
+                                                position: 'absolute',
+                                                overflow: 'visible',
+                                                top: -nailSize / 2,
+                                                left: 0,
+                                                zIndex: 15,
+                                            }}
+                                        >
+                                            <Circle
+                                                cx={nailSize / 2}
+                                                cy={nailSize / 2}
+                                                r={(nailSize - 10) / 2}
+                                                stroke="lightblue"
+                                                strokeWidth="10"
+                                                fill="none"
+                                                strokeDasharray={
+                                                    Math.PI * (nailSize + 10)
+                                                }
+                                                strokeDashoffset={
+                                                    2 *
+                                                        Math.PI *
+                                                        ((nailSize - 10) / 2) -
+                                                    (2 *
+                                                        Math.PI *
+                                                        ((nailSize - 10) / 2) *
+                                                        nailProgress[nail.id]) /
+                                                        100
+                                                }
+                                                strokeLinecap="round"
+                                            />
+                                        </Svg>
+                                    )}
+                            </Animated.View>
+                        )
+                )}
             </Animated.View>
-            
         </Animated.View>
-    );
+    )
 }
 
 const styles = StyleSheet.create({
     trimmerImage: {
-        position: "absolute",
-        zIndex: 10
+        position: 'absolute',
+        zIndex: 10,
     },
     paw: {
-        position: "absolute",
-        width: pawSize /2,
-        height: pawSize /2,
-        bottom:0,
+        position: 'absolute',
+        width: pawSize / 2,
+        height: pawSize / 2,
+        bottom: 0,
         zIndex: 3,
     },
-    pawContainer:{
-        position: "relative",
-        display: "flex",
-        alignItems: "center",
+    pawContainer: {
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
         width: pawSize,
         height: pawSize,
     },
     trimmerContainer: {
-        zIndex: 5
+        zIndex: 5,
     },
-    mainBox:{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "flex-end",
-        alignItems: "center",
-        width: "100%",
-        height: "100%",
+    mainBox: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        width: '100%',
+        height: '100%',
         margin: 0,
         padding: 0,
-    }
-});
+    },
+})
