@@ -40,7 +40,7 @@ function CustomTabIcon({ name, color, focused, iconsSize }: Props) {
 
 export default function TabLayout() {
     const pathname = usePathname()
-    
+
     const fetchUserAndPet = useUserPetStore((state) => state.fetchUserAndPet)
     const user = useUserPetStore((state) => state.user)
 
@@ -50,7 +50,6 @@ export default function TabLayout() {
             fetchUserAndPet(userId)
         }
     }, [fetchUserAndPet, user])
-
 
     const includeHeader = ['/store', '/quiz', '/minigames', '/profile']
     const includeBackBtn = ['/minigames', '/quiz']

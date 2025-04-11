@@ -9,18 +9,18 @@ import Drinkitem from '@/components/HomeItems/DrinkItem'
 import Wallpaperitem from '@/components/HomeItems/WallpaperItem'
 
 const Homescreen = () => {
-  return (
-    <View style = {styles.container}>
-      <Wallpaperitem/>
-      <Flooritem/>
-      <Petitem/>
-      <WcItem/>
-      <Beditem/>
-      <Toyitem/>
-      <Fooditem/>
-      <Drinkitem/>
-    </View>
-  )
+    return (
+        <View style={styles.container}>
+            <Wallpaperitem />
+            <Flooritem />
+            <Petitem />
+            <WcItem />
+            <Beditem />
+            <Toyitem />
+            <Fooditem />
+            <Drinkitem />
+        </View>
+    )
 }
 
 export default Homescreen
@@ -31,5 +31,5 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         justifyContent: 'center',
-    }
+    },
 })

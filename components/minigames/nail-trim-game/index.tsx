@@ -46,9 +46,9 @@ export default function NailTrimGame() {
     const [gameKey, setGameKey] = useState(0)
     const user = useUserPetStore((state) => state.user)
     const userUpdate = useUserPetStore((state) => state.updateUser)
-    const router = useRouter();
-    const { minigame, fetchMinigame } = useMinigameStore();
-    const minigameId = "UUorkjz1g8ZCRDNTK3k2"
+    const router = useRouter()
+    const { minigame, fetchMinigame } = useMinigameStore()
+    const minigameId = 'UUorkjz1g8ZCRDNTK3k2'
 
     const addScore = () => {
         setScore(score + 1)
@@ -60,9 +60,9 @@ export default function NailTrimGame() {
 
     useEffect(() => {
         if (!minigame) {
-            fetchMinigame(minigameId);
+            fetchMinigame(minigameId)
         }
-    }, [minigame, minigameId, fetchMinigame]);
+    }, [minigame, minigameId, fetchMinigame])
 
     const endGame = async () => {
         if (user && minigame) {

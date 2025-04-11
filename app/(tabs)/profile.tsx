@@ -39,7 +39,6 @@ export default function Profile() {
     }
     const router = useRouter()
 
-
     useEffect(() => {
         if (petInfo) {
             setPetName(petInfo.name)
@@ -83,7 +82,7 @@ export default function Profile() {
                 <View style={styles.petContainer}>
                     <PetOptionFormRegisterPet
                         Icon={pets[0].icon}
-                        onSelect={() => { }}
+                        onSelect={() => {}}
                         selected={false}
                         onlyPet={false}
                         color={petColor || '#7D5D56'}
@@ -121,7 +120,7 @@ export default function Profile() {
                                         { backgroundColor: color.color },
                                         styles.colorOption,
                                         colorSelected &&
-                                        styles.colorOptionActive,
+                                            styles.colorOptionActive,
                                     ]}
                                     onPress={() => {
                                         if (!isEditing) {
@@ -168,7 +167,10 @@ export default function Profile() {
                         </TouchableOpacity>
                     )}
 
-                    <TouchableOpacity onPress={() => router.push('/register')} style={styles.logoutButton}>
+                    <TouchableOpacity
+                        onPress={() => router.push('/register')}
+                        style={styles.logoutButton}
+                    >
                         <Text style={styles.logoutButtonText}>Sair</Text>
                         <MaterialIcons
                             name="exit-to-app"

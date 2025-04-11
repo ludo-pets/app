@@ -28,20 +28,20 @@ const XpBar = ({ xp, level }: xpBarProps) => {
 
     return (
         <View style={styles.container}>
-          <View style={styles.circleContainer}>
-                          <View style={styles.pawContainer}>
-                              <PawPrint size={60} color="#5b5b5b" />
-                              <Text
-                                  style={
-                                      Platform.OS === 'ios'
-                                          ? styles.levelTextIos
-                                          : styles.levelTextAndroid
-                                  }
-                              >
-                                  {level}
-                              </Text>
-                          </View>
-                      </View>
+            <View style={styles.circleContainer}>
+                <View style={styles.pawContainer}>
+                    <PawPrint size={60} color="#5b5b5b" />
+                    <Text
+                        style={
+                            Platform.OS === 'ios'
+                                ? styles.levelTextIos
+                                : styles.levelTextAndroid
+                        }
+                    >
+                        {level}
+                    </Text>
+                </View>
+            </View>
             <View style={styles.bar}>
                 <Text style={styles.text}>
                     {xp}/{xpBarSize}
@@ -65,15 +65,15 @@ const styles = StyleSheet.create({
     },
 
     circleContainer: {
-      backgroundColor: 'transparent',
-      borderRadius: 35,
-      width: 70,
-      height: 70,
-      justifyContent: 'center',
-      alignItems: 'center',
-      zIndex: 1,
-      position: 'relative',
-  },
+        backgroundColor: 'transparent',
+        borderRadius: 35,
+        width: 70,
+        height: 70,
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 1,
+        position: 'relative',
+    },
     pawContainer: {
         marginRight: 5,
         justifyContent: 'center',

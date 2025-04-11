@@ -5,7 +5,7 @@ export default function MinigameScreen() {
     return (
         <>
             <View style={styles.container}>
-              <NailTrimGame />
+                <NailTrimGame />
             </View>
         </>
     )

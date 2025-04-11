@@ -39,14 +39,14 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
     return (
-        <SafeAreaView style={{flex:1, backgroundColor: "transparent"}}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: 'transparent' }}>
             <Stack>
-            <Stack.Screen
-                name="register"
-                options={{ headerShown: false }}
-            />
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        </Stack>
+                <Stack.Screen
+                    name="register"
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            </Stack>
         </SafeAreaView>
     )
 }

@@ -18,7 +18,10 @@ export function PetOptionFormRegisterPet({
 }: PetOptionFormRegisterPetProps) {
     return (
         <Pressable
-            style={[onlyPet ? styles.petBox : styles.petBoxProfile, selected && styles.petBoxActive]}
+            style={[
+                onlyPet ? styles.petBox : styles.petBoxProfile,
+                selected && styles.petBoxActive,
+            ]}
             onPress={onSelect}
         >
             <View style={styles.imageContainer}>
@@ -40,11 +43,11 @@ const styles = StyleSheet.create({
         padding: 5,
     },
     petBoxProfile: {
-      width: '60%',
-      aspectRatio: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-  },
+        width: '60%',
+        aspectRatio: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     petBoxActive: {
         borderWidth: 5,
         borderColor: '#80BEE7',

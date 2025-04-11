@@ -11,11 +11,11 @@ export default function QuizScreen() {
         console.log('Quiz finalizado')
         if (!user) return
         userUpdate(user?.id || '', {
-          money: user?.money + 10,
-          experience: user?.experience + 10,
+            money: user?.money + 10,
+            experience: user?.experience + 10,
         })
         petUpdate(pet?.id || '', {
-          name: 'Alaor',
+            name: 'Alaor',
         })
     }
 

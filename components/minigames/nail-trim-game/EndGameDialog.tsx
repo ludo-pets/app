@@ -4,11 +4,14 @@ const { width } = Dimensions.get('window')
 import TrophyIcon from '@/assets/images/minigames/nail-trimmer/trophy.svg'
 
 interface EndGameDialogProps {
-    readonly givenMoney: number;
-    readonly endGame: () => void;
+    readonly givenMoney: number
+    readonly endGame: () => void
 }
 
-export default function EndGameDialog({ endGame, givenMoney }: EndGameDialogProps) {
+export default function EndGameDialog({
+    endGame,
+    givenMoney,
+}: EndGameDialogProps) {
     return (
         <Dialog.Container>
             <Dialog.Icon
@@ -21,7 +24,7 @@ export default function EndGameDialog({ endGame, givenMoney }: EndGameDialogProp
                     fontweight: '800',
                 }}
             />
-            <Dialog.Text content={`Você ganhou ${givenMoney} moedas.`}/>
+            <Dialog.Text content={`Você ganhou ${givenMoney} moedas.`} />
             <Dialog.ButtonArea>
                 <Dialog.Button
                     action={() => endGame()}
