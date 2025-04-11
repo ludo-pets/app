@@ -4,6 +4,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { useFonts } from 'expo-font'
 import { useEffect } from 'react'
 import { Stack } from 'expo-router'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 export { ErrorBoundary } from 'expo-router'
 
@@ -38,12 +39,14 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
     return (
-        <Stack>
+        <SafeAreaView style={{flex:1, backgroundColor: "transparent"}}>
+            <Stack>
             <Stack.Screen
                 name="index"
                 options={{ headerShown: false }}
             />
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         </Stack>
+        </SafeAreaView>
     )
 }

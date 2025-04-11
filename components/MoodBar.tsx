@@ -6,6 +6,7 @@ import {
     Animated,
     Dimensions,
     Pressable,
+    Platform,
 } from 'react-native'
 import { router } from 'expo-router'
 import { PawPrint } from 'phosphor-react-native'
@@ -44,10 +45,9 @@ const MoodBar = ({ animalLevel = 0, animalMood = 0 }) => {
             <View style={styles.circleContainer}>
                 <View style={styles.pawContainer}>
                     <PawPrint size={50} color="white" />
-                    <Text style={styles.levelText}>{level}</Text>
+                    <Text style={Platform.OS==='ios' ? styles.levelTextIos : styles.levelTextAndroid}>{level}</Text>
                 </View>
             </View>
-
             <View style={styles.bar}>
                 <View style={styles.barBackground}>
                     <Animated.View
@@ -86,9 +86,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         zIndex: 1,
         marginRight: -16,
+        position: "relative",
     },
     pawContainer: {
-        position: 'relative',
+        position: 'absolute',
         width: 50,
         height: 50,
         justifyContent: 'center',
@@ -99,15 +100,33 @@ const styles = StyleSheet.create({
         height: 40,
         tintColor: 'white',
     },
-    levelText: {
+
+    levelTextIos: {
         position: 'absolute',
-        top: '50%',
+        top: '63%',
         left: '50%',
-        transform: [{ translateX: -4 }, { translateY: -3.4 }],
+        fontFamily: "Courier Mono",
+        transform: [{ translateX: "-45%" }, { translateY: "-50%" }],
         fontSize: 14,
         fontWeight: 'bold',
         color: 'white',
+        textAlignVertical: 'center',
+        includeFontPadding: false,
     },
+    
+    levelTextAndroid: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        fontFamily: "Courier Mono",
+        transform: [{ translateX: "-45%" }, { translateY: "-50%" }],
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: 'white',
+        textAlignVertical: 'center',
+        includeFontPadding: false,
+    },
+
     text: {
         fontSize: 16,
         fontWeight: 'bold',
