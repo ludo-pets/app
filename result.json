@@ -1,42 +1,42 @@
 [
-  {
-    "id": "153dbf58-21e7-4cfd-9561-99efa5fe888a",
-    "status": "FINISHED",
-    "platform": "ANDROID",
-    "artifacts": {
-      "buildUrl": "https://expo.dev/artifacts/eas/3C8BNZ1pv2jjZY3YwAV3ah.apk",
-      "applicationArchiveUrl": "https://expo.dev/artifacts/eas/3C8BNZ1pv2jjZY3YwAV3ah.apk"
-    },
-    "initiatingActor": {
-      "id": "61da9569-02fc-4da5-a45b-a6ead81d3bbd",
-      "displayName": "llopex"
-    },
-    "project": {
-      "id": "5e3a24d7-b598-468a-bf60-e89a614e7b7e",
-      "name": "ludopets",
-      "slug": "ludopets",
-      "ownerAccount": {
-        "id": "f3447e9f-e1c8-45a5-9a00-a1f5b123cfc2",
-        "name": "llopex"
-      }
-    },
-    "distribution": "STORE",
-    "buildProfile": "production",
-    "sdkVersion": "52.0.0",
-    "appVersion": "1.0.0",
-    "appBuildVersion": "1",
-    "gitCommitHash": "aba3989a7d5dd156332aae9f6585b083c2f568bf",
-    "gitCommitMessage": "teste de correção",
-    "priority": "NORMAL",
-    "createdAt": "2025-04-07T06:20:09.047Z",
-    "updatedAt": "2025-04-07T06:32:23.238Z",
-    "completedAt": "2025-04-07T06:32:21.237Z",
-    "expirationDate": "2025-05-07T06:20:09.155Z",
-    "isForIosSimulator": false,
-    "metrics": {
-      "buildWaitTime": 245,
-      "buildQueueTime": 31215,
-      "buildDuration": 700437
+    {
+        "id": "153dbf58-21e7-4cfd-9561-99efa5fe888a",
+        "status": "FINISHED",
+        "platform": "ANDROID",
+        "artifacts": {
+            "buildUrl": "https://expo.dev/artifacts/eas/3C8BNZ1pv2jjZY3YwAV3ah.apk",
+            "applicationArchiveUrl": "https://expo.dev/artifacts/eas/3C8BNZ1pv2jjZY3YwAV3ah.apk"
+        },
+        "initiatingActor": {
+            "id": "61da9569-02fc-4da5-a45b-a6ead81d3bbd",
+            "displayName": "llopex"
+        },
+        "project": {
+            "id": "5e3a24d7-b598-468a-bf60-e89a614e7b7e",
+            "name": "ludopets",
+            "slug": "ludopets",
+            "ownerAccount": {
+                "id": "f3447e9f-e1c8-45a5-9a00-a1f5b123cfc2",
+                "name": "llopex"
+            }
+        },
+        "distribution": "STORE",
+        "buildProfile": "production",
+        "sdkVersion": "52.0.0",
+        "appVersion": "1.0.0",
+        "appBuildVersion": "1",
+        "gitCommitHash": "aba3989a7d5dd156332aae9f6585b083c2f568bf",
+        "gitCommitMessage": "teste de correção",
+        "priority": "NORMAL",
+        "createdAt": "2025-04-07T06:20:09.047Z",
+        "updatedAt": "2025-04-07T06:32:23.238Z",
+        "completedAt": "2025-04-07T06:32:21.237Z",
+        "expirationDate": "2025-05-07T06:20:09.155Z",
+        "isForIosSimulator": false,
+        "metrics": {
+            "buildWaitTime": 245,
+            "buildQueueTime": 31215,
+            "buildDuration": 700437
+        }
     }
-  }
 ]

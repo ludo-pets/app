@@ -26,13 +26,11 @@ export const getUserWithPetByIdService = async (
             return null
         }
 
-        // Garante que apenas o primeiro documento seja retornado
         const userDoc = userSnap.docs[0]
         const userData = userDoc.data()
 
         const petSnap = await getDoc(userData.pet)
 
-        //const petSnap = await getDoc(petRef);
         if (!petSnap.exists()) {
             console.error('Pet não encontrado')
             return null
