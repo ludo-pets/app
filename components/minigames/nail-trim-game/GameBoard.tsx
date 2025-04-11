@@ -20,7 +20,6 @@ const { width, height } = Dimensions.get('window')
 
 //trimmer
 const trimmer_initial_position = { x: width / 4, y: height / 6 }
-let trimmer_current_position = trimmer_initial_position
 const openTrimmer = require('@/assets/images/minigames/nail-trimmer/trimmer-open.png')
 const closeTrimmer = require('@/assets/images/minigames/nail-trimmer/trimmer-closed.png')
 const trimmerSound: AVPlaybackSource = require('@/assets/images/minigames/nail-trimmer/trimmer-sound.mp3')
@@ -59,8 +58,8 @@ export default function GameBoard({
 
     const handleGesture = (e: PanGestureHandlerGestureEvent) => {
         setTrimmer({
-            x: trimmer_current_position.x + e.nativeEvent.translationX,
-            y: trimmer_current_position.y + e.nativeEvent.translationY,
+            x: trimmer_initial_position.x + e.nativeEvent.translationX,
+            y: trimmer_initial_position.y + e.nativeEvent.translationY,
         })
 
         nails.forEach((nail) => {
@@ -139,7 +138,7 @@ export default function GameBoard({
                 onGestureEvent={(e) => handleGesture(e)}
                 onHandlerStateChange={(e: PanGestureHandlerGestureEvent) => {
                     if (e.nativeEvent.state == State.END)
-                        trimmer_current_position = trimmer
+                        setTrimmer(trimmer_initial_position)
                 }}
             >
                 <Animated.Image
