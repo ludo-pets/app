@@ -24,7 +24,7 @@ export const getMinigameByIdService = async (
 
         return { minigame }
     } catch (error) {
-        console.error('Erro ao buscar User e Pet:', error)
+        console.error('Erro ao buscar minigame:', error)
         return null
     }
 }
