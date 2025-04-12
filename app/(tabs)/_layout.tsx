@@ -38,6 +38,10 @@ function CustomTabIcon({ name, color, focused, iconsSize }: Props) {
     )
 }
 
+export const unstable_settings = {
+  initialRouteName: 'home',
+}
+
 export default function TabLayout() {
     const pathname = usePathname()
 
@@ -87,7 +91,7 @@ export default function TabLayout() {
                 }}
             >
                 <Tabs.Screen
-                    name="index"
+                    name="home"
                     options={{
                         title: 'Home',
                         tabBarIcon: ({ color, focused }) => (

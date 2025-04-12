@@ -3,11 +3,9 @@ import { StyleSheet, View } from 'react-native'
 
 export default function MinigameScreen() {
     return (
-        <>
-            <View style={styles.container}>
-                <NailTrimGame />
-            </View>
-        </>
+        <View style={styles.container}>
+            <NailTrimGame />
+        </View>
     )
 }
 

@@ -15,8 +15,8 @@ import React from 'react'
 import XpBar from '@/components/XpBar'
 import { colorsOptions, PetOption } from '@/components/FormRegisterPet'
 
-import Gato from '../../assets/images/pets/gato.svg'
-import Cachorro from '../../assets/images/pets/cachorro.svg'
+import Gato from '@/assets/images/pets/gato.svg'
+import Cachorro from '@/assets/images/pets/cachorro.svg'
 import { PetOptionFormRegisterPet } from '@/components/PetOptionFormRegisterPet'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { useRouter } from 'expo-router'
@@ -168,7 +168,7 @@ export default function Profile() {
                     )}
 
                     <TouchableOpacity
-                        onPress={() => router.push('/register')}
+                        onPress={() => router.push('/')}
                         style={styles.logoutButton}
                     >
                         <Text style={styles.logoutButtonText}>Sair</Text>

@@ -1,6 +1,6 @@
-import { StyleSheet, View, Dimensions, Pressable } from 'react-native'
-import Gato from '../../assets/images/pets/gato.svg'
-import Cachorro from '../../assets/images/pets/cachorro.svg'
+import { StyleSheet, View, Dimensions, Pressable, Platform } from 'react-native'
+import Gato from '@/assets/images/pets/gato.svg'
+import Cachorro from '@/assets/images/pets/cachorro.svg'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { PetOption } from '../FormRegisterPet'
 import GenericIcon from '../GenericIcon'
@@ -26,7 +26,7 @@ const PetItem = () => {
             <Pressable onPress={onPress}>
                 <GenericIcon
                     Icon={pets[0].icon}
-                    fill={petInfo?.color || '#B6E683'}
+                    fill={petInfo?.color || '#7D5D56'}
                     stroke={'#000'}
                 />
             </Pressable>
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
         width: '35%',
         height: '15%',
         position: 'absolute',
-        bottom: height / 6,
+        bottom: Platform.OS === 'ios' ? height / 8.0 : height / 6,
         right: width / 11,
     },
 })
