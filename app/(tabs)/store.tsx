@@ -5,29 +5,32 @@ const itemsMockup: PetshopItemProps[] = [
     {
         id: 0,
         category: 'food',
-        image: "https://cdn-icons-png.flaticon.com/512/1152/1152771.png",
-        name: "ração de salmão",
+        name: "Ração de salmão",
         price: 900.00,
         required_level: 3,
         is_active: true,
         quantity: 5,
+        has_item: true,
     },
     {
-        id: 2,
-        category: 'food',
-        image: "https://cdn-icons-png.flaticon.com/512/1152/1152771.png",
-        name: "ração de salmão",
-        price: 900.00,
+        id: 1,
+        category: 'bed',
+        name: "Almofada macia",
+        price: 1000,
         required_level: 3,
-        is_active: true,
+        is_active: false,
         quantity: 5,
+        has_item: false
     }
 ];
 export default function StoreScreen() {
     return (
-        <View style={styles.container}>
-            <ScrollView style={
-                { display: "flex", flexDirection: "column", flexWrap: "nowrap" }
+        <View >
+            <ScrollView   style={
+                {
+                    ...styles.scrollView,
+                    
+                }
             }>
             {itemsMockup.map((item: PetshopItemProps) => <PetshopItem item={item} />)}
             </ScrollView>
@@ -37,10 +40,10 @@ export default function StoreScreen() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
+    scrollView:{
+        height: "100%",
+        width: "100%",
+        padding: "2%",
     },
     title: {
         fontSize: 20,
