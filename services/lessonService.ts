@@ -27,12 +27,12 @@ export const getLessonByIdService = async (
 
         return { lesson }
     } catch (error) {
-        console.error('Erro ao buscar Lesson:', error)
+        console.error('Erro ao buscar Lição por id:', error)
         return null
     }
 }
 
-export const getAllLessons = async (): Promise<{ lessons: Array<Lesson> } | null> => {
+export const getAllLessonsService = async (): Promise<{ lessons: Array<Lesson> } | null> => {
     try {
         const lessonRef = collection(db, 'Lesson')
         const lessonSnap = await getDocs(lessonRef)
@@ -45,7 +45,7 @@ export const getAllLessons = async (): Promise<{ lessons: Array<Lesson> } | null
 
         return { lessons }
     } catch (error) {
-        console.error('Erro ao buscar Lessons:', error)
+        console.error('Erro ao buscar Lições:', error)
         return null
     }
 }
