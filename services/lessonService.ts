@@ -41,8 +41,6 @@ export const getAllLessonsService = async (): Promise<{ lessons: Array<Lesson> }
             ...doc.data()
         })) as Lesson[]
 
-        console.log(lessons)
-
         return { lessons }
     } catch (error) {
         console.error('Erro ao buscar Lições:', error)
