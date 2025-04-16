@@ -32,7 +32,7 @@ export const getLessonByIdService = async (
     }
 }
 
-export const getAllLessons = async (): Promise<{ lessons: Array<Lesson> } | null> => {
+export const getAllLessonsService = async (): Promise<{ lessons: Array<Lesson> } | null> => {
     try {
         const lessonRef = collection(db, 'Lesson')
         const lessonSnap = await getDocs(lessonRef)
