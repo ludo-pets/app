@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import Item from '@/dtos/Item'
 
-import { getAllItemsService } from '@/services/itemService'
+import { getAllItemService } from '@/services/itemService'
 
 interface ItemStoreState {
     items: Item[]
@@ -19,7 +19,7 @@ export const useItemStore = create<ItemStoreState>((set) => ({
     fetchItems: async () => {
         set({loading: true, error: null})
         try{
-            const result = await getAllItemsService()
+            const result = await getAllItemService()
             if(result) {
                 set({ items: result.items, loading: false})
             } else {
