@@ -1,5 +1,9 @@
 import { useUserPetStore } from '@/stores/userPetStore'
 import { StyleSheet, View, Text, Button } from 'react-native'
+import Header from '@/components/Header'
+import { Quiz } from '@/components/Quiz'
+import { navigate } from 'expo-router/build/global-state/routing'
+import QuizCat from '@/assets/images/quiz-cat.svg'
 
 export default function QuizScreen() {
     const user = useUserPetStore((state) => state.user)
@@ -20,10 +24,15 @@ export default function QuizScreen() {
     }
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Quiz</Text>
-            <View style={styles.separator} />
-        </View>
+        <View className="flex-1 bg-white">
+        <Quiz
+          question="Quantas horas por dia gatos adultos costumam dormir em média?"
+          options={['4 a 6 horas', '6 a 8 horas', '8 a 10 horas', '10 a 12 horas']}
+          correctAnswer="4 a 6 horas"
+          imageSource={'../../assets/images/quiz/quiz-cat.png'}
+          onCorrectAnswer={handleEndQuiz}
+        />
+      </View>
     )
 }
 
