@@ -29,7 +29,7 @@ export default function QuizScreen() {
           question="Quantas horas por dia gatos adultos costumam dormir em média?"
           options={['4 a 6 horas', '6 a 8 horas', '8 a 10 horas', '10 a 12 horas']}
           correctAnswer="4 a 6 horas"
-          imageSource={'../../assets/images/quiz/quiz-cat.png'}
+          imageSource={require('@/assets/images/quiz/quiz-cat.png')}
           onCorrectAnswer={handleEndQuiz}
         />
       </View>
