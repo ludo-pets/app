@@ -5,13 +5,14 @@ export interface PetshopItemProps {
     name: string;
     price: number;
     category: "bed" | "food" | "toy" | "wc" | "floor" | "wallpaper";
-    required_level: number;
+    has_required_level: boolean;
     quantity: number;
     has_item: boolean;
     is_active: boolean;
 }
 
 const {width, height} = Dimensions.get("window")
+
 //imagens baixadas de https://www.freepik.com/
 const foodIcon = require("@/assets/images/petshop/pet-food.png");
 const bedIcon = require("@/assets/images/petshop/pet-bed.png");
@@ -37,7 +38,8 @@ export default function PetshopItem ({item}: {item: PetshopItemProps}) {
 
     }
     const onBuy = () => {
-
+        console.log("toBuy");
+        
     }
     return(
         <view style={ styles.item }>
@@ -50,18 +52,19 @@ export default function PetshopItem ({item}: {item: PetshopItemProps}) {
                     <view style={ styles.price}> <Image style={{width: width /20, height: width / 20}} source={petCoin}/>{item.price}</view>
                 </view>
                 <view style={styles.row2}>
+                    <view style={styles.collum1}>
 
                     <Pressable 
                         style={
                             {
                                 ...styles.button,
                                 ...styles.active,
-                                display: item.has_item ? "flex" : "none"
+                                display: item.has_item && !item.is_active ? "flex" : "none"
                             }
-                        
+                            
                         }
                         onPress={() => onActive()}
-                    >
+                        >
                         <Text >
                             ATIVAR
                         </Text>
@@ -69,19 +72,40 @@ export default function PetshopItem ({item}: {item: PetshopItemProps}) {
                     </Pressable>
                     <Pressable 
                         onPress={() => onDesactive()}
+                        
                         style={
                             {
                                 ...styles.desactive,
                                 ...styles.button,
-                                display: !item.has_item ? "flex" : "none"
+                                display: item.has_item && item.is_active? 
+                                "flex" : "none"
                             }
                         }>
                             <Text >
                                 DESATIVAR
                             </Text>
                     </Pressable>
-                    <view>
-                    <Button onPress={() => onBuy()} title="Comprar"/>
+                    </view>
+                    <view style={styles.collum2}>
+                    <Pressable 
+                        onPress={() => onBuy() } 
+                        disabled={item.has_item || !item.has_required_level}
+                        style={
+                            {
+                                ...styles.button,
+                                display: !item.has_item ? "flex" : "none",
+                                backgroundColor: 
+                                    item.has_required_level && !item.has_item ?
+                                    "#6DA92C" :
+                                    "#5B5B5B"
+                                
+                            }
+                        }
+                    >
+                        <Text style={styles.buttonText}>
+                            COMPRAR
+                        </Text>
+                    </Pressable>
                     </view>
                 </view>
             </view>
@@ -91,10 +115,11 @@ export default function PetshopItem ({item}: {item: PetshopItemProps}) {
 
 const styles = StyleSheet.create({
     item: {
+        color:"#5B5B5B",
         display: "flex",
         flexDirection: "row",
         flexWrap: "nowrap",
-        justifyContent: "center",
+        justifyContent: "space-between",
         width: "100%",
         height: "100%",
         fontFamily: "inter",
@@ -131,19 +156,42 @@ const styles = StyleSheet.create({
     },
     row2: {
         display: "flex",
+        flexGrow: 1,
+        flexDirection: "row",
         width: "100%",
         justifyContent: "space-between",
     },
+    collum1: {
+        display: "flex",
+        padding: 0,
+        margin: 0,
+        justifyContent: "flex-start",
+        width: "50%"
+    },
+    collum2: {
+        display: "flex",
+        padding: 0,
+        margin: 0,
+        justifyContent: "flex-end",
+        width: "50%",
+    },
     button: {
+        color: "white",
         borderRadius: 20,
-        paddingTop: 10,
-        paddingBottom: 10,
+        paddingTop: 5,
+        paddingBottom: 5,
         paddingLeft: 50,
         paddingRight: 50,
         width: "30%",
         display: "flex",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        margin: 0,
+        
+       
+    },
+    buttonText:{
+        color: "white",
     },
     active: {
         backgroundColor: "#D4E4EB",
@@ -155,6 +203,12 @@ const styles = StyleSheet.create({
     },
     desactive: {
         backgroundColor: "#EDB0B0"
+    },
+    unlocked:{
+        backgroundColor: "#6DA92C"
+    },
+    locked:{
+        backgroundColor: "#5B5B5B"
     },
     price: {
         display: "flex",
