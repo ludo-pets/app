@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import User from '@/dtos/User'
-import Pet from '@/dtos/Pet'
+import { Pet } from '@/dtos/Pet'
 import {
     getUserWithPetByIdService,
     updateUserService,
