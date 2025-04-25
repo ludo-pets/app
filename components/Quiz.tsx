@@ -14,6 +14,7 @@ interface QuizProps {
     correctAnswer: string
     imageSource?: any
     onCorrectAnswer: () => void
+    onWrongAnswer: () => void
 }
 
 export function Quiz({
@@ -22,6 +23,7 @@ export function Quiz({
     correctAnswer,
     imageSource,
     onCorrectAnswer,
+    onWrongAnswer,
 }: QuizProps) {
     const [selected, setSelected] = useState<string | null>(null)
 
@@ -30,6 +32,8 @@ export function Quiz({
         setSelected(option)
         if (option === correctAnswer) {
             onCorrectAnswer()
+        } else {
+            onWrongAnswer() 
         }
     }
 
@@ -42,7 +46,6 @@ export function Quiz({
 
     return (
         <View style={styles.container}>
-            {/* <Image source={require('@/assets/images/quiz/quiz-cat.png')} /> */}
             <Image source={imageSource} />
             <Text style={styles.question}>{question}</Text>
             <View style={styles.optionsContainer}>
