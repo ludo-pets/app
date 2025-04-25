@@ -29,6 +29,8 @@ export const useLessonStore = create<LessonState>((set) => ({
             }
         } catch (error: any) {
             set({ error: error.message, loading: false })
+        } finally {
+            set({ loading: false })
         }
     },
 

@@ -16,14 +16,7 @@ export const getLessonByIdService = async (
 
         const lessonData = lessonSnap.data() as Lesson
 
-        const lesson: Lesson = {
-            id: lessonData.id,
-            concluded: lessonData.concluded,
-            name: lessonData.name,
-            questions: lessonData.questions,
-            givenExperience: lessonData.givenExperience,
-            givenMoney: lessonData.givenMoney
-        }
+        const lesson: Lesson = {...lessonData}
 
         return { lesson }
     } catch (error) {
@@ -32,12 +25,12 @@ export const getLessonByIdService = async (
     }
 }
 
-export const getAllLessonsService = async (): Promise<{ lessons: Array<Lesson> } | null> => {
+export const getAllLessonsService = async (): Promise<{ lessons: Lesson[] } | null> => {
     try {
         const lessonRef = collection(db, 'Lesson')
         const lessonSnap = await getDocs(lessonRef)
     
-        const lessons: Array<Lesson> = lessonSnap.docs.map(doc => ({
+        const lessons: Lesson[] = lessonSnap.docs.map(doc => ({
             ...doc.data()
         })) as Lesson[]
 

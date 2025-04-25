@@ -3,11 +3,11 @@ import Lesson from '@/dtos/Lesson'
 import { getAllLessonsService } from '@/services/lessonService'
 
 interface AllLessonsState {
-    lessons: Array<Lesson> | null
+    lessons: Lesson[] | null
     loading: boolean
     error: string | null
     fetchAllLessons: () => Promise<void>
-    setLessons: (lessons: Array<Lesson>) => void
+    setLessons: (lessons: Lesson[]) => void
 }
 
 export const useAllLessonsStore = create<AllLessonsState>((set) => ({
@@ -26,8 +26,10 @@ export const useAllLessonsStore = create<AllLessonsState>((set) => ({
             }
         } catch (error: any) {
             set({ error: error.message, loading: false })
+        } finally {
+            set({ loading: false })
         }
     },
 
-    setLessons: (lessons: Array<Lesson>) => set({ lessons }),
+    setLessons: (lessons: Lesson[]) => set({ lessons }),
 }))
