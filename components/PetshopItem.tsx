@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import {
     Button,
     Dimensions,
@@ -18,6 +19,7 @@ export interface PetshopItemProps {
     id: string
     name: string
     price: number
+    type: string
     category: string
     has_required_level: boolean
     quantity: number
@@ -44,13 +46,16 @@ const categoryIcon = {
     wallpaper: customisationIcon,
 }
 export default function PetshopItem({ item }: { item: PetshopItemProps }) {
+    useEffect(()=> {
+        console.log("item", item);
+    },[])
     const onActive = () => {}
     const onDesactive = () => {}
     const onBuy = () => {
         console.log('toBuy')
     }
     const teste = Object.keys(categoryIcon).find(
-        (category) => category == item.category
+        (category) => category == item.type
     )
     return (
         <view style={styles.item}>
@@ -60,10 +65,10 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
                     resizeMode="contain"
                     source={
                         Object.keys(categoryIcon).find(
-                            (category) => category == item.category
+                            (category) => category == item.type
                         )
                             ? categoryIcon[
-                                  item.category as keyof typeof categoryIcon
+                                  item.type as keyof typeof categoryIcon
                               ]
                             : foodIcon
                     }

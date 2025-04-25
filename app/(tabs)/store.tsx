@@ -31,7 +31,8 @@ export default function StoreScreen() {
         const fetchItems = async () => {
             const responseItemsShop = await getAllItemService()
             itemsShop = responseItemsShop?.items || []
-
+            
+            
             const responsePetActiveItems = await getUserWithPetByIdService(
                 'ludopetsages@gmail.com'
             )
@@ -44,6 +45,7 @@ export default function StoreScreen() {
             console.log('🚀 ~ fetchItems ~ userLevel:', userLevel)
             console.log('🚀 ~ fetchItems ~ petActiveItemsData:', petActiveItems)
             console.log('🚀 ~ useEffect ~ fetchItems:', itemsShop)
+            console.log("item", itemsShop);
         }
         fetchItems()
     }, [itemsShop, petActiveItems, userLevel])
@@ -65,7 +67,7 @@ export default function StoreScreen() {
                 ))}
             </View>
 
-            <View style={styles.itemsShopBox}>
+            {/* <View style={styles.itemsShopBox}>
                 <FlatList
                     style={{ width: '100%' }}
                     data={itemsShop.filter(
@@ -79,6 +81,7 @@ export default function StoreScreen() {
                                 name: item.name,
                                 category: item.category,
                                 price: item.price,
+                                type: item.type,
                                 has_required_level:
                                     userLevel >= item.requiredLevel,
                                 has_item: petActiveItems.some(
@@ -98,7 +101,26 @@ export default function StoreScreen() {
                         <View style={{ height: 10 }} />
                     )}
                 />
-            </View>
+            </View> */}
+           {itemsShop.map(item => (
+             <PetshopItem item={{
+                id: item.id,
+                name: item.name,
+                category: item.category,
+                price: item.price,
+                type: item.type,
+                has_required_level:
+                    userLevel >= item.requiredLevel,
+                has_item: petActiveItems.some(
+                    (petItem) => petItem.id === item.id
+                ),
+                is_active: true,
+                quantity:
+                    petActiveItems.find(
+                        (petItem) => petItem.id === item.id
+                    )?.quantity || 0,
+            }}/>
+           ))}
         </View>
     )
 }
