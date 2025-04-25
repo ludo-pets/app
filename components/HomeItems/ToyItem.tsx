@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
         width: '47%',
         height: '41.7%',
         position: 'absolute',
-        bottom: Platform.OS === 'ios' ? height / 3.70 : height / 3.36,
+        bottom: Platform.OS === 'ios' ? height / 3.7 : height / 3.36,
         right: width / 1.99,
         justifyContent: 'center',
         alignItems: 'center',
