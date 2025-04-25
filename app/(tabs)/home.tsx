@@ -43,7 +43,7 @@ const calcPetMood = (pet) : number => {
     mood += calcNecessityValue(lastDrank, 25, 43200);
     mood += calcNecessityValue(lastCleaned, 25, 86400);
     mood += calcNecessityValue(lastSlept, 12.5, 43200);
-    mood += calcNecessityValue(lastPlayed, 12.5, 172800);
+    mood += calcNecessityValue(lastPlayed, 12.5, 21600);
 
     console.log("[DEBUG] Mood:" + mood);
     return mood;
