@@ -6,12 +6,13 @@ import {
     Dimensions,
     Platform,
 } from 'react-native'
+import { InteractionTouch } from './InteractionTouch'
 
 const { height, width } = Dimensions.get('window')
 
 const BedItem = () => {
     const onPress = () => {
-        console.log("the cat won't sleep here")
+        InteractionTouch('bed')
     }
 
     return (

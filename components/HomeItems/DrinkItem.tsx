@@ -5,12 +5,13 @@ import {
     TouchableWithoutFeedback,
     Dimensions,
 } from 'react-native'
+import { InteractionTouch } from './InteractionTouch'
 
 const { height, width } = Dimensions.get('window')
 
 const DrinkItem = () => {
     const onPress = () => {
-        console.log('water.')
+        InteractionTouch('drink')
     }
 
     return (
