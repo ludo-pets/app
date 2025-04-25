@@ -43,7 +43,7 @@ export function Quiz({
     return (
         <View style={styles.container}>
             {/* <Image source={require('@/assets/images/quiz/quiz-cat.png')} /> */}
-            <Image source={imageSource}/>
+            <Image source={imageSource} />
             <Text style={styles.question}>{question}</Text>
             <View style={styles.optionsContainer}>
                 {options.map((option) => (
