@@ -16,6 +16,7 @@ export const getAllItemService = async (): Promise<{items: Item[]} | null> => {
                 requiredLevel: data.requiredLevel,
                 category: data.category,
                 image: data.image,
+                type: data.type
             }
         })
 
