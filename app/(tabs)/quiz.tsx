@@ -14,15 +14,27 @@ export default function QuizScreen() {
             money: user?.money + 10,
             experience: user?.experience + 10,
         })
-        petUpdate(pet?.id || '', {
-            name: 'Alaor',
-        })
+        // NAO DELETA (ASS: GABRIEL AGES 4)
+        // petUpdate(pet?.id || '', {
+        //     wellBeing: {
+        //         clean: (new Date()).toString(),
+        //         fun: (new Date()).toString(),
+        //         hunger: (new Date('2025-03-25T21:00:00')).toString(),
+        //         sleep: (new Date()).toString(),
+        //         thirst: (new Date()).toString(),
+        //     }
+        // })
     }
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Quiz</Text>
             <View style={styles.separator} />
+            {/* 
+            NAO DELETA (ASS: GABRIEL AGES 4)
+            <Button onPress={() => handleEndQuiz()} >
+                arruma
+            </Button> */}
         </View>
     )
 }
