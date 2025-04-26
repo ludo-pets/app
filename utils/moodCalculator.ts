@@ -1,25 +1,18 @@
 import { Wellbeing } from "@/dtos/Pet";
 
-export const calcPetMood = (wellBeing: Wellbeing) : number => {
-    const lastFed = new Date (wellBeing.hunger);
-    const lastDrank = new Date (wellBeing.thirst);
-    const lastCleaned = new Date (wellBeing.clean);
-    const lastPlayed = new Date (wellBeing.thirst);
-    const lastSlept = new Date (wellBeing.sleep);
-    console.log("[DEBUG] Wellbeing: " + wellBeing);
-    /*
-    const lastFed = new Date("2025-04-25T00:00:00");
-    const lastDrank = new Date("2025-04-25T00:00:00");
-    const lastCleaned = new Date("2025-04-25T18:00:00");
-    const lastPlayed = new Date("2025-04-25T18:00:00");
-    const lastSlept = new Date("2025-04-25T18:00:00");
-    */
+export const calcPetMood = (wellBeing: Wellbeing): number => {
+    const lastFed = new Date(wellBeing.hunger);
+    const lastDrank = new Date(wellBeing.thirst);
+    const lastCleaned = new Date(wellBeing.clean);
+    const lastPlayed = new Date(wellBeing.thirst);
+    const lastSlept = new Date(wellBeing.sleep);
+    
     let mood = 0;
-    mood += calcNecessityValue(lastFed, 25, 43200);
-    mood += calcNecessityValue(lastDrank, 25, 43200);
-    mood += calcNecessityValue(lastCleaned, 25, 86400);
-    mood += calcNecessityValue(lastSlept, 12.5, 43200);
-    mood += calcNecessityValue(lastPlayed, 12.5, 21600);
+    mood += calcNecessityValue(lastFed, 25, 216000);
+    mood += calcNecessityValue(lastDrank, 25, 216000);
+    mood += calcNecessityValue(lastSlept, 25, 216000);
+    mood += calcNecessityValue(lastCleaned, 12.5, 432000);
+    mood += calcNecessityValue(lastPlayed, 12.5, 43200);
 
     console.log("[DEBUG] Mood:" + mood);
     return mood;
@@ -28,7 +21,6 @@ export const calcPetMood = (wellBeing: Wellbeing) : number => {
 const calcNecessityValue = (last: Date, percentage: number, decrement: number) => {
     let currentDate = new Date();
     currentDate = new Date(currentDate.toISOString());
-    console.log("[DEBUG] current date:" + currentDate);
 
     const timeSince = (currentDate.valueOf() - last.valueOf()) / 1000;
     const decreaseOvertime = percentage / decrement;
