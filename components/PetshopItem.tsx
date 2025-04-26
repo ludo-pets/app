@@ -87,7 +87,7 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
                     </view>
                 </view>
                 <view style={styles.row2}>
-                    <view style={styles.collum1}>
+                    
                         <Pressable
                             style={{
                                 ...styles.button,
@@ -114,8 +114,8 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
                         >
                             <Text>DESATIVAR</Text>
                         </Pressable>
-                    </view>
-                    <view style={styles.collum2}>
+                    
+                   
                         <Pressable
                             onPress={() => onBuy()}
                             disabled={item.has_item || !item.has_required_level}
@@ -130,7 +130,7 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
                         >
                             <Text style={styles.buttonText}>COMPRAR</Text>
                         </Pressable>
-                    </view>
+                    
                 </view>
             </view>
         </view>
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         flexDirection: 'row',
         width: '100%',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-end',
     },
     collum1: {
         display: 'flex',

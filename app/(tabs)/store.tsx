@@ -5,18 +5,64 @@ import { getAllItemService } from '@/services/itemService'
 import { getUserWithPetByIdService } from '@/services/userService'
 import Item from '@/dtos/Item'
 import Pet from '@/dtos/Pet'
-import PetshopItem from '@/components/PetshopItem'
+import PetshopItem, { PetshopItemProps } from '@/components/PetshopItem'
 
 type FilterTitle = {
     id: number
     name: string
     category: string
 }
+const itemsMockup: PetshopItemProps[] = [
+    {
+        id: "dgfdfgd",
+        category: 'foods',
+        name: "Ração de salmão",
+        price: 900.00,
+        type: "food",
+        has_required_level: true,
+        is_active: true,
+        quantity: 5,
+        has_item: true,
+    },
+    {
+        id: "fsddjsfd",
+        category: 'environment',
+        name: "Almofada macia",
+        price: 1000,
+        type: "bed",
+        has_required_level: true,
+        is_active: false,
+        quantity: 5,
+        has_item: true
+    },
+    {
+        id: "fdklgjsdlkjgkl",
+        category: 'toys',
+        name: "Bola de lã",
+        price: 1500,
+        type: "toy",
+        has_required_level: true,
+        is_active: false,
+        quantity: 5,
+        has_item: false
+    },
+    {
+        id: "dkjghsdkgsdk",
+        category: 'toys',
+        name: "Arranhador",
+        price: 2000,
+        type: "toy",
+        has_required_level: false,
+        is_active: false,
+        quantity: 5,
+        has_item: false
+    }
+];
 
 const filterTitles: FilterTitle[] = [
-    { id: 1, name: 'Alimentação', category: 'Ração' },
-    { id: 2, name: 'Brinquedos', category: 'toy' },
-    { id: 3, name: 'Ambiente', category: 'floor' },
+    { id: 1, name: 'Alimentação', category: 'foods' },
+    { id: 2, name: 'Brinquedos', category: 'toys' },
+    { id: 3, name: 'Ambiente', category: 'environment' },
 ]
 
 let itemsShop: Item[] = []
@@ -67,14 +113,16 @@ export default function StoreScreen() {
                 ))}
             </View>
 
-            {/* <View style={styles.itemsShopBox}>
+            <View style={styles.itemsShopBox}>
                 <FlatList
                     style={{ width: '100%' }}
+                    // msa
                     data={itemsShop.filter(
                         (item) => item.category === selectedFilter.category
                     )}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => (
+                        
                         <PetshopItem
                             item={{
                                 id: item.id,
@@ -84,14 +132,19 @@ export default function StoreScreen() {
                                 type: item.type,
                                 has_required_level:
                                     userLevel >= item.requiredLevel,
-                                has_item: petActiveItems.some(
-                                    (petItem) => petItem.id === item.id
-                                ),
+                                
+                                //mudar para chamar do banco
+                                has_item: true,
+                                    
+                                //mudar para chamar do banco
                                 is_active: true,
+                    
+            
                                 quantity:
                                     petActiveItems.find(
                                         (petItem) => petItem.id === item.id
                                     )?.quantity || 0,
+                                    
                             }}
                         />
                     )}
@@ -101,26 +154,8 @@ export default function StoreScreen() {
                         <View style={{ height: 10 }} />
                     )}
                 />
-            </View> */}
-           {itemsShop.map(item => (
-             <PetshopItem item={{
-                id: item.id,
-                name: item.name,
-                category: item.category,
-                price: item.price,
-                type: item.type,
-                has_required_level:
-                    userLevel >= item.requiredLevel,
-                has_item: petActiveItems.some(
-                    (petItem) => petItem.id === item.id
-                ),
-                is_active: true,
-                quantity:
-                    petActiveItems.find(
-                        (petItem) => petItem.id === item.id
-                    )?.quantity || 0,
-            }}/>
-           ))}
+            </View>
+
         </View>
     )
 }
