@@ -1,5 +1,11 @@
-import { useEffect, useState } from 'react'
-import { StyleSheet, View, Text, Pressable } from 'react-native'
+import { useEffect, useState, useCallback } from 'react'
+import {
+    StyleSheet,
+    View,
+    Text,
+    Pressable,
+    ActivityIndicator,
+} from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { getAllItemService } from '@/services/itemService'
 import { getUserWithPetByIdService } from '@/services/userService'
@@ -10,43 +16,93 @@ import PetshopItem from '@/components/PetshopItem'
 type FilterTitle = {
     id: number
     name: string
-    category: string
+    category: 'foods' | 'toys' | 'environment'
 }
 
 const filterTitles: FilterTitle[] = [
-    { id: 1, name: 'Alimentação', category: 'Ração' },
-    { id: 2, name: 'Brinquedos', category: 'toy' },
-    { id: 3, name: 'Ambiente', category: 'floor' },
+    { id: 1, name: 'Alimentação', category: 'foods' },
+    { id: 2, name: 'Brinquedos', category: 'toys' },
+    { id: 3, name: 'Ambiente', category: 'environment' },
 ]
 
-let itemsShop: Item[] = []
-let petActiveItems: Pet['purchasedItems'] = []
-let userLevel = 0
 export default function StoreScreen() {
     const [selectedFilter, setSelectedFilter] = useState<FilterTitle>(
         filterTitles[0]
     )
+    const [isLoading, setIsLoading] = useState(true)
+
+    const [itemsShop, setItemsShop] = useState<Item[]>([])
+    const [petActiveItems, setPetActiveItems] = useState<Pet['purchasedItems']>(
+        []
+    )
+    const [petPurchasedItems, setPetPurchasedItems] = useState<
+        Pet['purchasedItems']
+    >([])
+    const [userLevel, setUserLevel] = useState<number>(0)
 
     useEffect(() => {
         const fetchItems = async () => {
             const responseItemsShop = await getAllItemService()
-            itemsShop = responseItemsShop?.items || []
+            setItemsShop(responseItemsShop?.items || [])
 
-            const responsePetActiveItems = await getUserWithPetByIdService(
+            const responsePetData = await getUserWithPetByIdService(
                 'ludopetsages@gmail.com'
             )
-            petActiveItems = Array.isArray(
-                responsePetActiveItems?.pet.activeItems
+
+            setPetActiveItems(
+                Array.isArray(responsePetData?.pet.activeItems)
+                    ? responsePetData.pet.activeItems
+                    : []
             )
-                ? responsePetActiveItems?.pet.activeItems
-                : []
-            userLevel = responsePetActiveItems?.user.level || 0
-            console.log('🚀 ~ fetchItems ~ userLevel:', userLevel)
-            console.log('🚀 ~ fetchItems ~ petActiveItemsData:', petActiveItems)
-            console.log('🚀 ~ useEffect ~ fetchItems:', itemsShop)
+
+            setPetPurchasedItems(
+                Array.isArray(responsePetData?.pet.purchasedItems)
+                    ? responsePetData.pet.purchasedItems
+                    : []
+            )
+
+            setUserLevel(responsePetData?.user.level || 0)
+
+            if (__DEV__) {
+                console.log('userLevel:', responsePetData?.user.level)
+                console.log('activeItems:', responsePetData?.pet.activeItems)
+                console.log(
+                    'purchasedItems:',
+                    responsePetData?.pet.purchasedItems
+                )
+                console.log('itemsShop:', responseItemsShop?.items)
+            }
+
+            setIsLoading(false)
         }
+
         fetchItems()
-    }, [itemsShop, petActiveItems, userLevel])
+    }, [])
+
+    const renderPetshopItem = useCallback(
+        ({ item }: { item: Item }) => {
+            const hasItem = petPurchasedItems.some((p) => p.id === item.id)
+            const isActive = petActiveItems.some((p) => p.id === item.id)
+            const quantity =
+                petActiveItems.find((p) => p.id === item.id)?.quantity || 0
+
+            return (
+                <PetshopItem
+                    item={{
+                        id: item.id,
+                        name: item.name,
+                        category: item.category,
+                        price: item.price,
+                        has_required_level: userLevel >= item.requiredLevel,
+                        has_item: hasItem,
+                        is_active: isActive,
+                        quantity,
+                    }}
+                />
+            )
+        },
+        [petPurchasedItems, petActiveItems, userLevel]
+    )
 
     return (
         <View style={styles.container}>
@@ -65,40 +121,25 @@ export default function StoreScreen() {
                 ))}
             </View>
 
-            <View style={styles.itemsShopBox}>
-                <FlatList
-                    style={{ width: '100%' }}
-                    data={itemsShop.filter(
-                        (item) => item.category === selectedFilter.category
-                    )}
-                    keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => (
-                        <PetshopItem
-                            item={{
-                                id: item.id,
-                                name: item.name,
-                                category: item.category,
-                                price: item.price,
-                                has_required_level:
-                                    userLevel >= item.requiredLevel,
-                                has_item: petActiveItems.some(
-                                    (petItem) => petItem.id === item.id
-                                ),
-                                is_active: true,
-                                quantity:
-                                    petActiveItems.find(
-                                        (petItem) => petItem.id === item.id
-                                    )?.quantity || 0,
-                            }}
-                        />
-                    )}
-                    showsVerticalScrollIndicator={false}
-                    showsHorizontalScrollIndicator={false}
-                    ItemSeparatorComponent={() => (
-                        <View style={{ height: 10 }} />
-                    )}
-                />
-            </View>
+            {isLoading ? (
+                <ActivityIndicator size="small" color="#FFF" />
+            ) : (
+                <View style={styles.itemsShopBox}>
+                    <FlatList
+                        style={{ width: '100%' }}
+                        data={itemsShop.filter(
+                            (item) => item.category === selectedFilter.category
+                        )}
+                        keyExtractor={(item) => item.id.toString()}
+                        renderItem={renderPetshopItem}
+                        showsVerticalScrollIndicator={false}
+                        showsHorizontalScrollIndicator={false}
+                        ItemSeparatorComponent={() => (
+                            <View style={{ height: 10 }} />
+                        )}
+                    />
+                </View>
+            )}
         </View>
     )
 }
@@ -119,7 +160,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#5B5B5B',
     },
-
     titleBox: {
         position: 'relative',
     },
@@ -135,13 +175,11 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 3,
         borderTopRightRadius: 3,
     },
-
     itemsShopBox: {
         width: '100%',
         paddingVertical: 20,
         paddingHorizontal: 10,
     },
-
     itemShop: {
         height: 92,
         backgroundColor: '#E5E5E5',
@@ -149,7 +187,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-
     itemShopText: {
         color: '#5B5B5B',
         fontWeight: 'bold',
