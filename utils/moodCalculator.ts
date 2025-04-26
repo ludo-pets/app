@@ -14,7 +14,6 @@ export const calcPetMood = (wellBeing: Wellbeing): number => {
     mood += calcNecessityValue(lastCleaned, 12.5, 432000);
     mood += calcNecessityValue(lastPlayed, 12.5, 43200);
 
-    console.log("[DEBUG] Mood:" + mood);
     return mood;
 }
 

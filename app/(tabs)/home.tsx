@@ -12,14 +12,10 @@ export default function HomeScreen() {
     const [mood, setMood] = useState(0);
     useEffect(() => {
         if (pet) {
-            console.log(pet);
             setMood(calcPetMood(pet.wellBeing))
         }
     }, [pet]
     )
-
-    console.log(mood)
-
 
     return (
         <View style={styles.container}>
