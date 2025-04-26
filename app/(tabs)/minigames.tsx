@@ -1,6 +1,6 @@
 import NailTrimGame from '@/components/minigames/nail-trim-game'
 import { StyleSheet, View, Text, FlatList, Dimensions, Image, TouchableHighlight } from 'react-native'
-import React from 'react';
+import React, { useState } from 'react';
 
 const { width, height } = Dimensions.get('window'); 
 
@@ -11,35 +11,49 @@ const DATA = [
         id: 1,
         gameTitle: 'Jogo da Unha',
         image: require('@/assets/images/minigames/minigame_icon_test.png'),
+        desc: 'Esta e a descricao do jogo da unha, nao tenho ideia agora',
     },
     { 
         id: 2,
         gameTitle: 'Jogo da Unha 2',
         image: require('@/assets/images/minigames/minigame_icon_test.png'),
+        desc: 'Esta e a descricao do jogo da unha 2, nao tenho ideia agora',
     },
     { 
         id: 3,
         gameTitle: 'Jogo da Unha 3',
         image: require('@/assets/images/minigames/minigame_icon_test.png'),
+        desc: 'Esta e a descricao do jogo da unha 3, nao tenho ideia agora',
     },
     {
         id: 4,
         gameTitle: 'Jogo da Unha 4',
         image: require('@/assets/images/minigames/minigame_icon_test.png'),
+        desc: 'Esta e a descricao do jogo da unha 4, nao tenho ideia agora',
     },
     { 
         id: 5,
         gameTitle: 'Jogo da Unha 5',
         image: require('@/assets/images/minigames/minigame_icon_test.png'),
+        desc: 'Esta e a descricao do jogo da unha 5, nao tenho ideia agora',
     },
     { 
         id: 6,
         gameTitle: 'Jogo da Unha 6',
         image: require('@/assets/images/minigames/minigame_icon_test.png'),
+        desc: 'Esta e a descricao do jogo da unha 6, nao tenho ideia agora',
     },
 ]
-//Mudar botao play!!!
+
 export default function MinigameScreen() {
+
+    const onPress = (id: number) => {
+        if(id == 1) {
+            return <NailTrimGame/>
+        }
+
+    }
+    
     return (
         <View style = {styles.container}>
             <FlatList
@@ -47,25 +61,26 @@ export default function MinigameScreen() {
             showsVerticalScrollIndicator = {false}
             keyExtractor = {(item) => item.id.toString()}
             renderItem = {({item}) => (
-                <View style = {styles.minigameBox}>
-                    <View style = {styles.imageDiv}>
-                        <View style = {styles.picBox}>
-                            <Image
-                            resizeMode = 'cover'
-                            style={{ width: '100%', height: '100%',borderRadius: imgRad}}
-                            source = {item.image}/>
-                        </View>
-                    </View>
-
-                    <View style = {styles.textDiv}>
-                        <Text style = {styles.title}>{item.gameTitle}</Text>
-                        <TouchableHighlight style = {styles.playButton}>
-                            <View>
-                                <Text style = {{fontSize: 15,fontWeight: '600',color: '#5B5B5B',}}> Play </Text>
+                <TouchableHighlight underlayColor="#ebebeb" onPress = {() => onPress(item.id)}>
+                    <View style = {styles.minigameBox}>
+                        <View style = {styles.imageDiv}>
+                            <View style = {styles.picBox}>
+                                <Image
+                                resizeMode = 'cover'
+                                style={{ width: '100%', height: '100%',borderRadius: imgRad}}
+                                source = {item.image}/>
                             </View>
-                        </TouchableHighlight>
+                        </View>
+
+                        <View style = {styles.textDiv}>
+                            <Text style = {styles.title}>{item.gameTitle}</Text>
+                            <View style = {styles.descDiv}>
+                                <Text style = {styles.desc}>{item.desc}</Text>
+                            </View>
+                        </View>
+                    
                     </View>
-                </View>
+                </TouchableHighlight>
             )}
             />
         </View>
@@ -79,7 +94,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     title: {
-        fontSize: 19,
+        fontSize: 20,
+        fontWeight: '600',
+        color: '#5B5B5B',
+    },
+    desc: {
+        fontSize: 16,
         fontWeight: '600',
         color: '#5B5B5B',
     },
@@ -94,7 +114,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginVertical: 3,
         width: width * 1,
-        height: height * 0.14,
+        height: height * 0.17,
     },
     imageDiv: {
         flex: 1,
@@ -119,16 +139,23 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
         position: 'absolute',
-        left: '32%',
-        width: '68%',
-        height: '80%',
+        left: '36%',
+        width: '64%',
+        height: '74%',
+    },
+    descDiv: {
+        //backgroundColor: '#dcdde3',
+        marginTop: '5.5%',
+        width: '94%',
+        height: '68%',
+        borderRadius: 10,
     },
     playButton: {
         backgroundColor: 'lightgrey',
         justifyContent: 'center',
         alignItems: 'center',
         top: '18%',
-        width: '95%',
+        width: '20%',
         height: '44%',
         borderRadius: 9,
         //alignSelf: 'center',
