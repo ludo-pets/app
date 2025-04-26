@@ -6,12 +6,13 @@ import {
     Dimensions,
 } from 'react-native'
 import { InteractionTouch } from './InteractionTouch'
+import ItemProps from '@/dtos/ItensProps'
 
 const { height, width } = Dimensions.get('window')
 
-const WcItem = () => {
+const WcItem = ({update}:ItemProps) => {
     const onPress = () => {
-        InteractionTouch('wc');
+        update('clean')
     }
 
     return (
