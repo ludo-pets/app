@@ -5,4 +5,5 @@ export default interface Item {
     requiredLevel: number
     category: string
     image?: string
+    type: string
 }
