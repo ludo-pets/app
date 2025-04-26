@@ -50,7 +50,8 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
         console.log("item", item);
     },[])
     const onActive = () => {}
-    const onDesactive = () => {}
+    const onDesactive = () => {console.log(item.quantity);
+    }
     const onBuy = () => {
         console.log('toBuy')
     }
@@ -73,6 +74,10 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
                             : foodIcon
                     }
                 />
+                <Text style={styles.quantity}>
+                    {item.quantity}
+               
+                </Text>
             </view>
             <view style={styles.info}>
                 <view style={styles.row1}>
@@ -149,7 +154,26 @@ const styles = StyleSheet.create({
         fontFamily: 'inter',
         fontWeight: '500',
     },
+    quantity: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        color: "white",
+        position: "absolute",
+        backgroundColor: "#80BEE7",
+        minWidth: 30,
+        minHeight: 30,
+        padding: 3,
+        bottom: 5,
+        right: 5,
+        textAlign: "center",
+        borderColor: "white",
+        borderWidth: 3,
+        aspectRatio: "1/1",
+        borderRadius:"50%"
+    },
     imageBox: {
+        position: "relative",
         display: 'flex',
         margin: 0,
         height: '100%',
