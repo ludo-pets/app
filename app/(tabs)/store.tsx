@@ -93,6 +93,7 @@ export default function StoreScreen() {
                         name: item.name,
                         category: item.category,
                         price: item.price,
+                        type: item.type,
                         has_required_level: userLevel >= item.requiredLevel,
                         has_item: hasItem,
                         is_active: isActive,
