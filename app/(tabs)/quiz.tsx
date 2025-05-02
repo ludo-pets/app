@@ -4,8 +4,8 @@ import User from '@/dtos/User';
 import ItemPathQuiz from '@/components/quiz/ItemPathQuiz';
 import { useUserPetStore } from '@/stores/userPetStore'
 
-const paws = require('@/assets/images/paw.svg');
-const pawsTravled = require('@/assets/images/pawTraveled.svg');
+const paws = require('@/assets/images/paw.png');
+const pawsTravled = require('@/assets/images/pawTraveled.png');
 interface pathItemQuiz {
     icon: string,
     name: string
