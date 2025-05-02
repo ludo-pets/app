@@ -5,6 +5,7 @@ import { useFonts } from 'expo-font'
 import { useEffect } from 'react'
 import { Stack } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import FlappyPetGame from './FlappyPetGame'
 
 export { ErrorBoundary } from 'expo-router'
 
@@ -43,6 +44,7 @@ function RootLayoutNav() {
             <Stack>
                 <Stack.Screen name="index" options={{ headerShown: false }} />
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen name = "FlappyPetGame" component={FlappyPetGame} options={{headerShown: false}}></>
             </Stack>
         </SafeAreaView>
     )
