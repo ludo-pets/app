@@ -1,165 +1,45 @@
-import { useUserPetStore } from '@/stores/userPetStore'
-import { StyleSheet, View, Text, Button, Modal } from 'react-native'
-import Header from '@/components/Header'
-import { Quiz } from '@/components/Quiz'
-import { navigate } from 'expo-router/build/global-state/routing'
-import QuizCat from '@/assets/images/quiz-cat.svg'
-import { useState } from 'react'
-import QuizSummaryModal from '@/components/QuizSummaryModal'
+import React from 'react'
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import { useRouter } from 'expo-router'
 
-const questions = [
-    {
-        question:
-            'Quantas horas por dia gatos adultos costumam dormir em média?',
-        options: [
-            '4 a 6 horas',
-            '6 a 8 horas',
-            '8 a 10 horas',
-            '10 a 12 horas',
-        ],
-        correctAnswer: '4 a 6 horas',
-        imageSource: require('@/assets/images/quiz/quiz-cat.png'),
-    },
-    {
-        question: 'Qual alimento é perigoso para cachorros?',
-        options: ['Cenoura', 'Chocolate', 'Arroz', 'Frango'],
-        correctAnswer: 'Chocolate',
-        imageSource: require('@/assets/images/quiz/quiz-cat.png'),
-    },
-    {
-        question: 'Qual é um sinal de que um pet está saudável?',
-        options: [
-            'Pelo brilhante',
-            'Olhos lacrimejando',
-            'Letargia',
-            'Falta de apetite',
-        ],
-        correctAnswer: 'Pelo brilhante',
-        imageSource: require('@/assets/images/quiz/quiz-cat.png'),
-    },
-    {
-        question: 'Quantas vezes por ano deve-se levar um pet ao veterinário?',
-        options: [
-            'Apenas quando doente',
-            '1 vez ao ano',
-            '2 vezes por mês',
-            'A cada 5 anos',
-        ],
-        correctAnswer: '1 vez ao ano',
-        imageSource: require('@/assets/images/quiz/quiz-cat.png'),
-    },
-    {
-        question: 'Qual é o benefício da castração em pets?',
-        options: [
-            'Evita fugas',
-            'Evita doenças e crias indesejadas',
-            'Deixa o pet mais agitado',
-            'Não tem benefício',
-        ],
-        correctAnswer: 'Evita doenças e crias indesejadas',
-        imageSource: require('@/assets/images/quiz/quiz-cat.png'),
-    },
-]
+export default function Quiz() {
+    const router = useRouter()
 
-export default function QuizScreen() {
-    const user = useUserPetStore((state) => state.user)
-    const userUpdate = useUserPetStore((state) => state.updateUser)
-    const petUpdate = useUserPetStore((state) => state.updatePet)
-    const pet = useUserPetStore((state) => state.pet)
-
-    const [currentIndex, setCurrentIndex] = useState(0)
-    const [quizFinished, setQuizFinished] = useState(false)
-    const [correctCount, setCorrectCount] = useState(0)
-
-    const handleAnswer = (wasCorrect: boolean) => {
-        if (wasCorrect) {
-            setCorrectCount((prev) => prev + 1)
-            if (user) {
-                userUpdate(user?.id, {
-                    money: user.money + 10,
-                    experience: user.experience + 10,
-                })
-            }
-            if (pet) {
-                petUpdate(pet.id, { name: pet.name })
-            }
-        }
-        // Espera 5 segundos para trocar a pergunta
-        setTimeout(() => {
-            if (currentIndex + 1 >= questions.length) {
-                setQuizFinished(true)
-            } else {
-                setCurrentIndex((prev) => prev + 1)
-            }
-        }, 1000)
-    }
-
-    const handleEndQuiz = () => {
-        console.log('Quiz finalizado')
-        if (!user) return
-        userUpdate(user?.id || '', {
-            money: user?.money + 10,
-            experience: user?.experience + 10,
-        })
-        petUpdate(pet?.id || '', {
-            name: 'Alaor',
-        })
-    }
-
-    const handleCorrectAnswer = () => {
-        // Atualiza dados do usuário e pet
-        if (user) {
-            userUpdate(user?.id, {
-                money: user.money + 10,
-                experience: user.experience + 10,
-            })
-        }
-        if (pet) {
-            petUpdate(pet.id, { name: pet.name })
-        }
-
-        // Verifica se era a última pergunta
-        if (currentIndex + 1 >= questions.length) {
-            setQuizFinished(true)
-        } else {
-            setCurrentIndex(currentIndex + 1)
-        }
+    const handleStartQuiz = () => {
+        // Navigate to the quizGame screen
+        router.push('/quizGame')
     }
 
     return (
-      <View style={styles.container}>
-        {!quizFinished && (
-          <Quiz
-            key={currentIndex} // Add this line to force re-rendering
-            question={questions[currentIndex].question}
-            options={questions[currentIndex].options}
-            correctAnswer={questions[currentIndex].correctAnswer}
-            imageSource={questions[currentIndex].imageSource}
-            onCorrectAnswer={() => handleAnswer(true)}
-            onWrongAnswer={() => handleAnswer(false)}
-          />
-        )}
-  
-        <Modal visible={quizFinished} transparent animationType="fade">
-          <QuizSummaryModal correctAnswers={correctCount} total={questions.length} />
-        </Modal>
-      </View>
-  )
+        <View style={styles.container}>
+            <Text style={styles.title}>Select a Lesson</Text>
+            <TouchableOpacity style={styles.button} onPress={handleStartQuiz}>
+                <Text style={styles.buttonText}>Start Quiz</Text>
+            </TouchableOpacity>
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
         justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#f5f5f5',
     },
     title: {
-        fontSize: 20,
+        fontSize: 24,
         fontWeight: 'bold',
+        marginBottom: 20,
     },
-    separator: {
-        marginVertical: 30,
-        height: 1,
-        width: '80%',
+    button: {
+        backgroundColor: '#6c63ff',
+        paddingHorizontal: 24,
+        paddingVertical: 12,
+        borderRadius: 12,
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 16,
     },
 })
