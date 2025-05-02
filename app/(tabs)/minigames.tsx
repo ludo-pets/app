@@ -1,6 +1,7 @@
 import NailTrimGame from '@/components/minigames/nail-trim-game'
 import { StyleSheet, View, Text, FlatList, Dimensions, Image, TouchableHighlight } from 'react-native'
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('window'); 
 
@@ -11,80 +12,102 @@ const DATA = [
         id: 1,
         gameTitle: 'Jogo da Unha',
         image: require('@/assets/images/minigames/minigame_icon_test.png'),
+        gameCall: <NailTrimGame/>,
         desc: 'Esta e a descricao do jogo da unha, nao tenho ideia agora',
     },
     { 
         id: 2,
         gameTitle: 'Jogo da Unha 2',
         image: require('@/assets/images/minigames/minigame_icon_test.png'),
+        gameCall: null,
         desc: 'Esta e a descricao do jogo da unha 2, nao tenho ideia agora',
     },
     { 
         id: 3,
         gameTitle: 'Jogo da Unha 3',
         image: require('@/assets/images/minigames/minigame_icon_test.png'),
+        gameCall: <NailTrimGame/>,
         desc: 'Esta e a descricao do jogo da unha 3, nao tenho ideia agora',
     },
     {
         id: 4,
         gameTitle: 'Jogo da Unha 4',
         image: require('@/assets/images/minigames/minigame_icon_test.png'),
+        gameCall: null,
         desc: 'Esta e a descricao do jogo da unha 4, nao tenho ideia agora',
     },
     { 
         id: 5,
         gameTitle: 'Jogo da Unha 5',
         image: require('@/assets/images/minigames/minigame_icon_test.png'),
+        gameCall: <NailTrimGame/>,
         desc: 'Esta e a descricao do jogo da unha 5, nao tenho ideia agora',
     },
     { 
         id: 6,
         gameTitle: 'Jogo da Unha 6',
         image: require('@/assets/images/minigames/minigame_icon_test.png'),
+        gameCall: null,
         desc: 'Esta e a descricao do jogo da unha 6, nao tenho ideia agora',
     },
 ]
 
 export default function MinigameScreen() {
+    const [showGame, setShowGame] = useState (false); 
+    const [currentGameCall, setCurrentGameCall] = useState <JSX.Element | null> (null);
+
+    useFocusEffect(
+        useCallback(() => {
+            setShowGame(false);
+        }, [])
+    );
 
     const onPress = (id: number) => {
-        if(id == 1) {
-            return <NailTrimGame/>
-        }
+        const aux = DATA.find((dataItem) => dataItem.id === id)?.gameCall || null;
 
-    }
-    
+            setCurrentGameCall(aux);
+            if(aux != null) {
+                setShowGame(true); 
+            }
+    };
+
     return (
-        <View style = {styles.container}>
-            <FlatList
-            data={DATA}
-            showsVerticalScrollIndicator = {false}
-            keyExtractor = {(item) => item.id.toString()}
-            renderItem = {({item}) => (
-                <TouchableHighlight underlayColor="#ebebeb" onPress = {() => onPress(item.id)}>
-                    <View style = {styles.minigameBox}>
-                        <View style = {styles.imageDiv}>
-                            <View style = {styles.picBox}>
-                                <Image
-                                resizeMode = 'cover'
-                                style={{ width: '100%', height: '100%',borderRadius: imgRad}}
-                                source = {item.image}/>
-                            </View>
-                        </View>
+        <View style={styles.container}> {
+            showGame ? (currentGameCall) : (
+                <FlatList
+                    data={DATA}
+                    showsVerticalScrollIndicator={false}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({ item }) => (
+                        <TouchableHighlight underlayColor="#ebebeb" onPress={() => onPress(item.id)}>
+                            <View style={styles.minigameBox}>
+                                <View style={styles.imageDiv}>
+                                    <View style={styles.picBox}>
+                                        <Image
+                                            resizeMode="cover"
+                                            style={{
+                                                width: '100%',
+                                                height: '100%',
+                                                borderRadius: imgRad,
+                                            }}
+                                            source={item.image}
+                                        />
+                                    </View>
+                                </View>
 
-                        <View style = {styles.textDiv}>
-                            <Text style = {styles.title}>{item.gameTitle}</Text>
-                            <View style = {styles.descDiv}>
-                                <Text style = {styles.desc}>{item.desc}</Text>
+                                <View style={styles.textDiv}>
+                                    <Text style={styles.title}>{item.gameTitle}</Text>
+                                    <View style={styles.descDiv}>
+                                        <Text style={styles.desc}>{item.desc}</Text>
+                                    </View>
+                                </View>
                             </View>
-                        </View>
-                    
-                    </View>
-                </TouchableHighlight>
+                        </TouchableHighlight>
+                    )}
+                />
             )}
-            />
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
@@ -99,7 +122,7 @@ const styles = StyleSheet.create({
         color: '#5B5B5B',
     },
     desc: {
-        fontSize: 16,
+        fontSize: 15,
         fontWeight: '600',
         color: '#5B5B5B',
     },
