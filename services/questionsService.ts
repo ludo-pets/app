@@ -5,27 +5,19 @@ import {
     QuerySnapshot,
     DocumentData,
 } from 'firebase/firestore'
-import { firebaseApp } from '../firebaseConfig'
+import { db } from '@/firebaseConfig'
 import Question from '@/dtos/Question'
 
-const db = getFirestore(firebaseApp)
-
-/**
- * Fetches all documents from the 'Question' collection in Firestore.
- * @returns {Promise<Question[]>} A promise that resolves to an array of quiz questions.
- * @throws Will throw an error if fetching fails.
- */
-export const fetchAllQuestions = async (): Promise<Question[]> => {
+export const fetchAllQuestionsService = async (): Promise<{
+    questions: Question[]
+} | null> => {
     try {
         const questionsCollectionRef = collection(db, 'Question')
-        const querySnapshot: QuerySnapshot<DocumentData> = await getDocs(
-            questionsCollectionRef
-        )
+        const questionsSnapshot = await getDocs(questionsCollectionRef)
 
-        const questions: Question[] = []
-        querySnapshot.forEach((doc) => {
+        const questions: Question[] = questionsSnapshot.docs.map((doc) => {
             const data = doc.data()
-            questions.push({
+            return {
                 id: doc.id,
                 answers: data.answers || [],
                 description: data.description || 'No description',
@@ -33,9 +25,9 @@ export const fetchAllQuestions = async (): Promise<Question[]> => {
                 // image: data.image,
                 rightAnswer: data.rightAnswer,
                 title: data.title || 'Untitled Question',
-            } as Question)
+            } as Question
         })
-        return questions
+        return { questions }
     } catch (error) {
         throw new Error('Failed to fetch quiz questions.')
     }
