@@ -1,21 +1,22 @@
 import { defineFeature, loadFeature } from 'jest-cucumber';
 import {
-  getUserWithPetByIdService,
+  getUserWithPetByEmailService,
 } from '@/services/userService';
 import * as firestore from 'firebase/firestore';
 
 const feature = loadFeature(
-  'tests/features/services/user/getUserWithPetById.feature'
+  'tests/features/services/user/gettingUser.feature'
 );
 
 defineFeature(feature, (test) => {
-  let result: { user: any; pet: any } | null;
-  const validEmail = 'user@example.com';
-  const invalidEmail = 'no-user@example.com';
+  let result: { user: any } | null;
+  const validExistingEmail = 'user@example.com';
+  const validNonExistingEmail = 'non-user@example.com';
+  const invalidEmail = 'invalid.email';
 
   const mockUserData = {
     id: 'u1',
-    email: validEmail,
+    email: validExistingEmail,
     money: 100,
     level: 1,
     experience: 0,
@@ -29,7 +30,7 @@ defineFeature(feature, (test) => {
 
     (firestore.getDocs as jest.Mock).mockImplementation((q) => {
       const requestedEmail = (q as any)._query.fieldFilters[0].value;
-      if (requestedEmail === validEmail) {
+      if (requestedEmail === validExistingEmail) {
         return Promise.resolve({
           empty: false,
           docs: [
@@ -42,41 +43,34 @@ defineFeature(feature, (test) => {
       }
       return Promise.resolve({ empty: true, docs: [] });
     });
-
-    (firestore.getDoc as jest.Mock).mockImplementation((ref) => {
-      if ((ref as any).id === mockPetData.id) {
-        return Promise.resolve({
-          exists: () => true,
-          id: mockPetData.id,
-          data: () => ({
-            name: mockPetData.name,
-            color: mockPetData.color,
-            type: mockPetData.type,
-            purchasedItems: mockPetData.purchasedItems,
-            activeItems: mockPetData.activeItems,
-            wellBeing: mockPetData.wellBeing,
-          }),
-        });
-      }
-      return Promise.resolve({ exists: () => false });
-    });
   });
 
   test(
-    'Fetching user with valid existing email',
+    'Getting user by valid existing email',
     ({ given, when, then, and }) => {
-      given('I have a valid user ID', () => {
+      given('I have a valid user email', () => {
         // validEmail is already set
       });
 
-      when('I request the user details by ID', async () => {
-        result = await getUserWithPetByIdService(validEmail);
+      and('the user email exists', () => {
+        // existingEmail is already set
+      });
+
+      when('I request the user details by email', async () => {
+        result = await getUserWithPetByEmailService(validExistingEmail);
       });
 
       then('I should receive the correct user information', () => {
         expect(result).not.toBeNull();
-        expect(result?.user.email).toBe(validEmail);
         expect(result?.user.id).toBe(mockUserData.id);
+        expect(result?.user.email).toBe(validExistingEmail);
+        expect(result?.user.money).toBe(mockUserData.money);
+        expect(result?.user.level).toBe(mockUserData.level);
+        expect(result?.user.experience).toBe(mockUserData.experience);
+        expect(result?.user.lastLessonConcluded).toBe(mockUserData.lastLessonConcluded);
+        expect(result?.user.notifications).toBe(mockUserData.notifications);
+        expect(result?.user.pet).toBe(mockUserData.pet);
+
       });
 
       and('the response should contain all required fields', () => {
@@ -93,14 +87,14 @@ defineFeature(feature, (test) => {
   );
 
   test(
-    'Fetching user by invalid email',
+    'Getting user by invalid email format',
     ({ given, when, then }) => {
-      given('I have an invalid user ID', () => {
+      given('I have an invalid user email', () => {
         // invalidEmail is already set
       });
 
-      when('I request the user details by ID', async () => {
-        result = await getUserWithPetByIdService(invalidEmail);
+      when('I request the user details by email', async () => {
+        result = await getUserWithPetByEmailService(invalidEmail);
       });
 
       then('I should receive a null response', () => {

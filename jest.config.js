@@ -1,4 +1,4 @@
-export default {
+module.export = {
   preset: 'jest-expo',
   testMatch: ['**/*.steps.ts'],
   transform: {

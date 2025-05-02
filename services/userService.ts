@@ -9,34 +9,59 @@ import {
     collection,
     query,
     where,
+    DocumentData,
+    DocumentReference,
 } from 'firebase/firestore'
 
-export const getUserWithPetByIdService = async (
+const getUserDataByEmail = async(
+    email: string
+): Promise<DocumentData | null> => {
+    if (!email.match("/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g")) {
+        console.error('Formato do e-mail inválido')
+        return null;
+    }
+
+    const userQuery = query(
+        collection(db, 'User'),
+        where('email', '==', email)
+    )
+    const userSnap = await getDocs(userQuery)
+
+    if (userSnap.empty) {
+        console.error('User não encontrado')
+        return null
+    }
+    
+    const userDoc = userSnap.docs[0]
+    return userDoc.data();
+}
+
+const getPetDataById = async(
+    pet: DocumentReference<unknown, DocumentData>
+): Promise<DocumentData | null> => {
+    const petSnap = await getDoc(pet);
+
+    if (!petSnap.exists()) {
+        console.error('Pet não encontrado')
+        return null
+    }
+
+    return petSnap;
+}
+
+export const getUserWithPetByEmailService = async (
     email: string
 ): Promise<{ user: User; pet: Pet } | null> => {
     try {
-        const userQuery = query(
-            collection(db, 'User'),
-            where('email', '==', email)
-        )
-        const userSnap = await getDocs(userQuery)
+        const userData = await getUserDataByEmail(email);
+        if (userData == null)
+            return null;
 
-        if (userSnap.empty) {
-            console.error('User não encontrado')
-            return null
-        }
+        const petSnap = await getPetDataById(userData.pet);
+        if (petSnap == null)
+            return null;
 
-        const userDoc = userSnap.docs[0]
-        const userData = userDoc.data()
-
-        const petSnap = await getDoc(userData.pet)
-
-        if (!petSnap.exists()) {
-            console.error('Pet não encontrado')
-            return null
-        }
-
-        const petData = petSnap.data() as Pet
+        const petData = petSnap.data() as Pet;
 
         const pet: Pet = {
             id: petSnap.id,
