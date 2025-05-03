@@ -1,64 +1,80 @@
 import NailTrimGame from '@/components/minigames/nail-trim-game'
-import { StyleSheet, View, Text, FlatList, Dimensions, Image, TouchableHighlight, ImageSourcePropType } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
-import Minigame from '@/dtos/Minigame';
-import { fetchMinigames } from '@/services/fetchMinigames';
+import {
+    StyleSheet,
+    View,
+    Text,
+    FlatList,
+    Dimensions,
+    Image,
+    TouchableHighlight,
+    ImageSourcePropType,
+} from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useFocusEffect } from '@react-navigation/native'
+import Minigame from '@/dtos/Minigame'
+import { fetchMinigames } from '@/services/fetchMinigames'
 
-const { width, height } = Dimensions.get('window'); 
+const { width, height } = Dimensions.get('window')
 
-const imgRad = 16;
+const imgRad = 16
 const MINIGAMES = {
-    "NailTrimGame": "NailTrimGame",
-
+    NailTrimGame: 'NailTrimGame',
 }
 const minigameImages: { [key: string]: ImageSourcePropType } = {
-   [MINIGAMES.NailTrimGame] : require("@/assets/images/minigames/minigame_icon_test.png")
+    [MINIGAMES.NailTrimGame]: require('@/assets/images/minigames/minigame_icon_test.png'),
 }
 const minigameComponents: { [key: string]: JSX.Element } = {
-    [MINIGAMES.NailTrimGame]:  <NailTrimGame/>,
-
+    [MINIGAMES.NailTrimGame]: <NailTrimGame />,
 }
 
 export default function MinigameScreen() {
-    const [showGame, setShowGame] = useState (false); 
-    const [currentGameCall, setCurrentGameCall] = useState <JSX.Element | null> (null);
+    const [showGame, setShowGame] = useState(false)
+    const [currentGameCall, setCurrentGameCall] = useState<JSX.Element | null>(
+        null
+    )
     const [minigames, setMinigames] = useState<Minigame[]>([])
-    useEffect(()=> {
-        loadMinigames();
+    useEffect(() => {
+        loadMinigames()
     }, [])
     useFocusEffect(
         useCallback(() => {
-            return () => setShowGame(false);
+            return () => setShowGame(false)
         }, [])
-    );
+    )
     const loadMinigames = async () => {
         try {
-            const fetchedMinigames = await fetchMinigames();
-            setMinigames(fetchedMinigames);
-            
-        } catch(error: any) {
+            const fetchedMinigames = await fetchMinigames()
+            setMinigames(fetchedMinigames)
+        } catch (error: any) {
             setMinigames([])
         }
     }
     const onPress = (id: string) => {
-        const aux: string = minigames.find((dataItem) => dataItem.id === id)!.name;
+        const aux: string = minigames.find(
+            (dataItem) => dataItem.id === id
+        )!.name
 
-            setCurrentGameCall(minigameComponents[aux]);
-            if(aux != null) {
-                setShowGame(true); 
-            }
-    };
+        setCurrentGameCall(minigameComponents[aux])
+        if (aux != null) {
+            setShowGame(true)
+        }
+    }
 
     return (
-        <View style={styles.container}> {
-            showGame ? (currentGameCall) : (
+        <View style={styles.container}>
+            {' '}
+            {showGame ? (
+                currentGameCall
+            ) : (
                 <FlatList
                     data={minigames}
                     showsVerticalScrollIndicator={false}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => (
-                        <TouchableHighlight underlayColor="#ebebeb" onPress={() => onPress(item.id)}>
+                        <TouchableHighlight
+                            underlayColor="#ebebeb"
+                            onPress={() => onPress(item.id)}
+                        >
                             <View style={styles.minigameBox}>
                                 <View style={styles.imageDiv}>
                                     <View style={styles.picBox}>
@@ -75,19 +91,22 @@ export default function MinigameScreen() {
                                 </View>
 
                                 <View style={styles.textDiv}>
-                                    <Text style={styles.title}>{item.name}</Text>
+                                    <Text style={styles.title}>
+                                        {item.name}
+                                    </Text>
                                     <View style={styles.descDiv}>
-                                        <Text style={styles.desc}>{item.description}</Text>
+                                        <Text style={styles.desc}>
+                                            {item.description}
+                                        </Text>
                                     </View>
                                 </View>
                             </View>
                         </TouchableHighlight>
                     )}
                 />
-            )
-            }
+            )}
         </View>
-    );
+    )
 }
 
 const styles = StyleSheet.create({
@@ -162,6 +181,5 @@ const styles = StyleSheet.create({
         height: '44%',
         borderRadius: 9,
         //alignSelf: 'center',
-    }
-    
+    },
 })

@@ -12,15 +12,11 @@ export default function HomeScreen() {
                 <ActivityIndicator size="large" color="#5b5b5b" />
             ) : (
                 <>
-                    <MoodBar
-                        animalLevel={user?.level}
-                        animalMood={100}
-                    />
+                    <MoodBar animalLevel={user?.level} animalMood={100} />
                     <Homescreen />
                 </>
             )}
         </View>
-     
     )
 }
 

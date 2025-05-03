@@ -75,10 +75,9 @@ export default function GameBoard({
             const trimmerCenterX = trimmer.x
             const trimmerCenterY = trimmer.y
 
-
             const distance = Math.sqrt(
                 (nailCenterX - trimmerCenterX) ** 2 +
-                (nailCenterY - trimmerCenterY - yOffset) ** 2
+                    (nailCenterY - trimmerCenterY - yOffset) ** 2
             )
 
             isNear = distance < 40
@@ -211,13 +210,13 @@ export default function GameBoard({
                                                 }
                                                 strokeDashoffset={
                                                     2 *
-                                                    Math.PI *
-                                                    ((nailSize - 10) / 2) -
+                                                        Math.PI *
+                                                        ((nailSize - 10) / 2) -
                                                     (2 *
                                                         Math.PI *
                                                         ((nailSize - 10) / 2) *
                                                         nailProgress[nail.id]) /
-                                                    100
+                                                        100
                                                 }
                                                 strokeLinecap="round"
                                             />
