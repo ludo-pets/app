@@ -30,7 +30,7 @@ build_apk:
   stage: android
   image: node:22
   script:
-    - npm install -g eas-cli firebase-tools
+    - sudo npm install -g eas-cli firebase-tools
     - npm ci
     - eas build --platform android --profile production --non-interactive --json > result.json
     - $APK_URL = (Get-Content result.json | ConvertFrom-Json)[0].artifacts.buildUrl
