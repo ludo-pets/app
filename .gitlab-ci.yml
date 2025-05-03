@@ -30,6 +30,7 @@ build_apk:
   stage: android
   image: node:22
   script:
+    - whoami
     - sudo apt-get update -qy
     - npm install -g eas-cli firebase-tools
     - npm ci
