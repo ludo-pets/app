@@ -16,12 +16,12 @@ import PetshopItem from '@/components/PetshopItem'
 type FilterTitle = {
     id: number
     name: string
-    category: 'foods' | 'toys' | 'environment'
+    category: 'food' | 'toy' | 'environment'
 }
 
 const filterTitles: FilterTitle[] = [
-    { id: 1, name: 'Alimentação', category: 'foods' },
-    { id: 2, name: 'Brinquedos', category: 'toys' },
+    { id: 1, name: 'Alimentação', category: 'food' },
+    { id: 2, name: 'Brinquedos', category: 'toy' },
     { id: 3, name: 'Ambiente', category: 'environment' },
 ]
 
@@ -43,6 +43,7 @@ export default function StoreScreen() {
     useEffect(() => {
         const fetchItems = async () => {
             const responseItemsShop = await getAllItemService()
+            console.log(responseItemsShop)
             setItemsShop(responseItemsShop?.items || [])
 
             const responsePetData = await getUserWithPetByIdService(
@@ -62,17 +63,6 @@ export default function StoreScreen() {
             )
 
             setUserLevel(responsePetData?.user.level || 0)
-
-            if (__DEV__) {
-                console.log('userLevel:', responsePetData?.user.level)
-                console.log('activeItems:', responsePetData?.pet.activeItems)
-                console.log(
-                    'purchasedItems:',
-                    responsePetData?.pet.purchasedItems
-                )
-                console.log('itemsShop:', responseItemsShop?.items)
-            }
-
             setIsLoading(false)
         }
 
@@ -93,7 +83,6 @@ export default function StoreScreen() {
                         name: item.name,
                         category: item.category,
                         price: item.price,
-                        type: item.type,
                         has_required_level: userLevel >= item.requiredLevel,
                         has_item: hasItem,
                         is_active: isActive,

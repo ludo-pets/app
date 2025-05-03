@@ -19,7 +19,6 @@ export interface PetshopItemProps {
     id: string
     name: string
     price: number
-    type: string
     category: string
     has_required_level: boolean
     quantity: number
@@ -46,18 +45,14 @@ const categoryIcon = {
     wallpaper: customisationIcon,
 }
 export default function PetshopItem({ item }: { item: PetshopItemProps }) {
-    useEffect(()=> {
-        console.log("item", item);
-    },[])
+
     const onActive = () => {}
     const onDesactive = () => {console.log(item.quantity);
     }
     const onBuy = () => {
         console.log('toBuy')
     }
-    const teste = Object.keys(categoryIcon).find(
-        (category) => category == item.type
-    )
+
     return (
         <view style={styles.item}>
             <view style={styles.imageBox}>
