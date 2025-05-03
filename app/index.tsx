@@ -1,15 +1,69 @@
-import { Image, View, StyleSheet, Pressable, Text } from 'react-native'
+import {
+    Image,
+    View,
+    StyleSheet,
+    Pressable,
+    Text,
+    Platform,
+} from 'react-native'
 import { FormRegisterPet } from '../components/FormRegisterPet'
 import { useRouter } from 'expo-router'
+import * as Notifications from 'expo-notifications'
+import { useEffect } from 'react'
+import * as Device from 'expo-device'
 
 export default function RegisterPetPage() {
     const router = useRouter()
+
+    useEffect(() => {
+        if (Platform.OS === 'android') {
+            Notifications.setNotificationChannelAsync('default', {
+                name: 'default',
+                importance: Notifications.AndroidImportance.HIGH,
+                vibrationPattern: [0, 250, 250, 250],
+                lightColor: '#FF231F7C',
+            })
+        }
+    }, [])
+
+    async function schedulePushNotification() {
+        if (Platform.OS === 'android' && !Device.isDevice) {
+          alert('Notificação simulada no emulador - veja a aba "Logcat"');
+          console.log("Notificação seria exibida em um dispositivo real");
+          return;
+        }
+      
+        const { status } = await Notifications.requestPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Permissão para notificações não concedida!');
+          return;
+        }
+      
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: "Teste de Notificação",
+            body: 'Esta é uma notificação de teste!',
+            data: { url: '/some-route' },
+          },
+          trigger: {
+            type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
+            seconds: 2,
+        },
+        });
+      }
 
     return (
         <View style={styles.containerBox}>
             <View style={styles.mainContent}>
                 <Image source={require('@/assets/images/logo.png')} />
                 <FormRegisterPet />
+                <Pressable
+                    onPress={async () => {
+                        await schedulePushNotification()
+                    }}
+                >
+                    <Text>Teste Notificação</Text>
+                </Pressable>
                 <Pressable
                     onPress={() => {
                         router.push('/home')

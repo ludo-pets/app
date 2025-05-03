@@ -8,6 +8,39 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 
 export { ErrorBoundary } from 'expo-router'
 
+import * as Notifications from 'expo-notifications';
+import { router } from 'expo-router';
+
+function useNotificationObserver() {
+  useEffect(() => {
+    let isMounted = true;
+
+    function redirect(notification: Notifications.Notification) {
+      const url = notification.request.content.data?.url;
+      if (url) {
+        router.push(url);
+      }
+    }
+
+    Notifications.getLastNotificationResponseAsync()
+      .then(response => {
+        if (!isMounted || !response?.notification) {
+          return;
+        }
+        redirect(response?.notification);
+      });
+
+    const subscription = Notifications.addNotificationResponseReceivedListener(response => {
+      redirect(response.notification);
+    });
+
+    return () => {
+      isMounted = false;
+      subscription.remove();
+    };
+  }, []);
+}
+
 export const unstable_settings = {
     initialRouteName: '(tabs)',
 }
@@ -38,6 +71,8 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
+    useNotificationObserver();
+    
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: 'transparent' }}>
             <Stack>
