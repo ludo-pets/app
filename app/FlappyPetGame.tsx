@@ -8,7 +8,7 @@ import {
   } from "react-native";
   import Pet from "../components/minigames/flappyPet/Pet";
   import Obstacle from "../components/minigames/flappyPet/Obstacle";
-  import { useEffect, useState } from "react";
+  import { useEffect, useState, useRef } from "react";
   
   const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
   
@@ -24,8 +24,19 @@ import {
     const [obstacleDimensions, setObstacleDimensions] = useState<dimensions>(
       getObstaclesDimensions(windowHeight, heightSpace, heightFloor)
     );
+
+    const startBottom = windowHeight / 2;
+    const petBottom = useRef(new Animated.Value(startBottom)).current;
+
+    useEffect(() => {
+      const interval = setInterval(() => {
+        petBottom.setValue(petBottom.getValue() - 3);
+      }, 30);
+
+      return () => clearInterval(interval);
+    }, []);
   
-    console.log("🚀 ~ FlappyPetGame ~ obstacleDimensions:", obstacleDimensions);
+    //console.log("🚀 ~ FlappyPetGame ~ obstacleDimensions:", obstacleDimensions);
   
     useEffect(() => {
       positionXObstacles.setValue(windowWidth);
@@ -61,6 +72,14 @@ import {
         heightObstacleBottom: heightBottomObstacle,
       };
     }
+
+    const handleJump = () => {
+      Animated.timing(petBottom, {
+        toValue: petBottom.getValye() + 60,
+        duration: 150,
+        useNativeDriver: false,
+      }).start();
+    };
   
     return (
       <View
@@ -81,7 +100,7 @@ import {
         />
   
         {/* Pet renderizado sobre o fundo */}
-        <Pet />
+        <Pet petBottom={petBottom}/>
   
         {/* Obstáculo renderizado sobre o fundo */}
         <Obstacle

@@ -1,10 +1,14 @@
-import { View, Text, StyleSheet } from "react-native";
+import { Animated, Text, StyleSheet } from "react-native";
 
-export default function Pet(){
+interface PetProps{
+    petBottom: Animated.Value;
+}
+
+export default function Pet({petBottom}: PetProps) {
     return (
-        <View style={styles.pet}>
-           <Text>Pet</Text> 
-        </View>
+        <Animated.View style={[styles.pet, {bottom: petBottom}]}>
+            <Text style= {{color: "white"}}>Pet</Text>
+        </Animated.View>
     );
 }
 
@@ -17,5 +21,8 @@ const styles = StyleSheet.create({
         bottom: 100,
         left: 50,
         zIndex: 4,
+        justifyContent:"center",
+        alignItems: "center"
+
     }
 })
