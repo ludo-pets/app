@@ -18,7 +18,6 @@ const styles = StyleSheet.create({
         height: 50,
         backgroundColor: "blue",
         position: "absolute",
-        bottom: 100,
         left: 50,
         zIndex: 4,
         justifyContent:"center",
