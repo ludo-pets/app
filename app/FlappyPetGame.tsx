@@ -68,14 +68,14 @@ import {
       >
         {/* Fundo do jogo */}
         <ImageBackground
-          source={require("../assets/game/background.png")}
+          source={require("..//assets/images/minigames/flappyPet/game/background.png")}
           style={styles.gameScnarioContainer}
           resizeMode="cover"
         ></ImageBackground>
   
         {/* Chão do jogo */}
         <ImageBackground
-          source={require("../assets/game/floor.png")}
+          source={require("..//assets/images/minigames/flappyPet/game/floor.png")}
           style={styles.floor}
           resizeMode="repeat"
         />
