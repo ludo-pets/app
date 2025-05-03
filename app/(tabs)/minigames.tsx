@@ -1,71 +1,50 @@
 import NailTrimGame from '@/components/minigames/nail-trim-game'
-import { StyleSheet, View, Text, FlatList, Dimensions, Image, TouchableHighlight } from 'react-native'
+import { StyleSheet, View, Text, FlatList, Dimensions, Image, TouchableHighlight, ImageSourcePropType } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
+import Minigame from '@/dtos/Minigame';
+import { fetchMinigames } from '@/services/fetchMinigames';
 
 const { width, height } = Dimensions.get('window'); 
 
 const imgRad = 16;
+const MINIGAMES = {
+    "NailTrimGame": "NailTrimGame",
 
-const DATA = [
-    {
-        id: 1,
-        gameTitle: 'Jogo da Unha',
-        image: require('@/assets/images/minigames/minigame_icon_test.png'),
-        gameCall: <NailTrimGame/>,
-        desc: 'Esta e a descricao do jogo da unha, nao tenho ideia agora',
-    },
-    { 
-        id: 2,
-        gameTitle: 'Jogo da Unha 2',
-        image: require('@/assets/images/minigames/minigame_icon_test.png'),
-        gameCall: null,
-        desc: 'Esta e a descricao do jogo da unha 2, nao tenho ideia agora',
-    },
-    { 
-        id: 3,
-        gameTitle: 'Jogo da Unha 3',
-        image: require('@/assets/images/minigames/minigame_icon_test.png'),
-        gameCall: <NailTrimGame/>,
-        desc: 'Esta e a descricao do jogo da unha 3, nao tenho ideia agora',
-    },
-    {
-        id: 4,
-        gameTitle: 'Jogo da Unha 4',
-        image: require('@/assets/images/minigames/minigame_icon_test.png'),
-        gameCall: null,
-        desc: 'Esta e a descricao do jogo da unha 4, nao tenho ideia agora',
-    },
-    { 
-        id: 5,
-        gameTitle: 'Jogo da Unha 5',
-        image: require('@/assets/images/minigames/minigame_icon_test.png'),
-        gameCall: <NailTrimGame/>,
-        desc: 'Esta e a descricao do jogo da unha 5, nao tenho ideia agora',
-    },
-    { 
-        id: 6,
-        gameTitle: 'Jogo da Unha 6',
-        image: require('@/assets/images/minigames/minigame_icon_test.png'),
-        gameCall: null,
-        desc: 'Esta e a descricao do jogo da unha 6, nao tenho ideia agora',
-    },
-]
+}
+const minigameImages: { [key: string]: ImageSourcePropType } = {
+   [MINIGAMES.NailTrimGame] : require("@/assets/images/minigames/minigame_icon_test.png")
+}
+const minigameComponents: { [key: string]: JSX.Element } = {
+    [MINIGAMES.NailTrimGame]:  <NailTrimGame/>,
+
+}
 
 export default function MinigameScreen() {
     const [showGame, setShowGame] = useState (false); 
     const [currentGameCall, setCurrentGameCall] = useState <JSX.Element | null> (null);
-
+    const [minigames, setMinigames] = useState<Minigame[]>([])
+    useEffect(()=> {
+        loadMinigames();
+    }, [])
     useFocusEffect(
         useCallback(() => {
-            setShowGame(false);
+            return () => setShowGame(false);
         }, [])
     );
+    const loadMinigames = async () => {
+        try {
+            const fetchedMinigames = await fetchMinigames();
+            setMinigames(fetchedMinigames);
+            
+        } catch(error: any) {
+            setMinigames([])
+        }
+    }
+    const onPress = (id: string) => {
+        const aux: string = minigames.find((dataItem) => dataItem.id === id)!.name;
 
-    const onPress = (id: number) => {
-        const aux = DATA.find((dataItem) => dataItem.id === id)?.gameCall || null;
-
-            setCurrentGameCall(aux);
+            setCurrentGameCall(minigameComponents[aux]);
             if(aux != null) {
                 setShowGame(true); 
             }
@@ -75,7 +54,7 @@ export default function MinigameScreen() {
         <View style={styles.container}> {
             showGame ? (currentGameCall) : (
                 <FlatList
-                    data={DATA}
+                    data={minigames}
                     showsVerticalScrollIndicator={false}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => (
@@ -90,22 +69,23 @@ export default function MinigameScreen() {
                                                 height: '100%',
                                                 borderRadius: imgRad,
                                             }}
-                                            source={item.image}
+                                            source={minigameImages[item.name]}
                                         />
                                     </View>
                                 </View>
 
                                 <View style={styles.textDiv}>
-                                    <Text style={styles.title}>{item.gameTitle}</Text>
+                                    <Text style={styles.title}>{item.name}</Text>
                                     <View style={styles.descDiv}>
-                                        <Text style={styles.desc}>{item.desc}</Text>
+                                        <Text style={styles.desc}>{item.description}</Text>
                                     </View>
                                 </View>
                             </View>
                         </TouchableHighlight>
                     )}
                 />
-            )}
+            )
+            }
         </View>
     );
 }
