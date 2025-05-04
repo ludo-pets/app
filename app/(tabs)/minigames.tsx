@@ -1,10 +1,35 @@
 import NailTrimGame from '@/components/minigames/nail-trim-game'
-import { StyleSheet, View } from 'react-native'
+import FoodGame from '@/components/minigames/food-game'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import React, { useState } from 'react'
+
+interface Game{
+    name: string
+    component: React.JSX.Element
+}
 
 export default function MinigameScreen() {
+    const games : Game[] = [
+        { name: 'Nail Trim', component: <NailTrimGame /> },
+        { name: 'Food Game', component: <FoodGame /> }, 
+    ] 
+
+    const [currentGame, setCurrentGame] = useState<Game | null>(null);
+
+    const onOpenGame = (game : Game) => {
+        setCurrentGame(game)
+    }    
     return (
         <View style={styles.container}>
-            <NailTrimGame />
+            {
+                (currentGame !== null) ? currentGame.component : (
+                    games.map((game, index) => (
+                        <TouchableOpacity onPress={() => onOpenGame(game)} key={index}>
+                            {game.name}                           
+                        </TouchableOpacity>          
+                    ))
+                )
+            }
         </View>
     )
 }
