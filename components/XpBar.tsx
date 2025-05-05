@@ -7,11 +7,33 @@ interface xpBarProps {
     level: number
 }
 
+const calcLevelUp = (xp: number, level: number): { xp: number; level: number } => {
+    let currentXp = xp
+    let currentLevel = level
+
+    while (true) {
+        const xpToNextLevel = 90 + currentLevel * 10
+
+        if (currentXp >= xpToNextLevel) {
+            currentXp -= xpToNextLevel
+            currentLevel++
+        } else {
+            break
+        }
+    }
+
+    return { xp: currentXp, level: currentLevel }
+}
+
 const XpBar = ({ xp, level }: xpBarProps) => {
     const animatedValue = useRef(new Animated.Value(0)).current
+    const xpAux = 480
+    const lvAux = 1
+    xp = xpAux
+    level = lvAux
+    const { xp: updatedXp, level: updatedLevel } = calcLevelUp(xp, level)
+    const xpBarSize = 90 + updatedLevel * 10
 
-    // Calculate the XP bar size based on the level
-    const xpBarSize = 95 + level * 5
 
     const barWidth = animatedValue.interpolate({
         inputRange: [0, xpBarSize],
@@ -19,12 +41,13 @@ const XpBar = ({ xp, level }: xpBarProps) => {
     })
 
     useEffect(() => {
+        animatedValue.setValue(0)
         Animated.timing(animatedValue, {
-            toValue: xp,
+            toValue: updatedXp,
             duration: 500,
             useNativeDriver: false,
         }).start()
-    }, [xp, animatedValue])
+    }, [updatedXp, xpBarSize])
 
     return (
         <View style={styles.container}>
@@ -38,13 +61,13 @@ const XpBar = ({ xp, level }: xpBarProps) => {
                                 : styles.levelTextAndroid
                         }
                     >
-                        {level}
+                        {updatedLevel}
                     </Text>
                 </View>
             </View>
             <View style={styles.bar}>
                 <Text style={styles.text}>
-                    {xp}/{xpBarSize}
+                    {updatedXp}/{xpBarSize}
                 </Text>
                 <View style={styles.barBackground}>
                     <Animated.View
