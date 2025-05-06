@@ -11,10 +11,10 @@ import Minigame from '@/dtos/Minigame'
 const db = getFirestore(firebaseApp)
 
 /**
- 
 Fetches all documents from the 'Minigame' collection in Firestore.
 @returns {Promise<Minigame[]>} A promise that resolves to an array of quiz questions.
-@throws Will throw an error if fetching fails.*/
+@throws Will throw an error if fetching fails.
+*/
 export const fetchMinigames = async (): Promise<Minigame[]> => {
     try {
         const minigamesCollectionRef = collection(db, 'Minigame')
