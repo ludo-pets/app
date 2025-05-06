@@ -1,7 +1,7 @@
 import { PawPrint } from 'phosphor-react-native'
 import React, { useEffect, useState, useRef } from 'react'
 import { View, Text, StyleSheet, Animated, Image, Platform } from 'react-native'
-import { calcLevelUp, calcMaxXp } from '@/components/CalcLevelUp'
+import { calcLevelUp, calcMaxXp } from '@/utils/CalcLevelUp'
 
 interface xpBarProps {
     xp: number

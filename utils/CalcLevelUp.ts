@@ -1,7 +1,3 @@
-import { PawPrint } from 'phosphor-react-native'
-import React, { useEffect, useState, useRef } from 'react'
-import { View, Text, StyleSheet, Animated, Image, Platform } from 'react-native'
-
 export const calcLevelUp = (xp: number, level: number): { xp: number; level: number } => {
     let currentXp = xp
     let currentLevel = level
