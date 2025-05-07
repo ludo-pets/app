@@ -1,14 +1,13 @@
 stages:
+  - android
   - build
-  - distribute
-  - pwa
   - deploy
 
 variables:
   GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS
 
 before_script:
-  - echo "$GOOGLE_APPLICATION_CREDENTIALS" | tr -d '\r' | base64 -d > /tmp/service-account.json
+  - echo "$GOOGLE_APPLICATION_CREDENTIALS" | base64 -d > /tmp/service-account.json
   - export GOOGLE_APPLICATION_CREDENTIALS="/tmp/service-account.json"
 
 image: node:22
@@ -18,7 +17,7 @@ cache:
     - node_modules/
 
 export_pwa:
-  stage: pwa
+  stage: build
   script:
     - npm install -g vercel
     - npm ci
@@ -35,17 +34,14 @@ deploy_pwa_vercel:
     - export_pwa
 
 build_apk:
-  stage: build
+  stage: android
   image: node:22
   script:
     - npm ci
     - eas build --platform android --profile production --non-interactive --json > result.json
-    - APK_URL=$(jq -r '.[0].artifacts.buildUrl' result.json)
-    - curl -o app.apk "$APK_URL"
-
-distribute_apk:
-  stage: distribute
-  image: node:22
-  script:
-    - npm install -g firebase-tools
+    - |
+      APK_URL=$(jq -r '.[0].artifacts.buildUrl' result.json)
+      echo "APK URL: $APK_URL"
+      curl -o app.apk "$APK_URL"
     - firebase appdistribution:distribute app.apk --app $FIREBASE_ANDROID_APP_ID --groups "testadores"
+
