@@ -8,7 +8,7 @@ variables:
   GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS
 
 before_script:
-  - echo "$GOOGLE_APPLICATION_CREDENTIALS" | tr -d '\n' | base64 -d > /tmp/service-account.json
+  - echo "$GOOGLE_APPLICATION_CREDENTIALS" | tr -d '\r' | base64 -d > /tmp/service-account.json
   - export GOOGLE_APPLICATION_CREDENTIALS="/tmp/service-account.json"
 
 image: node:22
