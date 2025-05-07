@@ -32,8 +32,8 @@ build_apk:
   script:
     - npm ci
     - eas build --platform android --profile production --non-interactive --json > result.json
-    - APK_URL=$(jq -r '.[0].artifacts.buildUrl' result.json)
-    - echo "APK URL: $APK_URL"
-    - curl -o app.apk $APK_URL
+    - |
+      APK_URL=$(jq -r '.[0].artifacts.buildUrl' result.json)
+      echo "APK URL: $APK_URL"
+      curl -o app.apk "$APK_URL"
     - firebase appdistribution:distribute app.apk --app $env:FIREBASE_ANDROID_APP_ID --token $env:FIREBASE_CLI_TOKEN --groups "testadores"
-
