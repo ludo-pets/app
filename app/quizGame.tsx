@@ -1,65 +1,20 @@
 import { useUserPetStore } from '@/stores/userPetStore'
-import { StyleSheet, View, Text, Button, Modal } from 'react-native'
+import {
+    StyleSheet,
+    View,
+    Text,
+    Button,
+    Modal,
+    ActivityIndicator,
+} from 'react-native'
 import Header from '@/components/Header'
 import { Quiz } from '@/components/Quiz'
 import { navigate } from 'expo-router/build/global-state/routing'
 import QuizCat from '@/assets/images/quiz-cat.svg'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import QuizSummaryModal from '@/components/QuizSummaryModal'
+import { useQuestionsStore } from '@/stores/questionsStore'
 
-const questions = [
-    {
-        question:
-            'Quantas horas por dia gatos adultos costumam dormir em média?',
-        options: [
-            '4 a 6 horas',
-            '6 a 8 horas',
-            '8 a 10 horas',
-            '10 a 12 horas',
-        ],
-        correctAnswer: '4 a 6 horas',
-        imageSource: require('@/assets/images/quiz/quiz-cat.png'),
-    },
-    {
-        question: 'Qual alimento é perigoso para cachorros?',
-        options: ['Cenoura', 'Chocolate', 'Arroz', 'Frango'],
-        correctAnswer: 'Chocolate',
-        imageSource: require('@/assets/images/quiz/quiz-cat.png'),
-    },
-    {
-        question: 'Qual é um sinal de que um pet está saudável?',
-        options: [
-            'Pelo brilhante',
-            'Olhos lacrimejando',
-            'Letargia',
-            'Falta de apetite',
-        ],
-        correctAnswer: 'Pelo brilhante',
-        imageSource: require('@/assets/images/quiz/quiz-cat.png'),
-    },
-    {
-        question: 'Quantas vezes por ano deve-se levar um pet ao veterinário?',
-        options: [
-            'Apenas quando doente',
-            '1 vez ao ano',
-            '2 vezes por mês',
-            'A cada 5 anos',
-        ],
-        correctAnswer: '1 vez ao ano',
-        imageSource: require('@/assets/images/quiz/quiz-cat.png'),
-    },
-    {
-        question: 'Qual é o benefício da castração em pets?',
-        options: [
-            'Evita fugas',
-            'Evita doenças e crias indesejadas',
-            'Deixa o pet mais agitado',
-            'Não tem benefício',
-        ],
-        correctAnswer: 'Evita doenças e crias indesejadas',
-        imageSource: require('@/assets/images/quiz/quiz-cat.png'),
-    },
-]
 
 export default function QuizScreen() {
     const user = useUserPetStore((state) => state.user)
@@ -67,9 +22,14 @@ export default function QuizScreen() {
     const petUpdate = useUserPetStore((state) => state.updatePet)
     const pet = useUserPetStore((state) => state.pet)
 
+    const { questions, loading, error, fetchQuestions } = useQuestionsStore()
     const [currentIndex, setCurrentIndex] = useState(0)
     const [quizFinished, setQuizFinished] = useState(false)
     const [correctCount, setCorrectCount] = useState(0)
+
+    useEffect(() => {
+        fetchQuestions()
+    }, [fetchQuestions])
 
     const handleAnswer = (wasCorrect: boolean) => {
         if (wasCorrect) {
@@ -94,19 +54,43 @@ export default function QuizScreen() {
         }, 1000)
     }
 
+    if (loading) {
+        return (
+            <View>
+                <ActivityIndicator size="large" color="#6c63ff" />
+                <Text>Carregando perguntas...</Text>
+            </View>
+        )
+    }
+    if (error) {
+        return (
+            <View style={styles.errorContainer}>
+                <Text style={styles.errorText}>Erro: {error}</Text>
+            </View>
+        )
+    }
+
     return (
         <>
             <View>
-                <Header title="Quiz" backgroundColor="#CFE2A8" showBackButton></Header>
+                <Header
+                    title="Quiz"
+                    backgroundColor="#CFE2A8"
+                    showBackButton
+                ></Header>
             </View>
             <View style={styles.container}>
-                {!quizFinished && (
+                {!quizFinished && questions.length > 0 && (
                     <Quiz
                         key={currentIndex} // Add this line to force re-rendering
-                        question={questions[currentIndex].question}
-                        options={questions[currentIndex].options}
-                        correctAnswer={questions[currentIndex].correctAnswer}
-                        imageSource={questions[currentIndex].imageSource}
+                        question={questions[currentIndex].id}
+                        options={questions[currentIndex].answers}
+                        correctAnswer={
+                            questions[currentIndex].answers[
+                                questions[currentIndex].rightAnswer
+                            ]
+                        }
+                        imageSource={null} // Update if you have image handling
                         onCorrectAnswer={() => handleAnswer(true)}
                         onWrongAnswer={() => handleAnswer(false)}
                     />
@@ -137,5 +121,19 @@ const styles = StyleSheet.create({
         marginVertical: 30,
         height: 1,
         width: '80%',
+    },
+    loadingContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    errorContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    errorText: {
+        color: 'red',
+        fontSize: 16,
     },
 })

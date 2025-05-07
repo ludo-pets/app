@@ -8,27 +8,30 @@ interface QuestionsStoreState {
     loading: boolean
     error: string | null
     fetchQuestions: () => Promise<void>
-    setQuestions: (questions : Question[]) => void
+    setQuestions: (questions: Question[]) => void
 }
 
 export const useQuestionsStore = create<QuestionsStoreState>((set) => ({
     questions: [],
     loading: false,
-    error:null,
+    error: null,
 
     fetchQuestions: async () => {
-        set({loading: true, error: null})
-        try{
+        set({ loading: true, error: null })
+        try {
             const result = await fetchAllQuestionsService()
-            if(result) {
-                set({ questions: result.questions, loading: false})
+            if (result) {
+                set({ questions: result.questions, loading: false })
             } else {
-                set({ error: 'Questões não encontradas', loading: false})
+                set({ error: 'Questões não encontradas', loading: false })
             }
-        } catch(error: any) {
-            set({ error: error.message || 'Erro ao buscar questão', loading: false})
+        } catch (error: any) {
+            set({
+                error: error.message || 'Erro ao buscar questões',
+                loading: false,
+            })
         }
     },
 
-        setQuestions: (questions: Question[]) => set({questions: questions}),
+    setQuestions: (questions: Question[]) => set({ questions }),
 }))

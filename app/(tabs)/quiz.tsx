@@ -6,7 +6,7 @@ export default function Quiz() {
     const router = useRouter()
 
     const handleStartQuiz = () => {
-        // Navigate to the quizGame screen
+        //TODO: Navigate to the quizGame screen
         router.push('/quizGame')
     }
 
