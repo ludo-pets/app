@@ -24,6 +24,7 @@ export interface PetshopItemProps {
     quantity: number
     has_item: boolean
     is_active: boolean
+    image?: string
 }
 
 const { width, height } = Dimensions.get('window')
@@ -45,14 +46,16 @@ const categoryIcon = {
     wallpaper: customisationIcon,
 }
 export default function PetshopItem({ item }: { item: PetshopItemProps }) {
-
+    useEffect(()=> {
+        
+    },[])
     const onActive = () => {}
     const onDesactive = () => {console.log(item.quantity);
     }
     const onBuy = () => {
         console.log('toBuy')
     }
-
+    
     return (
         <view style={styles.item}>
             <view style={styles.imageBox}>
@@ -60,12 +63,8 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
                     style={styles.image}
                     resizeMode="contain"
                     source={
-                        Object.keys(categoryIcon).find(
-                            (category) => category == item.type
-                        )
-                            ? categoryIcon[
-                                  item.type as keyof typeof categoryIcon
-                              ]
+                        item.image
+                            ? item.image
                             : foodIcon
                     }
                 />

@@ -86,6 +86,7 @@ export default function StoreScreen() {
                         has_required_level: userLevel >= item.requiredLevel,
                         has_item: hasItem,
                         is_active: isActive,
+                        image: item.image,
                         quantity,
                     }}
                 />
