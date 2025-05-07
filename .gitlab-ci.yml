@@ -35,4 +35,4 @@ build_apk:
     - APK_URL=$(jq -r '.[0].artifacts.buildUrl' result.json)  # Usando jq para extrair o buildUrl
     - echo "APK URL: $APK_URL"  # Apenas para verificar se a URL foi extraída corretamente
     - curl -o app.apk $APK_URL  # Baixando o APK usando o URL extraído
-    - firebase appdistribution:distribute app.apk --app $env:FIREBASE_ANDROID_APP_ID --token $env:FIREBASE_CLI_TOKEN --groups "testadores" --token $env:FIREBASE_CLI_TOKEN --groups "testadores"
+    - firebase appdistribution:distribute app.apk --app $env:FIREBASE_ANDROID_APP_ID --token $env:FIREBASE_CLI_TOKEN --groups "testadores"
