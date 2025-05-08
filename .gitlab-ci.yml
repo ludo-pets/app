@@ -36,11 +36,22 @@ build_apk:
   stage: android
   image: node:22
   script:
+    - npm install -g eas-cli firebase-tools
     - npm ci
     - eas build --platform android --profile production --non-interactive --json > result.json
     - |
-      APK_URL=$(jq -r '.artifacts.buildUrl' result.json)
+      APK_URL=$(jq -r '.[0].artifacts.buildUrl' result.json)
       echo "APK URL: $APK_URL"
       curl -L -o app.apk "$APK_URL"
       file app.apk
+
+      if file app.apk | grep -q 'Zip archive data'; then
+        echo "Arquivo APK válido."
+      else
+        echo "Erro: o arquivo baixado não é um APK válido."
+        cat app.apk
+        exit 1
+      fi
+
     - firebase appdistribution:distribute app.apk --app $FIREBASE_ANDROID_APP_ID --groups "testadores"
+
