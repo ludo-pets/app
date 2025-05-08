@@ -8,6 +8,8 @@ import {
     Text,
 } from 'react-native'
 
+const petCoin = require('@/assets/images/profile/pet_coin.png')
+
 // export type itemsCategory =
 //     | 'bed'
 //     | 'Ração'
@@ -19,9 +21,9 @@ export interface PetshopItemProps {
     id: string
     name: string
     price: number
-    type: string
     category: string
     has_required_level: boolean
+    image: string
     quantity: number
     has_item: boolean
     is_active: boolean
@@ -29,55 +31,27 @@ export interface PetshopItemProps {
 
 const { width, height } = Dimensions.get('window')
 
-//imagens baixadas de https://www.freepik.com/
-const foodIcon = require('@/assets/images/petshop/pet-food.png')
-const bedIcon = require('@/assets/images/petshop/pet-bed.png')
-const toyIcon = require('@/assets/images/petshop/wool.png')
-const wcIcon = require('@/assets/images/petshop/litter-box.png')
-const customisationIcon = require('@/assets/images/petshop/painting.png')
-const petCoin = require('@/assets/images/profile/pet_coin.png')
-
-const categoryIcon = {
-    bed: bedIcon,
-    food: foodIcon,
-    toy: toyIcon,
-    wc: wcIcon,
-    floor: customisationIcon,
-    wallpaper: customisationIcon,
-}
 export default function PetshopItem({ item }: { item: PetshopItemProps }) {
-    useEffect(()=> {
-        console.log("item", item);
-    },[])
+    useEffect(() => {
+        console.log('item', item)
+    }, [])
     const onActive = () => {}
-    const onDesactive = () => {console.log(item.quantity);
+    const onDesactive = () => {
+        console.log(item.quantity)
     }
     const onBuy = () => {
         console.log('toBuy')
     }
-    const teste = Object.keys(categoryIcon).find(
-        (category) => category == item.type
-    )
+
     return (
         <view style={styles.item}>
             <view style={styles.imageBox}>
                 <Image
                     style={styles.image}
                     resizeMode="contain"
-                    source={
-                        Object.keys(categoryIcon).find(
-                            (category) => category == item.type
-                        )
-                            ? categoryIcon[
-                                  item.type as keyof typeof categoryIcon
-                              ]
-                            : foodIcon
-                    }
+                    source={item.image ? { uri: item.image } : undefined}
                 />
-                <Text style={styles.quantity}>
-                    {item.quantity}
-               
-                </Text>
+                <Text style={styles.quantity}>{item.quantity}</Text>
             </view>
             <view style={styles.info}>
                 <view style={styles.row1}>
@@ -92,50 +66,47 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
                     </view>
                 </view>
                 <view style={styles.row2}>
-                    
-                        <Pressable
-                            style={{
-                                ...styles.button,
-                                ...styles.active,
-                                display:
-                                    item.has_item && !item.is_active
-                                        ? 'flex'
-                                        : 'none',
-                            }}
-                            onPress={() => onActive()}
-                        >
-                            <Text>ATIVAR</Text>
-                        </Pressable>
-                        <Pressable
-                            onPress={() => onDesactive()}
-                            style={{
-                                ...styles.desactive,
-                                ...styles.button,
-                                display:
-                                    item.has_item && item.is_active
-                                        ? 'flex'
-                                        : 'none',
-                            }}
-                        >
-                            <Text>DESATIVAR</Text>
-                        </Pressable>
-                    
-                   
-                        <Pressable
-                            onPress={() => onBuy()}
-                            disabled={item.has_item || !item.has_required_level}
-                            style={{
-                                ...styles.button,
-                                display: !item.has_item ? 'flex' : 'none',
-                                backgroundColor:
-                                    item.has_required_level && !item.has_item
-                                        ? '#6DA92C'
-                                        : '#5B5B5B',
-                            }}
-                        >
-                            <Text style={styles.buttonText}>COMPRAR</Text>
-                        </Pressable>
-                    
+                    <Pressable
+                        style={{
+                            ...styles.button,
+                            ...styles.active,
+                            display:
+                                item.has_item && !item.is_active
+                                    ? 'flex'
+                                    : 'none',
+                        }}
+                        onPress={() => onActive()}
+                    >
+                        <Text>ATIVAR</Text>
+                    </Pressable>
+                    <Pressable
+                        onPress={() => onDesactive()}
+                        style={{
+                            ...styles.desactive,
+                            ...styles.button,
+                            display:
+                                item.has_item && item.is_active
+                                    ? 'flex'
+                                    : 'none',
+                        }}
+                    >
+                        <Text>DESATIVAR</Text>
+                    </Pressable>
+
+                    <Pressable
+                        onPress={() => onBuy()}
+                        disabled={item.has_item || !item.has_required_level}
+                        style={{
+                            ...styles.button,
+                            display: !item.has_item ? 'flex' : 'none',
+                            backgroundColor:
+                                item.has_required_level && !item.has_item
+                                    ? '#6DA92C'
+                                    : '#5B5B5B',
+                        }}
+                    >
+                        <Text style={styles.buttonText}>COMPRAR</Text>
+                    </Pressable>
                 </view>
             </view>
         </view>
@@ -155,25 +126,25 @@ const styles = StyleSheet.create({
         fontWeight: '500',
     },
     quantity: {
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        color: "white",
-        position: "absolute",
-        backgroundColor: "#80BEE7",
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: 'white',
+        position: 'absolute',
+        backgroundColor: '#80BEE7',
         minWidth: 30,
         minHeight: 30,
         padding: 3,
         bottom: 5,
         right: 5,
-        textAlign: "center",
-        borderColor: "white",
+        textAlign: 'center',
+        borderColor: 'white',
         borderWidth: 3,
-        aspectRatio: "1/1",
-        borderRadius:"50%"
+        aspectRatio: '1/1',
+        borderRadius: '50%',
     },
     imageBox: {
-        position: "relative",
+        position: 'relative',
         display: 'flex',
         margin: 0,
         height: '100%',

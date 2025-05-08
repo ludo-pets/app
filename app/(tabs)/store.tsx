@@ -16,13 +16,13 @@ import PetshopItem from '@/components/PetshopItem'
 type FilterTitle = {
     id: number
     name: string
-    category: 'foods' | 'toys' | 'environment'
+    category: 'foods' | 'toys' | 'enviroment'
 }
 
 const filterTitles: FilterTitle[] = [
     { id: 1, name: 'Alimentação', category: 'foods' },
     { id: 2, name: 'Brinquedos', category: 'toys' },
-    { id: 3, name: 'Ambiente', category: 'environment' },
+    { id: 3, name: 'Ambiente', category: 'enviroment' },
 ]
 
 export default function StoreScreen() {
@@ -63,16 +63,6 @@ export default function StoreScreen() {
 
             setUserLevel(responsePetData?.user.level || 0)
 
-            if (__DEV__) {
-                console.log('userLevel:', responsePetData?.user.level)
-                console.log('activeItems:', responsePetData?.pet.activeItems)
-                console.log(
-                    'purchasedItems:',
-                    responsePetData?.pet.purchasedItems
-                )
-                console.log('itemsShop:', responseItemsShop?.items)
-            }
-
             setIsLoading(false)
         }
 
@@ -93,9 +83,9 @@ export default function StoreScreen() {
                         name: item.name,
                         category: item.category,
                         price: item.price,
-                        type: item.type,
                         has_required_level: userLevel >= item.requiredLevel,
                         has_item: hasItem,
+                        image: item.image,
                         is_active: isActive,
                         quantity,
                     }}
