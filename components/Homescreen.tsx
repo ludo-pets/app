@@ -11,8 +11,8 @@ import { useUserPetStore } from '@/stores/userPetStore'
 import Pet from '@/dtos/Pet'
 
 const Homescreen = () => {
-    const updatePet = useUserPetStore(state => state.updatePet)
-    const pet = useUserPetStore(state => state.pet)
+    const updatePet = useUserPetStore((state) => state.updatePet)
+    const pet = useUserPetStore((state) => state.pet)
 
     console.log(pet?.wellBeing)
 
@@ -21,23 +21,22 @@ const Homescreen = () => {
             updatePet(pet?.id, {
                 wellBeing: {
                     ...pet.wellBeing,
-                    [item]: new Date().toString()
-                  }
-
+                    [item]: new Date().toString(),
+                },
             })
         }
     }
 
     return (
         <View style={styles.container}>
-            <Wallpaperitem  />
+            <Wallpaperitem />
             <Flooritem />
             <Petitem />
-            <WcItem update={(item)=>updateTime(item)} />
-            <Beditem update={(item)=>updateTime(item)} />
-            <Toyitem update={(item)=>updateTime(item)} />
-            <Fooditem update={(item)=>updateTime(item)} />
-            <Drinkitem update={(item)=>updateTime(item)} />
+            <WcItem update={(item) => updateTime(item)} />
+            <Beditem update={(item) => updateTime(item)} />
+            <Toyitem update={(item) => updateTime(item)} />
+            <Fooditem update={(item) => updateTime(item)} />
+            <Drinkitem update={(item) => updateTime(item)} />
         </View>
     )
 }

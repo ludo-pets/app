@@ -6,12 +6,12 @@ import {
     Exam,
     UserCircle,
 } from 'phosphor-react-native'
-import { Tabs } from 'expo-router'
+import { Route, Tabs } from 'expo-router'
 import { StyleSheet, View } from 'react-native'
 import Header from '@/components/Header'
 import { usePathname } from 'expo-router'
 import { useUserPetStore } from '@/stores/userPetStore'
-import { CommonActions } from '@react-navigation/native'
+import { NavigationState } from '@react-navigation/native'
 
 const iconsSize = 32
 
@@ -133,13 +133,20 @@ export default function TabLayout() {
                         ),
                     }}
                     listeners={({ navigation, route }) => ({
-                        blur: () => {
-                            navigation.dispatch(
-                                CommonActions.reset({
-                                    index: 0,
-                                    routes: [{ name: 'home' }],
+                        tabPress: (e) => {
+                            const r = route as Route<string> & {
+                                state?: NavigationState
+                            }
+                            const nestedState = r.state
+                            const currentNested =
+                                nestedState?.routes?.[nestedState.index ?? 0]
+                                    ?.name ?? 'index'
+                            if (currentNested !== 'index') {
+                                e.preventDefault() // stop the normal tab change
+                                navigation.navigate('minigames', {
+                                    screen: 'index',
                                 })
-                            )
+                            }
                         },
                     })}
                 />

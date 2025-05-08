@@ -1,5 +1,5 @@
-import Pet from "./Pet";
+import Pet from './Pet'
 
 export default interface ItemProps {
-    update: (item:keyof Pet['wellBeing']) => void
+    update: (item: keyof Pet['wellBeing']) => void
 }
