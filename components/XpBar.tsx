@@ -1,6 +1,6 @@
 import { PawPrint } from 'phosphor-react-native'
-import React, { useEffect, useState, useRef } from 'react'
-import { View, Text, StyleSheet, Animated, Image, Platform } from 'react-native'
+import React, { useEffect, useRef } from 'react'
+import { View, Text, StyleSheet, Animated, Platform } from 'react-native'
 import { calcLevelUp, calcMaxXp } from '@/utils/CalcLevelUp'
 
 interface xpBarProps {
@@ -10,12 +10,8 @@ interface xpBarProps {
 
 const XpBar = ({ xp, level }: xpBarProps) => {
     const animatedValue = useRef(new Animated.Value(0)).current
-    const xpAux = 2650
-    const lvAux = 1
-    xp = xpAux
-    level = lvAux
-    const { xp: updatedXp, level: updatedLevel } = calcLevelUp(xp, level)
-    const xpBarSize = calcMaxXp(updatedLevel)
+    const { xp: updatedXp } = calcLevelUp(xp, level)
+    const xpBarSize = calcMaxXp(level)
 
 
     const barWidth = animatedValue.interpolate({
@@ -44,7 +40,7 @@ const XpBar = ({ xp, level }: xpBarProps) => {
                                 : styles.levelTextAndroid
                         }
                     >
-                        {updatedLevel}
+                        {level}
                     </Text>
                 </View>
             </View>
