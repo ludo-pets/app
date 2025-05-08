@@ -42,6 +42,6 @@ build_apk:
     - |
       APK_URL=$(jq -r '.[0].artifacts.buildUrl' result.json)
       echo "APK URL: $APK_URL"
-      curl -o app.apk "$APK_URL"
+      curl -L -o app.apk "$APK_URL"
       file app.apk
     - firebase appdistribution:distribute app.apk --app $FIREBASE_ANDROID_APP_ID --groups "testadores"
