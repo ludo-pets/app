@@ -24,7 +24,7 @@ interface MinigameListConfig {
 }
 
 const minigameListRegistry: Record<string, MinigameListConfig> = {
-    NailTrimGame: {
+    'Hora da Patinha': {
         icon: require('@/assets/images/minigames/minigame_icon_test.png'),
         routeName: 'NailTrimGame',
     },
@@ -131,7 +131,7 @@ export default function MinigameScreen() {
     if (isLoading) {
         return (
             <View style={styles.centered}>
-                <ActivityIndicator size="large" color="#0000ff" />
+                <ActivityIndicator size="large" color="#cfe2a8" />
                 <Text style={styles.loadingText}>Loading Minigames...</Text>
             </View>
         )
@@ -176,7 +176,7 @@ export default function MinigameScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#fefefe',
     },
     centered: {
         flex: 1,
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     loadingText: {
         marginTop: 10,
         fontSize: 16,
-        color: '#555',
+        color: '#cfe2a8',
     },
     errorText: {
         color: 'red',
