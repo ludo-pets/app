@@ -19,7 +19,6 @@ cache:
 export_pwa:
   stage: build
   script:
-    - npm install -g vercel
     - npm ci
     - npx expo export --platform web --output-dir dist
   artifacts:
@@ -37,7 +36,6 @@ build_apk:
   stage: android
   image: node:22
   script:
-    - npm install -g eas-cli firebase-tools
     - npm ci
     - eas build --platform android --profile production --non-interactive --json > result.json
     - |
