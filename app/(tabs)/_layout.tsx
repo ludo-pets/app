@@ -8,7 +8,10 @@ import {
 } from 'phosphor-react-native'
 import { Tabs } from 'expo-router'
 import { StyleSheet, View } from 'react-native'
-import { useUserPetStore } from '@/stores/ludoStore'
+import Header from '@/components/Header'
+import { usePathname } from 'expo-router'
+import { useUserPetStore } from '@/stores/userPetStore'
+import { CommonActions } from '@react-navigation/native'
 
 const iconsSize = 32
 
@@ -36,7 +39,13 @@ function CustomTabIcon({ name, color, focused, iconsSize }: Props) {
     )
 }
 
+export const unstable_settings = {
+    initialRouteName: 'home',
+}
+
 export default function TabLayout() {
+    const pathname = usePathname()
+
     const fetchUserAndPet = useUserPetStore((state) => state.fetchUserAndPet)
     const user = useUserPetStore((state) => state.user)
 
@@ -46,94 +55,124 @@ export default function TabLayout() {
             fetchUserAndPet(userId)
         }
     }, [fetchUserAndPet, user])
-    
-    return (
-        <Tabs
-            screenOptions={{
-                headerTitleAlign: 'center',
-                headerShown: false,
-                tabBarShowLabel: false,
-                tabBarStyle: {
-                    backgroundColor: 'white',
-                    height: 80,
-                    paddingBottom: 16,
-                    paddingTop: 8,
-                },
-                tabBarLabelPosition: 'beside-icon',
-            }}
-        >
-            <Tabs.Screen
-                name="index"
-                options={{
-                    title: 'Home',
-                    tabBarIcon: ({ color, focused }) => (
-                        <CustomTabIcon
-                            name="home"
-                            color="black"
-                            focused={focused}
-                            iconsSize={iconsSize}
-                        />
-                    ),
-                }}
-            />
-            <Tabs.Screen
-                name="store"
-                options={{
-                    title: 'Store',
 
-                    tabBarIcon: ({ color, focused }) => (
-                        <CustomTabIcon
-                            name="store"
-                            color="black"
-                            focused={focused}
-                            iconsSize={iconsSize}
-                        />
-                    ),
+    const includeHeader = ['/store', '/quiz', '/minigames', '/profile']
+    const includeBackBtn = ['/minigames', '/quiz']
+
+    const headerTitles: Record<string, string> = {
+        '/store': 'PetShop',
+        '/quiz': 'Quiz',
+        '/minigames': 'Minigames',
+        '/profile': 'Profile',
+    }
+
+    const headerTitle = headerTitles[pathname] || ''
+
+    return (
+        <>
+            {includeHeader.includes(pathname) && (
+                <Header
+                    title={headerTitle}
+                    showBackButton={includeBackBtn.includes(pathname)}
+                    coinsValue={pathname === '/store' ? user?.money : undefined}
+                    backgroundColor="#CFE2A8"
+                />
+            )}
+            <Tabs
+                screenOptions={{
+                    headerShown: false,
+                    tabBarShowLabel: false,
+                    tabBarStyle: {
+                        backgroundColor: 'white',
+                        height: 80,
+                        paddingBottom: 16,
+                        paddingTop: 8,
+                    },
+                    tabBarLabelPosition: 'beside-icon',
                 }}
-            />
-            <Tabs.Screen
-                name="minigames"
-                options={{
-                    title: 'Minigames',
-                    tabBarIcon: ({ color, focused }) => (
-                        <CustomTabIcon
-                            name="minigame"
-                            color="black"
-                            focused={focused}
-                            iconsSize={iconsSize}
-                        />
-                    ),
-                }}
-            />
-            <Tabs.Screen
-                name="quiz"
-                options={{
-                    title: 'Quiz',
-                    tabBarIcon: ({ color, focused }) => (
-                        <CustomTabIcon
-                            name="quiz"
-                            color="black"
-                            focused={focused}
-                            iconsSize={iconsSize}
-                        />
-                    ),
-                }}
-            />
-            <Tabs.Screen
-                name="profile"
-                options={{
-                    title: 'Profile',
-                    tabBarIcon: ({ color, focused }) => (
-                        <CustomTabIcon
-                            name="profile"
-                            color="black"
-                            focused={focused}
-                            iconsSize={iconsSize}
-                        />
-                    ),
-                }}
-            />
-        </Tabs>
+            >
+                <Tabs.Screen
+                    name="home"
+                    options={{
+                        title: 'Home',
+                        tabBarIcon: ({ color, focused }) => (
+                            <CustomTabIcon
+                                name="home"
+                                color="black"
+                                focused={focused}
+                                iconsSize={iconsSize}
+                            />
+                        ),
+                    }}
+                />
+                <Tabs.Screen
+                    name="store"
+                    options={{
+                        title: 'Store',
+                        tabBarIcon: ({ color, focused }) => (
+                            <CustomTabIcon
+                                name="store"
+                                color="black"
+                                focused={focused}
+                                iconsSize={iconsSize}
+                            />
+                        ),
+                    }}
+                />
+                <Tabs.Screen
+                    name="minigames"
+                    options={{
+                        title: 'Minigames',
+                        tabBarIcon: ({ color, focused }) => (
+                            <CustomTabIcon
+                                name="minigame"
+                                color="black"
+                                focused={focused}
+                                iconsSize={iconsSize}
+                            />
+                        ),
+                    }}
+                    listeners={({ navigation, route }) => ({
+                        blur: () => {
+                            navigation.dispatch(
+                                CommonActions.reset({
+                                    index: 0,
+                                    routes: [{ name: 'home' }],
+                                })
+                            )
+                        },
+                    })}
+                />
+                <Tabs.Screen
+                    name="quiz"
+                    options={{
+                        title: 'Quiz',
+                        tabBarIcon: ({ color, focused }) => (
+                            <CustomTabIcon
+                                name="quiz"
+                                color="black"
+                                focused={focused}
+                                iconsSize={iconsSize}
+                            />
+                        ),
+                    }}
+                />
+                <Tabs.Screen
+                    name="profile"
+                    options={{
+                        title: 'Profile',
+                        tabBarIcon: ({ color, focused }) => (
+                            <CustomTabIcon
+                                name="profile"
+                                color="black"
+                                focused={focused}
+                                iconsSize={iconsSize}
+                            />
+                        ),
+                    }}
+                />
+            </Tabs>
+        </>
     )
 }
 

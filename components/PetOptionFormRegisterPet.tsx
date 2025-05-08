@@ -3,9 +3,10 @@ import { SvgProps } from 'react-native-svg'
 
 interface PetOptionFormRegisterPetProps {
     Icon: React.FC<SvgProps>
-    onSelect: VoidFunction
+    onSelect?: VoidFunction
     selected: boolean
     color: string
+    onlyPet?: boolean
 }
 
 export function PetOptionFormRegisterPet({
@@ -13,10 +14,14 @@ export function PetOptionFormRegisterPet({
     onSelect,
     selected,
     color,
+    onlyPet = true,
 }: PetOptionFormRegisterPetProps) {
     return (
         <Pressable
-            style={[styles.petBox, selected && styles.petBoxActive]}
+            style={[
+                onlyPet ? styles.petBox : styles.petBoxProfile,
+                selected && styles.petBoxActive,
+            ]}
             onPress={onSelect}
         >
             <View style={styles.imageContainer}>
@@ -37,6 +42,12 @@ const styles = StyleSheet.create({
         margin: 10,
         padding: 5,
     },
+    petBoxProfile: {
+        width: '50%',
+        aspectRatio: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     petBoxActive: {
         borderWidth: 5,
         borderColor: '#80BEE7',
@@ -48,11 +59,5 @@ const styles = StyleSheet.create({
         aspectRatio: 1,
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    imagemBox: {
-        width: '100%',
-        height: '100%',
-        resizeMode: 'contain',
-        // tintColor: "#444B8E",
     },
 })

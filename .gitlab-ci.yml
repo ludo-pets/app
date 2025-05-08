@@ -1,7 +1,7 @@
 stages:
-  - android
-  - build
-  - deploy
+    - android
+    - build
+    - deploy
 
 variables:
   GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS
@@ -13,10 +13,11 @@ before_script:
 image: node:22
 
 cache:
-  paths:
-    - node_modules/
+    paths:
+        - node_modules/
 
 export_pwa:
+<<<<<<< HEAD
   stage: build
   script:
     - npm ci
@@ -24,15 +25,26 @@ export_pwa:
   artifacts:
     paths:
       - dist/
+=======
+    stage: build
+    script:
+        - npm install -g vercel
+        - npm ci
+        - npx expo export --platform web --output-dir dist
+    artifacts:
+        paths:
+            - dist/
+>>>>>>> origin/develop
 
 deploy_pwa_vercel:
-  stage: deploy
-  script:
-    - vercel deploy dist --yes --prod --token $VERCEL_TOKEN
-  dependencies:
-    - export_pwa
+    stage: deploy
+    script:
+        - vercel deploy dist --yes --prod --token $VERCEL_TOKEN
+    dependencies:
+        - export_pwa
 
 build_apk:
+<<<<<<< HEAD
   stage: android
   image: node:22
   script:
@@ -44,3 +56,14 @@ build_apk:
       curl -L -o app.apk "$APK_URL"
       file app.apk
     - firebase appdistribution:distribute app.apk --app $FIREBASE_ANDROID_APP_ID --groups "testadores"
+=======
+    stage: android
+    image: node:22
+    script:
+        - npm install -g eas-cli firebase-tools
+        - npm ci
+        - eas build --platform android --profile production --non-interactive --json > result.json
+        - $APK_URL = (Get-Content result.json | ConvertFrom-Json)[0].artifacts.buildUrl
+        - Invoke-WebRequest -Uri $APK_URL -OutFile app.apk
+        - firebase appdistribution:distribute app.apk --app $env:FIREBASE_ANDROID_APP_ID --token $env:FIREBASE_CLI_TOKEN --groups "testadores"
+>>>>>>> origin/develop

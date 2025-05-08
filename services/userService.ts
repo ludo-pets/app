@@ -26,13 +26,11 @@ export const getUserWithPetByIdService = async (
             return null
         }
 
-        // Garante que apenas o primeiro documento seja retornado
         const userDoc = userSnap.docs[0]
         const userData = userDoc.data()
 
         const petSnap = await getDoc(userData.pet)
 
-        //const petSnap = await getDoc(petRef);
         if (!petSnap.exists()) {
             console.error('Pet não encontrado')
             return null
@@ -48,11 +46,11 @@ export const getUserWithPetByIdService = async (
             purchasedItems: petData.purchasedItems,
             activeItems: petData.activeItems,
             wellBeing: {
-                clean: new Date(petData.wellBeing.clean),
-                fun: new Date(petData.wellBeing.fun),
-                hunger: new Date(petData.wellBeing.hunger),
-                thirst: new Date(petData.wellBeing.thirst),
-                sleep: new Date(petData.wellBeing.sleep),
+                clean: petData.wellBeing.clean,
+                fun: petData.wellBeing.fun,
+                hunger: petData.wellBeing.hunger,
+                thirst: petData.wellBeing.thirst,
+                sleep: petData.wellBeing.sleep,
             },
         }
 

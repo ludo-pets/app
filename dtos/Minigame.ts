@@ -1,5 +1,7 @@
 export default interface Minigame {
-    id: string;
-    given_money: number;
-    name: string;
+    id: string
+    name: string
+    image: string
+    description: string
+    givenMoney: number
 }

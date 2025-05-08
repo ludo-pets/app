@@ -4,6 +4,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { useFonts } from 'expo-font'
 import { useEffect } from 'react'
 import { Stack } from 'expo-router'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 export { ErrorBoundary } from 'expo-router'
 
@@ -15,7 +16,7 @@ SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
     const [loaded, error] = useFonts({
-        Inter: require('../assets/fonts/Inter.ttf'),
+        Inter: require('@/assets/fonts/Inter.ttf'),
         ...FontAwesome.font,
     })
 
@@ -38,12 +39,11 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
     return (
-        <Stack>
-            <Stack.Screen
-                name="index"
-                options={{ headerShown: false }}
-            />
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        </Stack>
+        <SafeAreaView style={{ flex: 1, backgroundColor: 'transparent' }}>
+            <Stack>
+                <Stack.Screen name="index" options={{ headerShown: false }} />
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            </Stack>
+        </SafeAreaView>
     )
 }
