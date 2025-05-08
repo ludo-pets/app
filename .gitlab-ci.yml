@@ -44,4 +44,3 @@ build_apk:
       echo "APK URL: $APK_URL"
       curl -o app.apk "$APK_URL"
     - firebase appdistribution:distribute app.apk --app $FIREBASE_ANDROID_APP_ID --groups "testadores"
-
