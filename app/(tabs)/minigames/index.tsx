@@ -28,6 +28,10 @@ const minigameListRegistry: Record<string, MinigameListConfig> = {
         icon: require('@/assets/images/minigames/minigame_icon_test.png'),
         routeName: 'NailTrimGame',
     },
+    'Comilança Maluca': {
+        icon: require('@/assets/images/minigames/food-game/gato_boca_aberta.png'),
+        routeName: 'FoodGame',
+    },
 }
 
 const getMinigameListConfig = (
