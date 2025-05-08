@@ -43,4 +43,17 @@ build_apk:
       APK_URL=$(jq -r '.[0].artifacts.buildUrl' result.json)
       echo "APK URL: $APK_URL"
       curl -o app.apk "$APK_URL"
-    - firebase appdistribution:distribute app.apk --app $FIREBASE_ANDROID_APP_ID --groups "testadores"
+      if [ -f "app.apk" ]; then
+          echo "APK baixado com sucesso!"
+      else
+          echo "ERRO: APK não encontrado! Verifique o processo de download."
+          exit 1
+      fi
+    - |
+      if apksigner verify app.apk; then
+          echo "APK assinado corretamente!"
+      else
+          echo "ERRO: O APK não está assinado. Revise a etapa de build."
+          exit 1
+      fi
+    - firebase appdistribution:distribute app.apk --app $FIREBASE_ANDROID_APP_ID --groups "testadores" --debug
