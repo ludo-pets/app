@@ -11,7 +11,7 @@ import ItemProps from '@/dtos/ItensProps'
 
 const { height, width } = Dimensions.get('window')
 
-const ToyItem = ({update}:ItemProps) => {
+const ToyItem = ({ update }: ItemProps) => {
     const onPress = () => {
         update('fun')
     }

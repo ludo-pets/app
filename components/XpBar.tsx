@@ -13,7 +13,6 @@ const XpBar = ({ xp, level }: xpBarProps) => {
     const { xp: updatedXp } = calcLevelUp(xp, level)
     const xpBarSize = calcMaxXp(level)
 
-
     const barWidth = animatedValue.interpolate({
         inputRange: [0, xpBarSize],
         outputRange: ['0%', '100%'],

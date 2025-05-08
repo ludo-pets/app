@@ -1,23 +1,25 @@
-import { View, ViewStyle, Image, StyleSheet } from "react-native";
-import { useGameConfig } from "./GameConfig";
-import { useMemo } from "react";
+import { View, ViewStyle, Image, StyleSheet } from 'react-native'
+import { useGameConfig } from './GameConfig'
+import { useMemo } from 'react'
 
 interface CharacterProps {
-    playerImage: any;
-    characterPosition: number;
+    playerImage: any
+    characterPosition: number
 }
 
-export const useCharacter = ({ playerImage, characterPosition }: CharacterProps) => {
-    const { config } = useGameConfig();
+export const useCharacter = ({
+    playerImage,
+    characterPosition,
+}: CharacterProps) => {
+    const { config } = useGameConfig()
 
     const characterStyle: ViewStyle = {
-        position: "absolute",
+        position: 'absolute',
         bottom: 20,
         width: config.CHARACTER_WIDTH,
         height: config.CHARACTER_HEIGHT,
         left: characterPosition,
-    };
-
+    }
 
     const Item = useMemo(() => {
         return (
@@ -28,16 +30,15 @@ export const useCharacter = ({ playerImage, characterPosition }: CharacterProps)
                     resizeMode="contain"
                 />
             </View>
+        )
+    }, [characterPosition])
 
-        );
-    }, [characterPosition]);
-
-    return { Item };
-};
+    return { Item }
+}
 
 const styles = StyleSheet.create({
     characterImage: {
-        width: "100%",
-        height: "100%",
+        width: '100%',
+        height: '100%',
     },
-});
+})
