@@ -5,12 +5,14 @@ import {
     TouchableWithoutFeedback,
     Dimensions,
 } from 'react-native'
+import { InteractionTouch } from './InteractionTouch'
+import ItemProps from '@/dtos/ItensProps'
 
 const { height, width } = Dimensions.get('window')
 
-const WcItem = () => {
+const WcItem = ({update}:ItemProps) => {
     const onPress = () => {
-        console.log("this isn't called sandbox!")
+        update('clean')
     }
 
     return (

@@ -4,6 +4,7 @@ import {
     Dimensions,
     StyleSheet,
     TouchableOpacity,
+    ViewStyle,
 } from 'react-native'
 import Button from './Dialog.Button'
 import Text from './Dialog.Text'
@@ -11,13 +12,14 @@ import ButtonArea from './Dialog.ButtonArea'
 import Icon from './Dialog.Icon'
 export type DialogContainerProps = {
     children: ReactNode
+    containerStyle?: ViewStyle
 }
 
 const { width } = Dimensions.get('window')
-function Container({ children }: DialogContainerProps) {
+function Container({ children, containerStyle }: DialogContainerProps) {
     return (
         <Animated.View style={style.overlay}>
-            <Animated.View style={style.startDialog}>{children}</Animated.View>
+            <Animated.View style={[style.startDialog, containerStyle]}>{children}</Animated.View>
         </Animated.View>
     )
 }
@@ -34,7 +36,6 @@ const style = StyleSheet.create({
         zIndex: 5,
     },
     startDialog: {
-        position: 'absolute',
         padding: 25,
         width: width * 0.8,
         height: width * 0.8,
@@ -46,12 +47,6 @@ const style = StyleSheet.create({
         gap: 10,
         justifyContent: 'space-around',
         alignItems: 'center',
-        top: '50%',
-        left: '50%',
-        transform: [
-            { translateX: -(width * 0.8) / 2 },
-            { translateY: -(width * 0.8) / 2 },
-        ],
         zIndex: 10,
     },
 })
