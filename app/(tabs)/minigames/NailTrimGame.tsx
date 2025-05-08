@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { Dimensions, StyleSheet } from 'react-native'
 
-import StartGameDialog from './StatGameDialog'
-import EndGameDialog from './EndGameDialog'
-import GameBoard from './GameBoard'
-import { Nail } from './types'
+import StartGameDialog from '../../../components/minigames/nail-trim-game/StatGameDialog'
+import EndGameDialog from '../../../components/minigames/nail-trim-game/EndGameDialog'
+import GameBoard from '../../../components/minigames/nail-trim-game/GameBoard'
+import { Nail } from '../../../components/minigames/nail-trim-game/types'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { useRouter } from 'expo-router'
 import { useMinigameStore } from '@/stores/minigameStore'
@@ -100,7 +100,7 @@ export default function NailTrimGame() {
             />
 
             {/**minigame do cachorro, quando tiver os assets do cachorro*/}
-            {/* <GameBoard 
+            {/* <GameBoard
                 pawImage={require("@/assets/images/minigames/nail-trimmer/paw-dog.png")}
                 addScore={addScore}
                 nailsSet={dogNailsSet}
