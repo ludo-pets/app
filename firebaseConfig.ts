@@ -7,9 +7,7 @@ const firebaseConfig = {
   projectId: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID,
   storageBucket: process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET,
   appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID
-};
-
-console.log("Firebase config:", firebaseConfig); 
+}; 
 
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
