@@ -10,7 +10,7 @@ import ItemProps from '@/dtos/ItensProps'
 
 const { height, width } = Dimensions.get('window')
 
-const DrinkItem = ({update}:ItemProps) => {
+const DrinkItem = ({ update }: ItemProps) => {
     const onPress = () => {
         update('thirst')
     }

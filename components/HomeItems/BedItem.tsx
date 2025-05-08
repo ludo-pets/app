@@ -11,7 +11,7 @@ import ItemProps from '@/dtos/ItensProps'
 
 const { height, width } = Dimensions.get('window')
 
-const BedItem = ({update}:ItemProps) => {
+const BedItem = ({ update }: ItemProps) => {
     const onPress = () => {
         update('sleep')
     }

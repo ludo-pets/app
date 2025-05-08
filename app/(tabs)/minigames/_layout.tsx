@@ -1,4 +1,3 @@
-// minigames/_layout.tsx
 import { Stack } from 'expo-router'
 import { useNavigation } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
