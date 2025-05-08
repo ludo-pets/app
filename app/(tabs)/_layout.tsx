@@ -11,6 +11,7 @@ import { StyleSheet, View } from 'react-native'
 import Header from '@/components/Header'
 import { usePathname } from 'expo-router'
 import { useUserPetStore } from '@/stores/userPetStore'
+import { CommonActions } from '@react-navigation/native'
 
 const iconsSize = 32
 
@@ -131,6 +132,16 @@ export default function TabLayout() {
                             />
                         ),
                     }}
+                    listeners={({ navigation, route }) => ({
+                        blur: () => {
+                            navigation.dispatch(
+                                CommonActions.reset({
+                                    index: 0,
+                                    routes: [{ name: 'home' }],
+                                })
+                            )
+                        },
+                    })}
                 />
                 <Tabs.Screen
                     name="quiz"
