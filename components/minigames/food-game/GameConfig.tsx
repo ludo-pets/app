@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
-import { Dimensions } from 'react-native';
+import { useState, useEffect } from 'react'
+import { Dimensions } from 'react-native'
 
-export interface GameConfigType  {
+export interface GameConfigType {
     SCREEN_WIDTH: number
     SCREEN_HEIGHT: number
     SPEED: number
     INITIAL_FALL_SPEED: number
     CHARACTER_WIDTH: number
-    CHARACTER_HEIGHT:number
+    CHARACTER_HEIGHT: number
     FOOD_SIZE: number
     MIN_FALL_SPEED: number
     MAX_FOODS_ON_SCREEN: number
@@ -16,13 +16,13 @@ export interface GameConfigType  {
     PROB_COIN_SPAWN: number
 }
 
-function generateDefaultGame() : GameConfigType  {
-    const screenWidth = Dimensions.get('window').width;
-    const screenHeight = Dimensions.get('window').height - 60 - 80;
-    
+function generateDefaultGame(): GameConfigType {
+    const screenWidth = Dimensions.get('window').width
+    const screenHeight = Dimensions.get('window').height - 60 - 80
+
     // Calcula o número máximo de comidas baseado na largura da tela
-    const maxFoodsOnScreen = Math.floor(screenWidth / 70); // Uma comida a cada 70 pixels
-    
+    const maxFoodsOnScreen = Math.floor(screenWidth / 70) // Uma comida a cada 70 pixels
+
     return {
         SCREEN_WIDTH: screenWidth,
         SCREEN_HEIGHT: screenHeight,
@@ -40,26 +40,29 @@ function generateDefaultGame() : GameConfigType  {
 }
 
 export function useGameConfig() {
-  const [config, setConfig] = useState<GameConfigType>(generateDefaultGame);
-  
-  useEffect(() => {
-    const subscription = Dimensions.addEventListener('change', ({ window }) => {
-      setConfig(prevConfig => ({
-        ...prevConfig,
-        SCREEN_WIDTH: window.width,
-        SCREEN_HEIGHT: window.height,
-      }));
-    });
+    const [config, setConfig] = useState<GameConfigType>(generateDefaultGame)
 
-    return () => subscription.remove();
-  }, []);
+    useEffect(() => {
+        const subscription = Dimensions.addEventListener(
+            'change',
+            ({ window }) => {
+                setConfig((prevConfig) => ({
+                    ...prevConfig,
+                    SCREEN_WIDTH: window.width,
+                    SCREEN_HEIGHT: window.height,
+                }))
+            }
+        )
 
-  const updateConfig = (newConfig : GameConfigType) => {
-    setConfig(prevConfig => ({
-      ...prevConfig,
-      ...newConfig,
-    }));
-  };
+        return () => subscription.remove()
+    }, [])
 
-  return { config, updateConfig };
+    const updateConfig = (newConfig: GameConfigType) => {
+        setConfig((prevConfig) => ({
+            ...prevConfig,
+            ...newConfig,
+        }))
+    }
+
+    return { config, updateConfig }
 }

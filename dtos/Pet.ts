@@ -16,10 +16,10 @@ export default interface Pet {
         wallpaper: string
     }
     wellBeing: {
-        clean: Date
-        fun: Date
-        hunger: Date
-        thirst: Date
-        sleep: Date
+        clean: string
+        fun: string
+        hunger: string
+        thirst: string
+        sleep: string
     }
 }
