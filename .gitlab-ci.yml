@@ -19,7 +19,8 @@ cache:
 export_pwa:
   stage: build
   script:
-    - echo "teste" > dist/teste.txt
+    - mkdir -p dist 
+    - echo "teste" > dist/teste.txt  
   artifacts:
     paths:
       - dist/teste.txt
