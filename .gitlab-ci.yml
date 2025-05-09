@@ -26,7 +26,6 @@ export_pwa:
       - dist.tar.gz
     expire_in: 1 week
     when: always
-    optional: true
 
 
 deploy_pwa_vercel:
