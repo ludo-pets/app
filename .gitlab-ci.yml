@@ -19,13 +19,15 @@ cache:
 export_pwa:
   stage: build
   script:
-    - echo "teste" > dist/teste.txt
+    - npm install -g vercel
+    - npm ci
+    - npx expo export --platform web --output-dir dist
   artifacts:
     paths:
-      - dist/teste.txt
+      - dist/index.html
     expire_in: 1 week
     when: always
-    optional: true
+
 
 
 deploy_pwa_vercel:
