@@ -1,6 +1,7 @@
 import { PawPrint } from 'phosphor-react-native'
-import React, { useEffect, useState, useRef } from 'react'
-import { View, Text, StyleSheet, Animated, Image, Platform } from 'react-native'
+import React, { useEffect, useRef } from 'react'
+import { View, Text, StyleSheet, Animated, Platform } from 'react-native'
+import { calcLevelUp, calcMaxXp } from '@/utils/CalcLevelUp'
 
 interface xpBarProps {
     xp: number
@@ -9,9 +10,8 @@ interface xpBarProps {
 
 const XpBar = ({ xp, level }: xpBarProps) => {
     const animatedValue = useRef(new Animated.Value(0)).current
-
-    // Calculate the XP bar size based on the level
-    const xpBarSize = 95 + level * 5
+    const { xp: updatedXp } = calcLevelUp(xp, level)
+    const xpBarSize = calcMaxXp(level)
 
     const barWidth = animatedValue.interpolate({
         inputRange: [0, xpBarSize],
@@ -19,12 +19,13 @@ const XpBar = ({ xp, level }: xpBarProps) => {
     })
 
     useEffect(() => {
+        animatedValue.setValue(0)
         Animated.timing(animatedValue, {
-            toValue: xp,
+            toValue: updatedXp,
             duration: 500,
             useNativeDriver: false,
         }).start()
-    }, [xp, animatedValue])
+    }, [updatedXp, xpBarSize])
 
     return (
         <View style={styles.container}>
@@ -44,7 +45,7 @@ const XpBar = ({ xp, level }: xpBarProps) => {
             </View>
             <View style={styles.bar}>
                 <Text style={styles.text}>
-                    {xp}/{xpBarSize}
+                    {updatedXp}/{xpBarSize}
                 </Text>
                 <View style={styles.barBackground}>
                     <Animated.View
@@ -67,8 +68,8 @@ const styles = StyleSheet.create({
     circleContainer: {
         backgroundColor: 'transparent',
         borderRadius: 35,
-        width: 70,
-        height: 70,
+        width: 65,
+        height: 65,
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 1,
@@ -88,7 +89,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#5b5b5b',
     },
-
     levelTextAndroid: {
         position: 'absolute',
         top: '65%',
@@ -99,7 +99,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#5b5b5b',
     },
-
     text: {
         fontSize: 16,
         fontWeight: 'bold',

@@ -8,11 +8,11 @@ export default function RegisterPetPage() {
     return (
         <View style={styles.containerBox}>
             <View style={styles.mainContent}>
-                <Image source={require('../assets/images/logo.png')} />
+                <Image source={require('@/assets/images/logo.png')} />
                 <FormRegisterPet />
                 <Pressable
                     onPress={() => {
-                        router.push('/(tabs)')
+                        router.push('/home')
                     }}
                 >
                     <Text style={styles.link}>Já tenho um pet</Text>

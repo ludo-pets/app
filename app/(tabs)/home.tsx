@@ -1,14 +1,21 @@
 import Homescreen from '@/components/Homescreen'
 import MoodBar from '@/components/MoodBar'
 import { useUserPetStore } from '@/stores/userPetStore'
-import { StyleSheet, View } from 'react-native'
+import { ActivityIndicator, StyleSheet, View } from 'react-native'
 
 export default function HomeScreen() {
     const user = useUserPetStore((state) => state.user)
+    const loading = useUserPetStore((state) => state.loading)
     return (
         <View style={styles.container}>
-            <MoodBar animalLevel={user?.level} animalMood={70} />
-            <Homescreen />
+            {loading ? (
+                <ActivityIndicator size="large" color="#5b5b5b" />
+            ) : (
+                <>
+                    <MoodBar animalLevel={user?.level} animalMood={100} />
+                    <Homescreen />
+                </>
+            )}
         </View>
     )
 }

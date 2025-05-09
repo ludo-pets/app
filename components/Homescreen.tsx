@@ -7,18 +7,36 @@ import Toyitem from '@/components/HomeItems/ToyItem'
 import Fooditem from '@/components/HomeItems/FoodItem'
 import Drinkitem from '@/components/HomeItems/DrinkItem'
 import Wallpaperitem from '@/components/HomeItems/WallpaperItem'
+import { useUserPetStore } from '@/stores/userPetStore'
+import Pet from '@/dtos/Pet'
 
 const Homescreen = () => {
+    const updatePet = useUserPetStore((state) => state.updatePet)
+    const pet = useUserPetStore((state) => state.pet)
+
+    console.log(pet?.wellBeing)
+
+    const updateTime = (item: keyof Pet['wellBeing']) => {
+        if (pet) {
+            updatePet(pet?.id, {
+                wellBeing: {
+                    ...pet.wellBeing,
+                    [item]: new Date().toString(),
+                },
+            })
+        }
+    }
+
     return (
         <View style={styles.container}>
             <Wallpaperitem />
             <Flooritem />
             <Petitem />
-            <WcItem />
-            <Beditem />
-            <Toyitem />
-            <Fooditem />
-            <Drinkitem />
+            <WcItem update={(item) => updateTime(item)} />
+            <Beditem update={(item) => updateTime(item)} />
+            <Toyitem update={(item) => updateTime(item)} />
+            <Fooditem update={(item) => updateTime(item)} />
+            <Drinkitem update={(item) => updateTime(item)} />
         </View>
     )
 }

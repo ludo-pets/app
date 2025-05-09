@@ -12,7 +12,7 @@ import { router } from 'expo-router'
 import { PawPrint } from 'phosphor-react-native'
 
 const { width: screenWidth } = Dimensions.get('window')
-const MoodBar = ({ animalLevel = 0, animalMood = 0 }) => {
+const MoodBar = ({ animalLevel = 1, animalMood = 0 }) => {
     const [mood, setMood] = useState(animalMood)
     const [level] = useState(animalLevel)
     const animatedValue = useRef(new Animated.Value(0)).current

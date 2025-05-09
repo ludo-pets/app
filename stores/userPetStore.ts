@@ -22,7 +22,7 @@ interface UserPetState {
 export const useUserPetStore = create<UserPetState>((set, get) => ({
     user: null,
     pet: null,
-    loading: false,
+    loading: true,
     error: null,
 
     fetchUserAndPet: async (userId: string) => {
@@ -59,7 +59,7 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
     },
 
     updatePet: async (petId: string, petData: Partial<Pet>) => {
-        set({ loading: true, error: null })
+        set({ error: null })
         try {
             const success = await updatePetService(petId, petData)
             if (success) {

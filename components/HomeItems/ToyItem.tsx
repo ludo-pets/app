@@ -4,13 +4,16 @@ import {
     Image,
     TouchableWithoutFeedback,
     Dimensions,
+    Platform,
 } from 'react-native'
+import { InteractionTouch } from './InteractionTouch'
+import ItemProps from '@/dtos/ItensProps'
 
 const { height, width } = Dimensions.get('window')
 
-const ToyItem = () => {
+const ToyItem = ({ update }: ItemProps) => {
     const onPress = () => {
-        console.log('toy.')
+        update('fun')
     }
 
     return (
@@ -36,7 +39,7 @@ const styles = StyleSheet.create({
         width: '47%',
         height: '41.7%',
         position: 'absolute',
-        bottom: height / 3.36,
+        bottom: Platform.OS === 'ios' ? height / 3.7 : height / 3.36,
         right: width / 1.99,
         justifyContent: 'center',
         alignItems: 'center',

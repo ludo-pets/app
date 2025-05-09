@@ -4,6 +4,7 @@ import {
     Animated,
     ImageSourcePropType,
     StyleSheet,
+    Platform,
 } from 'react-native'
 import {
     PanGestureHandler,
@@ -46,6 +47,7 @@ export default function GameBoard({
     const [isTrimming, setIsTrimming] = useState(false)
     const trimmerTimeout = useRef<{ [key: string]: NodeJS.Timeout | null }>({})
     const intervalRef = useRef<{ [key: string]: NodeJS.Timeout | null }>({})
+    const yOffset = Platform.OS === 'ios' ? pawSize / 1.5 : pawSize / 3
 
     const playSound = async (s: AVPlaybackSource) => {
         const { sound } = await Audio.Sound.createAsync(s, {
@@ -75,8 +77,9 @@ export default function GameBoard({
 
             const distance = Math.sqrt(
                 (nailCenterX - trimmerCenterX) ** 2 +
-                    (nailCenterY - trimmerCenterY - pawSize / 3) ** 2
+                    (nailCenterY - trimmerCenterY - yOffset) ** 2
             )
+
             isNear = distance < 40
             if (isNear) {
                 if (!trimmerTimeout.current[nail.id] && entrou) {
