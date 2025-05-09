@@ -55,12 +55,12 @@ export default function QuizScreen() {
     const OnPressItem = (id: string) => {
         const lesson = lessons.find((lesson: Lesson) => lesson.id === id)
         if (!lesson) {
-            console.error('PUTZ')
+            alert('Lição não encontrada')
             return
         }
 
         if (lessons.indexOf(lesson) != lastLessonConcludedId) {
-            console.error('Você não pode acessar essa lição ainda')
+            alert('Você não pode acessar essa lição ainda')
             return
         }
         
@@ -83,7 +83,8 @@ export default function QuizScreen() {
                     ) : (
                         lessons?.map((item: Lesson, index: number) => {
                             return (
-                                <>
+                                <View
+                                    key={item.id}>
                                     <ItemPathQuiz
                                         pendent={lastLessonConcludedId == index}
                                         onPress={() => OnPressItem(item.id)}
@@ -91,7 +92,6 @@ export default function QuizScreen() {
                                         name={item.name}
                                         index={index}
                                         icon={item.icon}
-                                        key={item.id}
                                         concluded={
                                             lastLessonConcludedId > index
                                         }
@@ -116,7 +116,7 @@ export default function QuizScreen() {
                                             />
                                         </View>
                                     )}
-                                </>
+                                </View>
                             )
                         })
                     )}
