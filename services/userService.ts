@@ -2,93 +2,33 @@ import Pet from '@/dtos/Pet'
 import User from '@/dtos/User'
 import { db } from '@/firebaseConfig'
 import {
-    doc,
-    getDoc,
-    getDocs,
-    updateDoc,
     collection,
-    query,
-    where,
+    doc,
     DocumentData,
     DocumentReference,
+    getDoc,
+    getDocs,
+    query,
+    updateDoc,
+    where,
 } from 'firebase/firestore'
-
-const getUserDataByEmail = async(
-    email: string
-): Promise<DocumentData | null> => {
-    if (!email.match("/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g")) {
-        console.error('Formato do e-mail inválido')
-        return null;
-    }
-
-    const userQuery = query(
-        collection(db, 'User'),
-        where('email', '==', email)
-    )
-    const userSnap = await getDocs(userQuery)
-
-    if (userSnap.empty) {
-        console.error('User não encontrado')
-        return null
-    }
-    
-    const userDoc = userSnap.docs[0]
-    return userDoc.data();
-}
-
-const getPetDataById = async(
-    pet: DocumentReference<unknown, DocumentData>
-): Promise<DocumentData | null> => {
-    const petSnap = await getDoc(pet);
-
-    if (!petSnap.exists()) {
-        console.error('Pet não encontrado')
-        return null
-    }
-
-    return petSnap;
-}
 
 export const getUserWithPetByEmailService = async (
     email: string
 ): Promise<{ user: User; pet: Pet } | null> => {
     try {
-        const userData = await getUserDataByEmail(email);
-        if (userData == null)
-            return null;
+        const userData = await getUserDataByEmail(email)
+        if (!userData) return null
 
-        const petSnap = await getPetDataById(userData.pet);
-        if (petSnap == null)
-            return null;
+        const petRef = userData.pet
+        if (!petRef) return null
 
-        const petData = petSnap.data() as Pet;
+        const petData = await getPetDataById(petRef)
+        if (!petData) return null
 
-        const pet: Pet = {
-            id: petSnap.id,
-            name: petData.name,
-            color: petData.color,
-            type: petData.type,
-            purchasedItems: petData.purchasedItems,
-            activeItems: petData.activeItems,
-            wellBeing: {
-                clean: new Date(petData.wellBeing.clean),
-                fun: new Date(petData.wellBeing.fun),
-                hunger: new Date(petData.wellBeing.hunger),
-                thirst: new Date(petData.wellBeing.thirst),
-                sleep: new Date(petData.wellBeing.sleep),
-            },
-        }
+        const pet: Pet = { ...petData } as Pet
 
-        const user: User = {
-            id: userData.id,
-            email: userData.email,
-            money: userData.money,
-            level: userData.level,
-            experience: userData.experience,
-            lastLessonConcluded: userData.lastLessonConcluded,
-            notifications: userData.notifications,
-            pet: userData.pet,
-        }
+        const user: User = { ...userData } as User
 
         return { user, pet }
     } catch (error) {
@@ -100,7 +40,50 @@ export const getUserWithPetByEmailService = async (
 export const updateUserService = async (
     userId: string,
     userData: Partial<User>
+): Promise<boolean | null> => {
+    return await updateUserInFirestore(userId, userData)
+}
+
+export const getUserDataByEmail = async (
+    email: string
+): Promise<DocumentData | null> => {
+    if (!isValidEmail(email)) {
+        console.error('Formato do e-mail inválido')
+        return null
+    }
+
+    const userQuery = query(collection(db, 'User'), where('email', '==', email))
+    const userSnap = await getDocs(userQuery)
+
+    if (userSnap.empty) {
+        console.error('User não encontrado')
+        return null
+    }
+
+    return userSnap.docs[0].data()
+}
+
+const isValidEmail = (email: string): boolean => {
+    return /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(email)
+}
+
+export const getPetDataById = async (
+    petRef: DocumentReference<unknown, DocumentData>
 ) => {
+    const petSnap = await getDoc(petRef)
+
+    if (!petSnap.exists()) {
+        console.error('Pet não encontrado')
+        return null
+    }
+
+    return petSnap.data()
+}
+
+export const updateUserInFirestore = async (
+    userId: string,
+    userData: Partial<User>
+): Promise<boolean | null> => {
     try {
         const userRef = doc(db, 'User', userId)
         await updateDoc(userRef, { ...userData })
