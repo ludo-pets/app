@@ -1,6 +1,6 @@
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 import { db } from '@/firebaseConfig'
-import Pet from '@/dtos/Pet'
+import { Pet } from '@/dtos/Pet'
 
 type CreatePetData = {
     name: string
