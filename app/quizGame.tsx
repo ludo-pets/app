@@ -14,47 +14,44 @@ import QuizCat from '@/assets/images/quiz-cat.svg'
 import { useEffect, useState } from 'react'
 import QuizSummaryModal from '@/components/QuizSummaryModal'
 import { useQuestionsStore } from '@/stores/questionsStore'
+import { useLessonStore } from '@/stores/lessonStore'
+import { router } from 'expo-router'
 
 
-export default function QuizScreen() {
+export default function QuizGame() {
     const user = useUserPetStore((state) => state.user)
     const userUpdate = useUserPetStore((state) => state.updateUser)
     const petUpdate = useUserPetStore((state) => state.updatePet)
     const pet = useUserPetStore((state) => state.pet)
 
-    const { questions, loading, error, fetchQuestions } = useQuestionsStore()
-    const [currentIndex, setCurrentIndex] = useState(0)
     const [quizFinished, setQuizFinished] = useState(false)
     const [correctCount, setCorrectCount] = useState(0)
 
-    useEffect(() => {
-        fetchQuestions()
-    }, [fetchQuestions])
+    const { loading, error, lesson, currentQuestion, changeToNextQuestion, finishLesson } = useLessonStore()
 
-    const handleAnswer = (wasCorrect: boolean) => {
-        if (wasCorrect) {
-            setCorrectCount((prev) => prev + 1)
-            if (user) {
-                userUpdate(user?.id, {
-                    money: user.money + 10,
-                    experience: user.experience + 10,
-                })
-            }
-            if (pet) {
-                petUpdate(pet.id, { name: pet.name })
-            }
+    useEffect(() => { }, [currentQuestion])
+
+    const handleCorrectAnswer = () => {
+        setCorrectCount((prev) => prev + 1)    
+        if (pet) {
+            petUpdate(pet.id, { name: pet.name })
         }
-        // Espera x segundos para trocar a pergunta
-        setTimeout(() => {
-            if (currentIndex + 1 >= questions.length) {
-                setQuizFinished(true)
-            } else {
-                setCurrentIndex((prev) => prev + 1)
-            }
-        }, 1000)
+        handleChangeQuestion()
     }
 
-    if (loading) {
+    const handleChangeQuestion = async () => {
+        if (!currentQuestion || !lesson) {
+            return
+        }
+
+        const hasNext = await changeToNextQuestion(currentQuestion.id, lesson.questions)
+        if (!hasNext) {
+            setQuizFinished(true)
+            finishLesson(lesson)
+        }
+    }
+
+    if (loading || !lesson) {
         return (
             <View>
                 <ActivityIndicator size="large" color="#6c63ff" />
@@ -80,26 +77,31 @@ export default function QuizScreen() {
                 ></Header>
             </View>
             <View style={styles.container}>
-                {!quizFinished && questions.length > 0 && (
+                {currentQuestion && (
                     <Quiz
-                        key={currentIndex} // Add this line to force re-rendering
-                        question={questions[currentIndex].id}
-                        options={questions[currentIndex].answers}
+                        key={currentQuestion.id} 
+                        question={currentQuestion.title}
+                        options={currentQuestion.answers}
                         correctAnswer={
-                            questions[currentIndex].answers[
-                                questions[currentIndex].rightAnswer
+                            currentQuestion.answers[
+                                currentQuestion.rightAnswer
                             ]
                         }
-                        imageSource={null} // Update if you have image handling
-                        onCorrectAnswer={() => handleAnswer(true)}
-                        onWrongAnswer={() => handleAnswer(false)}
+                        imageSource={null} 
+                        onCorrectAnswer={() => handleCorrectAnswer()}
+                        onWrongAnswer={() => handleChangeQuestion()}
                     />
                 )}
 
                 <Modal visible={quizFinished} transparent animationType="fade">
                     <QuizSummaryModal
                         correctAnswers={correctCount}
-                        total={questions.length}
+                        total={lesson.questions.length}
+                        onClose={() => {
+                            setQuizFinished(false)
+                            router.push('/home')
+
+                        }}
                     />
                 </Modal>
             </View>
