@@ -1,7 +1,7 @@
 stages:
-  - android
   - build
   - deploy
+  - android
 
 variables:
   GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS
