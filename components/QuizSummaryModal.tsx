@@ -3,9 +3,10 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 interface Props {
   correctAnswers: number
   total: number
+  onClose: () => void
 }
 
-export default function QuizSummaryModal({ correctAnswers, total }: Props) {
+export default function QuizSummaryModal({ correctAnswers, total, onClose }: Props) {
   return (
     <View style={styles.overlay}>
       <View style={styles.modal}>
@@ -13,7 +14,7 @@ export default function QuizSummaryModal({ correctAnswers, total }: Props) {
         <Text style={styles.text}>
           Você acertou {correctAnswers} de {total} perguntas.
         </Text>
-        <TouchableOpacity style={styles.button} onPress={() => console.log('Fechar')}>
+        <TouchableOpacity style={styles.button} onPress={onClose}>
           <Text style={styles.buttonText}>Fechar</Text>
         </TouchableOpacity>
       </View>
