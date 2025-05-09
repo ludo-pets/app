@@ -1,4 +1,4 @@
-export default interface Pet {
+export interface Pet {
     id: string
     name: string
     color: string
@@ -15,11 +15,13 @@ export default interface Pet {
         floor: string
         wallpaper: string
     }
-    wellBeing: {
-        clean: string
-        fun: string
-        hunger: string
-        thirst: string
-        sleep: string
-    }
+    wellBeing: Wellbeing
+}
+
+export interface Wellbeing {
+    clean: string
+    fun: string
+    hunger: string
+    thirst: string
+    sleep: string
 }

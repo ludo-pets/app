@@ -1,4 +1,4 @@
-import Pet from '@/dtos/Pet'
+import { Pet } from '@/dtos/Pet'
 import User from '@/dtos/User'
 import { db } from '@/firebaseConfig'
 import {
