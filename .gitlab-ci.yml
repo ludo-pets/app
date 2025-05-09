@@ -19,11 +19,11 @@ cache:
 export_pwa:
   stage: build
   script:
-    - mkdir -p dist 
-    - echo "teste" > dist/teste.txt  
+    - mkdir -p dist
+    - npx expo export --platform web --output-dir dist
   artifacts:
     paths:
-      - dist/teste.txt
+      - dist/*
     expire_in: 1 week
     when: always
 
