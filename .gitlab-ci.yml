@@ -24,8 +24,6 @@ export_pwa:
   artifacts:
     paths:
       - dist/
-  only:
-    - main
 
 deploy_pwa_vercel:
   stage: deploy
@@ -33,8 +31,6 @@ deploy_pwa_vercel:
     - vercel deploy dist --yes --prod --token $VERCEL_TOKEN
   dependencies:
     - export_pwa
-  only:
-    - main
 
 build_apk:
   stage: android
@@ -56,7 +52,5 @@ build_apk:
         exit 1
       fi
 
-    - firebase appdistribution:distribute app.apk --app $FIREBASE_ANDROID_APP_ID --groups "testadores"
-  only:
-    - main  
+    - firebase appdistribution:distribute app.apk --app $FIREBASE_ANDROID_APP_ID --groups "testadores" 
 
