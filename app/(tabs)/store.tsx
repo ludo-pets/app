@@ -12,79 +12,56 @@ import { getUserWithPetByIdService } from '@/services/userService'
 import Item from '@/dtos/Item'
 import Pet from '@/dtos/Pet'
 import PetshopItem from '@/components/PetshopItem'
+import { useUserPetStore } from '@/stores/userPetStore'
+import { useItemStore } from '@/stores/itemStore'
 
 type FilterTitle = {
     id: number
     name: string
-    category: 'foods' | 'toys' | 'environment'
+    category: 'foods' | 'toys' | 'enviroment'
 }
 
 const filterTitles: FilterTitle[] = [
     { id: 1, name: 'Alimentação', category: 'foods' },
     { id: 2, name: 'Brinquedos', category: 'toys' },
-    { id: 3, name: 'Ambiente', category: 'environment' },
+    { id: 3, name: 'Ambiente', category: 'enviroment' },
 ]
 
 export default function StoreScreen() {
     const [selectedFilter, setSelectedFilter] = useState<FilterTitle>(
         filterTitles[0]
     )
-    const [isLoading, setIsLoading] = useState(true)
-
-    const [itemsShop, setItemsShop] = useState<Item[]>([])
+    const { pet, user } = useUserPetStore()
+    const { fetchItems, items, loading } = useItemStore()
     const [petActiveItems, setPetActiveItems] = useState<Pet['purchasedItems']>(
         []
     )
     const [petPurchasedItems, setPetPurchasedItems] = useState<
         Pet['purchasedItems']
     >([])
-    const [userLevel, setUserLevel] = useState<number>(0)
 
     useEffect(() => {
-        const fetchItems = async () => {
-            const responseItemsShop = await getAllItemService()
-            setItemsShop(responseItemsShop?.items || [])
-
-            const responsePetData = await getUserWithPetByIdService(
-                'ludopetsages@gmail.com'
-            )
-
+        const fetchItensUseEffect = async () => {
+            fetchItems()
             setPetActiveItems(
-                Array.isArray(responsePetData?.pet.activeItems)
-                    ? responsePetData.pet.activeItems
-                    : []
+                Array.isArray(pet?.activeItems) ? pet.activeItems : []
             )
 
             setPetPurchasedItems(
-                Array.isArray(responsePetData?.pet.purchasedItems)
-                    ? responsePetData.pet.purchasedItems
-                    : []
+                Array.isArray(pet?.purchasedItems) ? pet.purchasedItems : []
             )
-
-            setUserLevel(responsePetData?.user.level || 0)
-
-            if (__DEV__) {
-                console.log('userLevel:', responsePetData?.user.level)
-                console.log('activeItems:', responsePetData?.pet.activeItems)
-                console.log(
-                    'purchasedItems:',
-                    responsePetData?.pet.purchasedItems
-                )
-                console.log('itemsShop:', responseItemsShop?.items)
-            }
-
-            setIsLoading(false)
         }
-
-        fetchItems()
+        fetchItensUseEffect()
     }, [])
 
     const renderPetshopItem = useCallback(
         ({ item }: { item: Item }) => {
-            const hasItem = petPurchasedItems.some((p) => p.id === item.id)
-            const isActive = petActiveItems.some((p) => p.id === item.id)
-            const quantity =
-                petActiveItems.find((p) => p.id === item.id)?.quantity || 0
+            const hasItem = petPurchasedItems.some((p) => p.itemId === item.id)
+            const isActive = petActiveItems.some((p) => p.itemId === item.id)
+            const purchasedRecord = petPurchasedItems.find(
+                (p) => p.itemId === item.id
+            )
+            const quantity = purchasedRecord?.quantity ?? 0
 
             return (
                 <PetshopItem
@@ -93,16 +70,19 @@ export default function StoreScreen() {
                         name: item.name,
                         category: item.category,
                         price: item.price,
-                        type: item.type,
-                        has_required_level: userLevel >= item.requiredLevel,
+                        has_required_level:
+                            user &&
+                            user?.level >= item.requiredLevel &&
+                            user?.money >= item.price,
                         has_item: hasItem,
+                        image: item.image,
                         is_active: isActive,
                         quantity,
                     }}
                 />
             )
         },
-        [petPurchasedItems, petActiveItems, userLevel]
+        [petPurchasedItems, petActiveItems, user]
     )
 
     return (
@@ -122,13 +102,13 @@ export default function StoreScreen() {
                 ))}
             </View>
 
-            {isLoading ? (
+            {loading ? (
                 <ActivityIndicator size="small" color="#FFF" />
             ) : (
                 <View style={styles.itemsShopBox}>
                     <FlatList
                         style={{ width: '100%' }}
-                        data={itemsShop.filter(
+                        data={items.filter(
                             (item) => item.category === selectedFilter.category
                         )}
                         keyExtractor={(item) => item.id.toString()}

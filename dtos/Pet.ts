@@ -4,7 +4,7 @@ export interface Pet {
     color: string
     type: 'cat' | 'dog'
     purchasedItems: {
-        id: string
+        itemId: string
         quantity?: number
     }[]
     activeItems: {

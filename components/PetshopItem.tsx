@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import {
     Button,
     Dimensions,
@@ -7,6 +7,8 @@ import {
     StyleSheet,
     Text,
 } from 'react-native'
+
+const petCoin = require('@/assets/images/profile/pet_coin.png')
 
 // export type itemsCategory =
 //     | 'bed'
@@ -19,9 +21,9 @@ export interface PetshopItemProps {
     id: string
     name: string
     price: number
-    type: string
     category: string
-    has_required_level: boolean
+    has_required_level: boolean | null
+    image: string
     quantity: number
     has_item: boolean
     is_active: boolean
@@ -29,53 +31,30 @@ export interface PetshopItemProps {
 
 const { width, height } = Dimensions.get('window')
 
-//imagens baixadas de https://www.freepik.com/
-const foodIcon = require('@/assets/images/petshop/pet-food.png')
-const bedIcon = require('@/assets/images/petshop/pet-bed.png')
-const toyIcon = require('@/assets/images/petshop/wool.png')
-const wcIcon = require('@/assets/images/petshop/litter-box.png')
-const customisationIcon = require('@/assets/images/petshop/painting.png')
-const petCoin = require('@/assets/images/profile/pet_coin.png')
-
-const categoryIcon = {
-    bed: bedIcon,
-    food: foodIcon,
-    toy: toyIcon,
-    wc: wcIcon,
-    floor: customisationIcon,
-    wallpaper: customisationIcon,
-}
 export default function PetshopItem({ item }: { item: PetshopItemProps }) {
-    useEffect(() => {
-        console.log('item', item)
-    }, [])
-    const onActive = () => {}
+    const [active, setActive] = useState(item.is_active)
+
+    useEffect(() => {}, [item])
+
+    const onActive = () => {
+        setActive(true)
+    }
     const onDesactive = () => {
-        console.log(item.quantity)
+        setActive(false)
     }
-    const onBuy = () => {
-        console.log('toBuy')
-    }
-    const teste = Object.keys(categoryIcon).find(
-        (category) => category == item.type
-    )
+    const onBuy = () => {}
+
     return (
         <view style={styles.item}>
             <view style={styles.imageBox}>
                 <Image
                     style={styles.image}
                     resizeMode="contain"
-                    source={
-                        Object.keys(categoryIcon).find(
-                            (category) => category == item.type
-                        )
-                            ? categoryIcon[
-                                  item.type as keyof typeof categoryIcon
-                              ]
-                            : foodIcon
-                    }
+                    source={item.image ? { uri: item.image } : undefined}
                 />
-                <Text style={styles.quantity}>{item.quantity}</Text>
+                {item.category === 'foods' && (
+                    <Text style={styles.quantity}>{item.quantity}</Text>
+                )}
             </view>
             <view style={styles.info}>
                 <view style={styles.row1}>
@@ -90,44 +69,30 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
                     </view>
                 </view>
                 <view style={styles.row2}>
-                    <Pressable
-                        style={{
-                            ...styles.button,
-                            ...styles.active,
-                            display:
-                                item.has_item && !item.is_active
-                                    ? 'flex'
-                                    : 'none',
-                        }}
-                        onPress={() => onActive()}
-                    >
-                        <Text>ATIVAR</Text>
-                    </Pressable>
-                    <Pressable
-                        onPress={() => onDesactive()}
-                        style={{
-                            ...styles.desactive,
-                            ...styles.button,
-                            display:
-                                item.has_item && item.is_active
-                                    ? 'flex'
-                                    : 'none',
-                        }}
-                    >
-                        <Text>DESATIVAR</Text>
-                    </Pressable>
+                    {item.has_item && (
+                        <Pressable
+                            style={[
+                                styles.button,
+                                active ? styles.desactive : styles.active,
+                            ]}
+                            onPress={active ? onDesactive : onActive}
+                        >
+                            <Text style={styles.buttonActive}>
+                                {active ? 'DESATIVAR' : 'ATIVAR'}
+                            </Text>
+                        </Pressable>
+                    )}
 
                     <Pressable
-                        onPress={() => onBuy()}
-                        disabled={item.has_item || !item.has_required_level}
-                        style={{
-                            ...styles.button,
-                            display: !item.has_item ? 'flex' : 'none',
-                            backgroundColor:
-                                item.has_required_level && !item.has_item
-                                    ? '#6DA92C'
-                                    : '#5B5B5B',
-                        }}
+                        onPress={onBuy}
+                        disabled={!item.has_required_level}
+                        style={[
+                            styles.button,
+                            item.has_required_level
+                                ? styles.unlocked
+                                : styles.locked,
+                            { marginLeft: 'auto' },
+                        ]}
                     >
                         <Text style={styles.buttonText}>COMPRAR</Text>
                     </Pressable>
@@ -200,7 +165,7 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         flexDirection: 'row',
         width: '100%',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
     },
     collum1: {
         display: 'flex',
@@ -231,6 +196,9 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: 'white',
+    },
+    buttonActive: {
+        color: '#5B5B5B',
     },
     active: {
         backgroundColor: '#D4E4EB',
