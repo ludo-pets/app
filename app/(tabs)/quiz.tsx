@@ -91,6 +91,7 @@ export default function QuizScreen() {
                                         name={item.name}
                                         index={index}
                                         icon={item.icon}
+                                        key={item.id}
                                         concluded={
                                             lastLessonConcludedId > index
                                         }
