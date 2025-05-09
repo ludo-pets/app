@@ -23,8 +23,12 @@ export_pwa:
     - npm ci
     - npx expo export --platform web --output-dir dist
   artifacts:
-    paths:
-      - dist/
+  paths:
+    - dist/index.html
+    - dist/static/js/*
+    - dist/static/css/*
+  expire_in: 1 week
+
 
 deploy_pwa_vercel:
   stage: deploy
