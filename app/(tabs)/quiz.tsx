@@ -18,38 +18,12 @@ const paws = require('@/assets/images/paw.png')
 const pawsTravled = require('@/assets/images/pawTraveled.png')
 
 export default function QuizScreen() {
-    const getAllLesssons = useAllLessonsStore(
-        (state: { fetchAllLessons: any }) => state.fetchAllLessons
-    )
-
-    const lessons = useAllLessonsStore(
-        (state: { lessons: any }) => state.lessons
-    )
-
-    const loading = useAllLessonsStore(
-        (state: { loading: boolean }) => state.loading
-    )
-
+    const getAllLesssons = useAllLessonsStore((state: { fetchAllLessons: any }) => state.fetchAllLessons  )
+    const lessons = useAllLessonsStore((state: { lessons: any }) => state.lessons)
+    const loading = useAllLessonsStore((state: { loading: boolean }) => state.loading)
     const user = useUserPetStore((state) => state.user)
-
     const [lastLessonConcludedId, setLastLessonConcludedId] = useState(1)
-
-    useEffect(() => {
-        if (lessons && user?.lastLessonConcluded) {
-            const lastIndex = lessons.findIndex(
-                (item: Lesson) => item.id === user.lastLessonConcluded
-            )
-            if (lastIndex !== -1) {
-                setLastLessonConcludedId(lastIndex+1)
-            }
-        }
-        if (!lessons) {
-            getAllLesssons()
-        }
-    }, [getAllLesssons, user])
-
     const { setLesson, changeToNextQuestion } = useLessonStore()
-
     const router = useRouter()
 
     const OnPressItem = (id: string) => {
@@ -70,6 +44,20 @@ export default function QuizScreen() {
 
         router.push('/quizGame')
     }
+
+    useEffect(() => {
+        if (lessons && user?.lastLessonConcluded) {
+            const lastIndex = lessons.findIndex(
+                (item: Lesson) => item.id === user.lastLessonConcluded
+            )
+            if (lastIndex !== -1) {
+                setLastLessonConcludedId(lastIndex+1)
+            }
+        }
+        if (!lessons) {
+            getAllLesssons()
+        }
+    }, [getAllLesssons, user, lessons])
 
     return (
         <View style={styles.container}>
