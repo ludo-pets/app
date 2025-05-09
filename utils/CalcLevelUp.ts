@@ -1,8 +1,9 @@
 export const calcLevelUp = (
-    xp: number,
-    level: number
-): { xp: number; level: number } => {
-    let currentXp = xp
+    oldXp: number,
+    level: number,
+    newXp: number
+) => {
+    let currentXp = oldXp + newXp
     let currentLevel = level
 
     while (true) {

@@ -1,6 +1,6 @@
 import Lesson from '@/dtos/Lesson'
 import { db } from '@/firebaseConfig'
-import { getDoc, doc, collection, getDocs } from 'firebase/firestore'
+import { getDoc, doc, collection, getDocs, updateDoc } from 'firebase/firestore'
 
 export const getLessonByIdService = async (
     id: string
@@ -36,9 +36,21 @@ export const getAllLessonsService = async (): Promise<{
             ...doc.data(),
         })) as Lesson[]
 
-        return { lessons }
+        return { lessons: lessons.sort((a,b) => a.order-b.order) }
     } catch (error) {
         console.error('Erro ao buscar Lições:', error)
+        return null
+    }
+}
+
+export const markLessonAsConcluded = async (
+    lessonId: string
+): Promise<void | null> => {
+    try {
+        const lessonRef = doc(db, 'Lesson', lessonId)
+        await updateDoc(lessonRef, { concluded: true })
+    } catch (error) {
+        console.error('Erro ao atualizar lição:', error)
         return null
     }
 }

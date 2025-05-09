@@ -10,7 +10,6 @@ interface xpBarProps {
 
 const XpBar = ({ xp, level }: xpBarProps) => {
     const animatedValue = useRef(new Animated.Value(0)).current
-    const { xp: updatedXp } = calcLevelUp(xp, level)
     const xpBarSize = calcMaxXp(level)
 
     const barWidth = animatedValue.interpolate({
@@ -21,11 +20,11 @@ const XpBar = ({ xp, level }: xpBarProps) => {
     useEffect(() => {
         animatedValue.setValue(0)
         Animated.timing(animatedValue, {
-            toValue: updatedXp,
+            toValue: xp,
             duration: 500,
             useNativeDriver: false,
         }).start()
-    }, [updatedXp, xpBarSize])
+    }, [xp, xpBarSize])
 
     return (
         <View style={styles.container}>
@@ -45,7 +44,7 @@ const XpBar = ({ xp, level }: xpBarProps) => {
             </View>
             <View style={styles.bar}>
                 <Text style={styles.text}>
-                    {updatedXp}/{xpBarSize}
+                    {xp}/{xpBarSize}
                 </Text>
                 <View style={styles.barBackground}>
                     <Animated.View
