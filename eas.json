@@ -17,6 +17,14 @@
             },
             "ios": {
                 "simulator": true
+            },
+            "env": {
+                "EXPO_PUBLIC_FIREBASE_API_KEY": "AIzaSyAFoi2BYgJB2YOeafkWz4g7_x71BYvFvKE",
+                "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN": "ludo-pets.firebaseapp.com",
+                "EXPO_PUBLIC_FIREBASE_PROJECT_ID": "ludo-pets",
+                "EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET": "ludo-pets.firebasestorage.app",
+                "EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "823465219976",
+                "EXPO_PUBLIC_FIREBASE_APP_ID": "1:823465219976:android:cd5b86d09b91269a5d8c3d"
             }
         }
     }

@@ -16,7 +16,7 @@ export const getLessonByIdService = async (
 
         const lessonData = lessonSnap.data() as Lesson
 
-        const lesson: Lesson = {...lessonData}
+        const lesson: Lesson = { ...lessonData }
 
         return { lesson }
     } catch (error) {
@@ -25,13 +25,15 @@ export const getLessonByIdService = async (
     }
 }
 
-export const getAllLessonsService = async (): Promise<{ lessons: Lesson[] } | null> => {
+export const getAllLessonsService = async (): Promise<{
+    lessons: Lesson[]
+} | null> => {
     try {
         const lessonRef = collection(db, 'Lesson')
         const lessonSnap = await getDocs(lessonRef)
-    
-        const lessons: Lesson[] = lessonSnap.docs.map(doc => ({
-            ...doc.data()
+
+        const lessons: Lesson[] = lessonSnap.docs.map((doc) => ({
+            ...doc.data(),
         })) as Lesson[]
 
         return { lessons }

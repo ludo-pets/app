@@ -46,11 +46,11 @@ export const getUserWithPetByIdService = async (
             purchasedItems: petData.purchasedItems,
             activeItems: petData.activeItems,
             wellBeing: {
-                clean: new Date(petData.wellBeing.clean),
-                fun: new Date(petData.wellBeing.fun),
-                hunger: new Date(petData.wellBeing.hunger),
-                thirst: new Date(petData.wellBeing.thirst),
-                sleep: new Date(petData.wellBeing.sleep),
+                clean: petData.wellBeing.clean,
+                fun: petData.wellBeing.fun,
+                hunger: petData.wellBeing.hunger,
+                thirst: petData.wellBeing.thirst,
+                sleep: petData.wellBeing.sleep,
             },
         }
 
