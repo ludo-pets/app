@@ -1,54 +1,65 @@
-import { useUserPetStore } from '@/stores/userPetStore'
-import {
-    StyleSheet,
-    View,
-    Text,
-    Button,
-    Modal,
-    ActivityIndicator,
-} from 'react-native'
+import { StyleSheet, View, Text, Modal, ActivityIndicator } from 'react-native'
 import Header from '@/components/Header'
 import { Quiz } from '@/components/Quiz'
-import { navigate } from 'expo-router/build/global-state/routing'
-import QuizCat from '@/assets/images/quiz-cat.svg'
 import { useEffect, useState } from 'react'
 import QuizSummaryModal from '@/components/QuizSummaryModal'
-import { useQuestionsStore } from '@/stores/questionsStore'
 import { useLessonStore } from '@/stores/lessonStore'
 import { router } from 'expo-router'
-
+import { useUserPetStore } from '@/stores/userPetStore'
+import { calcLevelUp } from '@/utils/CalcLevelUp'
+import EndGameDialog from '@/components/minigames/food-game/EndGameDialog'
 
 export default function QuizGame() {
-    const user = useUserPetStore((state) => state.user)
-    const userUpdate = useUserPetStore((state) => state.updateUser)
-    const petUpdate = useUserPetStore((state) => state.updatePet)
-    const pet = useUserPetStore((state) => state.pet)
-
     const [quizFinished, setQuizFinished] = useState(false)
     const [correctCount, setCorrectCount] = useState(0)
 
-    const { loading, error, lesson, currentQuestion, changeToNextQuestion, finishLesson } = useLessonStore()
+    const {
+        loading,
+        error,
+        lesson,
+        currentQuestion,
+        changeToNextQuestion,
+        finishLesson,
+    } = useLessonStore()
 
-    useEffect(() => { }, [currentQuestion])
+    const { updateUser, user } = useUserPetStore()
+
+    useEffect(() => {}, [currentQuestion])
 
     const handleCorrectAnswer = () => {
-        setCorrectCount((prev) => prev + 1)    
-        if (pet) {
-            petUpdate(pet.id, { name: pet.name })
-        }
+        setCorrectCount((prev) => prev + 1)
         handleChangeQuestion()
     }
 
-    const handleChangeQuestion = async () => {
-        if (!currentQuestion || !lesson) {
-            return
-        }
+    const handleChangeQuestion = () => {
+        setTimeout(async () => {
+            if (!currentQuestion || !lesson) {
+                return
+            }
 
-        const hasNext = await changeToNextQuestion(currentQuestion.id, lesson.questions)
-        if (!hasNext) {
-            setQuizFinished(true)
-            finishLesson(lesson)
-        }
+            const hasNext = await changeToNextQuestion(
+                currentQuestion.id,
+                lesson.questions
+            )
+            if (!hasNext) {
+                setQuizFinished(true)
+                if (user) {
+                    const { level, xp } = calcLevelUp(
+                        user.experience,
+                        user.level,
+                        lesson.givenExperience
+                    )
+
+                    updateUser(user?.id, {
+                        lastLessonConcluded: lesson.id,
+                        level: level,
+                        experience: xp,
+                        money: user.money + lesson.givenMoney,
+                    })
+                }
+                finishLesson(lesson)
+            }
+        }, 2000)
     }
 
     if (loading || !lesson) {
@@ -79,31 +90,39 @@ export default function QuizGame() {
             <View style={styles.container}>
                 {currentQuestion && (
                     <Quiz
-                        key={currentQuestion.id} 
+                        key={currentQuestion.id}
                         question={currentQuestion.title}
                         options={currentQuestion.answers}
                         correctAnswer={
-                            currentQuestion.answers[
-                                currentQuestion.rightAnswer
-                            ]
+                            currentQuestion.answers[currentQuestion.rightAnswer]
                         }
-                        imageSource={null} 
+                        imageSource={null}
                         onCorrectAnswer={() => handleCorrectAnswer()}
                         onWrongAnswer={() => handleChangeQuestion()}
                     />
                 )}
+                {quizFinished && (
+                    <EndGameDialog
+                        callback={() => {
+                            setQuizFinished(false)
+                            router.push('/home')
+                        }}
+                        message='Você concluiu a lição!'
+                        score={correctCount}
+                        coins={lesson.givenMoney}
+                    />
+                )}
 
-                <Modal visible={quizFinished} transparent animationType="fade">
+                {/* <Modal visible={quizFinished} transparent animationType="fade">
                     <QuizSummaryModal
                         correctAnswers={correctCount}
                         total={lesson.questions.length}
                         onClose={() => {
                             setQuizFinished(false)
                             router.push('/home')
-
                         }}
                     />
-                </Modal>
+                </Modal> */}
             </View>
         </>
     )
@@ -114,6 +133,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+        width: '100%',
     },
     title: {
         fontSize: 20,

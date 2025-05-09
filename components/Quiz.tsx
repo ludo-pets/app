@@ -5,7 +5,6 @@ import {
     TouchableOpacity,
     Image,
     StyleSheet,
-    Dimensions,
 } from 'react-native'
 
 interface QuizProps {
@@ -69,8 +68,9 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingHorizontal: 16,
         paddingTop: 24,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#fefefe',
         alignItems: 'center',
+        width: '100%',
     },
     image: {
         width: 120,
@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#ccc',
         paddingVertical: 12,
+        paddingHorizontal: 8,
         borderRadius: 12,
         marginBottom: 16,
         alignItems: 'center',

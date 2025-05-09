@@ -57,7 +57,6 @@ export default function TabLayout() {
     }, [fetchUserAndPet, user])
 
     const includeHeader = ['/store', '/quiz', '/minigames', '/profile']
-    const includeBackBtn = ['/minigames', '/quiz']
 
     const headerTitles: Record<string, string> = {
         '/store': 'PetShop',
@@ -73,7 +72,6 @@ export default function TabLayout() {
             {includeHeader.includes(pathname) && (
                 <Header
                     title={headerTitle}
-                    showBackButton={includeBackBtn.includes(pathname)}
                     coinsValue={pathname === '/store' ? user?.money : undefined}
                     backgroundColor="#CFE2A8"
                 />
@@ -182,7 +180,7 @@ export default function TabLayout() {
 function getTabBarStyle(pathname?: string) {
     const baseStyle = StyleSheet.create({
         default: {
-            backgroundColor: 'white',
+            backgroundColor: '#fefefe',
             height: 80,
             paddingBottom: 16,
             paddingTop: 8,
@@ -190,7 +188,7 @@ function getTabBarStyle(pathname?: string) {
         hidden: {
             height: 0,
             overflow: 'hidden',
-            backgroundColor: 'white',
+            backgroundColor: '#fefefe',
             paddingBottom: 16,
             paddingTop: 8,
         },

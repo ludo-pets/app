@@ -20,7 +20,7 @@ interface LessonState {
 
 export const useLessonStore = create<LessonState>((set) => ({
     lesson: null,
-    loading: false,
+    loading: true,
     error: null,
     currentQuestion: null,
 
@@ -43,17 +43,18 @@ export const useLessonStore = create<LessonState>((set) => ({
         }
     },
 
-    setLesson: (lesson: Lesson) => set({ lesson }),
+    setLesson: (lesson: Lesson) => set({ lesson, loading: false }),
 
     finishLesson: async (lesson: Lesson) => {
         set({ loading: true, error: null })
         try {
-            await markLessonAsConcluded(lesson.id)
             set({
                 lesson: {
                     ...lesson,
-                    concluded: true,
                 },
+                loading: false,
+                currentQuestion: null,
+                error: null,
             })
         } catch (error: any) {            
             set({ error: error.message, loading: false })
@@ -78,7 +79,7 @@ export const useLessonStore = create<LessonState>((set) => ({
             nextQuestionId = questionList[currentQuestionIdIndex + 1]
         }
         const nextQuestion = await fetchQuestion(nextQuestionId)
-        set({ currentQuestion: nextQuestion })
+        set({ currentQuestion: nextQuestion, loading: false })
         return true
     },
 }))

@@ -37,22 +37,9 @@ export default function RootLayout() {
     return <RootLayoutNav />
 }
 
-// function RootLayoutNav() {
-//     return (
-//         <SafeAreaView style={{ flex: 1, backgroundColor: 'transparent' }}>
-//             <Stack>
-//                 <Stack.Screen
-//                     name="index"
-//                     options={{ headerShown: false }}
-//                 />
-//                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-//             </Stack>
-//         </SafeAreaView>
-//     )
-// }
 function RootLayoutNav() {
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: 'transparent' }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#fefefe' }}>
             <Stack>
                 <Stack.Screen
                     name="index"
