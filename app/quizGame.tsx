@@ -91,12 +91,12 @@ export default function QuizGame() {
                 {currentQuestion && (
                     <Quiz
                         key={currentQuestion.id}
-                        question={currentQuestion.title}
+                        question={currentQuestion.description}
                         options={currentQuestion.answers}
                         correctAnswer={
                             currentQuestion.answers[currentQuestion.rightAnswer]
                         }
-                        imageSource={null}
+                        imageSource={currentQuestion.image || require('@/assets/images/quiz/quiz-cat.png')} 
                         onCorrectAnswer={() => handleCorrectAnswer()}
                         onWrongAnswer={() => handleChangeQuestion()}
                     />
@@ -112,17 +112,6 @@ export default function QuizGame() {
                         coins={lesson.givenMoney}
                     />
                 )}
-
-                {/* <Modal visible={quizFinished} transparent animationType="fade">
-                    <QuizSummaryModal
-                        correctAnswers={correctCount}
-                        total={lesson.questions.length}
-                        onClose={() => {
-                            setQuizFinished(false)
-                            router.push('/home')
-                        }}
-                    />
-                </Modal> */}
             </View>
         </>
     )
