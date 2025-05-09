@@ -5,4 +5,5 @@ export default interface Lesson {
     questions: string[]
     givenExperience: number
     givenMoney: number
+    icon: string
 }
