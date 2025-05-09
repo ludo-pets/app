@@ -84,7 +84,7 @@ export default function StoreScreen() {
             const hasItem = petPurchasedItems.some((p) => p.id === item.id)
             const isActive = petActiveItems.some((p) => p.id === item.id)
             const quantity =
-                petActiveItems.find((p) => p.id === item.id)?.quantity || 0
+                petPurchasedItems.find((p) => p.id === item.id)?.quantity || 0
 
             return (
                 <PetshopItem

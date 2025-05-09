@@ -1,4 +1,7 @@
-import { useEffect } from 'react'
+import Pet from '@/dtos/Pet'
+import User from '@/dtos/User'
+import { useUserPetStore } from '@/stores/userPetStore'
+import { useEffect, useState } from 'react'
 import {
     Button,
     Dimensions,
@@ -46,15 +49,49 @@ const categoryIcon = {
     wallpaper: customisationIcon,
 }
 export default function PetshopItem({ item }: { item: PetshopItemProps }) {
+    const user = useUserPetStore((state) => state.user);
+    const pet = useUserPetStore((state) => state.pet);
+    const userUpdate = useUserPetStore((state) => state.updateUser);
+    const petUpdate = useUserPetStore((state) => state.updatePet)
+    const [quantity, setQuantity] = useState<number>(item.quantity);
+    const [canBuy, setCanBuy] = useState(false);
     useEffect(()=> {
-        console.log("item", item);
-    },[])
+        if(user)
+            setCanBuy(user?.money >= item.price)
+            
+    },[user, pet])
     const onActive = () => {}
     const onDesactive = () => {console.log(item.quantity);
     }
-    const onBuy = () => {
-        console.log('toBuy')
+    const onBuy = async () => {
+
+        
+        if(user && pet){
+            const newUser = {...user}
+            const newPet  = {...pet}
+            let curItem = null;
+            newPet.purchasedItems
+                .forEach(i => {
+                    
+                    if(i.id == item.id) {
+                        
+                        curItem = i;
+                        i.quantity = i.quantity! + 1;
+                    }
+                });
+            if(!curItem) {
+                newPet.purchasedItems.push({...item, quantity: 1});
+            }
+             
+         
+            await userUpdate(newUser.id, { money: newUser.money - item.price });
+            await petUpdate(newPet.id, {purchasedItems: newPet.purchasedItems});
+            setQuantity((prev) => prev + 1);
+        
+                
+        }
     }
+
     const teste = Object.keys(categoryIcon).find(
         (category) => category == item.type
     )
@@ -75,7 +112,7 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
                     }
                 />
                 <Text style={styles.quantity}>
-                    {item.quantity}
+                    {quantity.valueOf()}
                
                 </Text>
             </view>
@@ -83,7 +120,6 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
                 <view style={styles.row1}>
                     <view>{item.name}</view>
                     <view style={styles.price}>
-                        {' '}
                         <Image
                             style={{ width: width / 20, height: width / 20 }}
                             source={petCoin}
@@ -112,7 +148,7 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
                                 ...styles.desactive,
                                 ...styles.button,
                                 display:
-                                    item.has_item && item.is_active
+                                    item.has_item && item.is_active 
                                         ? 'flex'
                                         : 'none',
                             }}
@@ -123,12 +159,12 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
                    
                         <Pressable
                             onPress={() => onBuy()}
-                            disabled={item.has_item || !item.has_required_level}
+                            disabled={!canBuy || !item.has_required_level}
                             style={{
                                 ...styles.button,
-                                display: !item.has_item ? 'flex' : 'none',
+                                
                                 backgroundColor:
-                                    item.has_required_level && !item.has_item
+                                    item.has_required_level && canBuy
                                         ? '#6DA92C'
                                         : '#5B5B5B',
                             }}
@@ -205,7 +241,7 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         flexDirection: 'row',
         width: '100%',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
     },
     collum1: {
         display: 'flex',
