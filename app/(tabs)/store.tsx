@@ -5,12 +5,10 @@ import {
     Text,
     Pressable,
     ActivityIndicator,
+    FlatList,
 } from 'react-native'
-import { FlatList } from 'react-native-gesture-handler'
-import { getAllItemService } from '@/services/itemService'
-import { getUserWithPetByIdService } from '@/services/userService'
 import Item from '@/dtos/Item'
-import Pet from '@/dtos/Pet'
+import { Pet } from '@/dtos/Pet'
 import PetshopItem from '@/components/PetshopItem'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { useItemStore } from '@/stores/itemStore'
@@ -116,7 +114,7 @@ export default function StoreScreen() {
                         showsVerticalScrollIndicator={false}
                         showsHorizontalScrollIndicator={false}
                         ItemSeparatorComponent={() => (
-                            <View style={{ height: 10 }} />
+                            <View style={{ height: 0 }} />
                         )}
                     />
                 </View>
@@ -136,6 +134,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
+        backgroundColor: '#fefefe',
     },
     title: {
         fontWeight: 'bold',
