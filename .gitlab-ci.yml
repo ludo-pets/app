@@ -19,6 +19,7 @@ cache:
 export_pwa:
   stage: build
   script:
+    - npm install
     - npm ci
     - npx expo export --platform web --output-dir dist
   artifacts:
