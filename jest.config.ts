@@ -11,6 +11,11 @@ const config: Config = {
   testMatch: [
     "**/tests/**/*.+(ts|tsx|js)",
   ],
+  collectCoverage: true,
+  collectCoverageFrom: [
+    "services/**/*.ts",
+  ],
+  coverageDirectory: './coverage',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
 };
 

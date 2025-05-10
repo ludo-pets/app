@@ -37,13 +37,6 @@ export const getUserWithPetByEmailService = async (
     }
 }
 
-export const updateUserService = async (
-    userId: string,
-    userData: Partial<User>
-): Promise<boolean | null> => {
-    return await updateUserInFirestore(userId, userData)
-}
-
 export const getUserDataByEmail = async (
     email: string
 ): Promise<DocumentData | null> => {
@@ -55,12 +48,6 @@ export const getUserDataByEmail = async (
     const userQuery = query(collection(db, 'User'), where('email', '==', email))
     const userSnap = await getDocs(userQuery)
 
-    if (userSnap.empty) {
-        console.error('User não encontrado')
-        return null
-    }
-
-    return userSnap.docs[0].data()
 }
 
 const isValidEmail = (email: string): boolean => {
@@ -80,16 +67,18 @@ export const getPetDataById = async (
     return petSnap.data()
 }
 
-export const updateUserInFirestore = async (
+export const updateUserService = async (
     userId: string,
     userData: Partial<User>
-): Promise<boolean | null> => {
+): Promise<boolean> => {
+    if (!userId || Object.keys(userData).length === 0) return false;
+
     try {
         const userRef = doc(db, 'User', userId)
         await updateDoc(userRef, { ...userData })
         return true
     } catch (error) {
         console.error('Erro ao atualizar User:', error)
-        return null
+        return false
     }
 }
