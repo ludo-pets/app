@@ -57,7 +57,6 @@ export default function TabLayout() {
     }, [fetchUserAndPet, user])
 
     const includeHeader = ['/store', '/quiz', '/minigames', '/profile']
-    const includeBackBtn = ['/minigames', '/quiz']
 
     const headerTitles: Record<string, string> = {
         '/store': 'PetShop',
@@ -73,7 +72,6 @@ export default function TabLayout() {
             {includeHeader.includes(pathname) && (
                 <Header
                     title={headerTitle}
-                    showBackButton={includeBackBtn.includes(pathname)}
                     coinsValue={pathname === '/store' ? user?.money : undefined}
                     backgroundColor="#CFE2A8"
                 />
@@ -82,12 +80,7 @@ export default function TabLayout() {
                 screenOptions={{
                     headerShown: false,
                     tabBarShowLabel: false,
-                    tabBarStyle: {
-                        backgroundColor: 'white',
-                        height: 80,
-                        paddingBottom: 16,
-                        paddingTop: 8,
-                    },
+                    tabBarStyle: getTabBarStyle(),
                     tabBarLabelPosition: 'beside-icon',
                 }}
             >
@@ -154,6 +147,7 @@ export default function TabLayout() {
                     name="quiz"
                     options={{
                         title: 'Quiz',
+                        tabBarStyle: getTabBarStyle(pathname),
                         tabBarIcon: ({ color, focused }) => (
                             <CustomTabIcon
                                 name="quiz"
@@ -181,6 +175,26 @@ export default function TabLayout() {
             </Tabs>
         </>
     )
+}
+
+function getTabBarStyle(pathname?: string) {
+    const baseStyle = StyleSheet.create({
+        default: {
+            backgroundColor: '#fefefe',
+            height: 80,
+            paddingBottom: 16,
+            paddingTop: 8,
+        },
+        hidden: {
+            height: 0,
+            overflow: 'hidden',
+            backgroundColor: '#fefefe',
+            paddingBottom: 16,
+            paddingTop: 8,
+        },
+    })
+
+    return pathname === '/quizGame' ? baseStyle.hidden : baseStyle.default
 }
 
 const styles = StyleSheet.create({

@@ -13,7 +13,7 @@ interface ItemStoreState {
 
 export const useItemStore = create<ItemStoreState>((set) => ({
     items: [],
-    loading: false,
+    loading: true,
     error: null,
 
     fetchItems: async () => {

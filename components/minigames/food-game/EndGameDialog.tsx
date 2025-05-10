@@ -9,6 +9,7 @@ interface EndGameDialogProps {
     score: number
     coins: number
     callback: () => void
+    message?: string
 }
 
 const messagesToShow = [
@@ -27,6 +28,7 @@ export default function EndGameDialog({
     score,
     coins,
     callback,
+    message,
 }: EndGameDialogProps) {
     const randomMessage = useMemo(() => {
         const index = Math.floor(Math.random() * messagesToShow.length)
@@ -35,7 +37,7 @@ export default function EndGameDialog({
 
     return (
         <>
-            <Dialog.Container>
+            <Dialog.Container containerStyle={{paddingVertical: 12}}>
                 <View style={styles.dialogCustomHTop}>
                     <Dialog.Icon
                         content={
@@ -53,22 +55,33 @@ export default function EndGameDialog({
                 <View style={styles.dialogCustomPoints}>
                     <Dialog.Text
                         style={styles.dialogCustomPointsText}
-                        content={`Você fez ${score} pontos.`}
+                        content={`Você fez ${score} pontos`}
                     />
                     <Dialog.Text
                         style={styles.dialogCustomPointsText}
-                        content={`Você ganhou ${coins} moedas.`}
+                        content={`e ganhou ${coins} moedas.`}
                     />
                 </View>
-
-                <Dialog.Text
-                    content={randomMessage}
-                    style={{
-                        fontSize: 16,
-                        textAlign: 'center',
-                        marginBottom: 4,
-                    }}
-                />
+                
+                {message ? (
+                    <Dialog.Text
+                        content={message}
+                        style={{
+                            fontSize: 16,
+                            textAlign: 'center',
+                            marginBottom: 4,
+                        }}
+                    />
+                ) : (
+                    <Dialog.Text
+                        content={randomMessage}
+                        style={{
+                            fontSize: 16,
+                            textAlign: 'center',
+                            marginBottom: 4,
+                        }}
+                    />
+                )}
 
                 <Dialog.ButtonArea>
                     <Dialog.Button

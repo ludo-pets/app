@@ -14,8 +14,6 @@ const Homescreen = () => {
     const updatePet = useUserPetStore((state) => state.updatePet)
     const pet = useUserPetStore((state) => state.pet)
 
-    console.log(pet?.wellBeing)
-
     const updateTime = (item: keyof Pet['wellBeing']) => {
         if (pet) {
             updatePet(pet?.id, {
