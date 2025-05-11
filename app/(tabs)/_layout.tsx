@@ -1,17 +1,25 @@
-import React, { useEffect } from 'react'
-import {
-    House,
-    Storefront,
-    Joystick,
-    Exam,
-    UserCircle,
-} from 'phosphor-react-native'
-import { Route, Tabs } from 'expo-router'
-import { StyleSheet, View } from 'react-native'
 import Header from '@/components/Header'
-import { usePathname } from 'expo-router'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { NavigationState } from '@react-navigation/native'
+import { Route, Tabs, usePathname } from 'expo-router'
+import {
+    Exam,
+    House,
+    Joystick,
+    Storefront,
+    UserCircle,
+} from 'phosphor-react-native'
+import React, { useEffect } from 'react'
+import {
+    Platform,
+    StatusBar,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from 'react-native'
+import Tooltip from 'react-native-walkthrough-tooltip'
+import { useWalkthrough } from '@/contexts/WalkthroughContext'
 
 const iconsSize = 32
 
@@ -23,19 +31,79 @@ const iconMap = {
     profile: UserCircle,
 } as const
 
-interface Props {
-    name: string
+interface CustomTabIconWithTooltipProps {
+    name: keyof typeof iconMap
     color: string
     focused: boolean
     iconsSize: number
+    targetElementId: string
 }
 
-function CustomTabIcon({ name, color, focused, iconsSize }: Props) {
-    const IconComponent = iconMap[name as keyof typeof iconMap] || House
-    return (
-        <View style={focused ? styles.focusedIconContainer : {}}>
+function CustomTabIconWithTooltip({
+    name,
+    color,
+    focused,
+    iconsSize,
+    targetElementId,
+}: CustomTabIconWithTooltipProps) {
+    const IconComponent = iconMap[name] || House
+
+    const walkthrough = useWalkthrough()
+    if (!walkthrough) return null
+
+    const {
+        isActive: isWalkthroughGloballyActive,
+        currentStep,
+        next,
+        skip,
+    } = walkthrough
+
+    const anchor = (
+        <View
+            style={focused ? styles.focusedIconContainer : styles.iconContainer}
+        >
             <IconComponent color={color} size={iconsSize} weight="regular" />
         </View>
+    )
+
+    if (!isWalkthroughGloballyActive || !currentStep) {
+        return anchor
+    }
+    const isCurrentWalkthroughTarget = currentStep.id === targetElementId
+
+    if (!isCurrentWalkthroughTarget) {
+        return anchor
+    }
+
+    const tooltipContent = (
+        <View style={styles.tooltipContentContainer}>
+            <Text style={styles.tooltipText}>{currentStep.content}</Text>
+            <View style={styles.tooltipButtonsContainer}>
+                <TouchableOpacity onPress={skip} style={styles.tooltipButton}>
+                    <Text style={styles.tooltipButtonSkipText}>Pular Tudo</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={next} style={styles.tooltipButton}>
+                    <Text style={styles.tooltipButtonNextText}>
+                        {currentStep.isLastStep ? 'Concluir' : 'Próximo'}
+                    </Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+    )
+
+    return (
+        <Tooltip
+            isVisible
+            content={tooltipContent}
+            placement={currentStep.placement || 'top'}
+            onClose={next}
+            useInteractionManager
+            topAdjustment={
+                Platform.OS === 'android' ? -(StatusBar.currentHeight || 0) : 0
+            }
+        >
+            {anchor}
+        </Tooltip>
     )
 }
 
@@ -44,7 +112,8 @@ export const unstable_settings = {
 }
 
 export default function TabLayout() {
-    const pathname = usePathname()
+    const currentRoutePath = usePathname()
+    const simplePathname = currentRoutePath.substring(1)
 
     const fetchUserAndPet = useUserPetStore((state) => state.fetchUserAndPet)
     const user = useUserPetStore((state) => state.user)
@@ -56,23 +125,25 @@ export default function TabLayout() {
         }
     }, [fetchUserAndPet, user])
 
-    const includeHeader = ['/store', '/quiz', '/minigames', '/profile']
+    const includeHeader = ['store', 'quiz', 'minigames', 'profile']
 
     const headerTitles: Record<string, string> = {
-        '/store': 'PetShop',
-        '/quiz': 'Quiz',
-        '/minigames': 'Minigames',
-        '/profile': 'Profile',
+        store: 'PetShop',
+        quiz: 'Quiz',
+        minigames: 'Minigames',
+        profile: 'Perfil',
     }
 
-    const headerTitle = headerTitles[pathname] || ''
+    const headerTitle = headerTitles[simplePathname] || ''
 
     return (
         <>
-            {includeHeader.includes(pathname) && (
+            {includeHeader.includes(simplePathname) && (
                 <Header
                     title={headerTitle}
-                    coinsValue={pathname === '/store' ? user?.money : undefined}
+                    coinsValue={
+                        simplePathname === 'store' ? user?.money : undefined
+                    }
                     backgroundColor="#CFE2A8"
                 />
             )}
@@ -80,7 +151,7 @@ export default function TabLayout() {
                 screenOptions={{
                     headerShown: false,
                     tabBarShowLabel: false,
-                    tabBarStyle: getTabBarStyle(),
+                    tabBarStyle: getTabBarStyle(currentRoutePath),
                     tabBarLabelPosition: 'beside-icon',
                 }}
             >
@@ -89,11 +160,12 @@ export default function TabLayout() {
                     options={{
                         title: 'Home',
                         tabBarIcon: ({ color, focused }) => (
-                            <CustomTabIcon
+                            <CustomTabIconWithTooltip
                                 name="home"
                                 color="black"
                                 focused={focused}
                                 iconsSize={iconsSize}
+                                targetElementId="tab_home"
                             />
                         ),
                     }}
@@ -103,11 +175,12 @@ export default function TabLayout() {
                     options={{
                         title: 'Store',
                         tabBarIcon: ({ color, focused }) => (
-                            <CustomTabIcon
+                            <CustomTabIconWithTooltip
                                 name="store"
                                 color="black"
                                 focused={focused}
                                 iconsSize={iconsSize}
+                                targetElementId="tab_store"
                             />
                         ),
                     }}
@@ -117,11 +190,12 @@ export default function TabLayout() {
                     options={{
                         title: 'Minigames',
                         tabBarIcon: ({ color, focused }) => (
-                            <CustomTabIcon
+                            <CustomTabIconWithTooltip
                                 name="minigame"
                                 color="black"
                                 focused={focused}
                                 iconsSize={iconsSize}
+                                targetElementId="tab_minigames"
                             />
                         ),
                     }}
@@ -135,7 +209,7 @@ export default function TabLayout() {
                                 nestedState?.routes?.[nestedState.index ?? 0]
                                     ?.name ?? 'index'
                             if (currentNested !== 'index') {
-                                e.preventDefault() // stop the normal tab change
+                                e.preventDefault()
                                 navigation.navigate('minigames', {
                                     screen: 'index',
                                 })
@@ -147,13 +221,13 @@ export default function TabLayout() {
                     name="quiz"
                     options={{
                         title: 'Quiz',
-                        tabBarStyle: getTabBarStyle(pathname),
                         tabBarIcon: ({ color, focused }) => (
-                            <CustomTabIcon
+                            <CustomTabIconWithTooltip
                                 name="quiz"
                                 color="black"
                                 focused={focused}
                                 iconsSize={iconsSize}
+                                targetElementId="tab_quiz"
                             />
                         ),
                     }}
@@ -163,11 +237,12 @@ export default function TabLayout() {
                     options={{
                         title: 'Profile',
                         tabBarIcon: ({ color, focused }) => (
-                            <CustomTabIcon
+                            <CustomTabIconWithTooltip
                                 name="profile"
                                 color="black"
                                 focused={focused}
                                 iconsSize={iconsSize}
+                                targetElementId="tab_profile"
                             />
                         ),
                     }}
@@ -177,33 +252,76 @@ export default function TabLayout() {
     )
 }
 
-function getTabBarStyle(pathname?: string) {
+function getTabBarStyle(currentRoutePath?: string) {
     const baseStyle = StyleSheet.create({
         default: {
             backgroundColor: '#fefefe',
             height: 80,
             paddingBottom: 16,
             paddingTop: 8,
+            borderTopWidth: 1,
+            borderTopColor: '#e0e0e0',
         },
         hidden: {
-            height: 0,
-            overflow: 'hidden',
-            backgroundColor: '#fefefe',
-            paddingBottom: 16,
-            paddingTop: 8,
+            display: 'none',
         },
     })
 
-    return pathname === '/quizGame' ? baseStyle.hidden : baseStyle.default
+    if (
+        currentRoutePath?.startsWith('/minigames/') &&
+        currentRoutePath !== '/minigames'
+    ) {
+        return baseStyle.hidden
+    }
+    return baseStyle.default
 }
 
 const styles = StyleSheet.create({
-    focusedIconContainer: {
-        backgroundColor: '#E8DEF8',
-        borderRadius: 50,
+    iconContainer: {
         width: 60,
         height: 32,
         alignItems: 'center',
         justifyContent: 'center',
+        borderRadius: 16,
+    },
+    focusedIconContainer: {
+        backgroundColor: '#E8DEF8',
+        borderRadius: 16,
+        width: 60,
+        height: 32,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    tooltipContentContainer: {
+        paddingVertical: 12,
+        paddingHorizontal: 16,
+        backgroundColor: 'white',
+        borderRadius: 8,
+        maxWidth: 300,
+        alignSelf: 'center',
+    },
+    tooltipText: {
+        color: '#333333',
+        marginBottom: 16,
+        textAlign: 'center',
+        fontSize: 15,
+        lineHeight: 20,
+    },
+    tooltipButtonsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    tooltipButton: {
+        paddingVertical: 6,
+        paddingHorizontal: 12,
+    },
+    tooltipButtonSkipText: {
+        color: '#555555',
+        fontSize: 14,
+    },
+    tooltipButtonNextText: {
+        color: '#007AFF',
+        fontWeight: '600',
+        fontSize: 14,
     },
 })

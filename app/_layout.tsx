@@ -5,6 +5,11 @@ import { useFonts } from 'expo-font'
 import { useEffect } from 'react'
 import { Stack } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import {
+    useWalkthrough,
+    WalkthroughProvider,
+} from '@/contexts/WalkthroughContext'
 
 export { ErrorBoundary } from 'expo-router'
 
@@ -34,21 +39,27 @@ export default function RootLayout() {
         return null
     }
 
-    return <RootLayoutNav />
+    return (
+        <GestureHandlerRootView style={{ flex: 1 }}>
+            <WalkthroughProvider>
+                <RootLayoutNav />
+            </WalkthroughProvider>
+        </GestureHandlerRootView>
+    )
 }
 
 function RootLayoutNav() {
+    const { hasCheckedStorage } = useWalkthrough()
+    if (!hasCheckedStorage) return null
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#fefefe' }}>
             <Stack>
-                <Stack.Screen
-                    name="index"
-                    options={{ headerShown: false }}
-                />
+                <Stack.Screen name="index" options={{ headerShown: false }} />
                 <Stack.Screen
                     name="quizGame"
                     options={{
-                        headerShown: false, // Remove the default header
+                        headerShown: false,
                     }}
                 />
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

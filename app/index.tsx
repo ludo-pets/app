@@ -1,4 +1,13 @@
-import { Image, View, StyleSheet, Pressable, Text } from 'react-native'
+import {
+    Image,
+    View,
+    StyleSheet,
+    Pressable,
+    Text,
+    Platform,
+    StatusBar,
+    TouchableOpacity,
+} from 'react-native'
 import { FormRegisterPet } from '../components/FormRegisterPet'
 import { useRouter } from 'expo-router'
 

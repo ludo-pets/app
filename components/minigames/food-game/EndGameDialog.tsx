@@ -37,7 +37,7 @@ export default function EndGameDialog({
 
     return (
         <>
-            <Dialog.Container containerStyle={{paddingVertical: 12}}>
+            <Dialog.Container containerStyle={{ paddingVertical: 12 }}>
                 <View style={styles.dialogCustomHTop}>
                     <Dialog.Icon
                         content={
@@ -62,7 +62,7 @@ export default function EndGameDialog({
                         content={`Você ganhou ${coins} moedas.`}
                     />
                 </View>
-                
+
                 {message ? (
                     <Dialog.Text
                         content={message}

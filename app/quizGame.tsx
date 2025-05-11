@@ -96,7 +96,10 @@ export default function QuizGame() {
                         correctAnswer={
                             currentQuestion.answers[currentQuestion.rightAnswer]
                         }
-                        imageSource={currentQuestion.image || require('@/assets/images/quiz/quiz-cat.png')} 
+                        imageSource={
+                            currentQuestion.image ||
+                            require('@/assets/images/quiz/quiz-cat.png')
+                        }
                         onCorrectAnswer={() => handleCorrectAnswer()}
                         onWrongAnswer={() => handleChangeQuestion()}
                     />
@@ -107,7 +110,7 @@ export default function QuizGame() {
                             setQuizFinished(false)
                             router.push('/home')
                         }}
-                        message='Você concluiu a lição!'
+                        message="Você concluiu a lição!"
                         score={correctCount}
                         coins={lesson.givenMoney}
                     />

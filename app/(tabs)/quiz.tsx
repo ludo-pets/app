@@ -40,7 +40,7 @@ export default function QuizScreen() {
                 (item: Lesson) => item.id === user.lastLessonConcluded
             )
             if (lastIndex !== -1) {
-                setLastLessonConcludedId(lastIndex+1)
+                setLastLessonConcludedId(lastIndex + 1)
             }
         }
         if (!lessons) {
@@ -63,7 +63,7 @@ export default function QuizScreen() {
             console.error('Você não pode acessar essa lição ainda')
             return
         }
-        
+
         const currentLesson = lesson as Lesson
         setLesson(currentLesson)
         changeToNextQuestion('', currentLesson.questions)

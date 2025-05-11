@@ -6,6 +6,7 @@ import {
     Pressable,
     StyleSheet,
     Text,
+    View,
 } from 'react-native'
 
 const petCoin = require('@/assets/images/profile/pet_coin.png')
@@ -45,8 +46,8 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
     const onBuy = () => {}
 
     return (
-        <view style={styles.item}>
-            <view style={styles.imageBox}>
+        <View style={styles.item}>
+            <View style={styles.imageBox}>
                 <Image
                     style={styles.image}
                     resizeMode="contain"
@@ -55,20 +56,20 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
                 {item.category === 'foods' && (
                     <Text style={styles.quantity}>{item.quantity}</Text>
                 )}
-            </view>
-            <view style={styles.info}>
-                <view style={styles.row1}>
-                    <view>{item.name}</view>
-                    <view style={styles.price}>
+            </View>
+            <View style={styles.info}>
+                <View style={styles.row1}>
+                    <View>{item.name}</View>
+                    <View style={styles.price}>
                         {' '}
                         <Image
                             style={{ width: width / 20, height: width / 20 }}
                             source={petCoin}
                         />
                         {item.price}
-                    </view>
-                </view>
-                <view style={styles.row2}>
+                    </View>
+                </View>
+                <View style={styles.row2}>
                     {item.has_item && (
                         <Pressable
                             style={[
@@ -96,9 +97,9 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
                     >
                         <Text style={styles.buttonText}>COMPRAR</Text>
                     </Pressable>
-                </view>
-            </view>
-        </view>
+                </View>
+            </View>
+        </View>
     )
 }
 
