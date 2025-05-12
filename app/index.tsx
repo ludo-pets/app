@@ -15,6 +15,7 @@ import * as Device from 'expo-device'
 export default function RegisterPetPage() {
     const router = useRouter()
 
+    // Configuração do canal de notificação para Android, apagar depois
     useEffect(() => {
         if (Platform.OS === 'android') {
             Notifications.setNotificationChannelAsync('default', {
@@ -26,6 +27,7 @@ export default function RegisterPetPage() {
         }
     }, [])
 
+    // Função para enviar notificações, apagar depois
     async function schedulePushNotification() {
         if (Platform.OS === 'android' && !Device.isDevice) {
           alert('Notificação simulada no emulador - veja a aba "Logcat"');
@@ -57,6 +59,7 @@ export default function RegisterPetPage() {
             <View style={styles.mainContent}>
                 <Image source={require('@/assets/images/logo.png')} />
                 <FormRegisterPet />
+                {/* usando esse para testar as notificações sem precisar esperar/ter pet/etc (apagar depois) */}
                 <Pressable
                     onPress={async () => {
                         await schedulePushNotification()
