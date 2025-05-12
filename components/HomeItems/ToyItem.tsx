@@ -8,16 +8,33 @@ import {
 } from 'react-native'
 import { InteractionTouch } from './InteractionTouch'
 import ItemProps from '@/dtos/ItensProps'
+import { useUserPetStore } from '@/stores/userPetStore'
+import { calcPetMood } from '@/utils/moodCalculator'
 
 const { height, width } = Dimensions.get('window')
 
 const ToyItem = ({ update }: ItemProps) => {
+    const pet = useUserPetStore((state) => state.pet)
+    
+    const needsToPlay = () => {
+        if (pet) {
+            const mood = calcPetMood(pet.wellBeing)
+            return mood < 12.5
+        }
+        return false
+    }
+
     const onPress = () => {
         update('fun')
     }
 
     return (
         <View style={styles.cbox}>
+            {needsToPlay() && (
+                <View style={styles.alertIcon}>
+                    <Image src='assets\images\homescreen\icone_feedback.png'/>
+                </View>
+            )}
             <TouchableWithoutFeedback onPress={onPress}>
                 <Image
                     style={{
@@ -45,5 +62,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         display: 'flex',
         //backgroundColor: 'blue',
+    },
+    alertIcon: {
+        position: 'absolute',
+        top: -10,
+        right: -10,
+        zIndex: 1,
+        backgroundColor: 'white',
+        borderRadius: 12,
+        padding: 2,
     },
 })

@@ -17,7 +17,7 @@ export const calcPetMood = (wellBeing: Wellbeing): number => {
     return mood;
 }
 
-const calcNecessityValue = (last: Date, percentage: number, decrement: number) => {
+export const calcNecessityValue = (last: Date, percentage: number, decrement: number) => {
     let currentDate = new Date();
     currentDate = new Date(currentDate.toISOString());
 
