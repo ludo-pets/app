@@ -1,6 +1,6 @@
 import { doc, updateDoc } from 'firebase/firestore'
 import { db } from '../firebaseConfig' // mudar quando tiver a configuração do firebase
-import Pet from '@/dtos/Pet'
+import { Pet } from '@/dtos/Pet'
 
 export const updatePetService = async (
     petId: string,

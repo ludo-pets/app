@@ -23,7 +23,13 @@ export default function Header({
         <View style={[styles.container, { backgroundColor }]}>
             {showBackButton && (
                 <TouchableOpacity
-                    onPress={() => router.back()}
+                    onPress={() => {
+                        router.back()
+
+                        if (onBackPress) {
+                            onBackPress()
+                        }
+                    }}
                     style={styles.backButton}
                 >
                     <ArrowCircleLeft size={32} />

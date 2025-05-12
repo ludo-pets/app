@@ -92,11 +92,20 @@ export default function RootLayout() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: 'transparent' }}>
-      <Stack>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      </Stack>
-    </SafeAreaView>
-  );
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#fefefe' }}>
+            <Stack>
+                <Stack.Screen
+                    name="index"
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="quizGame"
+                    options={{
+                        headerShown: false, // Remove the default header
+                    }}
+                />
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            </Stack>
+        </SafeAreaView>
+    )
 }
