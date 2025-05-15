@@ -9,6 +9,7 @@ import {
     Pressable,
     StyleSheet,
     Text,
+    View,
 } from 'react-native'
 
 // export type itemsCategory =
@@ -53,14 +54,38 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
     const pet = useUserPetStore((state) => state.pet);
     const userUpdate = useUserPetStore((state) => state.updateUser);
     const petUpdate = useUserPetStore((state) => state.updatePet)
+    const fetchUserAndPet = useUserPetStore(state => state.fetchUserAndPet)
+    const [hasItem, setHasItem] = useState(false)
     const [quantity, setQuantity] = useState<number>(item.quantity);
     const [canBuy, setCanBuy] = useState(false);
+    const [isActive, setIsActive] = useState(item.is_active)
+
     useEffect(()=> {
+        console.log("atualizou user e pet")
+
+        let activeItems: {[Key: string]: string};
+        if(pet) {
+            activeItems = {...pet.activeItems};
+            setIsActive(activeItems[item.type] == item.id)
+            const thisItem = pet.purchasedItems.find(i => i.id == item.id)
+            
+            setHasItem(thisItem != null)
+            setQuantity(thisItem?.quantity || 0);
+        }
         if(user)
+            
             setCanBuy(user?.money >= item.price)
             
     },[user, pet])
-    const onActive = () => {}
+
+    const onActive = async () => {
+       if(pet && user){
+        const activeItems: {[Key: string]: string} = {...pet.activeItems};
+        activeItems[item.type] = item.id;
+        await petUpdate(pet.id, { activeItems: activeItems as any })
+        await fetchUserAndPet(user.email);
+       }
+    }
     const onDesactive = () => {console.log(item.quantity);
     }
     const onBuy = async () => {
@@ -86,7 +111,8 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
          
             await userUpdate(newUser.id, { money: newUser.money - item.price });
             await petUpdate(newPet.id, {purchasedItems: newPet.purchasedItems});
-            setQuantity((prev) => prev + 1);
+            await fetchUserAndPet(user.email);
+            
         
                 
         }
@@ -96,8 +122,8 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
         (category) => category == item.type
     )
     return (
-        <view style={styles.item}>
-            <view style={styles.imageBox}>
+        <View style={styles.item}>
+            <View style={styles.imageBox}>
                 <Image
                     style={styles.image}
                     resizeMode="contain"
@@ -115,26 +141,26 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
                     {quantity.valueOf()}
                
                 </Text>
-            </view>
-            <view style={styles.info}>
-                <view style={styles.row1}>
-                    <view>{item.name}</view>
-                    <view style={styles.price}>
+            </View>
+            <View style={styles.info}>
+                <View style={styles.row1}>
+                    <View style={{width: "80%"}}>{item.name}</View>
+                    <View style={styles.price}>
                         <Image
                             style={{ width: width / 20, height: width / 20 }}
                             source={petCoin}
                         />
                         {item.price}
-                    </view>
-                </view>
-                <view style={styles.row2}>
+                    </View>
+                </View>
+                <View style={styles.row2}>
                     
                         <Pressable
                             style={{
                                 ...styles.button,
                                 ...styles.active,
                                 display:
-                                    item.has_item && !item.is_active
+                                    hasItem && !isActive
                                         ? 'flex'
                                         : 'none',
                             }}
@@ -148,7 +174,7 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
                                 ...styles.desactive,
                                 ...styles.button,
                                 display:
-                                    item.has_item && item.is_active 
+                                    hasItem && isActive
                                         ? 'flex'
                                         : 'none',
                             }}
@@ -172,9 +198,9 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
                             <Text style={styles.buttonText}>COMPRAR</Text>
                         </Pressable>
                     
-                </view>
-            </view>
-        </view>
+                </View>
+            </View>
+        </View>
     )
 }
 
@@ -213,6 +239,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         margin: 0,
         height: '100%',
+        width: "40%",
         aspectRatio: 1,
         backgroundColor: '#CFE2A8',
         justifyContent: 'center',

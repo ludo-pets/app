@@ -63,16 +63,6 @@ export default function StoreScreen() {
 
             setUserLevel(responsePetData?.user.level || 0)
 
-            if (__DEV__) {
-                console.log('userLevel:', responsePetData?.user.level)
-                console.log('activeItems:', responsePetData?.pet.activeItems)
-                console.log(
-                    'purchasedItems:',
-                    responsePetData?.pet.purchasedItems
-                )
-                console.log('itemsShop:', responseItemsShop?.items)
-            }
-
             setIsLoading(false)
         }
 
@@ -178,11 +168,13 @@ const styles = StyleSheet.create({
     },
     itemsShopBox: {
         width: '100%',
+        
         paddingVertical: 20,
         paddingHorizontal: 10,
     },
     itemShop: {
         height: 92,
+        
         backgroundColor: '#E5E5E5',
         width: '100%',
         justifyContent: 'center',
