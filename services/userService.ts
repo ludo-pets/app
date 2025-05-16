@@ -63,6 +63,7 @@ export const getUserWithPetByIdService = async (
             lastLessonConcluded: userData.lastLessonConcluded,
             notifications: userData.notifications,
             pet: userData.pet,
+            achievements: userData.achievements || []
         }
 
         return { user, pet }
