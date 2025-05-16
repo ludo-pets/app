@@ -55,6 +55,7 @@ export const addPet = async (petData: CreatePetData): Promise<Pet | null> => {
     try {
         const petCollectionRef = collection(db, 'Pet')
 
+        const nowISOString = new Date().toISOString()
         const newPetDocData = {
             name: petData.name,
             color: petData.color,
@@ -69,11 +70,11 @@ export const addPet = async (petData: CreatePetData): Promise<Pet | null> => {
                 wallpaper: 'defaultWallpaper',
             },
             wellBeing: {
-                clean: new Date(),
-                fun: new Date(),
-                hunger: new Date(),
-                thirst: new Date(),
-                sleep: new Date(),
+                clean: nowISOString,
+                fun: nowISOString,
+                hunger: nowISOString,
+                thirst: nowISOString,
+                sleep: nowISOString,
             },
         }
 
