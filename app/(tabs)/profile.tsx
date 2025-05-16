@@ -26,6 +26,7 @@ const coinIcon = require('@/assets/images/profile/pet_coin.png')
 
 export default function Profile() {
     const [isChecked, setIsChecked] = useState(false)
+    const [showAchievements, setShowAchievements] = useState(false)
     const [isEditing, setIsEditing] = useState(false)
     const { height: screenHeight } = useWindowDimensions()
     const styles = createStyles(screenHeight < 775)
@@ -73,6 +74,14 @@ export default function Profile() {
             console.error('Pet ID is undefined')
         }
         setIsEditing(false)
+    }
+
+    const openAchievements = () => {
+        if(showAchievements == false) {
+            setShowAchievements(true)
+        } else {
+            setShowAchievements(false)
+        }
     }
 
     return (
@@ -154,6 +163,14 @@ export default function Profile() {
                                 Notificações
                             </Text>
                         </View>
+                        <TouchableOpacity 
+                            style={styles.achievementsContainer}
+                            onPress={openAchievements}
+                            >
+                            <Text style={styles.notificationText}>
+                                Testando...
+                            </Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
 
@@ -180,6 +197,20 @@ export default function Profile() {
                     </TouchableOpacity>
                 </View>
             </View>
+            {showAchievements && (
+                <View style={styles.achievementsBackground}>
+                    <View style={styles.achievementsScreen}>
+                        <Text style={styles.achievementsTitle}>Conquistas</Text>
+                        <View style={{ flex: 1 }} />
+                        <TouchableOpacity
+                            style={styles.achievementsReturn}
+                            onPress={openAchievements}
+                            >
+                            <Text style ={styles.achievementsReturnText}>Voltar</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            )}
         </SafeAreaView>
     )
 }
@@ -411,5 +442,52 @@ const createStyles = (isSmallScreen: boolean) =>
             color: '#5B5B5B',
             textAlign: 'center',
             fontWeight: '600',
+        },
+        achievementsContainer: {
+            width: '100%',
+            height: '40%',
+            borderRadius: 15,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderColor: '#5B5B5B',
+            borderWidth: 3,
+        },
+        achievementsBackground: {
+            backgroundColor: 'rgba(59, 61, 60, 0.7)',
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            alignSelf: 'center',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        achievementsScreen: {
+            backgroundColor: '#FEFEFE',
+            position: 'absolute',
+            width: '90%',
+            height: '80%',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            borderRadius: 16,
+            padding: '5%',
+        },
+        achievementsTitle: {
+            fontSize: isSmallScreen ? 22 : 24,
+            fontWeight: '600',
+            color: '#5B5B5B',
+        },
+        achievementsReturnText: {
+            fontSize: isSmallScreen ? 20 : 22,
+            fontWeight: '600',
+            color: '#5B5B5B',
+        },
+        achievementsReturn: {
+            width: '100%',
+            height: '9%',
+            borderRadius: 15,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderColor: '#5B5B5B',
+            borderWidth: 2,
         },
     })
