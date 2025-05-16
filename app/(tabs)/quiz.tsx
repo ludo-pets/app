@@ -21,18 +21,35 @@ export default function QuizScreen() {
     const getAllLesssons = useAllLessonsStore(
         (state: { fetchAllLessons: any }) => state.fetchAllLessons
     )
-
     const lessons = useAllLessonsStore(
         (state: { lessons: any }) => state.lessons
     )
-
     const loading = useAllLessonsStore(
         (state: { loading: boolean }) => state.loading
     )
-
     const user = useUserPetStore((state) => state.user)
-
     const [lastLessonConcludedId, setLastLessonConcludedId] = useState(1)
+    const { setLesson, changeToNextQuestion } = useLessonStore()
+    const router = useRouter()
+
+    const OnPressItem = (id: string) => {
+        const lesson = lessons.find((lesson: Lesson) => lesson.id === id)
+        if (!lesson) {
+            alert('Lição não encontrada')
+            return
+        }
+
+        if (lessons.indexOf(lesson) != lastLessonConcludedId) {
+            alert('Você não pode acessar essa lição ainda')
+            return
+        }
+
+        const currentLesson = lesson as Lesson
+        setLesson(currentLesson)
+        changeToNextQuestion('', currentLesson.questions)
+
+        router.push('/quizGame')
+    }
 
     useEffect(() => {
         if (lessons && user?.lastLessonConcluded) {
@@ -46,30 +63,7 @@ export default function QuizScreen() {
         if (!lessons) {
             getAllLesssons()
         }
-    }, [getAllLesssons, user])
-
-    const { setLesson, changeToNextQuestion } = useLessonStore()
-
-    const router = useRouter()
-
-    const OnPressItem = (id: string) => {
-        const lesson = lessons.find((lesson: Lesson) => lesson.id === id)
-        if (!lesson) {
-            console.error('PUTZ')
-            return
-        }
-
-        if (lessons.indexOf(lesson) != lastLessonConcludedId) {
-            console.error('Você não pode acessar essa lição ainda')
-            return
-        }
-
-        const currentLesson = lesson as Lesson
-        setLesson(currentLesson)
-        changeToNextQuestion('', currentLesson.questions)
-
-        router.push('/quizGame')
-    }
+    }, [getAllLesssons, user, lessons])
 
     return (
         <View style={styles.container}>
@@ -83,7 +77,7 @@ export default function QuizScreen() {
                     ) : (
                         lessons?.map((item: Lesson, index: number) => {
                             return (
-                                <>
+                                <View key={item.id}>
                                     <ItemPathQuiz
                                         pendent={lastLessonConcludedId == index}
                                         onPress={() => OnPressItem(item.id)}
@@ -115,7 +109,7 @@ export default function QuizScreen() {
                                             />
                                         </View>
                                     )}
-                                </>
+                                </View>
                             )
                         })
                     )}

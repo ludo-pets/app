@@ -1,23 +1,15 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
-    Button,
-    Dimensions,
+    View,
+    Text,
     Image,
     Pressable,
     StyleSheet,
-    Text,
-    View,
+    Dimensions,
 } from 'react-native'
 
 const petCoin = require('@/assets/images/profile/pet_coin.png')
 
-// export type itemsCategory =
-//     | 'bed'
-//     | 'Ração'
-//     | 'toy'
-//     | 'wc'
-//     | 'floor'
-//     | 'wallpaper'
 export interface PetshopItemProps {
     id: string
     name: string
@@ -30,70 +22,63 @@ export interface PetshopItemProps {
     is_active: boolean
 }
 
-const { width, height } = Dimensions.get('window')
+const { width } = Dimensions.get('window')
 
 export default function PetshopItem({ item }: { item: PetshopItemProps }) {
     const [active, setActive] = useState(item.is_active)
 
-    useEffect(() => {}, [item])
-
-    const onActive = () => {
-        setActive(true)
-    }
-    const onDesactive = () => {
-        setActive(false)
-    }
-    const onBuy = () => {}
-
     return (
-        <View style={styles.item}>
-            <View style={styles.imageBox}>
+        <View style={styles.card}>
+            <View style={styles.imageContainer}>
                 <Image
+                    source={item.image ? { uri: item.image } : undefined}
                     style={styles.image}
                     resizeMode="contain"
-                    source={item.image ? { uri: item.image } : undefined}
                 />
                 {item.category === 'foods' && (
-                    <Text style={styles.quantity}>{item.quantity}</Text>
+                    <View style={styles.quantityBadge}>
+                        <Text style={styles.quantityText}>{item.quantity}</Text>
+                    </View>
                 )}
             </View>
-            <View style={styles.info}>
-                <View style={styles.row1}>
-                    <View>{item.name}</View>
+
+            <View style={styles.details}>
+                <View style={styles.rowTop}>
+                    <Text style={styles.name}>{item.name}</Text>
                     <View style={styles.price}>
-                        {' '}
-                        <Image
-                            style={{ width: width / 20, height: width / 20 }}
-                            source={petCoin}
-                        />
-                        {item.price}
+                        <Image source={petCoin} style={styles.coin} />
+                        <Text style={styles.priceText}>{item.price}</Text>
                     </View>
                 </View>
-                <View style={styles.row2}>
+
+                <View style={styles.rowButtons}>
                     {item.has_item && (
                         <Pressable
                             style={[
                                 styles.button,
                                 active ? styles.desactive : styles.active,
                             ]}
-                            onPress={active ? onDesactive : onActive}
+                            onPress={() => setActive(!active)}
                         >
-                            <Text style={styles.buttonActive}>
+                            <Text
+                                style={[
+                                    styles.buttonText,
+                                    active && styles.buttonActiveText,
+                                ]}
+                            >
                                 {active ? 'DESATIVAR' : 'ATIVAR'}
                             </Text>
                         </Pressable>
                     )}
-
                     <Pressable
-                        onPress={onBuy}
-                        disabled={!item.has_required_level}
                         style={[
                             styles.button,
                             item.has_required_level
                                 ? styles.unlocked
                                 : styles.locked,
-                            { marginLeft: 'auto' },
+                            styles.buyButton,
                         ]}
+                        disabled={!item.has_required_level}
                     >
                         <Text style={styles.buttonText}>COMPRAR</Text>
                     </Pressable>
@@ -104,109 +89,103 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
 }
 
 const styles = StyleSheet.create({
-    item: {
-        color: '#5B5B5B',
-        display: 'flex',
+    card: {
         flexDirection: 'row',
-        flexWrap: 'nowrap',
-        justifyContent: 'space-between',
-        width: '100%',
-        height: '100%',
-        fontFamily: 'inter',
-        fontWeight: '500',
-    },
-    quantity: {
-        display: 'flex',
-        justifyContent: 'center',
+        backgroundColor: '#FFF',
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: '#EDEDED',
+        padding: 12,
         alignItems: 'center',
-        color: 'white',
-        position: 'absolute',
-        backgroundColor: '#80BEE7',
-        minWidth: 30,
-        minHeight: 30,
-        padding: 3,
-        bottom: 5,
-        right: 5,
-        textAlign: 'center',
-        borderColor: 'white',
-        borderWidth: 3,
-        aspectRatio: '1/1',
-        borderRadius: '50%',
+        marginVertical: 4,
+        minHeight: 90,
+        maxHeight: 90,
     },
-    imageBox: {
-        position: 'relative',
-        display: 'flex',
-        margin: 0,
-        height: '100%',
+    imageContainer: {
+        width: width * 0.18,
         aspectRatio: 1,
         backgroundColor: '#CFE2A8',
+        borderRadius: 8,
         justifyContent: 'center',
         alignItems: 'center',
+        marginRight: 12,
     },
     image: {
+        width: '70%',
         height: '70%',
-        width: '100%',
-        margin: 0,
     },
-    info: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        gap: 30,
-        padding: '5%',
-        width: '60%',
-    },
-    row1: {
-        display: 'flex',
-        width: '100%',
-        justifyContent: 'space-between',
-    },
-    row2: {
-        display: 'flex',
-        flexGrow: 1,
-        flexDirection: 'row',
-        width: '100%',
-        justifyContent: 'space-between',
-    },
-    collum1: {
-        display: 'flex',
-        padding: 0,
-        margin: 0,
-        justifyContent: 'flex-start',
-        width: '50%',
-    },
-    collum2: {
-        display: 'flex',
-        padding: 0,
-        margin: 0,
-        justifyContent: 'flex-end',
-        width: '50%',
-    },
-    button: {
-        color: 'white',
-        borderRadius: 20,
-        paddingTop: 5,
-        paddingBottom: 5,
-        paddingLeft: 50,
-        paddingRight: 50,
-        width: '30%',
-        display: 'flex',
+    quantityBadge: {
+        position: 'absolute',
+        bottom: 4,
+        right: 4,
+        width: 24,
+        height: 24,
+        borderRadius: 12,
+        backgroundColor: '#80BEE7',
         justifyContent: 'center',
         alignItems: 'center',
-        margin: 0,
+        borderWidth: 2,
+        borderColor: '#FFF',
+    },
+    quantityText: {
+        color: '#FFF',
+        fontSize: 12,
+        fontWeight: 'bold',
+    },
+    details: {
+        flex: 1,
+        height: '100%',
+        justifyContent: 'space-between',
+        marginLeft: 8,
+    },
+    rowTop: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    rowButtons: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    name: {
+        fontSize: 16,
+        fontWeight: '500',
+        color: '#333',
+    },
+    price: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    coin: {
+        width: width * 0.05,
+        height: width * 0.05,
+        marginRight: 4,
+    },
+    priceText: {
+        fontSize: 14,
+        fontWeight: '500',
+        color: '#333',
+    },
+    button: {
+        paddingVertical: 6,
+        paddingHorizontal: 16,
+        borderRadius: 20,
+        minWidth: 80,
+        alignItems: 'center',
+    },
+    buyButton: {
+        marginLeft: 'auto',
     },
     buttonText: {
-        color: 'white',
+        fontSize: 12,
+        fontWeight: '500',
+        color: '#FFF',
     },
-    buttonActive: {
+    buttonActiveText: {
         color: '#5B5B5B',
     },
     active: {
         backgroundColor: '#D4E4EB',
-        display: 'flex',
-        alignContent: 'center',
-        justifyContent: 'center',
-        textAlign: 'center',
     },
     desactive: {
         backgroundColor: '#EDB0B0',
@@ -216,9 +195,5 @@ const styles = StyleSheet.create({
     },
     locked: {
         backgroundColor: '#5B5B5B',
-    },
-    price: {
-        display: 'flex',
-        gap: 5,
     },
 })

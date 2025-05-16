@@ -108,7 +108,7 @@ export default function QuizGame() {
                     <EndGameDialog
                         callback={() => {
                             setQuizFinished(false)
-                            router.push('/home')
+                            router.push('/quiz')
                         }}
                         message="Você concluiu a lição!"
                         score={correctCount}

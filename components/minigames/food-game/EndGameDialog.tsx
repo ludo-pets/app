@@ -55,11 +55,11 @@ export default function EndGameDialog({
                 <View style={styles.dialogCustomPoints}>
                     <Dialog.Text
                         style={styles.dialogCustomPointsText}
-                        content={`Você fez ${score} pontos.`}
+                        content={`Você fez ${score} pontos`}
                     />
                     <Dialog.Text
                         style={styles.dialogCustomPointsText}
-                        content={`Você ganhou ${coins} moedas.`}
+                        content={`e ganhou ${coins} moedas.`}
                     />
                 </View>
 
