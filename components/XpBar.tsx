@@ -1,6 +1,7 @@
 import { PawPrint } from 'phosphor-react-native'
-import React, { useEffect, useState, useRef } from 'react'
-import { View, Text, StyleSheet, Animated, Image, Platform } from 'react-native'
+import React, { useEffect, useRef } from 'react'
+import { View, Text, StyleSheet, Animated, Platform } from 'react-native'
+import { calcLevelUp, calcMaxXp } from '@/utils/CalcLevelUp'
 
 interface xpBarProps {
     xp: number
@@ -9,9 +10,7 @@ interface xpBarProps {
 
 const XpBar = ({ xp, level }: xpBarProps) => {
     const animatedValue = useRef(new Animated.Value(0)).current
-
-    // Calculate the XP bar size based on the level
-    const xpBarSize = 95 + level * 5
+    const xpBarSize = calcMaxXp(level)
 
     const barWidth = animatedValue.interpolate({
         inputRange: [0, xpBarSize],
@@ -19,12 +18,13 @@ const XpBar = ({ xp, level }: xpBarProps) => {
     })
 
     useEffect(() => {
+        animatedValue.setValue(0)
         Animated.timing(animatedValue, {
             toValue: xp,
             duration: 500,
             useNativeDriver: false,
         }).start()
-    }, [xp, animatedValue])
+    }, [xp, xpBarSize])
 
     return (
         <View style={styles.container}>

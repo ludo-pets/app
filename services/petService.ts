@@ -8,7 +8,7 @@ import {
     updateDoc,
 } from 'firebase/firestore'
 import { db } from '@/firebaseConfig'
-import Pet from '@/dtos/Pet'
+import { Pet } from '@/dtos/Pet'
 
 export const getPetDataByReference = async (
     petRef: DocumentReference<unknown, DocumentData>

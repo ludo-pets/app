@@ -56,7 +56,7 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
     },
 
     updatePet: async (petId: string, petData: Partial<Pet>) => {
-        set({ loading: true, error: null })
+        set({ error: null })
         try {
             const success = await updatePet(petId, petData)
             if (success) {

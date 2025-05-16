@@ -3,4 +3,7 @@ export default interface Question {
     answers: string[]
     description: string
     rightAnswer: number
+    explanation: string
+    image: string
+    title: string
 }
