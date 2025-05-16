@@ -5,25 +5,29 @@ import {
     collection,
     doc,
     DocumentData,
-    DocumentReference,
-    getDoc,
     getDocs,
     query,
     updateDoc,
     where,
 } from 'firebase/firestore'
+import { getPetDataByReference } from './petService'
 
-export const getUserWithPetByEmailService = async (
+/**
+ * Fetches a User document and its associated Pet document from Firestore by the user's email.
+ * @param email - The email address of the user to fetch.
+ * @returns An object containing the User and Pet documents, or null if not found.
+ */
+export const getUserWithPetByEmail = async (
     email: string
 ): Promise<{ user: User; pet: Pet } | null> => {
     try {
         const userData = await getUserDataByEmail(email)
         if (!userData) return null
 
-        const petRef = userData.pet
-        if (!petRef) return null
+        const petReference = userData.pet
+        if (!petReference) return null
 
-        const petData = await getPetDataById(petRef)
+        const petData = await getPetDataByReference(petReference)
         if (!petData) return null
 
         const pet: Pet = { ...petData } as Pet
@@ -47,38 +51,31 @@ export const getUserDataByEmail = async (
 
     const userQuery = query(collection(db, 'User'), where('email', '==', email))
     const userSnap = await getDocs(userQuery)
+    if (userSnap.empty) {
+        console.error('User não encontrado')
+        return null
+    }
 
+    return userSnap.docs[0].data()
 }
 
 const isValidEmail = (email: string): boolean => {
     return /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(email)
 }
 
-export const getPetDataById = async (
-    petRef: DocumentReference<unknown, DocumentData>
-) => {
-    const petSnap = await getDoc(petRef)
-
-    if (!petSnap.exists()) {
-        console.error('Pet não encontrado')
-        return null
-    }
-
-    return petSnap.data()
-}
-
-export const updateUserService = async (
+export const updateUser = async (
     userId: string,
     userData: Partial<User>
 ): Promise<boolean> => {
-    if (!userId || Object.keys(userData).length === 0) return false;
+    if (!userId || Object.keys(userData).length === 0) return false
 
     try {
-        const userRef = doc(db, 'User', userId)
-        await updateDoc(userRef, { ...userData })
-        return true
+        const userReference = doc(db, 'User', userId)
+        await updateDoc(userReference, { ...userData })
     } catch (error) {
         console.error('Erro ao atualizar User:', error)
         return false
     }
+
+    return true
 }
