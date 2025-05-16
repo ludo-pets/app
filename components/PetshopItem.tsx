@@ -61,16 +61,19 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
     const [isActive, setIsActive] = useState(item.is_active)
 
     useEffect(()=> {
-        console.log("atualizou user e pet")
 
         let activeItems: {[Key: string]: string};
         if(pet) {
             activeItems = {...pet.activeItems};
-            setIsActive(activeItems[item.type] == item.id)
+            console.log("active itens: ", activeItems)
+            console.log("item id: ", item.id);
+            
+            setIsActive(activeItems[item.type || "toy"] == item.id)
             const thisItem = pet.purchasedItems.find(i => i.id == item.id)
             
             setHasItem(thisItem != null)
             setQuantity(thisItem?.quantity || 0);
+            
         }
         if(user)
             
@@ -81,7 +84,7 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
     const onActive = async () => {
        if(pet && user){
         const activeItems: {[Key: string]: string} = {...pet.activeItems};
-        activeItems[item.type] = item.id;
+        activeItems[item.type || "toy"] = item.id;
         await petUpdate(pet.id, { activeItems: activeItems as any })
         await fetchUserAndPet(user.email);
        }
@@ -93,7 +96,7 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
         
         if(user && pet){
             const newUser = {...user}
-            const newPet  = {...pet}
+            const newPet: Pet  = {...pet}
             let curItem = null;
             newPet.purchasedItems
                 .forEach(i => {
@@ -102,15 +105,20 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
                         
                         curItem = i;
                         i.quantity = i.quantity! + 1;
+                        return;
                     }
                 });
             if(!curItem) {
-                newPet.purchasedItems.push({...item, quantity: 1});
+
+                const newItem = {...item, quantity: 1, type: item.type || "toy"};
+                newPet.purchasedItems.push(...pet.purchasedItems, newItem );
+                
             }
              
-         
-            await userUpdate(newUser.id, { money: newUser.money - item.price });
-            await petUpdate(newPet.id, {purchasedItems: newPet.purchasedItems});
+            console.log("newpet: ", newPet.purchasedItems);
+            
+            await userUpdate(user.id, { money: newUser.money - item.price });
+            await petUpdate(pet.id, {purchasedItems: newPet.purchasedItems});
             await fetchUserAndPet(user.email);
             
         
