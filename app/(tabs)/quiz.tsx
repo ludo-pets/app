@@ -1,78 +1,113 @@
-import React from 'react'
-import { StyleSheet, View, Text, ScrollView, SafeAreaView, Image, Dimensions } from 'react-native'
-import User from '@/dtos/User';
-import ItemPathQuiz from '@/components/quiz/ItemPathQuiz';
+import React, { useEffect, useState } from 'react'
+import {
+    StyleSheet,
+    View,
+    ScrollView,
+    SafeAreaView,
+    Image,
+    ActivityIndicator,
+} from 'react-native'
+import ItemPathQuiz from '@/components/quiz/ItemPathQuiz'
 import { useUserPetStore } from '@/stores/userPetStore'
+import { useRouter } from 'expo-router'
+import { useLessonStore } from '@/stores/lessonStore'
+import Lesson from '@/dtos/Lesson'
+import { useAllLessonsStore } from '@/stores/allLessonsStore'
 
-const paws = require('@/assets/images/paw.png');
-const pawsTravled = require('@/assets/images/pawTraveled.png');
-interface pathItemQuiz {
-    icon: string,
-    name: string
-    concluded: boolean,
-    id: string
-}
-
-const user : User = {
-    email: 'default@gmail.com',
-    money: 10,
-    level: 1,
-    experience: 10,
-    lastLessonConcluded: '1',
-    notifications: true,
-    pet: 'Simba',
-    id: '1'
-}
-
-const catQuizzes: pathItemQuiz[] = [
-    { icon: 'Medal', name: 'Primeiros cuidados com o gato', concluded: true, id: '0' },
-    { icon: 'BowlFood', name: 'Nutrição e alimentação adequada', concluded: false, id: '1' },
-    { icon: 'Toilet', name: 'Caixa de areia: uso e limpeza', concluded: false, id: '2' },
-    { icon: 'HandHeart', name: 'Construindo confiança com seu gato', concluded: false, id: '3' },
-    { icon: 'PuzzlePiece', name: 'Estimulação mental e brinquedos', concluded: false, id: '4' },
-    { icon: 'Syringe', name: 'Vacinas e cuidados de saúde', concluded: false, id: '5' },
-    { icon: 'Dresser', name: 'Organização do espaço do gato', concluded: false, id: '6' },
-    { icon: 'ShieldCheck', name: 'Prevenindo acidentes em casa', concluded: false, id: '7' },
-    { icon: 'Scissors', name: 'Cuidados com unhas e pelos', concluded: false, id: '8' },
-    { icon: 'Heartbeat', name: 'Sinais de estresse e dor', concluded: false, id: '9' },
-    { icon: 'Bird', name: 'Gatos e caça: instintos naturais', concluded: false, id: '10' },
-    { icon: 'MoonStars', name: 'Gatos noturnos: como lidar?', concluded: false, id: '11' },
-    { icon: 'HandsClapping', name: 'Gato e visitas: como apresentar?', concluded: false, id: '12' },
-    { icon: 'Thermometer', name: 'Temperatura ideal e cuidados com o clima', concluded: false, id: '13' },
-    { icon: 'MapPin', name: 'Como transportar o gato com segurança', concluded: false, id: '14' },
-    { icon: 'Plant', name: 'Plantas perigosas para gatos', concluded: false, id: '15' },
-    {
-        icon: 'Trophy',
-        name: 'Desafio final: cuidados com seu pet',
-        concluded: false,
-        id: 'final'
-    }
-  ];
+const paws = require('@/assets/images/paw.png')
+const pawsTravled = require('@/assets/images/pawTraveled.png')
 
 export default function QuizScreen() {
-    const userUpdate = useUserPetStore((state: { updateUser: any; }) => state.updateUser)
-    const petUpdate = useUserPetStore((state: { updatePet: any; }) => state.updatePet)
-    const pet = useUserPetStore((state: { pet: any; }) => state.pet)
+    const getAllLesssons = useAllLessonsStore((state: { fetchAllLessons: any }) => state.fetchAllLessons  )
+    const lessons = useAllLessonsStore((state: { lessons: any }) => state.lessons)
+    const loading = useAllLessonsStore((state: { loading: boolean }) => state.loading)
+    const user = useUserPetStore((state) => state.user)
+    const [lastLessonConcludedId, setLastLessonConcludedId] = useState(1)
+    const { setLesson, changeToNextQuestion } = useLessonStore()
+    const router = useRouter()
 
-    const OnPressItem = (id : string) => {
-        //Move para tela do quiz
+    const OnPressItem = (id: string) => {
+        const lesson = lessons.find((lesson: Lesson) => lesson.id === id)
+        if (!lesson) {
+            alert('Lição não encontrada')
+            return
+        }
+
+        if (lessons.indexOf(lesson) != lastLessonConcludedId) {
+            alert('Você não pode acessar essa lição ainda')
+            return
+        }
+        
+        const currentLesson = lesson as Lesson
+        setLesson(currentLesson)
+        changeToNextQuestion('', currentLesson.questions)
+
+        router.push('/quizGame')
     }
+
+    useEffect(() => {
+        if (lessons && user?.lastLessonConcluded) {
+            const lastIndex = lessons.findIndex(
+                (item: Lesson) => item.id === user.lastLessonConcluded
+            )
+            if (lastIndex !== -1) {
+                setLastLessonConcludedId(lastIndex+1)
+            }
+        }
+        if (!lessons) {
+            getAllLesssons()
+        }
+    }, [getAllLesssons, user, lessons])
 
     return (
         <View style={styles.container}>
             <SafeAreaView style={{ flex: 1, width: '100%', height: '100%' }}>
-                <ScrollView style={{ flex: 1, width: '100%', height: '100%' }} contentContainerStyle={{ paddingBottom: 20 }}>
-                    {catQuizzes.map((item, index) => (
-                        <> 
-                            <ItemPathQuiz pendent={user.lastLessonConcluded == item.id} onPress={() => OnPressItem(item.id)} id={item.id} name={item.name} index={index} icon={item.icon} concluded={item.concluded} />
-                            {catQuizzes.length - 1 !== index && (
-                                <View style={styles.boxPaws}>
-                                    <Image source={item.concluded === false ? paws : pawsTravled} />
-                                    <Image source={item.concluded === false ? paws : pawsTravled} />
+                <ScrollView
+                    style={{ flex: 1, width: '100%', height: '100%' }}
+                    contentContainerStyle={{ paddingBottom: 20 }}
+                >
+                    {loading ? (
+                        <ActivityIndicator size="large" color="#5b5b5b" />
+                    ) : (
+                        lessons?.map((item: Lesson, index: number) => {
+                            return (
+                                <View
+                                    key={item.id}>
+                                    <ItemPathQuiz
+                                        pendent={lastLessonConcludedId == index}
+                                        onPress={() => OnPressItem(item.id)}
+                                        id={item.id}
+                                        name={item.name}
+                                        index={index}
+                                        icon={item.icon}
+                                        concluded={
+                                            lastLessonConcludedId > index
+                                        }
+                                    />
+                                    {lessons.length - 1 !== index && (
+                                        <View style={styles.boxPaws}>
+                                            <Image
+                                                source={
+                                                    lastLessonConcludedId <=
+                                                    index
+                                                        ? paws
+                                                        : pawsTravled
+                                                }
+                                            />
+                                            <Image
+                                                source={
+                                                    lastLessonConcludedId <=
+                                                    index
+                                                        ? paws
+                                                        : pawsTravled
+                                                }
+                                            />
+                                        </View>
+                                    )}
                                 </View>
-                            )}    
-                        </>        
-                    ))}
+                            )
+                        })
+                    )}
                 </ScrollView>
             </SafeAreaView>
         </View>
@@ -82,20 +117,21 @@ export default function QuizScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
         justifyContent: 'center',
         height: '100%',
+        backgroundColor: '#fefefe',
     },
     title: {
-        fontSize: 20,
+        fontSize: 24,
         fontWeight: 'bold',
+        marginBottom: 20,
     },
-    boxPaws :{
+    boxPaws: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         gap: 20,
         marginTop: 5,
         marginBottom: 7,
-    }
+    },
 })

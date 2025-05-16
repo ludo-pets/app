@@ -8,27 +8,30 @@ interface ItemStoreState {
     loading: boolean
     error: string | null
     fetchItems: () => Promise<void>
-    setItems: (items : Item[]) => void
+    setItems: (items: Item[]) => void
 }
 
 export const useItemStore = create<ItemStoreState>((set) => ({
     items: [],
-    loading: false,
-    error:null,
+    loading: true,
+    error: null,
 
     fetchItems: async () => {
-        set({loading: true, error: null})
-        try{
+        set({ loading: true, error: null })
+        try {
             const result = await getAllItemService()
-            if(result) {
-                set({ items: result.items, loading: false})
+            if (result) {
+                set({ items: result.items, loading: false })
             } else {
-                set({ error: 'Itens não encontrados', loading: false})
+                set({ error: 'Itens não encontrados', loading: false })
             }
-        } catch(error: any) {
-            set({ error: error.message || 'Erro ao buscar itens', loading: false})
+        } catch (error: any) {
+            set({
+                error: error.message || 'Erro ao buscar itens',
+                loading: false,
+            })
         }
     },
 
-        setItems: (items: Item[]) => set({items}),
+    setItems: (items: Item[]) => set({ items }),
 }))

@@ -1,44 +1,60 @@
-import { View, StyleSheet, Image, Text, Animated, ViewStyle, PanResponder } from "react-native"
-import { useCharacter } from "./Character";
-import { GameManagerType} from "./GameManager";
-import { useGameConfig } from "./GameConfig";
-import { useEffect, useRef, useState } from "react";
+import {
+    View,
+    StyleSheet,
+    Image,
+    Text,
+    Animated,
+    ViewStyle,
+    PanResponder,
+} from 'react-native'
+import { useCharacter } from './Character'
+import { GameManagerType } from './GameManager'
+import { useGameConfig } from './GameConfig'
+import { useEffect, useRef, useState } from 'react'
 
-const playerImage = require("@/assets/images/minigames/food-game/gato_boca_aberta.png")
-const heart = require("@/assets/images/minigames/food-game/heart.png")
+const playerImage = require('@/assets/images/minigames/food-game/gato_boca_aberta.png')
+const heart = require('@/assets/images/minigames/food-game/heart.png')
 const coinIcon = require('@/assets/images/profile/pet_coin.png')
 
 const Renderer = ({ gameManager }: { gameManager: GameManagerType }) => {
-    const { characterPosition, setCharacterPosition, score, lifes, foods, coins, checkCollisions} = gameManager;
-    const { Item } = useCharacter({ 
-        playerImage, 
-        characterPosition
-    });
-    const { config } = useGameConfig();
+    const {
+        characterPosition,
+        setCharacterPosition,
+        score,
+        lifes,
+        foods,
+        coins,
+        checkCollisions,
+    } = gameManager
+    const { Item } = useCharacter({
+        playerImage,
+        characterPosition,
+    })
+    const { config } = useGameConfig()
 
     // Efeito de brilho no gato (incompleto)
-    const [catEffect, setCatEffect] = useState<null | "good" | "bad">(null);
-    const effectTimeout = useRef<NodeJS.Timeout | null>(null);
+    const [catEffect, setCatEffect] = useState<null | 'good' | 'bad'>(null)
+    const effectTimeout = useRef<NodeJS.Timeout | null>(null)
 
     const foodStyle: ViewStyle = {
-        position: "absolute",
+        position: 'absolute',
         width: config.FOOD_SIZE,
-        height: config.FOOD_SIZE
-    };
+        height: config.FOOD_SIZE,
+    }
 
     function triggerCatEffect(type: string) {
-        if(type === 'good' || type === 'bad'){
+        if (type === 'good' || type === 'bad') {
             //Interage colisão das comidas no gatos
             //A ideia era setar uma animação que exibe particulas de brilho ao gato comer uma comida
             // setCatEffect(type);
             // if (effectTimeout.current) clearTimeout(effectTimeout.current);
             // effectTimeout.current = setTimeout(() => setCatEffect(null), 350);
-        } 
+        }
     }
 
     useEffect(() => {
-        checkCollisions(triggerCatEffect);
-    }, [foods, characterPosition, checkCollisions]);
+        checkCollisions(triggerCatEffect)
+    }, [foods, characterPosition, checkCollisions])
 
     // PanResponder para movimentação do player
     const panResponder = useRef(
@@ -46,31 +62,29 @@ const Renderer = ({ gameManager }: { gameManager: GameManagerType }) => {
             onStartShouldSetPanResponder: () => true,
             onMoveShouldSetPanResponder: () => true,
             onPanResponderGrant: (event) => {
-                const touchX = event.nativeEvent.locationX;
-                let newPosition = touchX - config.CHARACTER_WIDTH / 2;
-                if (newPosition < 0)
-                    newPosition = 0;
+                const touchX = event.nativeEvent.locationX
+                let newPosition = touchX - config.CHARACTER_WIDTH / 2
+                if (newPosition < 0) newPosition = 0
 
-                if (newPosition > (config.SCREEN_WIDTH - config.CHARACTER_WIDTH))
-                    newPosition = config.SCREEN_WIDTH - config.CHARACTER_WIDTH;
+                if (newPosition > config.SCREEN_WIDTH - config.CHARACTER_WIDTH)
+                    newPosition = config.SCREEN_WIDTH - config.CHARACTER_WIDTH
 
-                setCharacterPosition(newPosition);
+                setCharacterPosition(newPosition)
             },
             onPanResponderMove: (event, gestureState) => {
-                let newPosition = gestureState.moveX - config.CHARACTER_WIDTH / 2;
+                let newPosition =
+                    gestureState.moveX - config.CHARACTER_WIDTH / 2
 
-                if (newPosition < 0)
-                    newPosition = 0;
+                if (newPosition < 0) newPosition = 0
 
-                if (newPosition > (config.SCREEN_WIDTH - config.CHARACTER_WIDTH))
-                    newPosition = config.SCREEN_WIDTH - config.CHARACTER_WIDTH;
+                if (newPosition > config.SCREEN_WIDTH - config.CHARACTER_WIDTH)
+                    newPosition = config.SCREEN_WIDTH - config.CHARACTER_WIDTH
 
-                setCharacterPosition(newPosition);
+                setCharacterPosition(newPosition)
             },
-            onPanResponderRelease: () => {
-            },
+            onPanResponderRelease: () => {},
         })
-    ).current;
+    ).current
 
     return (
         <View style={styles.gameContainer} {...panResponder.panHandlers}>
@@ -80,10 +94,12 @@ const Renderer = ({ gameManager }: { gameManager: GameManagerType }) => {
                 <View>
                     <Text style={styles.scoreText}>Pontos: {score}</Text>
                     <View style={styles.coinsContainer}>
-                        <Image source={coinIcon} resizeMode="contain" style={styles.coinImage} />
-                        <Text style={styles.coinValue}>
-                            {coins}
-                        </Text> 
+                        <Image
+                            source={coinIcon}
+                            resizeMode="contain"
+                            style={styles.coinImage}
+                        />
+                        <Text style={styles.coinValue}>{coins}</Text>
                     </View>
                 </View>
 
@@ -91,11 +107,11 @@ const Renderer = ({ gameManager }: { gameManager: GameManagerType }) => {
                     {/* Lifes aqui */}
                     <View style={styles.lifesContainer}>
                         {Array.from({ length: lifes }).map((_, index) => (
-                            <View style={styles.lifeBox} key={index}> 
+                            <View style={styles.lifeBox} key={index}>
                                 <Image
                                     source={heart}
-                                    resizeMode="contain" 
-                                    style={styles.lifeImage}   
+                                    resizeMode="contain"
+                                    style={styles.lifeImage}
                                 />
                             </View>
                         ))}
@@ -114,7 +130,11 @@ const Renderer = ({ gameManager }: { gameManager: GameManagerType }) => {
                         },
                     ]}
                 >
-                    <Image source={food.image} style={styles.foodImage} resizeMode="contain" />
+                    <Image
+                        source={food.image}
+                        style={styles.foodImage}
+                        resizeMode="contain"
+                    />
                 </Animated.View>
             ))}
 
@@ -129,70 +149,70 @@ const Renderer = ({ gameManager }: { gameManager: GameManagerType }) => {
 
             {Item}
         </View>
-    );
-};
+    )
+}
 
-export default Renderer;
+export default Renderer
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#87CEEB",
-        width: "100%",
+        backgroundColor: '#87CEEB',
+        width: '100%',
     },
     gameContainer: {
         flex: 1,
     },
 
     foodImage: {
-        width: "100%",
-        height: "100%",
+        width: '100%',
+        height: '100%',
     },
     statsContainer: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         padding: 10,
-        backgroundColor: "rgba(0,0,0,0.3)",
+        backgroundColor: 'rgba(0,0,0,0.3)',
     },
     scoreText: {
         fontSize: 18,
-        fontWeight: "bold",
-        color: "white",
+        fontWeight: 'bold',
+        color: 'white',
     },
 
     healthBar: {
-        height: "100%",
-        backgroundColor: "#4CAF50",
+        height: '100%',
+        backgroundColor: '#4CAF50',
     },
 
     piso: {
-        width: "100%",
+        width: '100%',
         height: 40,
-        position: "absolute",
-        backgroundColor: "#b6e683",
+        position: 'absolute',
+        backgroundColor: '#b6e683',
         bottom: 0,
     },
     lifesContainer: {
-        flexDirection: "row",
-        justifyContent: "flex-end",
-        alignItems: "center",
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
         marginRight: 10,
     },
     lifeImage: {
-        width: "100%",
-        height: "100%"
+        width: '100%',
+        height: '100%',
     },
 
-    lifeBox : {
+    lifeBox: {
         width: 30,
         height: 30,
         marginLeft: 5,
     },
 
     coinsContainer: {
-        flexDirection: "row",
-        alignItems: "center",
+        flexDirection: 'row',
+        alignItems: 'center',
     },
 
     coinImage: {
@@ -203,8 +223,8 @@ const styles = StyleSheet.create({
 
     coinValue: {
         fontSize: 18,
-        fontWeight: "bold",
-        color: "white",
+        fontWeight: 'bold',
+        color: 'white',
     },
 
     catEffect: {
@@ -224,13 +244,13 @@ const styles = StyleSheet.create({
         elevation: 10,
     },
     catEffectGood: {
-        backgroundColor: '#7CFC98', 
+        backgroundColor: '#7CFC98',
         borderWidth: 2,
         borderColor: '#00ff00',
     },
     catEffectBad: {
-        backgroundColor: '#ff6b6b', 
+        backgroundColor: '#ff6b6b',
         borderWidth: 2,
         borderColor: '#ff0000',
     },
-});
+})

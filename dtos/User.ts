@@ -7,4 +7,5 @@ export default interface User {
     lastLessonConcluded: string
     notifications: boolean
     pet: string
+    achievements: string[]
 }

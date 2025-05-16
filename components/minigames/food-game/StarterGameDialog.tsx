@@ -17,11 +17,17 @@ export default function StarterGameDialog({
         <Dialog.Container containerStyle={styles.dialogCustom}>
             <View style={styles.headerArea}>
                 <Dialog.Text content="Como Jogar" style={styles.title} />
-                <Dialog.Text content="Pegue os alimentos corretos para que seu pet se mantenha saudável e feliz!" style={styles.subtitle} />
+                <Dialog.Text
+                    content="Pegue os alimentos corretos para que seu pet se mantenha saudável e feliz!"
+                    style={styles.subtitle}
+                />
             </View>
             <View style={styles.foodItem}>
                 <Image source={racao} style={styles.foodImage} />
-                <Dialog.Text content="Ração: +10 pontos" style={styles.foodText} />
+                <Dialog.Text
+                    content="Ração: +10 pontos"
+                    style={styles.foodText}
+                />
             </View>
             <View style={styles.foodItem}>
                 <Image source={bolo} style={styles.foodImage} />
@@ -29,11 +35,17 @@ export default function StarterGameDialog({
             </View>
             <View style={styles.foodItem}>
                 <Image source={chocolate} style={styles.foodImage} />
-                <Dialog.Text content="Chocolate: -1 vida" style={styles.foodText} />
+                <Dialog.Text
+                    content="Chocolate: -1 vida"
+                    style={styles.foodText}
+                />
             </View>
             <View style={styles.foodItem}>
                 <Image source={health} style={styles.foodImage} />
-                <Dialog.Text content="Coração: +1 vida" style={styles.foodText} />
+                <Dialog.Text
+                    content="Coração: +1 vida"
+                    style={styles.foodText}
+                />
             </View>
             <Dialog.ButtonArea>
                 <Dialog.Button action={() => startGame(true)} text="Começar" />
@@ -45,7 +57,7 @@ export default function StarterGameDialog({
 const styles = StyleSheet.create({
     dialogCustom: {
         width: width * 0.92,
-        minHeight: height * 0.60,
+        minHeight: height * 0.6,
         maxWidth: 440,
         paddingHorizontal: 32,
         paddingTop: 28,
@@ -75,7 +87,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 10,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#fefefe',
         borderRadius: 14,
         paddingVertical: 8,
         paddingHorizontal: 12,
@@ -91,4 +103,4 @@ const styles = StyleSheet.create({
         fontSize: 16,
         flexShrink: 1,
     },
-}) 
+})

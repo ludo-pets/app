@@ -19,7 +19,9 @@ const { width } = Dimensions.get('window')
 function Container({ children, containerStyle }: DialogContainerProps) {
     return (
         <Animated.View style={style.overlay}>
-            <Animated.View style={[style.startDialog, containerStyle]}>{children}</Animated.View>
+            <Animated.View style={[style.startDialog, containerStyle]}>
+                {children}
+            </Animated.View>
         </Animated.View>
     )
 }

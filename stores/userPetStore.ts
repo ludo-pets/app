@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import User from '@/dtos/User'
-import Pet from '@/dtos/Pet'
+import { Pet } from '@/dtos/Pet'
 import {
     getUserWithPetByIdService,
     updateUserService,
@@ -59,7 +59,7 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
     },
 
     updatePet: async (petId: string, petData: Partial<Pet>) => {
-        set({ loading: true, error: null })
+        set({ error: null })
         try {
             const success = await updatePetService(petId, petData)
             if (success) {
