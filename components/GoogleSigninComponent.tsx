@@ -7,13 +7,16 @@ import { auth } from '../firebaseConfig';
 import { GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
 import * as AuthSession from 'expo-auth-session';
 
-console.log(AuthSession.makeRedirectUri());
+const redirectUri = 'https://auth.expo.io/@llopex/ludopets';
 
 WebBrowser.maybeCompleteAuthSession();
 
 export default function GoogleSigninButton() {
   const [request, response, promptAsync] = Google.useAuthRequest({
-    clientId: 'ludo-pets.apps.googleusercontent.com',
+    androidClientId: '823465219976-5t5443kohpdm9kda4ne1k4cib0gmcutd.apps.googleusercontent.com',
+    iosClientId: '823465219976-9tr8frv4ksgmeh6l3ai4tdgu4hfpcejg.apps.googleusercontent.com',
+    clientId: '823465219976-5gioroqbrn0134u220jagvasotqs7rbo.apps.googleusercontent.com',
+    redirectUri: redirectUri,
   });
 
   useEffect(() => {
