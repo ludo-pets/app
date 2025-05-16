@@ -7,4 +7,9 @@ export interface Coordinate {
     y: number;
 }
 
-export enum
+export enum Direction {
+    Right,
+    Up,
+    Left,
+    Down
+}
