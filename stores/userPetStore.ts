@@ -17,6 +17,8 @@ interface UserPetState {
     updatePet: (petId: string, petData: Partial<Pet>) => Promise<void>
     setUser: (user: User) => void
     setPet: (pet: Pet) => void
+    setAchievements: (achievements: string) => void
+    updateAchievements: (achievements: string) => Promise<void>
 }
 
 export const useUserPetStore = create<UserPetState>((set, get) => ({
@@ -24,6 +26,9 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
     pet: null,
     loading: true,
     error: null,
+    setAchievements(achievements) {
+
+    },
 
     fetchUserAndPet: async (userId: string) => {
         set({ loading: true, error: null })
@@ -79,4 +84,24 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
 
     setUser: (user: User) => set({ user }),
     setPet: (pet: Pet) => set({ pet }),
+
+    updateAchievements: async (achievements: string) => {
+        set({ error: null })
+        try {
+            const user = get().user
+            if (user) {
+                const newAchievements = user?.achievements
+                var verifica = user?.achievements.includes(achievements)
+                if (verifica) {
+                    return
+                } else {
+                    newAchievements?.push(achievements)
+                }
+            }
+        } catch (error: any) {
+            set({ error: error.message })
+        } finally {
+            set({ loading: false })
+        }
+    },
 }))
