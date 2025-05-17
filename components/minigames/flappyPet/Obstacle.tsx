@@ -1,4 +1,5 @@
-import { StyleSheet, Animated, Dimensions, Easing } from "react-native";
+import { StyleSheet, Animated, Dimensions, Easing, Image } from "react-native";
+import { gameConstants} from "@/constants/game";
 
 const { height: windowHeight} = Dimensions.get("window")
 
@@ -14,22 +15,52 @@ export default function Obstacle({
     positionX,
 }: ObstacleProps) {
     const topPosition = isTopObstacle ? 0 : windowHeight - height - 100;
+    const flexDirection = isTopObstacle ? "column-reverse" : "column";
     return (
         <Animated.View
         style={[
           styles.obstacle,
-          { height, transform: [{ translateX: positionX }], top: topPosition },
+          {
+            ...(isTopObstacle ? { height} : {}),
+            transform: [{ translateX: positionX}],
+            top: topPosition,
+            flexDirection,
+          },
         ]}
-      />
-    );
-  }
+      >
+        <Image
+          source={require("@/assets/images/minigames/flappyPet/game/pipe_core.png")}
+          style={styles.pipeTop}
+        />
+        <Image
+          source={require("@/assets/images/minigames/flappyPet/game/pipe_core.png")}
+          style={styles.pipeCore}
+        />
+        </Animated.View>
+     );
+    }
+
+
 
 const styles = StyleSheet.create({
     obstacle: {
         position: "absolute",
-        width: 50,
-        backgroundColor:"green",
+        width: gameConstants.obstacleWidth,
         bottom: 100,
         zIndex: 3,
+        alignItems: "center",
+        flex: 1,
     },
+    pipeCore: {
+      flex: 1,
+      width: "85%",
+      resizeMode: "repeat",
+      height: "80%",
+    },
+    pipeTop: {
+      zIndex: 2,
+      width: "100%",
+      height: 28,
+      resizeMode: "cover"
+    }
 });
