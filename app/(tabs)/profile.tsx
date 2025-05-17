@@ -20,6 +20,7 @@ import Cachorro from '@/assets/images/pets/cachorro.svg'
 import { PetOptionFormRegisterPet } from '@/components/PetOptionFormRegisterPet'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { useRouter } from 'expo-router'
+import { FlatList } from 'react-native-gesture-handler'
 
 const editIcon = require('@/assets/images/profile/edit_icon.png')
 const coinIcon = require('@/assets/images/profile/pet_coin.png')
@@ -83,6 +84,71 @@ export default function Profile() {
             setShowAchievements(false)
         }
     }
+
+    //delete this later
+
+    const TESTE = [
+        {
+            id: 1,
+            name: 'conquista 1',
+            message: 'esta é a conquista 1',
+        },
+        {
+            id: 2,
+            name: 'conquista 2',
+            message: 'esta é a conquista 2',
+        },
+        {
+            id: 3,
+            name: 'conquista 3',
+            message: 'esta é a conquista 3',
+        },
+        {
+            id: 4,
+            name: 'conquista 4',
+            message: 'esta é a conquista 4',
+        },
+        {
+            id: 5,
+            name: 'conquista 5',
+            message: 'esta é a conquista 5',
+        },
+        {
+            id: 6,
+            name: 'conquista 6',
+            message: 'esta é a conquista 6',
+        },
+        {
+            id: 7,
+            name: 'conquista 7',
+            message: 'esta é a conquista 7',
+        },
+        {
+            id: 8,
+            name: 'conquista 8',
+            message: 'esta é a conquista 8',
+        },
+        {
+            id: 9,
+            name: 'conquista 9',
+            message: 'esta é a conquista 9',
+        },
+        {
+            id: 10,
+            name: 'conquista 10',
+            message: 'esta é a conquista 10',
+        },
+        {
+            id: 11,
+            name: 'conquista 11',
+            message: 'esta é a conquista 11',
+        },
+        {
+            id: 12,
+            name: 'conquista 12',
+            message: 'esta é a conquista 12 ',
+        },
+    ]
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -201,7 +267,22 @@ export default function Profile() {
                 <View style={styles.achievementsBackground}>
                     <View style={styles.achievementsScreen}>
                         <Text style={styles.achievementsTitle}>Conquistas</Text>
-                        <View style={{ flex: 1 }} />
+                        <View style={styles.listBox}>
+                            <FlatList
+                                data={TESTE}
+                                showsVerticalScrollIndicator={false}
+                                keyExtractor={(item) => item.id.toString()}
+                                numColumns={3}
+                                renderItem={({item}) => (
+                                    <View style={styles.achievementBox}> 
+                                        <View>
+                                            <Text>{item.id}</Text>
+                                        </View>
+                                    </View>
+                                )}
+                                />
+                        </View>
+                        <View style={{ flex: 1 }} /> 
                         <TouchableOpacity
                             style={styles.achievementsReturn}
                             onPress={openAchievements}
@@ -490,4 +571,20 @@ const createStyles = (isSmallScreen: boolean) =>
             borderColor: '#5B5B5B',
             borderWidth: 2,
         },
+        achievementBox: {
+            width: 120,
+            height: 120,
+            backgroundColor: 'lightblue',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: 2,
+        },
+        listBox: {
+            top: '4%',
+            width: '100%',
+            height: '78%',
+            alignItems: 'center',
+            //backgroundColor: 'blue',
+        }
+        
     })
