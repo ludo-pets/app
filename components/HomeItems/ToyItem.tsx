@@ -6,14 +6,21 @@ import {
     Dimensions,
     Platform,
 } from 'react-native'
-import { InteractionTouch } from './InteractionTouch'
 import ItemProps from '@/dtos/ItensProps'
+import { scheduleNeedNotification, cancelNeedNotifications } from '@/utils/scheduleNotifications'
 
 const { height, width } = Dimensions.get('window')
 
 const ToyItem = ({ update }: ItemProps) => {
     const onPress = () => {
         update('fun')
+        cancelNeedNotifications('fun')
+            .then(() => {
+                scheduleNeedNotification('fun')
+            })
+            .catch(error => {
+                console.error('Erro ao agendar notificação de brincadeira:', error)
+            })
     }
 
     return (
@@ -43,7 +50,6 @@ const styles = StyleSheet.create({
         right: width / 1.99,
         justifyContent: 'center',
         alignItems: 'center',
-        display: 'flex',
-        //backgroundColor: 'blue',
+        display: 'flex'
     },
 })

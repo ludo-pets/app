@@ -4,7 +4,7 @@ export const calcPetMood = (wellBeing: Wellbeing): number => {
     const lastFed = new Date(wellBeing.hunger)
     const lastDrank = new Date(wellBeing.thirst)
     const lastCleaned = new Date(wellBeing.clean)
-    const lastPlayed = new Date(wellBeing.thirst)
+    const lastPlayed = new Date(wellBeing.fun)
     const lastSlept = new Date(wellBeing.sleep)
 
     let mood = 0

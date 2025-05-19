@@ -5,14 +5,22 @@ import {
     TouchableWithoutFeedback,
     Dimensions,
 } from 'react-native'
-import { InteractionTouch } from './InteractionTouch'
 import ItemProps from '@/dtos/ItensProps'
+import { scheduleNeedNotification, cancelNeedNotifications } from '@/utils/scheduleNotifications'
 
 const { height, width } = Dimensions.get('window')
 
 const DrinkItem = ({ update }: ItemProps) => {
     const onPress = () => {
         update('thirst')
+        
+        cancelNeedNotifications('thirst')
+            .then(() => {
+                scheduleNeedNotification('thirst')
+            })
+            .catch(error => {
+                console.error('Erro ao agendar notificação de sede:', error)
+            })
     }
 
     return (
@@ -42,7 +50,6 @@ const styles = StyleSheet.create({
         right: width / 1.45,
         justifyContent: 'center',
         alignItems: 'center',
-        display: 'flex',
-        //backgroundColor: 'blue',
+        display: 'flex'
     },
 })

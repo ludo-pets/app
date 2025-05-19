@@ -6,14 +6,22 @@ import {
     Dimensions,
     Platform,
 } from 'react-native'
-import { InteractionTouch } from './InteractionTouch'
 import ItemProps from '@/dtos/ItensProps'
+import { scheduleNeedNotification, cancelNeedNotifications } from '@/utils/scheduleNotifications'
 
 const { height, width } = Dimensions.get('window')
 
 const BedItem = ({ update }: ItemProps) => {
     const onPress = () => {
         update('sleep')
+        
+        cancelNeedNotifications('sleep')
+            .then(() => {
+                scheduleNeedNotification('sleep')
+            })
+            .catch(error => {
+                console.error('Erro ao agendar notificação de sono:', error)
+            })
     }
 
     return (
@@ -43,7 +51,6 @@ const styles = StyleSheet.create({
         left: width / 1.8,
         justifyContent: 'center',
         alignItems: 'center',
-        display: 'flex',
-        //backgroundColor: 'blue',
+        display: 'flex'
     },
 })
