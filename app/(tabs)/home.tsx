@@ -9,13 +9,12 @@ export default function HomeScreen() {
     const user = useUserPetStore((state) => state.user)
     const loading = useUserPetStore((state) => state.loading)
     const pet = useUserPetStore((state) => state.pet)
-    const [mood, setMood] = useState(0);
+    const [mood, setMood] = useState(0)
     useEffect(() => {
         if (pet) {
             setMood(calcPetMood(pet.wellBeing))
         }
-    }, [pet]
-    )
+    }, [pet])
 
     return (
         <View style={styles.container}>
@@ -31,7 +30,6 @@ export default function HomeScreen() {
     )
 }
 
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -40,4 +38,3 @@ const styles = StyleSheet.create({
         position: 'relative',
     },
 })
-
