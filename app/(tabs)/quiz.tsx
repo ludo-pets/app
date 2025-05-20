@@ -39,12 +39,20 @@ export default function QuizScreen() {
             return
         }
 
-        if (lessons.indexOf(lesson) != lastLessonConcludedId) {
+        if (lessons.indexOf(lesson) > lastLessonConcludedId) {
             alert('Você não pode acessar essa lição ainda')
             return
         }
 
         const currentLesson = lesson as Lesson
+
+        if(lessons.indexOf(lesson) < lastLessonConcludedId) {
+            console.log("resumo");
+            
+            setLesson(currentLesson)
+            router.push('/quizSummary')
+            return;
+        }
         setLesson(currentLesson)
         changeToNextQuestion('', currentLesson.questions)
 
