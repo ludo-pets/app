@@ -1,12 +1,12 @@
-import { StyleSheet, Animated, Dimensions, Easing, Image } from "react-native";
-import { gameConstants} from "@/constants/game";
+import { StyleSheet, Animated, Dimensions, Easing, Image } from 'react-native'
+import { gameConstants } from '@/constants/game'
 
-const { height: windowHeight} = Dimensions.get("window")
+const { height: windowHeight } = Dimensions.get('window')
 
 interface ObstacleProps {
-    height: number;
-    positionX: Animated.Value;
-    isTopObstacle?: boolean;
+    height: number
+    positionX: Animated.Value
+    isTopObstacle?: boolean
 }
 
 export default function Obstacle({
@@ -14,53 +14,49 @@ export default function Obstacle({
     isTopObstacle,
     positionX,
 }: ObstacleProps) {
-    const topPosition = isTopObstacle ? 0 : windowHeight - height - 100;
-    const flexDirection = isTopObstacle ? "column-reverse" : "column";
+    //images
+    const pipeTop = require('@/assets/images/minigames/flappyPet/pipe_top.png')
+    const pipeCore = require('@/assets/images/minigames/flappyPet/pipe_core.png')
+
+    const topPosition = isTopObstacle ? 0 : windowHeight - height - 100
+    const flexDirection = isTopObstacle ? 'column-reverse' : 'column'
     return (
         <Animated.View
-        style={[
-          styles.obstacle,
-          {
-            ...(isTopObstacle ? { height} : {}),
-            transform: [{ translateX: positionX}],
-            top: topPosition,
-            flexDirection,
-          },
-        ]}
-      >
-        <Image
-          source={require("@/assets/images/minigames/flappyPet/game/pipe_core.png")}
-          style={styles.pipeTop}
-        />
-        <Image
-          source={require("@/assets/images/minigames/flappyPet/game/pipe_core.png")}
-          style={styles.pipeCore}
-        />
+            style={[
+                styles.obstacle,
+                {
+                    ...(isTopObstacle ? { height } : {}),
+                    transform: [{ translateX: positionX }],
+                    top: topPosition,
+                    flexDirection,
+                },
+            ]}
+        >
+            <Image source={pipeTop} style={styles.pipeTop} />
+            <Image source={pipeCore} style={styles.pipeCore} />
         </Animated.View>
-     );
-    }
-
-
+    )
+}
 
 const styles = StyleSheet.create({
     obstacle: {
-        position: "absolute",
+        position: 'absolute',
         width: gameConstants.obstacleWidth,
         bottom: 100,
         zIndex: 3,
-        alignItems: "center",
+        alignItems: 'center',
         flex: 1,
     },
     pipeCore: {
-      flex: 1,
-      width: "85%",
-      resizeMode: "repeat",
-      height: "80%",
+        flex: 1,
+        width: '85%',
+        resizeMode: 'repeat',
+        height: '80%',
     },
     pipeTop: {
-      zIndex: 2,
-      width: "100%",
-      height: 28,
-      resizeMode: "cover"
-    }
-});
+        zIndex: 2,
+        width: '100%',
+        height: 28,
+        resizeMode: 'cover',
+    },
+})
