@@ -1,5 +1,8 @@
 import { gameConstants } from "@/constants/game";
 import { Animated, Text, StyleSheet, Image } from "react-native";
+import { useUserPetStore } from "@/stores/userPetStore";
+import Gato from "@/assets/images/pets/gato.svg";
+import Cachorro from "@/assets/images/pets/cachorro.svg";
 
 interface PetProps{
     positionY: Animated.Value;
@@ -7,6 +10,9 @@ interface PetProps{
 }
 
 export default function Pet({ positionY, airPlaneDegree}: PetProps) {
+  const animal = useUserPetStore((state) => state.pet?.type);
+  const color = useUserPetStore((state) => state.pet?.color);
+
     const interpolatedAirPlaneDegree = airPlaneDegree.interpolate({
         inputRange: [
             gameConstants.airPlaneDegreeDown,
@@ -18,6 +24,16 @@ export default function Pet({ positionY, airPlaneDegree}: PetProps) {
         ],
         extrapolate: "clamp",
     });
+
+    const renderPet = () => {
+      if (animal === "cat") {
+        return <Gato width="80%" height="80%" fill={color} style={styles.pet} />;
+      }
+      if (animal === "dog") {
+      return <Cachorro width="80%" height="80%" fill={color} style={styles.pet} />;
+    }
+    return null;
+    };
 
     return (
     <Animated.View
@@ -31,11 +47,7 @@ export default function Pet({ positionY, airPlaneDegree}: PetProps) {
         },
       ]}
     >
-      <Image
-        style={styles.pet}
-        source={require("@/assets/images/minigames/flappyPet/game/pet4.png")}
-        resizeMode="contain"
-      />
+      {renderPet()}
       <Image
         style={styles.airPlane}
         source={require("@/assets/images/minigames/flappyPet/game/airPlane.png")}

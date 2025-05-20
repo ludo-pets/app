@@ -15,7 +15,7 @@ interface UseCollisionProps {
   heightFloor: number;
 }
 
-export function useColision({
+export function useCollision({
   positionXObstacles,
   positionYPet,
   obstacleDimensions,
