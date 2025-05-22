@@ -3,6 +3,13 @@ stages:
     - build
     - deploy
 
+variables:
+    GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS
+
+before_script:
+    - echo "$GOOGLE_APPLICATION_CREDENTIALS" | base64 -d > /tmp/service-account.json
+    - export GOOGLE_APPLICATION_CREDENTIALS="/tmp/service-account.json"
+
 image: node:22
 
 cache:
@@ -12,12 +19,13 @@ cache:
 export_pwa:
     stage: build
     script:
-        - npm install -g vercel
         - npm ci
         - npx expo export --platform web --output-dir dist
     artifacts:
         paths:
             - dist/
+    only:
+        - main
 
 deploy_pwa_vercel:
     stage: deploy
@@ -25,14 +33,29 @@ deploy_pwa_vercel:
         - vercel deploy dist --yes --prod --token $VERCEL_TOKEN
     dependencies:
         - export_pwa
+    only:
+        - main
 
 build_apk:
     stage: android
     image: node:22
     script:
-        - npm install -g eas-cli firebase-tools
         - npm ci
         - eas build --platform android --profile production --non-interactive --json > result.json
-        - $APK_URL = (Get-Content result.json | ConvertFrom-Json)[0].artifacts.buildUrl
-        - Invoke-WebRequest -Uri $APK_URL -OutFile app.apk
-        - firebase appdistribution:distribute app.apk --app $env:FIREBASE_ANDROID_APP_ID --token $env:FIREBASE_CLI_TOKEN --groups "testadores"
+        - |
+            APK_URL=$(jq -r '.[0].artifacts.buildUrl' result.json)
+            echo "APK URL: $APK_URL"
+            curl -L -o app.apk "$APK_URL"
+            file app.apk
+
+            if file app.apk | grep -q 'Zip archive data'; then
+              echo "Arquivo APK válido."
+            else
+              echo "Erro: o arquivo baixado não é um APK válido."
+              cat app.apk
+              exit 1
+            fi
+
+        - firebase appdistribution:distribute app.apk --app $FIREBASE_ANDROID_APP_ID --groups "testadores"
+    only:
+        - main

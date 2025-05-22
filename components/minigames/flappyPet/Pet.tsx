@@ -14,6 +14,7 @@ export default function Pet({ positionY, airPlaneDegree }: PetProps) {
     const airplane = require('@/assets/images/minigames/flappyPet/airPlane.png')
 
     const animal = useUserPetStore((state) => state.pet?.type)
+
     const color = useUserPetStore((state) => state.pet?.color)
 
     const interpolatedAirPlaneDegree = airPlaneDegree.interpolate({
@@ -28,28 +29,15 @@ export default function Pet({ positionY, airPlaneDegree }: PetProps) {
         extrapolate: 'clamp',
     })
 
-    const renderPet = () => {
-        if (animal === 'cat') {
-            return (
-                <Gato
-                    width="80%"
-                    height="80%"
-                    fill={color}
-                    style={styles.pet}
-                />
-            )
+    function renderPet(pet: 'cat' | 'dog' | undefined) {
+        if (!pet) return null
+
+        switch (pet) {
+            case 'cat':
+                return <Gato fill={color} style={styles.catPet} />
+            case 'dog':
+                return <Cachorro fill={color} style={styles.dogPet} />
         }
-        if (animal === 'dog') {
-            return (
-                <Cachorro
-                    width="80%"
-                    height="80%"
-                    fill={color}
-                    style={styles.pet}
-                />
-            )
-        }
-        return null
     }
 
     return (
@@ -64,7 +52,7 @@ export default function Pet({ positionY, airPlaneDegree }: PetProps) {
                 },
             ]}
         >
-            {renderPet()}
+            {renderPet(animal)}
             <Image
                 style={styles.airPlane}
                 source={airplane}
@@ -85,14 +73,21 @@ const styles = StyleSheet.create({
         left: 50,
         zIndex: 4,
     },
-    pet: {
-        width: '80%',
-        height: '80%',
+    catPet: {
+        width: '50%',
+        height: '50%',
         position: 'absolute',
-        bottom: '30%',
-        left: '10%',
-        zIndex: 4,
-        transform: [{ scaleX: -1 }, { rotate: '25deg' }],
+        bottom: '38%',
+        left: '20%',
+        transform: [{ scaleX: -1 }, { rotate: '40deg' }],
+    },
+    dogPet: {
+        width: '50%',
+        height: '50%',
+        position: 'absolute',
+        bottom: '48%',
+        left: '25%',
+        transform: [{ scaleX: -1 }, { rotate: '15deg' }],
     },
 
     airPlane: {

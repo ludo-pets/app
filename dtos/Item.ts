@@ -4,6 +4,6 @@ export default interface Item {
     price: number
     requiredLevel: number
     category: string
-    image?: string
+    image: string
     type: string
 }

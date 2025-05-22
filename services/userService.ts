@@ -1,4 +1,4 @@
-import Pet from '@/dtos/Pet'
+import { Pet } from '@/dtos/Pet'
 import User from '@/dtos/User'
 import { db } from '@/firebaseConfig'
 import {
@@ -46,11 +46,11 @@ export const getUserWithPetByIdService = async (
             purchasedItems: petData.purchasedItems,
             activeItems: petData.activeItems,
             wellBeing: {
-                clean: new Date(petData.wellBeing.clean),
-                fun: new Date(petData.wellBeing.fun),
-                hunger: new Date(petData.wellBeing.hunger),
-                thirst: new Date(petData.wellBeing.thirst),
-                sleep: new Date(petData.wellBeing.sleep),
+                clean: petData.wellBeing.clean,
+                fun: petData.wellBeing.fun,
+                hunger: petData.wellBeing.hunger,
+                thirst: petData.wellBeing.thirst,
+                sleep: petData.wellBeing.sleep,
             },
         }
 
@@ -63,6 +63,7 @@ export const getUserWithPetByIdService = async (
             lastLessonConcluded: userData.lastLessonConcluded,
             notifications: userData.notifications,
             pet: userData.pet,
+            achievements: userData.achievements || [],
         }
 
         return { user, pet }

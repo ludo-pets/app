@@ -5,16 +5,25 @@ import {
     View,
     Animated,
     Pressable,
+    ActivityIndicator,
 } from 'react-native'
 
 import Pet from '@/components/minigames/flappyPet/Pet'
 import Obstacle from '@/components/minigames/flappyPet/Obstacle'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import {
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState,
+} from 'react'
 import { gameConstants } from '@/constants/game'
 import { useObstacleMovement } from '@/hooks/useObstacleMovement'
 import { useCollision } from '@/hooks/useCollision'
 import { useGravity } from '@/hooks/useGravity'
 import { generateObstacleHeights } from '@/utils/generateObstacleHeight'
+import { useNavigation } from 'expo-router'
+import Score from '@/components/minigames/flappyPet/Score'
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get('window')
 
@@ -22,11 +31,26 @@ interface DimensionsObstacle {
     heightObstacleTop: number
     heightObstacleBottom: number
 }
-export default function FlappyPetGame() {
+export default function Renderer() {
+    //esconder taskbar
+    const navigation = useNavigation()
+    useLayoutEffect(() => {
+        navigation.getParent()?.setOptions({
+            tabBarStyle: { display: 'none' },
+        })
+
+        return () => {
+            navigation.getParent()?.setOptions({
+                tabBarStyle: undefined,
+            })
+        }
+    }, [navigation])
+
     //imagens
     const background = require('@/assets/images/minigames/flappyPet/background.png')
     const floor = require('@/assets/images/minigames/flappyPet/floor.png')
 
+    //Positions and values
     const positionYPet = useRef(
         new Animated.Value(gameConstants.initialDimensions.positionY)
     ).current
@@ -36,32 +60,71 @@ export default function FlappyPetGame() {
         new Animated.Value(gameConstants.airPlaneDegree)
     ).current
 
+    //initial values
     const initialDimensions = generateObstacleHeights(
         windowHeight,
         gameConstants.heightSpace,
         gameConstants.heightFloor
     )
 
+    //states
+    const [score, setScore] = useState(0)
+    const [coins, setCoins] = useState(0)
     const [obstacleDimensions, setObstacleDimensions] =
         useState<DimensionsObstacle>(initialDimensions)
     const [isGameOver, setIsGameOver] = useState(false)
     const [gravity, setGravity] = useState(gameConstants.initialGravity)
     const [duration, setDuration] = useState(gameConstants.initialDuration)
 
-    const handlerObstacleHeights = useCallback(() => {
+    // handlers
+    function handlerFlyDirection(direction: 'up' | 'down' | 'none') {
+        let gravityStrength = 0
+        switch (direction) {
+            case 'up':
+                gravityStrength = gameConstants.flyUpStrength
+                break
+            case 'down':
+                gravityStrength = gameConstants.flyDownStrength
+                break
+            case 'none':
+                gravityStrength = gameConstants.initialGravity
+                break
+        }
+        setGravity(gravityStrength)
+    }
+    function handlerAirPlaneDegree(degree: number) {
+        Animated.spring(airPlaneDegree, {
+            toValue: degree,
+            useNativeDriver: false,
+            bounciness: 0,
+            speed: 10,
+        }).start()
+    }
+    const handleObstacleReset = useCallback(() => {
         const newObstacleDimensions = generateObstacleHeights(
             windowHeight,
             gameConstants.heightSpace,
             gameConstants.heightFloor
         )
         setObstacleDimensions(newObstacleDimensions)
+        setScore((prevScore) => {
+            if (prevScore % 5 === 0 && prevScore > 0) {
+                setCoins((prevCoins) => prevCoins + 1)
+            }
+            return prevScore + 1
+        })
+
+        setDuration((prevDuration) => {
+            const newDuration = prevDuration * 0.98
+            return Math.max(newDuration, 1500)
+        })
     }, [windowHeight])
 
     // minigame physics in hooks. viniii :)
     useObstacleMovement({
         positionXObstacles: positionXObstacles,
         duration,
-        onReset: handlerObstacleHeights,
+        onReset: handleObstacleReset,
         windowWidth,
         isGameOver,
     })
@@ -93,32 +156,6 @@ export default function FlappyPetGame() {
         }
     }, [isColliding])
 
-    // handlers
-    function handlerFlyDirection(direction: 'up' | 'down' | 'none') {
-        let gravityStrength = 0
-        switch (direction) {
-            case 'up':
-                gravityStrength = gameConstants.flyUpStrength
-                break
-            case 'down':
-                gravityStrength = gameConstants.flyDownStrength
-                break
-            case 'none':
-                gravityStrength = gameConstants.initialGravity
-                break
-        }
-        setGravity(gravityStrength)
-    }
-
-    function handlerAirPlaneDegree(degree: number) {
-        Animated.spring(airPlaneDegree, {
-            toValue: degree,
-            useNativeDriver: false,
-            bounciness: 0,
-            speed: 10,
-        }).start()
-    }
-
     return (
         <View
             style={[
@@ -126,6 +163,7 @@ export default function FlappyPetGame() {
                 { width: windowWidth, height: windowHeight },
             ]}
         >
+            <Score score={score} coins={coins} />
             <Pressable
                 onPressIn={() => {
                     handlerFlyDirection('up')
