@@ -1,5 +1,12 @@
 import { Wellbeing } from "@/dtos/Pet";
 
+export let feeded = 0;
+export let drunk = 0;
+export let slept = 0;
+export let cleaned = 0;
+export let played = 0;
+export let mood = 0;
+
 export const calcPetMood = (wellBeing: Wellbeing): number => {
     const lastFed = new Date(wellBeing.hunger);
     const lastDrank = new Date(wellBeing.thirst);
@@ -8,11 +15,12 @@ export const calcPetMood = (wellBeing: Wellbeing): number => {
     const lastSlept = new Date(wellBeing.sleep);
     
     let mood = 0;
-    mood += calcNecessityValue(lastFed, 25, 216000);
-    mood += calcNecessityValue(lastDrank, 25, 216000);
-    mood += calcNecessityValue(lastSlept, 25, 216000);
-    mood += calcNecessityValue(lastCleaned, 12.5, 432000);
-    mood += calcNecessityValue(lastPlayed, 12.5, 43200);
+    feeded = calcNecessityValue(lastFed, 25, 216000);
+    drunk =  calcNecessityValue(lastDrank, 25, 216000);
+    slept = mood += calcNecessityValue(lastSlept, 25, 216000);
+    cleaned =  calcNecessityValue(lastCleaned, 12.5, 432000);
+    played = calcNecessityValue(lastPlayed, 12.5, 43200);
+    mood += (feeded + drunk + slept + cleaned + played);
 
     return mood;
 }

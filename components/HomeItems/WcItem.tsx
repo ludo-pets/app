@@ -7,7 +7,7 @@ import {
 } from 'react-native'
 import ItemProps from '@/dtos/ItensProps'
 import { useUserPetStore } from '@/stores/userPetStore'
-import { calcPetMood } from '@/utils/moodCalculator'
+import { cleaned } from '@/utils/moodCalculator'
 import { useState } from 'react'
 
 const { height, width } = Dimensions.get('window')
@@ -17,8 +17,7 @@ const WcItem = ({ update }: ItemProps) => {
 
     const needsCleaning = () => {
         if (pet) {
-            const mood = calcPetMood(pet.wellBeing)
-            return mood < 12.5
+            return cleaned < 12.5
         }
         return false
     }
