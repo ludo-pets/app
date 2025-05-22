@@ -1,8 +1,35 @@
+import Dialog from "@/components/Dialog/Dialog";
 import Header from "@/components/Header";
+import { useLessonStore } from "@/stores/lessonStore";
+import { router } from "expo-router";
+import { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function quizSummary(){
-    return(
+    const [endSummary, setEndSummary] = useState(false);
+     const {
+            loading,
+            error,
+            lesson,
+            currentQuestion,
+            changeToNextQuestion,
+            finishLesson,
+        } = useLessonStore()
+
+    const onHandleNext = async () => {
+        if(currentQuestion && lesson) {
+            const hasNext = await changeToNextQuestion(currentQuestion.id, lesson.questions)
+            
+            if(!hasNext) {
+                setEndSummary(true);
+                finishLesson(lesson);
+            }
+        }
+        
+            
+    }
+    useEffect(()=>{}, [currentQuestion])
+    return (lesson && currentQuestion) && (
     <View>
         <View>
             <Header
@@ -14,19 +41,37 @@ export default function quizSummary(){
         <View style={styles.container}>
             <Image source={require('@/assets/images/quiz/quiz-cat.png')}/>    
             <Text style={styles.title}>
-                Gatos adultos costumam dormir de 10 a 15 horas por dia.
+                {currentQuestion?.description}
+            </Text>
+            <Text style={styles.answers}>
+                {currentQuestion?.answers.map((ans,index) => (
+                    <View style={index == currentQuestion.rightAnswer ? styles.rightAnswer: styles.wrongAnswer}>
+                        <Text>{ans}</Text>
+                    </View>
+                ))}
             </Text>
             <Text style={styles.summary}>
-                De acordo com especialistas, os peludos dormem, em média, 60% do seu tempo. 
-                Isso significa que eles passam cerca de 15h por dia de olhos fechados. Entretanto, 
-                esse número pode variar a partir de fatores como clima, saíde e idade do pet. Em outros,
-                os bigodudos dorem mais ou menos o mesmo tempo médio de um ser humano adulto. 
-                Ficar de olho no sono do amigo é importante...
+                {currentQuestion?.explanation}
             </Text>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity 
+                style={styles.button}
+                onPress={() => onHandleNext()}
+            >
                 <Text style={styles.buttonText}>Avançar</Text>
             </TouchableOpacity>
         </View>
+        {
+            endSummary && (<Dialog.Container>
+                <Dialog.Text content="Parabéns!!"/>
+                <Dialog.Text content="Você concluiu a revisão desta lição"/>
+                <Dialog.Button
+                    action={() => router.push("/quiz")}
+                    text="Voltar"
+                >
+
+                </Dialog.Button>
+            </Dialog.Container>
+        )}
     </View>
     )
 }
@@ -47,6 +92,18 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         color: "#5B5B5B",
         width: "80%",
+    },
+    description: {
+
+    },
+    answers: {
+
+    },
+    rightAnswer: {
+        backgroundColor :"green"
+    },
+    wrongAnswer: {
+        backgroundColor :"red"
     },
     summary: {
         fontSize: 16,
