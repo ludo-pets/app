@@ -4,10 +4,11 @@ import { SafeAreaView, StyleSheet, View } from "react-native"
 import { PanGestureHandler } from "react-native-gesture-handler";
 import { Colors } from "react-native/Libraries/NewAppScreen"
 import Dog from "./Dog";
+import { checkGameOver } from "@/utils/checkGameOver";
 
 const DOG_INITIAL_POSITION = [{ x: 5, y: 5}];
 const FOOD_INITIAL_POSITION = {x: 5, y: 20};
-const GAME_BOUNDS = { xMin: 0, xMax: 35, yMin: 0, yMax: 63};
+const GAME_BOUNDS = { xMin: 0, xMax: 35, yMin: 0, yMax: 70 };
 const MOVE_INTERVAL = 50;
 const SCORE_INCREMENT = 10;
 
@@ -23,10 +24,43 @@ export default function Game(): JSX.Element {
     const [isGameOver, setIsGameOver] = React.useState<boolean>(false);
     const [isPaused, setIsPaused] = React.useState<boolean>(false);
 
+    React.useEffect(() => {
+        if(!isGameOver) {
+            const intervalID = setInterval(() => {
+                !isPaused && moveDog();
+            },MOVE_INTERVAL)
+            return () => clearInterval(intervalID);
+        }
+    }, [dog, isGameOver, isPaused])
+
     const moveDog = () => {
         const dogHead = dog[0];
         const newHead = {...dogHead}
-    }
+
+        if (checkGameOver(dogHead, GAME_BOUNDS)) {
+            setIsGameOver((prev) => !prev);
+            return;
+        }
+
+        switch (direction) {
+            case Direction.Up:
+                newHead.y -= 1;
+                break;
+            case Direction.Down:
+                newHead.y += 1;
+                break;
+            case Direction.Right:
+                newHead.x -= 1;
+                break;
+            case Direction.Right:
+                newHead.x += 1;
+                break; 
+            default:
+                break;          
+        }
+
+        setDog([newHead, ...dog.slice(0, -1)]);
+    };
 
     const handleGesture = (event: any) => {
         const { translationX, translationY } = event.nativeEvent;
