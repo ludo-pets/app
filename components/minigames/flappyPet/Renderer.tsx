@@ -4,6 +4,8 @@ import {
     Dimensions,
     View,
     Pressable,
+    Animated,
+    Easing,
 } from 'react-native'
 
 import Pet from '@/components/minigames/flappyPet/Pet'
@@ -48,6 +50,7 @@ export default function Renderer({ isPaused }: RendererProps) {
     //     obstacleWidth: gameConstants.obstacleWidth,
     //     heightFloor: gameConstants.heightFloor,
     // })
+    // console.log('🚀 ~ Renderer ~ obstacleDimensions:', obstacleDimensions)
 
     const isColliding = useCollisionDetection({
         positionYPet,
@@ -59,8 +62,16 @@ export default function Renderer({ isPaused }: RendererProps) {
     useEffect(() => {
         if (isColliding) {
             setIsGameOver(true)
-            positionXObstacles.stopAnimation()
-            positionYPet.stopAnimation()
+            Animated.timing(positionYPet, {
+                toValue:
+                    windowHeight -
+                    (gameConstants.heightFloor + gameConstants.petHeight * 1.4),
+                duration: 1000,
+                useNativeDriver: true,
+                easing: Easing.linear,
+            }).start()
+            // positionXObstacles.stopAnimation()
+            // positionYPet.stopAnimation()
         }
     }, [isColliding])
 

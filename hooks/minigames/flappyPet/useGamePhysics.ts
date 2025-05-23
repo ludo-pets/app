@@ -32,6 +32,10 @@ export default function useGamePhysics(gameOver: boolean, isPaused: boolean) {
     }
 
     function handleAirPlaneDegree(degree: number) {
+        if (gameOver) {
+            airPlaneDegree.setValue(gameConstants.airPlaneDegree)
+            return
+        }
         Animated.spring(airPlaneDegree, {
             toValue: degree,
             useNativeDriver: false,

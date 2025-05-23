@@ -73,7 +73,8 @@ const styles = StyleSheet.create({
         // bottom: 100,
         // left: gameConstants.positionXPet,
         zIndex: 4,
-        backgroundColor: 'blue',
+        // backgroundColor: 'blue',
+        borderRadius: '50%',
     },
     catPet: {
         width: '50%',

@@ -24,10 +24,12 @@ export default function useObstacleManager(
     const [duration, setDuration] = useState(gameConstants.initialDuration)
     const [obstacleDimensions, setObstacleDimensions] =
         useState<DimensionsObstacle>(initialDimensions)
+    // console.log('🚀 ~ obstacleDimensions:', obstacleDimensions)
     const [score, setScore] = useState(0)
     const [coins, setCoins] = useState(0)
 
     const handleObstacleReset = useCallback(() => {
+        console.log('🚀 ~ trocoooou')
         const newObstacleDimensions = generateObstacleHeights(
             windowHeight,
             gameConstants.heightSpace,
@@ -49,32 +51,31 @@ export default function useObstacleManager(
 
     useEffect(() => {
         let isCanceled = false
-        if (gameOver || isPaused) {
-            positionXObstacles.stopAnimation()
-            return
-        }
+
         const runAnimation = () => {
-            Animated.sequence([
-                Animated.timing(positionXObstacles, {
-                    toValue: -60,
-                    duration,
-                    useNativeDriver: true,
-                    easing: Easing.linear,
-                }),
-                Animated.timing(positionXObstacles, {
-                    toValue: windowWidth,
-                    duration: 0,
-                    useNativeDriver: true,
-                    easing: Easing.linear,
-                }),
-            ]).start(() => {
-                if (!isCanceled && !gameOver) {
-                    handleObstacleReset()
-                    runAnimation()
+            if (gameOver || isPaused || isCanceled) {
+                positionXObstacles.stopAnimation()
+                return
+            }
+
+            Animated.timing(positionXObstacles, {
+                toValue: -80,
+                duration,
+                useNativeDriver: true,
+                easing: Easing.linear,
+            }).start(({ finished }) => {
+                if (!finished || gameOver || isPaused || isCanceled) {
+                    return
                 }
+
+                positionXObstacles.setValue(windowWidth)
+                handleObstacleReset()
+                runAnimation()
             })
         }
+
         runAnimation()
+
         return () => {
             isCanceled = true
             positionXObstacles.stopAnimation()

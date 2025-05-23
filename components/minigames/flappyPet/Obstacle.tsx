@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
         height: '80%',
     },
     pipeTop: {
-        zIndex: 2,
+        zIndex: 1,
         width: '100%',
         height: 28,
         resizeMode: 'cover',
