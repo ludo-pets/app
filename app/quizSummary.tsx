@@ -52,19 +52,26 @@ export default function quizSummary(){
             <Text style={styles.title}>
                 {currentQuestion?.description}
             </Text>
-            <Text style={styles.answers}>
+            <View style={styles.answers}>
                 {<View style={styles.rightAnswer}>
                         <Text>{currentQuestion?.answers[currentQuestion.rightAnswer]}</Text>
                     </View>
                 }
                 {currentQuestion?.answers
 
-                    .map((ans,index) => (index != currentQuestion.rightAnswer) && (
-                    <View style={index == currentQuestion.rightAnswer ? styles.rightAnswer: styles.wrongAnswer}>
-                        <Text>{ans}</Text>
+                    .map((ans,index) => index != currentQuestion.rightAnswer && (
+                    <View key={index} style={styles.wrongAnswer}>
+                        <Text 
+                            adjustsFontSizeToFit
+                            numberOfLines={4}
+                            minimumFontScale={0.5}
+                            style={{ width: "100%", textAlign: "center" }}
+                            >
+                                {ans}
+                        </Text>
                     </View>
                 ))}
-            </Text>
+            </View>
             <Text style={styles.summary}>
                 {currentQuestion?.explanation}
             </Text>
@@ -102,14 +109,14 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 20,
         textAlign: "center",
-        fontWeight: '800',
+        fontWeight: '500',
         color: "#5B5B5B",
         width: "80%",
     },
     answers: {
         display: "flex",
         justifyContent: "center",
-        alignItems: "center",
+        alignItems: "stretch",
         flexDirection: "row",
         flexWrap: "wrap",
 
@@ -119,7 +126,7 @@ const styles = StyleSheet.create({
     rightAnswer: {
         backgroundColor :"#D9E8B9",
         padding: 15,
-        fontSize: 16,
+        fontSize: 20,
         alignItems: "center",
         color: "#5B5B5B",
         borderColor: "#5B5B5B",
@@ -132,14 +139,12 @@ const styles = StyleSheet.create({
     wrongAnswer: {
         backgroundColor :"#EDB0B0",
         padding: 15,
-        flex: 1,
-        fontSize: 14,
         color: "#5B5B5B",
+        fontSize: 14,
         borderColor: "#5B5B5B",
         borderWidth: 1,
         borderRadius: 10,
         width: "30%",
-        aspectRatio: 2 / 1,
         textAlign: "center",
         alignItems: "center",
         minHeight: 60,
