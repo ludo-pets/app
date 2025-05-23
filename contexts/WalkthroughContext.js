@@ -7,7 +7,6 @@ import React, {
 } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { router, usePathname } from 'expo-router'
-
 const ASYNC_STORAGE_KEY = 'appGlobalWalkthroughCompleted_v1'
 
 export const WALKTHROUGH_STEPS_CONFIG = [
@@ -61,7 +60,6 @@ export const WalkthroughProvider = ({ children }) => {
         ;(async () => {
             try {
                 const completed = await AsyncStorage.getItem(ASYNC_STORAGE_KEY)
-                // const completed = null
                 if (cancelled) return
 
                 if (completed === null) {
@@ -84,7 +82,7 @@ export const WalkthroughProvider = ({ children }) => {
         })()
 
         return () => {
-            cancelled = true // suppress stale async state updates
+            cancelled = true
         }
     }, [])
 

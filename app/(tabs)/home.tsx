@@ -18,7 +18,6 @@ export default function HomeScreen() {
     const pet = useUserPetStore((state) => state.pet)
 
     const [mood, setMood] = useState(0)
-    const [showTip, setTip] = useState(false)
 
     useEffect(() => {
         if (pet) {
