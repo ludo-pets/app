@@ -21,6 +21,9 @@ import { PetOptionFormRegisterPet } from '@/components/PetOptionFormRegisterPet'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { useRouter } from 'expo-router'
 import { FlatList } from 'react-native-gesture-handler'
+import Achievement from '@/components/Achievement'
+import AchievementType from '@/dtos/Achievement'
+import { fetchAchievements } from '@/services/fetchAchievements'
 
 const editIcon = require('@/assets/images/profile/edit_icon.png')
 const coinIcon = require('@/assets/images/profile/pet_coin.png')
@@ -85,6 +88,29 @@ export default function Profile() {
         }
     }
 
+    //TODO: fetch "conquered" achievements and add boolean atributes to them
+    //TODO: add "is loading" feature
+
+    const [achievements, setAchievements] = useState<AchievementType[]>([])
+    const [error, setError] = useState<string | null>(null)
+
+    useEffect(() => {
+            const loadData = async () => {
+                setError(null)
+                try {
+                    const fetchedAchievements = await fetchAchievements()
+                    setAchievements(fetchedAchievements)
+                } catch (err: any) {
+                    console.error('Failed to fetch achievements:', err)
+                    setError(
+                        err.message || 'Failed to load achievements. Please try again.'
+                    )
+                    setAchievements([])
+                } 
+            }
+            loadData()
+        }, [])
+
     //delete this later
 
     const TESTE = [
@@ -92,61 +118,74 @@ export default function Profile() {
             id: 1,
             name: 'conquista 1',
             message: 'esta é a conquista 1',
+            conquered: true,
+
         },
         {
             id: 2,
             name: 'conquista 2',
             message: 'esta é a conquista 2',
+            conquered: true,
         },
         {
             id: 3,
             name: 'conquista 3',
             message: 'esta é a conquista 3',
+            conquered: false,
         },
         {
             id: 4,
             name: 'conquista 4',
             message: 'esta é a conquista 4',
+            conquered: true,
         },
         {
             id: 5,
             name: 'conquista 5',
             message: 'esta é a conquista 5',
+            conquered: true,
         },
         {
             id: 6,
             name: 'conquista 6',
             message: 'esta é a conquista 6',
+            conquered: true,
         },
         {
             id: 7,
             name: 'conquista 7',
             message: 'esta é a conquista 7',
+            conquered: false,
         },
         {
             id: 8,
             name: 'conquista 8',
             message: 'esta é a conquista 8',
+            conquered: true,
         },
         {
             id: 9,
             name: 'conquista 9',
             message: 'esta é a conquista 9',
+            conquered: false,
         },
         {
             id: 10,
             name: 'conquista 10',
             message: 'esta é a conquista 10',
+            conquered: true,
         },
         {
             id: 11,
             name: 'conquista 11',
             message: 'esta é a conquista 11',
+            conquered: true,
         },
         {
             id: 12,
             name: 'conquista 12',
             message: 'esta é a conquista 12 ',
+            conquered: false,
         },
     ]
 
@@ -269,15 +308,13 @@ export default function Profile() {
                         <Text style={styles.achievementsTitle}>Conquistas</Text>
                         <View style={styles.listBox}>
                             <FlatList
-                                data={TESTE}
+                                data={achievements}
                                 showsVerticalScrollIndicator={false}
-                                keyExtractor={(item) => item.id.toString()}
+                                keyExtractor={(item) => item.name.toString()}
                                 numColumns={3}
                                 renderItem={({item}) => (
                                     <View style={styles.achievementBox}> 
-                                        <View>
-                                            <Text>{item.id}</Text>
-                                        </View>
+                                            <Achievement title={item.name} description={item.message} conquered={false}></Achievement>
                                     </View>
                                 )}
                                 />
@@ -571,20 +608,22 @@ const createStyles = (isSmallScreen: boolean) =>
             borderColor: '#5B5B5B',
             borderWidth: 2,
         },
-        achievementBox: {
-            width: 120,
-            height: 120,
-            backgroundColor: 'lightblue',
-            alignItems: 'center',
-            justifyContent: 'center',
-            margin: 2,
-        },
         listBox: {
             top: '4%',
             width: '100%',
             height: '78%',
             alignItems: 'center',
             //backgroundColor: 'blue',
-        }
+        },
+        achievementBox: {
+            width: 120,
+            height: 120,
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: 2,
+            //backgroundColor: 'lightblue',
+            paddingTop: 70, // gambiarra, fix later
+            paddingBottom: 100, // same thing
+        },
         
     })
