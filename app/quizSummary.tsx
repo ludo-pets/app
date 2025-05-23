@@ -2,35 +2,44 @@ import Dialog from "@/components/Dialog/Dialog";
 import Header from "@/components/Header";
 import { useLessonStore } from "@/stores/lessonStore";
 import { router } from "expo-router";
+import { push } from "expo-router/build/global-state/routing";
 import { useEffect, useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function quizSummary(){
     const [endSummary, setEndSummary] = useState(false);
      const {
-            loading,
-            error,
-            lesson,
-            currentQuestion,
-            changeToNextQuestion,
-            finishLesson,
-        } = useLessonStore()
+        loading,
+        error,
+        lesson,
+        currentQuestion,
+        changeToNextQuestion,
+        finishLesson,
+    } = useLessonStore()
 
     const onHandleNext = async () => {
         if(currentQuestion && lesson) {
             const hasNext = await changeToNextQuestion(currentQuestion.id, lesson.questions)
             
             if(!hasNext) {
-                setEndSummary(true);
-                finishLesson(lesson);
+                setEndSummary(true)
             }
         }
         
             
     }
-    useEffect(()=>{}, [currentQuestion])
+    useEffect(()=>{
+        return () => {
+            finishLesson(lesson!)
+        };
+    }, [])
+    useEffect(()=>{
+
+    }, [currentQuestion])
     return (lesson && currentQuestion) && (
-    <View>
+    <ScrollView 
+        contentContainerStyle={{flex: 1, justifyContent: "space-between"}}
+        showsVerticalScrollIndicator={false}> 
         <View>
             <Header
                     title="Quiz"
@@ -44,7 +53,13 @@ export default function quizSummary(){
                 {currentQuestion?.description}
             </Text>
             <Text style={styles.answers}>
-                {currentQuestion?.answers.map((ans,index) => (
+                {<View style={styles.rightAnswer}>
+                        <Text>{currentQuestion?.answers[currentQuestion.rightAnswer]}</Text>
+                    </View>
+                }
+                {currentQuestion?.answers
+
+                    .map((ans,index) => (index != currentQuestion.rightAnswer) && (
                     <View style={index == currentQuestion.rightAnswer ? styles.rightAnswer: styles.wrongAnswer}>
                         <Text>{ans}</Text>
                     </View>
@@ -72,7 +87,7 @@ export default function quizSummary(){
                 </Dialog.Button>
             </Dialog.Container>
         )}
-    </View>
+    </ScrollView>
     )
 }
 
@@ -80,34 +95,59 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'space-around',
-        width: '100%',
-        height: "100%",
+        justifyContent: 'flex-start',
         gap: 20,
 
     },
     title: {
         fontSize: 20,
         textAlign: "center",
-        fontWeight: '500',
+        fontWeight: '800',
         color: "#5B5B5B",
         width: "80%",
     },
-    description: {
-
-    },
     answers: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "row",
+        flexWrap: "wrap",
 
+        gap: 15,
+        width: "90%",
     },
     rightAnswer: {
-        backgroundColor :"green"
+        backgroundColor :"#D9E8B9",
+        padding: 15,
+        fontSize: 16,
+        alignItems: "center",
+        color: "#5B5B5B",
+        borderColor: "#5B5B5B",
+        borderWidth: 1,
+        borderRadius: 10,
+        width: "100%",
+        textAlign: "center",
+        minHeight: 60,
     },
     wrongAnswer: {
-        backgroundColor :"red"
+        backgroundColor :"#EDB0B0",
+        padding: 15,
+        flex: 1,
+        fontSize: 14,
+        color: "#5B5B5B",
+        borderColor: "#5B5B5B",
+        borderWidth: 1,
+        borderRadius: 10,
+        width: "30%",
+        aspectRatio: 2 / 1,
+        textAlign: "center",
+        alignItems: "center",
+        minHeight: 60,
     },
     summary: {
         fontSize: 16,
-        textAlign: "justify",
+        textAlign: "center",
+
         fontWeight: '500',
         color: "#5B5B5B",
         width: "80%",
@@ -116,10 +156,10 @@ const styles = StyleSheet.create({
         width: "80%",
         backgroundColor: "#FFAFD4",
         padding: 10,
-        flex: 1,
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 10,
+
         boxShadow: "rgba(0,0,0,0.15) 5px 5px 5px"
         
     },
