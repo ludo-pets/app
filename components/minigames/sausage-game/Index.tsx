@@ -5,6 +5,7 @@ import { PanGestureHandler } from "react-native-gesture-handler";
 import { Colors } from "react-native/Libraries/NewAppScreen"
 import Dog from "./Dog";
 import { checkGameOver } from "@/utils/checkGameOver";
+import Food from "./Food";
 
 const DOG_INITIAL_POSITION = [{ x: 5, y: 5}];
 const FOOD_INITIAL_POSITION = {x: 5, y: 20};
@@ -84,6 +85,7 @@ export default function Game(): JSX.Element {
             <SafeAreaView style={styles.container}>
                 <View style={styles.boundaries}>
                     <Dog dog={dog} />
+                    <Food x={food.x} y={food.y} />
                 </View>
             </SafeAreaView>
         </PanGestureHandler>
