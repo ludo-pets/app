@@ -85,17 +85,16 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
     setUser: (user: User) => set({ user }),
     setPet: (pet: Pet) => set({ pet }),
 
-    updateAchievements: async (achievements: string) => {
+    updateAchievements: async (achievement: string) => {
         set({ error: null })
         try {
             const user = get().user
             if (user) {
-                const newAchievements = user?.achievements
-                var verifica = user?.achievements.includes(achievements)
-                if (verifica) {
-                    return
-                } else {
-                    newAchievements?.push(achievements)
+                const alreadyOwned = user.achievements.includes(achievement)
+                if (!alreadyOwned) {
+                    const newAchievements = [...user.achievements, achievement]
+                    await updateUserService(user.id, { achievements: newAchievements, experience: user.experience + 1 })
+                    set({ user: { ...user, achievements: newAchievements, experience: user.experience + 1 } })
                 }
             }
         } catch (error: any) {
