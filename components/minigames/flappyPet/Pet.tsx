@@ -47,6 +47,7 @@ export default function Pet({ positionY, airPlaneDegree }: PetProps) {
                 {
                     transform: [
                         { translateY: positionY },
+
                         { rotate: interpolatedAirPlaneDegree },
                     ],
                 },
@@ -69,9 +70,10 @@ const styles = StyleSheet.create({
         minHeight: 80,
         minWidth: 80,
         position: 'absolute',
-        bottom: 100,
-        left: 50,
+        // bottom: 100,
+        // left: gameConstants.positionXPet,
         zIndex: 4,
+        backgroundColor: 'blue',
     },
     catPet: {
         width: '50%',

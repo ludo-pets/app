@@ -3,148 +3,56 @@ import {
     ImageBackground,
     Dimensions,
     View,
-    Animated,
     Pressable,
-    ActivityIndicator,
 } from 'react-native'
 
 import Pet from '@/components/minigames/flappyPet/Pet'
 import Obstacle from '@/components/minigames/flappyPet/Obstacle'
-import {
-    useCallback,
-    useEffect,
-    useLayoutEffect,
-    useRef,
-    useState,
-} from 'react'
+import { useEffect, useState } from 'react'
 import { gameConstants } from '@/constants/game'
-import { useObstacleMovement } from '@/hooks/useObstacleMovement'
-import { useCollision } from '@/hooks/useCollision'
-import { useGravity } from '@/hooks/useGravity'
-import { generateObstacleHeights } from '@/utils/generateObstacleHeight'
-import { useNavigation } from 'expo-router'
+import { useCollision } from '@/hooks/minigames/flappyPet/useCollision'
 import Score from '@/components/minigames/flappyPet/Score'
+import useObstacleManager from '@/hooks/minigames/flappyPet/useObstacleManager'
+import useGamePhysics from '@/hooks/minigames/flappyPet/useGamePhysics'
+import useCollisionDetection from '@/hooks/minigames/flappyPet/useCollisionDetection'
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get('window')
 
-interface DimensionsObstacle {
-    heightObstacleTop: number
-    heightObstacleBottom: number
+interface RendererProps {
+    isPaused: boolean
 }
-export default function Renderer() {
-    //esconder taskbar
-    const navigation = useNavigation()
-    useLayoutEffect(() => {
-        navigation.getParent()?.setOptions({
-            tabBarStyle: { display: 'none' },
-        })
-
-        return () => {
-            navigation.getParent()?.setOptions({
-                tabBarStyle: undefined,
-            })
-        }
-    }, [navigation])
-
+export default function Renderer({ isPaused }: RendererProps) {
     //imagens
     const background = require('@/assets/images/minigames/flappyPet/background.png')
     const floor = require('@/assets/images/minigames/flappyPet/floor.png')
 
-    //Positions and values
-    const positionYPet = useRef(
-        new Animated.Value(gameConstants.initialDimensions.positionY)
-    ).current
-    const prevValuePositionY = useRef(gameConstants.initialDimensions.positionY)
-    const positionXObstacles = useRef(new Animated.Value(windowWidth)).current
-    const airPlaneDegree = useRef(
-        new Animated.Value(gameConstants.airPlaneDegree)
-    ).current
-
-    //initial values
-    const initialDimensions = generateObstacleHeights(
-        windowHeight,
-        gameConstants.heightSpace,
-        gameConstants.heightFloor
-    )
-
-    //states
-    const [score, setScore] = useState(0)
-    const [coins, setCoins] = useState(0)
-    const [obstacleDimensions, setObstacleDimensions] =
-        useState<DimensionsObstacle>(initialDimensions)
     const [isGameOver, setIsGameOver] = useState(false)
-    const [gravity, setGravity] = useState(gameConstants.initialGravity)
-    const [duration, setDuration] = useState(gameConstants.initialDuration)
 
-    // handlers
-    function handlerFlyDirection(direction: 'up' | 'down' | 'none') {
-        let gravityStrength = 0
-        switch (direction) {
-            case 'up':
-                gravityStrength = gameConstants.flyUpStrength
-                break
-            case 'down':
-                gravityStrength = gameConstants.flyDownStrength
-                break
-            case 'none':
-                gravityStrength = gameConstants.initialGravity
-                break
-        }
-        setGravity(gravityStrength)
-    }
-    function handlerAirPlaneDegree(degree: number) {
-        Animated.spring(airPlaneDegree, {
-            toValue: degree,
-            useNativeDriver: false,
-            bounciness: 0,
-            speed: 10,
-        }).start()
-    }
-    const handleObstacleReset = useCallback(() => {
-        const newObstacleDimensions = generateObstacleHeights(
-            windowHeight,
-            gameConstants.heightSpace,
-            gameConstants.heightFloor
-        )
-        setObstacleDimensions(newObstacleDimensions)
-        setScore((prevScore) => {
-            if (prevScore % 5 === 0 && prevScore > 0) {
-                setCoins((prevCoins) => prevCoins + 1)
-            }
-            return prevScore + 1
-        })
+    const { positionXObstacles, obstacleDimensions, score, coins } =
+        useObstacleManager(isGameOver, isPaused)
 
-        setDuration((prevDuration) => {
-            const newDuration = prevDuration * 0.98
-            return Math.max(newDuration, 1500)
-        })
-    }, [windowHeight])
-
-    // minigame physics in hooks. viniii :)
-    useObstacleMovement({
-        positionXObstacles: positionXObstacles,
-        duration,
-        onReset: handleObstacleReset,
-        windowWidth,
-        isGameOver,
-    })
-
-    useGravity({
-        prevValuePositionY,
-        gravity,
+    const {
         positionYPet,
-        gameOver: isGameOver,
-    })
+        airPlaneDegree,
+        handleFlyDirection,
+        handleAirPlaneDegree,
+    } = useGamePhysics(isGameOver, isPaused)
 
-    const isColliding = useCollision({
-        positionXObstacles: positionXObstacles,
+    // const isColliding = useCollision({
+    //     positionXObstacles: positionXObstacles,
+    //     positionYPet,
+    //     obstacleDimensions,
+    //     windowHeight,
+    //     petWidth: gameConstants.petWidth,
+    //     petHeight: gameConstants.petHeight,
+    //     obstacleWidth: gameConstants.obstacleWidth,
+    //     heightFloor: gameConstants.heightFloor,
+    // })
+
+    const isColliding = useCollisionDetection({
         positionYPet,
         obstacleDimensions,
-        windowHeight,
-        petWidth: gameConstants.petWidth,
-        petHeight: gameConstants.petHeight,
-        obstacleWidth: gameConstants.obstacleWidth,
-        heightFloor: gameConstants.heightFloor,
+        positionXObstacles,
     })
 
     //use effects
@@ -166,23 +74,23 @@ export default function Renderer() {
             <Score score={score} coins={coins} />
             <Pressable
                 onPressIn={() => {
-                    handlerFlyDirection('up')
-                    handlerAirPlaneDegree(gameConstants.airPlaneDegreeUp)
+                    handleFlyDirection('up')
+                    handleAirPlaneDegree(gameConstants.airPlaneDegreeUp)
                 }}
                 onPressOut={() => {
-                    handlerFlyDirection('none')
-                    handlerAirPlaneDegree(gameConstants.airPlaneDegree)
+                    handleFlyDirection('none')
+                    handleAirPlaneDegree(gameConstants.airPlaneDegree)
                 }}
                 style={styles.pressFlyUpBox}
             />
             <Pressable
                 onPressIn={() => {
-                    handlerFlyDirection('down')
-                    handlerAirPlaneDegree(gameConstants.airPlaneDegreeDown)
+                    handleFlyDirection('down')
+                    handleAirPlaneDegree(gameConstants.airPlaneDegreeDown)
                 }}
                 onPressOut={() => {
-                    handlerFlyDirection('none')
-                    handlerAirPlaneDegree(gameConstants.airPlaneDegree)
+                    handleFlyDirection('none')
+                    handleAirPlaneDegree(gameConstants.airPlaneDegree)
                 }}
                 style={styles.pressFlyDownBox}
             />
