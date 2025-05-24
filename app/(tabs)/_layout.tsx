@@ -56,7 +56,7 @@ export default function TabLayout() {
         }
     }, [fetchUserAndPet, user])
 
-    const includeHeader = ['/store', '/quiz', '/minigames', '/profile']
+    const includeHeader = ['/store', '/quiz', '/minigames',]
 
     const headerTitles: Record<string, string> = {
         '/store': 'PetShop',

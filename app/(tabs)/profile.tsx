@@ -25,6 +25,8 @@ import { useRouter } from 'expo-router'
 import Achievement from '@/components/Achievement'
 import AchievementType from '@/dtos/Achievement'
 import { fetchAchievements } from '@/services/fetchAchievements'
+import Header from '@/components/Header'
+import { Medal } from 'phosphor-react-native'
 
 const editIcon = require('@/assets/images/profile/edit_icon.png')
 const coinIcon = require('@/assets/images/profile/pet_coin.png')
@@ -131,7 +133,14 @@ export default function Profile() {
         }
 
     return (
+        
         <SafeAreaView style={styles.safeArea}>
+            <View>
+                <Header
+                    title="Profile"
+                    backgroundColor="#CFE2A8"
+                />
+            </View>
             <View style={styles.container}>
                 <XpBar xp={user?.experience || 0} level={user?.level || 1} />
                 <View style={styles.petContainer}>
@@ -209,14 +218,6 @@ export default function Profile() {
                                 Notificações
                             </Text>
                         </View>
-                        <TouchableOpacity
-                            style={styles.achievementsContainer}
-                            onPress={openAchievements}
-                        >
-                            <Text style={styles.notificationText}>
-                                Testando...
-                            </Text>
-                        </TouchableOpacity>
                     </View>
                 </View>
 
@@ -275,6 +276,12 @@ export default function Profile() {
                     </View>
                 </View>
             )}
+            <TouchableOpacity
+                style={styles.achievementsContainer}
+                onPress={openAchievements}
+            >
+                <Medal color={'rgb(98, 99, 97)'} size={34} />
+            </TouchableOpacity>
         </SafeAreaView>
     )
 }
@@ -508,13 +515,17 @@ const createStyles = (isSmallScreen: boolean) =>
             fontWeight: '600',
         },
         achievementsContainer: {
-            width: '100%',
-            height: '30%',
-            borderRadius: 15,
+            top: '0.65%',
+            right: '3%',
+            width: '12%',
+            borderRadius: 50,
             alignItems: 'center',
             justifyContent: 'center',
-            borderColor: '#5B5B5B',
-            borderWidth: 3,
+            borderColor: 'rgb(98, 99, 97)',
+            //borderWidth: 2.5,
+            position: 'absolute',
+            aspectRatio: 1,
+            zIndex: 1,
         },
         achievementsBackground: {
             backgroundColor: 'rgba(59, 61, 60, 0.7)',
@@ -571,21 +582,20 @@ const createStyles = (isSmallScreen: boolean) =>
             //backgroundColor: 'lightblue',
         },
         centered: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 20,
-    },
-    loadingText: {
-        marginTop: 10,
-        fontSize: 16,
-        color: '#cfe2a8',
-    },
-    errorText: {
-        color: 'red',
-        textAlign: 'center',
-        fontSize: 16,
-        marginBottom: 10,
-    },
-
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 20,
+        },
+        loadingText: {
+            marginTop: 10,
+            fontSize: 16,
+            color: '#cfe2a8',
+        },
+        errorText: {
+            color: 'red',
+            textAlign: 'center',
+            fontSize: 16,
+            marginBottom: 10,
+        },
     })
