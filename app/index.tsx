@@ -1,6 +1,8 @@
 import { Image, View, StyleSheet, Pressable, Text } from 'react-native'
 import { FormRegisterPet } from '../components/FormRegisterPet'
 import { useRouter } from 'expo-router'
+import { useUserPetStore } from '@/stores/userPetStore'
+import { Dog } from 'phosphor-react-native'
 
 export default function RegisterPetPage() {
     const router = useRouter()
@@ -12,6 +14,30 @@ export default function RegisterPetPage() {
                 <FormRegisterPet />
                 <Pressable
                     onPress={() => {
+                        useUserPetStore.setState({
+                            pet: {
+                                id: '1',
+                                name: 'Rex',
+                                color: '#000000',
+                                type: 'dog',
+                                purchasedItems: [],
+                                activeItems: {
+                                    bed: '',
+                                    food: '',
+                                    toy: '',
+                                    wc: '',
+                                    floor: '',
+                                    wallpaper: '',
+                                },
+                                wellBeing: {
+                                    clean: '',
+                                    fun: '',
+                                    hunger: '',
+                                    thirst: '',
+                                    sleep: '',
+                                },
+                            },
+                        })
                         router.push('/home')
                     }}
                 >
