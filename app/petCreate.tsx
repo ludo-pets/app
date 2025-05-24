@@ -13,6 +13,14 @@ export default function RegisterPetPage() {
         <View style={styles.containerBox}>
             <View style={styles.mainContent}>
                 <Image source={require('@/assets/images/logo.png')} />
+                <FormRegisterPet />
+                <Pressable
+                    onPress={() => {
+                        router.push('/home')
+                    }}
+                >
+                    <Text style={styles.link}>Já tenho um pet</Text>
+                </Pressable>
                 <GoogleSigninButton/>
             </View>
         </View>
