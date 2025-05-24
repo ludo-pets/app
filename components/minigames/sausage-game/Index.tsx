@@ -6,6 +6,8 @@ import { Colors } from "react-native/Libraries/NewAppScreen"
 import Dog from "./Dog";
 import { checkGameOver } from "@/utils/checkGameOver";
 import Food from "./Food";
+import { checkEatsFood } from "./checkEatsFood";
+import { randomFoodPosition } from "./randomFoodPosition";
 
 const DOG_INITIAL_POSITION = [{ x: 5, y: 5}];
 const FOOD_INITIAL_POSITION = {x: 5, y: 20};
@@ -24,6 +26,7 @@ export default function Game(): JSX.Element {
     );
     const [isGameOver, setIsGameOver] = React.useState<boolean>(false);
     const [isPaused, setIsPaused] = React.useState<boolean>(false);
+    const [score, setScore] = React.useState<number>(0);
 
     React.useEffect(() => {
         if(!isGameOver) {
@@ -60,7 +63,13 @@ export default function Game(): JSX.Element {
                 break;          
         }
 
-        setDog([newHead, ...dog.slice(0, -1)]);
+        if (checkEatsFood(newHead, food, 2)) {
+            setDog([newHead, ...dog]);
+            setFood(randomFoodPosition(GAME_BOUNDS.xMax, GAME_BOUNDS.yMax))
+            setScore(score + SCORE_INCREMENT);
+        } else {
+            setDog([newHead, ...dog.slice(0, -1)]);
+        }
     };
 
     const handleGesture = (event: any) => {

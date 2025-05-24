@@ -8,6 +8,7 @@ export default function MinigameStackLayout() {
         <Stack initialRouteName="index" screenOptions={{ headerShown: false }}>
             <Stack.Screen name="index" />
             <Stack.Screen name="NailTrimGame" />
+            <Stack.Screen name="SausageGame" />
         </Stack>
     )
 }

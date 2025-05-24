@@ -32,6 +32,10 @@ const minigameListRegistry: Record<string, MinigameListConfig> = {
         icon: require('@/assets/images/minigames/food-game/gato_boca_aberta.png'),
         routeName: 'FoodGame',
     },
+    'Cachorro Salsicha': {
+        icon: require('@/assets/images/minigames/minigame_icon_test.png'),
+        routeName: 'SausageGame'
+    }
 }
 
 const getMinigameListConfig = (
