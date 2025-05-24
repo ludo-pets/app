@@ -11,8 +11,14 @@ import { useCharacter } from './Character'
 import { GameManagerType } from './GameManager'
 import { useGameConfig } from './GameConfig'
 import { useEffect, useRef, useState } from 'react'
+import { useUserPetStore } from '@/stores/userPetStore'
 
-const playerImage = require('@/assets/images/minigames/food-game/gato_boca_aberta.png')
+const petInfo = useUserPetStore.getState().pet
+
+const playerImage =
+    petInfo?.type === 'cat'
+        ? require('@/assets/images/minigames/food-game/gato_boca_aberta.png')
+        : require('@/assets/images/minigames/food-game/dog.png')
 const heart = require('@/assets/images/minigames/food-game/heart.png')
 const coinIcon = require('@/assets/images/profile/pet_coin.png')
 

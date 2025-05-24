@@ -14,6 +14,9 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native'
 
 import Minigame from '@/dtos/Minigame'
 import { fetchMinigames } from '@/services/fetchMinigames'
+import { useUserPetStore } from '@/stores/userPetStore'
+
+const petInfo = useUserPetStore.getState().pet
 
 const { width } = Dimensions.get('window')
 const imgRad = 16
@@ -29,7 +32,9 @@ const minigameListRegistry: Record<string, MinigameListConfig> = {
         routeName: 'NailTrimGame',
     },
     'Comilança Maluca': {
-        icon: require('@/assets/images/minigames/food-game/gato_boca_aberta.png'),
+        icon: petInfo?.type === 'cat'
+        ? require('@/assets/images/minigames/food-game/gato_boca_aberta.png')
+        : require('@/assets/images/minigames/food-game/dog.png'),
         routeName: 'FoodGame',
     },
 }
@@ -109,7 +114,7 @@ export default function MinigameScreen() {
                     <View style={styles.imageContainer}>
                         <View style={styles.picBox}>
                             <Image
-                                resizeMode="cover"
+                                resizeMode="contain"
                                 style={styles.listItemImage}
                                 source={config.icon}
                             />
