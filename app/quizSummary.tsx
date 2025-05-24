@@ -48,7 +48,7 @@ export default function quizSummary(){
             ></Header>
         </View>
         <View style={styles.container}>
-            <Image source={require('@/assets/images/quiz/quiz-cat.png')}/>    
+            <Image style={styles.image}source={{uri: "https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/quiz-cat.png"}}/>    
             <Text style={styles.title}>
                 {currentQuestion?.description}
             </Text>
@@ -105,6 +105,11 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         gap: 20,
 
+    },
+    image: {
+        height: 220,
+        width: "100%",
+        resizeMode: "contain",
     },
     title: {
         fontSize: 20,
