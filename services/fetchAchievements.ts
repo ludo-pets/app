@@ -26,6 +26,7 @@ export const fetchAchievements = async (): Promise<Achievement[]> => {
         querySnapshot.forEach((doc) => {
             const data: Achievement = doc.data() as Achievement
             achievements.push({
+                id: data.id,
                 name: data.name,
                 message: data.message
             } as Achievement)

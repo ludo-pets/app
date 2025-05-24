@@ -8,6 +8,7 @@ import {
     useWindowDimensions,
     TextInput,
     Pressable,
+    FlatList,
 } from 'react-native'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { useEffect, useState } from 'react'
@@ -20,7 +21,6 @@ import Cachorro from '@/assets/images/pets/cachorro.svg'
 import { PetOptionFormRegisterPet } from '@/components/PetOptionFormRegisterPet'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { useRouter } from 'expo-router'
-import { FlatList } from 'react-native-gesture-handler'
 import Achievement from '@/components/Achievement'
 import AchievementType from '@/dtos/Achievement'
 import { fetchAchievements } from '@/services/fetchAchievements'
@@ -81,7 +81,7 @@ export default function Profile() {
     }
 
     const openAchievements = () => {
-        if(showAchievements == false) {
+        if (showAchievements == false) {
             setShowAchievements(true)
         } else {
             setShowAchievements(false)
@@ -95,21 +95,21 @@ export default function Profile() {
     const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
-            const loadData = async () => {
-                setError(null)
-                try {
-                    const fetchedAchievements = await fetchAchievements()
-                    setAchievements(fetchedAchievements)
-                } catch (err: any) {
-                    console.error('Failed to fetch achievements:', err)
-                    setError(
-                        err.message || 'Failed to load achievements. Please try again.'
-                    )
-                    setAchievements([])
-                } 
+        const loadData = async () => {
+            setError(null)
+            try {
+                const fetchedAchievements = await fetchAchievements()
+                setAchievements(fetchedAchievements)
+            } catch (err: any) {
+                console.error('Failed to fetch achievements:', err)
+                setError(
+                    err.message || 'Failed to load achievements. Please try again.'
+                )
+                setAchievements([])
             }
-            loadData()
-        }, [])
+        }
+        loadData()
+    }, [])
 
     //delete this later
 
@@ -234,7 +234,7 @@ export default function Profile() {
                                         { backgroundColor: color.color },
                                         styles.colorOption,
                                         colorSelected &&
-                                            styles.colorOptionActive,
+                                        styles.colorOptionActive,
                                     ]}
                                     onPress={() => {
                                         if (!isEditing) {
@@ -268,10 +268,10 @@ export default function Profile() {
                                 Notificações
                             </Text>
                         </View>
-                        <TouchableOpacity 
+                        <TouchableOpacity
                             style={styles.achievementsContainer}
                             onPress={openAchievements}
-                            >
+                        >
                             <Text style={styles.notificationText}>
                                 Testando...
                             </Text>
@@ -310,21 +310,21 @@ export default function Profile() {
                             <FlatList
                                 data={achievements}
                                 showsVerticalScrollIndicator={false}
-                                keyExtractor={(item) => item.name.toString()}
-                                numColumns={3}
-                                renderItem={({item}) => (
-                                    <View style={styles.achievementBox}> 
-                                            <Achievement title={item.name} description={item.message} conquered={false}></Achievement>
+                                keyExtractor={(item) => item.id}
+                                numColumns={2}
+                                renderItem={({ item }) => (
+                                    <View style={styles.achievementBox}>
+                                        <Achievement title={item.name} description={item.message} conquered={user?.achievements.includes(item.id)  || false} />
                                     </View>
                                 )}
-                                />
+                            />
                         </View>
-                        <View style={{ flex: 1 }} /> 
+                        <View style={{ flex: 1 }} />
                         <TouchableOpacity
                             style={styles.achievementsReturn}
                             onPress={openAchievements}
-                            >
-                            <Text style ={styles.achievementsReturnText}>Voltar</Text>
+                        >
+                            <Text style={styles.achievementsReturnText}>Voltar</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -563,7 +563,7 @@ const createStyles = (isSmallScreen: boolean) =>
         },
         achievementsContainer: {
             width: '100%',
-            height: '40%',
+            height: '30%',
             borderRadius: 15,
             alignItems: 'center',
             justifyContent: 'center',
@@ -587,7 +587,8 @@ const createStyles = (isSmallScreen: boolean) =>
             alignItems: 'center',
             justifyContent: 'flex-start',
             borderRadius: 16,
-            padding: '5%',
+            padding: '4%',
+            zIndex: 1,
         },
         achievementsTitle: {
             fontSize: isSmallScreen ? 22 : 24,
@@ -601,7 +602,7 @@ const createStyles = (isSmallScreen: boolean) =>
         },
         achievementsReturn: {
             width: '100%',
-            height: '9%',
+            height: '7%',
             borderRadius: 15,
             alignItems: 'center',
             justifyContent: 'center',
@@ -609,21 +610,19 @@ const createStyles = (isSmallScreen: boolean) =>
             borderWidth: 2,
         },
         listBox: {
-            top: '4%',
+            top: '1.8%',
             width: '100%',
-            height: '78%',
+            height: '83%',
             alignItems: 'center',
             //backgroundColor: 'blue',
         },
         achievementBox: {
-            width: 120,
-            height: 120,
+            width: 150,
+            height: 150,
             alignItems: 'center',
             justifyContent: 'center',
             margin: 2,
             //backgroundColor: 'lightblue',
-            paddingTop: 70, // gambiarra, fix later
-            paddingBottom: 100, // same thing
         },
-        
+
     })

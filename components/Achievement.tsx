@@ -13,16 +13,18 @@ const Achievement = ({ title, description, conquered }: AchievementProps) => {
     return (
         <>
             <View style={styles.containerAchievement}>
-                <View style={[styles.circleTrophy, {borderColor: (conquered ? "#40ad43" : "#aaaaaa"), 
+                <View style={[styles.circleTrophy, {
+                    borderColor: (conquered ? "#40ad43" : "#aaaaaa"),
                     borderStyle: (conquered ? "solid" : "dashed"),
                     backgroundColor: (conquered ? "transparent" : "#f5f5f5"),
-                    boxShadow: (conquered ? "0 0 8px 0px #0000003d" : "none")}]}>
+                    boxShadow: (conquered ? "0 0 8px 0px #0000003d" : "none")
+                }]}>
                     <Trophy color={conquered ? '#fcc41f' : "#aaaaaa"} size={38} />
                 </View>
 
-                <View>
-                    <Text style={[styles.titleAchievement, {color: (conquered ? "black" : "#aaaaaa")}]}>{title}</Text>
-                    <Text style={[styles.descriptionAchievement, {color: (conquered ? "black" : "#aaaaaa")}]}>{description}</Text>
+                <View style = {styles.description}>
+                    <Text style={[styles.titleAchievement, { color: (conquered ? "black" : "#aaaaaa") }]}>{title}</Text>
+                    <Text style={[styles.descriptionAchievement, { color: (conquered ? "black" : "#aaaaaa") }]}>{description}</Text>
                 </View>
             </View>
         </>
@@ -38,7 +40,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-
     circleTrophy: {
         width: 80,
         height: 80,
@@ -47,16 +48,22 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
     },
-
     titleAchievement: {
         textAlign: "center",
         fontWeight: "600",
         fontSize: 18,
     },
-
     descriptionAchievement: {
         textAlign: "center",
         fontWeight: "400",
         fontSize: 15,
     },
+    description: {
+        width: '100%',
+        height: '40%',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        resizeMode: 'contain',
+        marginTop: '5%',
+    }
 })
