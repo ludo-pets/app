@@ -12,7 +12,7 @@ import EndGameDialog from '@/components/minigames/food-game/EndGameDialog'
 export default function QuizGame() {
     const [quizFinished, setQuizFinished] = useState(false)
     const [correctCount, setCorrectCount] = useState(0)
-
+    const petInfo = useUserPetStore.getState().pet
     const {
         loading,
         error,
@@ -98,7 +98,9 @@ export default function QuizGame() {
                         }
                         imageSource={
                             currentQuestion.image ||
-                            require('@/assets/images/quiz/quiz-cat.png')
+                            petInfo?.type === 'cat'
+                                ? require('@/assets/images/quiz/quiz-cat.png')
+                                : require('@/assets/images/quiz/quiz-dog.png')
                         }
                         onCorrectAnswer={() => handleCorrectAnswer()}
                         onWrongAnswer={() => handleChangeQuestion()}

@@ -39,7 +39,7 @@ export function Quiz({
 
     return (
         <View style={styles.container}>
-            <Image source={imageSource} />
+            <Image style={{width: 300, height: 260,alignContent: 'center',resizeMode: 'contain'}} source={imageSource} />
             <Text style={styles.question}>{question}</Text>
             <View style={styles.optionsContainer}>
                 {options.map((option) => (

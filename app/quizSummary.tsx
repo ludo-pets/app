@@ -5,9 +5,11 @@ import { router } from "expo-router";
 import { push } from "expo-router/build/global-state/routing";
 import { useEffect, useState } from "react";
 import { Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useUserPetStore } from "@/stores/userPetStore";
 
 export default function quizSummary(){
     const [endSummary, setEndSummary] = useState(false);
+    const petInfo = useUserPetStore.getState().pet
      const {
         loading,
         error,
@@ -48,7 +50,9 @@ export default function quizSummary(){
             ></Header>
         </View>
         <View style={styles.container}>
-            <Image source={require('@/assets/images/quiz/quiz-cat.png')}/>    
+            <Image style={{width: 300, height: 260,alignContent: 'center',resizeMode: 'contain'}} source={petInfo?.type === 'cat'
+        ? require('@/assets/images/quiz/quiz-cat.png')
+        : require('@/assets/images/quiz/quiz-dog.png')}/>    
             <Text style={styles.title}>
                 {currentQuestion?.description}
             </Text>
