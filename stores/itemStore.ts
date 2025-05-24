@@ -21,7 +21,8 @@ export const useItemStore = create<ItemStoreState>((set) => ({
         try {
             const result = await getAllItemService()
             if (result) {
-                set({ items: result.items, loading: false })
+                const filteredItems = result.items.filter(item => item.animalType === 'cat' || item.animalType === 'dog')
+                set({ items: filteredItems, loading: false })
             } else {
                 set({ error: 'Itens não encontrados', loading: false })
             }
