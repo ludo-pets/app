@@ -10,13 +10,13 @@ import {
 
 import Pet from '@/components/minigames/flappyPet/Pet'
 import Obstacle from '@/components/minigames/flappyPet/Obstacle'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { gameConstants } from '@/constants/game'
-import { useCollision } from '@/hooks/minigames/flappyPet/useCollision'
 import Score from '@/components/minigames/flappyPet/Score'
 import useObstacleManager from '@/hooks/minigames/flappyPet/useObstacleManager'
 import useGamePhysics from '@/hooks/minigames/flappyPet/useGamePhysics'
 import useCollisionDetection from '@/hooks/minigames/flappyPet/useCollisionDetection'
+import useGameManager from '@/hooks/minigames/flappyPet/useGameManager'
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get('window')
 
@@ -28,29 +28,17 @@ export default function Renderer({ isPaused }: RendererProps) {
     const background = require('@/assets/images/minigames/flappyPet/background.png')
     const floor = require('@/assets/images/minigames/flappyPet/floor.png')
 
-    const [isGameOver, setIsGameOver] = useState(false)
+    const gameManager = useGameManager()
 
     const { positionXObstacles, obstacleDimensions, score, coins } =
-        useObstacleManager(isGameOver, isPaused)
+        useObstacleManager(gameManager.isGameOver, isPaused)
 
     const {
         positionYPet,
         airPlaneDegree,
         handleFlyDirection,
         handleAirPlaneDegree,
-    } = useGamePhysics(isGameOver, isPaused)
-
-    // const isColliding = useCollision({
-    //     positionXObstacles: positionXObstacles,
-    //     positionYPet,
-    //     obstacleDimensions,
-    //     windowHeight,
-    //     petWidth: gameConstants.petWidth,
-    //     petHeight: gameConstants.petHeight,
-    //     obstacleWidth: gameConstants.obstacleWidth,
-    //     heightFloor: gameConstants.heightFloor,
-    // })
-    // console.log('🚀 ~ Renderer ~ obstacleDimensions:', obstacleDimensions)
+    } = useGamePhysics(gameManager.isGameOver, isPaused)
 
     const isColliding = useCollisionDetection({
         positionYPet,
@@ -61,7 +49,7 @@ export default function Renderer({ isPaused }: RendererProps) {
     //use effects
     useEffect(() => {
         if (isColliding) {
-            setIsGameOver(true)
+            gameManager.setGameOver(true)
             Animated.timing(positionYPet, {
                 toValue:
                     windowHeight -
@@ -70,8 +58,6 @@ export default function Renderer({ isPaused }: RendererProps) {
                 useNativeDriver: true,
                 easing: Easing.linear,
             }).start()
-            // positionXObstacles.stopAnimation()
-            // positionYPet.stopAnimation()
         }
     }, [isColliding])
 

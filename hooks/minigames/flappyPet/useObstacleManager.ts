@@ -2,6 +2,7 @@ import { gameConstants } from '@/constants/game'
 import { generateObstacleHeights } from '@/utils/minigames/flappyPet/generateObstacleHeight'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Animated, Dimensions, Easing } from 'react-native'
+import useGameManager from './useGameManager'
 
 export interface DimensionsObstacle {
     heightObstacleTop: number
@@ -25,23 +26,17 @@ export default function useObstacleManager(
     const [obstacleDimensions, setObstacleDimensions] =
         useState<DimensionsObstacle>(initialDimensions)
     // console.log('🚀 ~ obstacleDimensions:', obstacleDimensions)
-    const [score, setScore] = useState(0)
-    const [coins, setCoins] = useState(0)
-
+    // const [score, setScore] = useState(0)
+    // const [coins, setCoins] = useState(0)
+    const gameManager = useGameManager()
     const handleObstacleReset = useCallback(() => {
-        console.log('🚀 ~ trocoooou')
         const newObstacleDimensions = generateObstacleHeights(
             windowHeight,
             gameConstants.heightSpace,
             gameConstants.heightFloor
         )
         setObstacleDimensions(newObstacleDimensions)
-        setScore((prevScore) => {
-            if (prevScore % 5 === 0 && prevScore > 0) {
-                setCoins((prevCoins) => prevCoins + 1)
-            }
-            return prevScore + 1
-        })
+        gameManager.incrementScore()
 
         setDuration((prevDuration) => {
             const newDuration = prevDuration * 0.98
@@ -93,8 +88,8 @@ export default function useObstacleManager(
         positionXObstacles,
         obstacleDimensions,
         handleObstacleReset,
-        score,
-        coins,
+        score: gameManager.score,
+        coins: gameManager.coins,
         duration,
     }
 }
