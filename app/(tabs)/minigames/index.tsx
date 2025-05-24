@@ -33,9 +33,9 @@ const minigameListRegistry: Record<string, MinigameListConfig> = {
         // routeName: 'FoodGame',
         routeName: 'FoodGame',
     },
-    'Flappy pet': {
+    'Flappy Pet': {
         icon: require('@/assets/images/minigames/food-game/gato_boca_aberta.png'),
-        routeName: 'FoodGame',
+        routeName: 'FlappyPetGame',
     },
 }
 
@@ -57,6 +57,7 @@ export default function MinigameScreen() {
             setError(null)
             try {
                 const fetchedMinigames = await fetchMinigames()
+
                 setMinigames(fetchedMinigames)
             } catch (err: any) {
                 console.error('Failed to fetch minigames:', err)
@@ -154,6 +155,7 @@ export default function MinigameScreen() {
         )
     }
 
+    console.log('🚀 ~ MinigameScreen ~ minigames:', minigames)
     return (
         <View style={styles.container}>
             <FlatList
