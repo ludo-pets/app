@@ -9,6 +9,7 @@ import {
     TextInput,
     Pressable,
     FlatList,
+    ActivityIndicator,
 } from 'react-native'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { useEffect, useState } from 'react'
@@ -88,14 +89,13 @@ export default function Profile() {
         }
     }
 
-    //TODO: fetch "conquered" achievements and add boolean atributes to them
-    //TODO: add "is loading" feature
-
     const [achievements, setAchievements] = useState<AchievementType[]>([])
     const [error, setError] = useState<string | null>(null)
+    const [isLoading, setIsLoading] = useState<boolean>(true)
 
     useEffect(() => {
         const loadData = async () => {
+            setIsLoading(true)
             setError(null)
             try {
                 const fetchedAchievements = await fetchAchievements()
@@ -106,88 +106,29 @@ export default function Profile() {
                     err.message || 'Failed to load achievements. Please try again.'
                 )
                 setAchievements([])
+            } finally {
+                setIsLoading(false)
             }
         }
         loadData()
     }, [])
 
-    //delete this later
-
-    const TESTE = [
-        {
-            id: 1,
-            name: 'conquista 1',
-            message: 'esta é a conquista 1',
-            conquered: true,
-
-        },
-        {
-            id: 2,
-            name: 'conquista 2',
-            message: 'esta é a conquista 2',
-            conquered: true,
-        },
-        {
-            id: 3,
-            name: 'conquista 3',
-            message: 'esta é a conquista 3',
-            conquered: false,
-        },
-        {
-            id: 4,
-            name: 'conquista 4',
-            message: 'esta é a conquista 4',
-            conquered: true,
-        },
-        {
-            id: 5,
-            name: 'conquista 5',
-            message: 'esta é a conquista 5',
-            conquered: true,
-        },
-        {
-            id: 6,
-            name: 'conquista 6',
-            message: 'esta é a conquista 6',
-            conquered: true,
-        },
-        {
-            id: 7,
-            name: 'conquista 7',
-            message: 'esta é a conquista 7',
-            conquered: false,
-        },
-        {
-            id: 8,
-            name: 'conquista 8',
-            message: 'esta é a conquista 8',
-            conquered: true,
-        },
-        {
-            id: 9,
-            name: 'conquista 9',
-            message: 'esta é a conquista 9',
-            conquered: false,
-        },
-        {
-            id: 10,
-            name: 'conquista 10',
-            message: 'esta é a conquista 10',
-            conquered: true,
-        },
-        {
-            id: 11,
-            name: 'conquista 11',
-            message: 'esta é a conquista 11',
-            conquered: true,
-        },
-        {
-            id: 12,
-            name: 'conquista 12',
-            message: 'esta é a conquista 12 ',
-            conquered: false,
-        },
-    ]
+    if (isLoading) {
+            return (
+                <View style={styles.centered}>
+                    <ActivityIndicator size="large" color="#cfe2a8" />
+                    <Text style={styles.loadingText}>Carregando...</Text>
+                </View>
+            )
+        }
+    
+        if (error && !isLoading && achievements.length === 0) {
+            return (
+                <View style={styles.centered}>
+                    <Text style={styles.errorText}>{error}</Text>
+                </View>
+            )
+        }
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -317,6 +258,11 @@ export default function Profile() {
                                         <Achievement title={item.name} description={item.message} conquered={user?.achievements.includes(item.id)  || false} />
                                     </View>
                                 )}
+                                ListEmptyComponent={
+                                    <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                                        <Text>No achievements found in the database.</Text>
+                                    </View>
+                                }
                             />
                         </View>
                         <View style={{ flex: 1 }} />
@@ -624,5 +570,22 @@ const createStyles = (isSmallScreen: boolean) =>
             margin: 2,
             //backgroundColor: 'lightblue',
         },
+        centered: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 20,
+    },
+    loadingText: {
+        marginTop: 10,
+        fontSize: 16,
+        color: '#cfe2a8',
+    },
+    errorText: {
+        color: 'red',
+        textAlign: 'center',
+        fontSize: 16,
+        marginBottom: 10,
+    },
 
     })

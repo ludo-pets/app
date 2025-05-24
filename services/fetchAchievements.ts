@@ -11,8 +11,8 @@ import Achievement from '@/dtos/Achievement'
 const db = getFirestore(firebaseApp)
 
 /**
-Fetches all documents from the 'Minigame' collection in Firestore.
-@returns {Promise<Achievement[]>} A promise that resolves to an array of quiz questions.
+Fetches all documents from the 'Achievements' collection in Firestore.
+@returns {Promise<Achievement[]>} 
 @throws Will throw an error if fetching fails.
 */
 export const fetchAchievements = async (): Promise<Achievement[]> => {
