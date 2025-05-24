@@ -58,7 +58,12 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      "@react-native-google-signin/google-signin"
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.823465219976-9tr8frv4ksgmeh6l3ai4tdgu4hfpcejg"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
