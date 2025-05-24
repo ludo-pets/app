@@ -6,7 +6,7 @@ interface StartGameDialogProps {
 export default function StartGameDialog({ startGame }: StartGameDialogProps) {
     return (
         <Dialog.Container>
-            <Dialog.Text content="Segura firme! Direita sobe, esquerda desce. Bora desviar e voar longe!" />
+            <Dialog.Text content="Guie seu aviãozinho pelo céu tocando na direita pra subir e na esquerda pra descer. Desvie dos obstáculos no caminho. A cada 5 obstáculos, você ganha uma moedinha!" />
             <Dialog.ButtonArea>
                 <Dialog.Button action={() => startGame()} text="Começar" />
             </Dialog.ButtonArea>

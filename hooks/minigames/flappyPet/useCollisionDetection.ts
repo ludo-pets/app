@@ -15,19 +15,12 @@ export default function useCollisionDetection({
     positionXObstacles,
 }: CollisionProps) {
     const { height: windowHeight } = Dimensions.get('window')
-    // const positionYPetNumber = (positionYPet as any).__getValue()
-    const positionXPet = gameConstants.positionXPet
-    const faixaColisaoEixoXPet =
-        gameConstants.positionXPet - gameConstants.petWidth
-    const faixaColisaoEixoYPet = positionYPet
-    // const postionXObstaclesNumber = (positionXObstacles as any).__getValue()
 
     const postionYGround = windowHeight - gameConstants.heightFloor
     const faixaColisaoGround = postionYGround - gameConstants.petHeight * 1.7
-    const faixaColisaoRoof = 0 - gameConstants.petHeight * 0.4
-    // const faixaColisaoRoof = 0
     const faixaColisaoObstaculo =
         gameConstants.petWidth + gameConstants.petWidth * 0.8
+
     const [isColliding, setIsColliding] = useState(false)
 
     const heightObstacleTop = useRef(obstacleDimensions.heightObstacleTop)
@@ -37,38 +30,42 @@ export default function useCollisionDetection({
         let animatedFrameId: number
         let positionYPetNumber: number
         let positionXObstaclesNumber: number
+
         heightObstacleTop.current = obstacleDimensions.heightObstacleTop
         heightObstacleBottom.current = obstacleDimensions.heightObstacleBottom
+
         const checkCollision = () => {
-            // const { heightObstacleTop, heightObstacleBottom } =
-            //     obstacleDimensions
             positionYPet.addListener((event) => {
                 positionYPetNumber = event.value
             })
+
             positionXObstacles.addListener((event) => {
                 positionXObstaclesNumber = event.value
             })
 
             if (positionYPetNumber >= faixaColisaoGround) {
                 setIsColliding(true)
-                // console.log('colidiu no chao')
             }
-
-            // positionYPetNumber >= heightObstacleTop.current
-            // positionYPetNumber <= heightObstacleTop.current
 
             const colisaoObstaculoBottom =
                 windowHeight -
                 gameConstants.heightFloor -
                 heightObstacleBottom.current
 
+            const isObstacleInCollisionRange =
+                positionXObstaclesNumber <= faixaColisaoObstaculo
+
+            const isCollidingWithBottomObstacle =
+                positionYPetNumber >=
+                colisaoObstaculoBottom - gameConstants.petHeight * 0.8
+
+            const isCollidingWithTopObstacle =
+                positionYPetNumber <=
+                heightObstacleTop.current - gameConstants.petHeight * 0.4
+
             if (
-                positionXObstaclesNumber <= faixaColisaoObstaculo &&
-                (positionYPetNumber >=
-                    colisaoObstaculoBottom - gameConstants.petHeight * 0.8 ||
-                    positionYPetNumber <=
-                        heightObstacleTop.current -
-                            gameConstants.petHeight * 0.4)
+                isObstacleInCollisionRange &&
+                (isCollidingWithBottomObstacle || isCollidingWithTopObstacle)
             ) {
                 setIsColliding(true)
             }
@@ -77,6 +74,14 @@ export default function useCollisionDetection({
         }
 
         animatedFrameId = requestAnimationFrame(checkCollision)
+
+        return () => {
+            positionYPet.removeAllListeners()
+            positionXObstacles.removeAllListeners()
+            if (animatedFrameId) {
+                cancelAnimationFrame(animatedFrameId)
+            }
+        }
     }, [obstacleDimensions])
 
     return isColliding
