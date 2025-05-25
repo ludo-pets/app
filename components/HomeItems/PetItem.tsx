@@ -21,7 +21,7 @@ const PetItem = () => {
     const pets: PetOption[] = [
         {
             icon: petInfo?.type === 'cat' ? Gato : Cachorro,
-            pet_type: petInfo?.type === 'cat' ? 'cat' : 'dog',
+            pet_type: petInfo?.type || 'cat',
         },
     ]
 
