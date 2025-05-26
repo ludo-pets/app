@@ -30,6 +30,7 @@ export type GameManagerType = {
     coins: number
     gameOver: boolean
     setGameOver: (gameOver: boolean) => void
+    cleanup: () => void
 }
 
 export const useGameManager = (): GameManagerType => {
@@ -135,6 +136,21 @@ export const useGameManager = (): GameManagerType => {
             return newDifficulty
         })
     }
+
+     const cleanup = useCallback(() => {
+        if (gameTimer.current) clearInterval(gameTimer.current);
+        if (difficultyTimer.current) clearInterval(difficultyTimer.current);
+        setGameStarted(false);
+        setGameOver(false);
+        setScore(0);
+        setFallSpeed(config.INITIAL_FALL_SPEED);
+        setDifficulty(1);
+        setSpawnRate(1500);
+        setFoods([]);
+        setLifes(3);
+        setCoins(0);
+    }, []);
+
 
     /**
      * Cria uma nova comida
@@ -324,5 +340,6 @@ export const useGameManager = (): GameManagerType => {
         coins,
         gameOver,
         setGameOver,
+        cleanup,
     }
 }
