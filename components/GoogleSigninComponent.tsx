@@ -5,6 +5,9 @@ import { useEffect } from 'react';
 import { auth } from '../firebaseConfig';
 import { GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
 import * as AuthSession from 'expo-auth-session';
+import { useUserPetStore } from '@/stores/userPetStore';
+import { createUserService } from '@/services/userService';
+import { useRouter } from 'expo-router';
 
 const redirectUri = AuthSession.makeRedirectUri({
   useProxy: true,
@@ -14,6 +17,7 @@ const redirectUri = AuthSession.makeRedirectUri({
 console.log('Redirect URI:', redirectUri);
 
 export default function GoogleSigninButton() {
+  const router = useRouter();
   const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId: '823465219976-5t5443kohpdm9kda4ne1k4cib0gmcutd.apps.googleusercontent.com',
     iosClientId: '823465219976-9tr8frv4ksgmeh6l3ai4tdgu4hfpcejg.apps.googleusercontent.com',
@@ -24,14 +28,36 @@ export default function GoogleSigninButton() {
 
   useEffect(() => {
     if (response?.type === 'success') {
-      console.log(response.params);
       const { id_token } = response.params;
-      console.log(id_token);
       const credential = GoogleAuthProvider.credential(id_token);
-      console.log(credential)
+
       signInWithCredential(auth, credential)
-        .then((userCredential) => {
-          console.log('Logged in user:', userCredential.user);
+        .then(async (userCredential) => {
+          const userId = userCredential.user.uid;
+          const email = userCredential.user.email || '';
+
+          // Try to fetch user and pet
+          await useUserPetStore.getState().fetchUserAndPet(email);
+
+          let user = useUserPetStore.getState().user;
+
+          if (!user) {
+            // No user found, create new user
+            await createUserService({ uid: userId, email });
+            // Fetch again to get the new user
+            await useUserPetStore.getState().fetchUserAndPet(email);
+            user = useUserPetStore.getState().user;
+          }
+
+          if (user) {
+            useUserPetStore.getState().setUser(user);
+            // If user has a pet, go to home, else go to petCreate
+            if (user.pet) {
+              router.replace('/home');
+            } else {
+              router.replace('/petCreate');
+            }
+          }
         })
         .catch((error) => {
           console.error('Firebase login error:', error);
