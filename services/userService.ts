@@ -44,12 +44,13 @@ export const getUserWithPetByIdService = async (
             console.error('User não encontrado')
             return null
         }
-
+        
+        
         const userDoc = userSnap.docs[0]
         const userData = userDoc.data()
-
-        const petSnap = await getDoc(userData.pet)
-
+        
+        const petSnap = await getDoc(doc(db, "Pet", userData.pet))
+        
         if (!petSnap.exists()) {
             console.error('Pet não encontrado')
             return null
