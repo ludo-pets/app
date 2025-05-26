@@ -42,11 +42,11 @@ function RootLayoutNav() {
         <SafeAreaView style={{ flex: 1, backgroundColor: '#fefefe' }}>
             <Stack>
                 <Stack.Screen
-                    name="petCreate"
+                    name="index"
                     options={{ headerShown: false }}
                 />
                 <Stack.Screen
-                    name="index"
+                    name="petCreate"
                     options={{ headerShown: false }}
                 />
                 <Stack.Screen

@@ -5,8 +5,6 @@ import GoogleSigninButton from '@/components/GoogleSigninComponent'
 import * as WebBrowser from 'expo-web-browser'
 
 export default function RegisterPetPage() {
-    const router = useRouter()
-
     WebBrowser.maybeCompleteAuthSession();
 
     return (

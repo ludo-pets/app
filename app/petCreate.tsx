@@ -21,7 +21,6 @@ export default function RegisterPetPage() {
                 >
                     <Text style={styles.link}>Já tenho um pet</Text>
                 </Pressable>
-                <GoogleSigninButton/>
             </View>
         </View>
     )
