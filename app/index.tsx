@@ -1,17 +1,26 @@
 import { Image, View, StyleSheet, Pressable, Text } from 'react-native'
 import { FormRegisterPet } from '../components/FormRegisterPet'
-import { useRouter } from 'expo-router'
+import { router, useRouter } from 'expo-router'
 import GoogleSigninButton from '@/components/GoogleSigninComponent'
 import * as WebBrowser from 'expo-web-browser'
 
+const route = () => {
+    router.replace('/(tabs)/home')
+}
+
 export default function RegisterPetPage() {
-    WebBrowser.maybeCompleteAuthSession();
+    WebBrowser.maybeCompleteAuthSession()
 
     return (
         <View style={styles.containerBox}>
             <View style={styles.mainContent}>
                 <Image source={require('@/assets/images/logo.png')} />
-                <GoogleSigninButton/>
+                <View style={styles.buttons}>
+                    <GoogleSigninButton />
+                    <Pressable onPress={route}>
+                        <Text>Permanecer Desconectado</Text>
+                    </Pressable>
+                </View>
             </View>
         </View>
     )
@@ -39,5 +48,9 @@ const styles = StyleSheet.create({
         maxHeight: 650,
         justifyContent: 'space-between',
         alignItems: 'center',
+    },
+    buttons: {
+        alignItems: 'center',
+        gap: 10,
     },
 })
