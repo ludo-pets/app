@@ -7,6 +7,7 @@ import { GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
 import * as AuthSession from 'expo-auth-session';
 import { createUserService, getUserWithPetByIdService } from '@/services/userService';
 import { useRouter } from 'expo-router';
+import { useUserPetStore } from '@/stores/userPetStore';
 
 const redirectUri = AuthSession.makeRedirectUri({
   useProxy: true,
@@ -49,6 +50,8 @@ useEffect(() => {
 
         // Only navigate, do NOT set in store yet
         if (user && user.pet) {
+          console.log('User with pet found:', user);
+          await useUserPetStore.getState().fetchUserAndPet(email);
           router.replace('/home');
         } else {
           // Pass userId/email as param if needed
