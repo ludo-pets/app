@@ -1,4 +1,4 @@
-import { gameConstants } from '@/constants/game'
+import { gameConstants } from '@/constants/minigames/flappyPet/game'
 import { generateObstacleHeights } from '@/utils/minigames/flappyPet/generateObstacleHeight'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Animated, Dimensions, Easing } from 'react-native'
@@ -22,12 +22,10 @@ export default function useObstacleManager(
     )
 
     const positionXObstacles = useRef(new Animated.Value(windowWidth)).current
-    const [duration, setDuration] = useState(gameConstants.initialDuration)
+    const [speed, setSpeed] = useState(gameConstants.initialSpeed)
     const [obstacleDimensions, setObstacleDimensions] =
         useState<DimensionsObstacle>(initialDimensions)
-    // console.log('🚀 ~ obstacleDimensions:', obstacleDimensions)
-    // const [score, setScore] = useState(0)
-    // const [coins, setCoins] = useState(0)
+
     const gameManager = useGameManager()
     const handleObstacleReset = useCallback(() => {
         const newObstacleDimensions = generateObstacleHeights(
@@ -38,14 +36,20 @@ export default function useObstacleManager(
         setObstacleDimensions(newObstacleDimensions)
         gameManager.incrementScore()
 
-        setDuration((prevDuration) => {
-            const newDuration = prevDuration * 0.98
-            return Math.max(newDuration, 1500)
+        setSpeed((prevSpeed) => {
+            const newSpeed = prevSpeed + prevSpeed * 0.05
+            return Math.min(newSpeed, 500)
         })
     }, [windowHeight])
 
     useEffect(() => {
         let isCanceled = false
+        const currentXObstacules = (positionXObstacles as any).__getValue()
+
+        const distance = Math.abs(
+            currentXObstacules - gameConstants.targertObstacules
+        )
+        const durationAnimation = (distance / speed) * 1000
 
         const runAnimation = () => {
             if (gameOver || isPaused || isCanceled) {
@@ -55,7 +59,7 @@ export default function useObstacleManager(
 
             Animated.timing(positionXObstacles, {
                 toValue: -80,
-                duration,
+                duration: durationAnimation,
                 useNativeDriver: true,
                 easing: Easing.linear,
             }).start(({ finished }) => {
@@ -76,7 +80,7 @@ export default function useObstacleManager(
             positionXObstacles.stopAnimation()
         }
     }, [
-        duration,
+        speed,
         handleObstacleReset,
         positionXObstacles,
         windowWidth,
@@ -90,6 +94,6 @@ export default function useObstacleManager(
         handleObstacleReset,
         score: gameManager.score,
         coins: gameManager.coins,
-        duration,
+        speed,
     }
 }

@@ -1,4 +1,4 @@
-import { gameConstants } from '@/constants/game'
+import { gameConstants } from '@/constants/minigames/flappyPet/game'
 import { Animated, StyleSheet, Image } from 'react-native'
 import { useUserPetStore } from '@/stores/userPetStore'
 import Gato from '@/assets/images/pets/gato.svg'

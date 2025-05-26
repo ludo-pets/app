@@ -1,14 +1,17 @@
-import { gameConstants } from '@/constants/game'
+import { gameConstants } from '@/constants/minigames/flappyPet/game'
 import { useEffect, useRef, useState } from 'react'
 import { Animated } from 'react-native'
+import useGameManager from './useGameManager'
 
 export default function useGamePhysics(gameOver: boolean, isPaused: boolean) {
+    const gameManager = useGameManager()
+    const isFallingAnimation = gameManager.isFallingAnimation
+
     const prevValuePositionY = useRef(gameConstants.initialDimensions.positionY)
     const [gravity, setGravity] = useState(gameConstants.initialGravity)
     const positionYPet = useRef(
         new Animated.Value(gameConstants.initialDimensions.positionY)
     ).current
-    // const positionYPet = useRef(new Animated.Value(0)).current
     const animationFrame = useRef<number | null>(null)
 
     const airPlaneDegree = useRef(
@@ -32,7 +35,8 @@ export default function useGamePhysics(gameOver: boolean, isPaused: boolean) {
     }
 
     function handleAirPlaneDegree(degree: number) {
-        if (gameOver) {
+        airPlaneDegree.stopAnimation()
+        if (gameOver || isPaused || isFallingAnimation) {
             airPlaneDegree.setValue(gameConstants.airPlaneDegree)
             return
         }
@@ -43,18 +47,23 @@ export default function useGamePhysics(gameOver: boolean, isPaused: boolean) {
             speed: 10,
         }).start()
     }
-
+    function resetAnimation() {
+        if (animationFrame.current !== null) {
+            cancelAnimationFrame(animationFrame.current)
+            animationFrame.current = null
+        }
+    }
     useEffect(() => {
-        if (gameOver || isPaused) {
-            // if (gameOver || isPaused) {
-            if (animationFrame.current) {
-                cancelAnimationFrame(animationFrame.current)
-            }
+        if (
+            prevValuePositionY.current == null ||
+            gameOver ||
+            isPaused ||
+            isFallingAnimation
+        ) {
+            resetAnimation()
             return
         }
         const updatePetPosition = () => {
-            if (prevValuePositionY.current == null) return
-
             const newPosition = prevValuePositionY.current + gravity
             positionYPet.setValue(newPosition)
             prevValuePositionY.current = newPosition
@@ -63,11 +72,9 @@ export default function useGamePhysics(gameOver: boolean, isPaused: boolean) {
         animationFrame.current = requestAnimationFrame(updatePetPosition)
 
         return () => {
-            if (animationFrame.current) {
-                cancelAnimationFrame(animationFrame.current)
-            }
+            resetAnimation()
         }
-    }, [gravity, gameOver, isPaused])
+    }, [gravity, gameOver, isPaused, isFallingAnimation])
 
     return {
         positionYPet,

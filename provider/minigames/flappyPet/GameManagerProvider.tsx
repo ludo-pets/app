@@ -10,6 +10,8 @@ type GameManagerType = {
     incrementScore: () => void
     coins: number
     resetGame: () => void
+    setFallingAnimation: (value: boolean) => void
+    isFallingAnimation: boolean
 }
 
 export const GameManagerContext = createContext<GameManagerType | null>(null)
@@ -21,10 +23,12 @@ export function GameManagerProvider({ children }: GameManagerProviderProps) {
     const [isGameOver, setIsGameOver] = useState(false)
     const [score, setScore] = useState(0)
     const [coins, setCoins] = useState(0)
+    const [isFallingAnimation, setIsFallingAnimation] = useState(false)
 
     const setGameIdle = (value: boolean) => setIsGameIdle(value)
     const setGameOver = (value: boolean) => setIsGameOver(value)
     const setGameScore = (value: number) => setScore(value)
+    const setFallingAnimation = (value: boolean) => setIsFallingAnimation(value)
 
     const incrementScore = () =>
         setScore((prev) => {
@@ -51,6 +55,8 @@ export function GameManagerProvider({ children }: GameManagerProviderProps) {
         incrementScore,
         coins,
         resetGame,
+        setFallingAnimation,
+        isFallingAnimation,
     }
     return (
         <GameManagerContext.Provider value={value}>

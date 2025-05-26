@@ -8,7 +8,7 @@ export const gameConstants = {
     flyDownStrength: 8,
     heightSpace: 250, // Espaço entre os obstáculos
     heightFloor: 100, // Altura do chão
-    initialDuration: 3000,
+    initialSpeed: 100, // pixel por segundo
     airPlaneDegree: -30,
     airPlaneDegreeDown: -40,
     airPlaneDegreeUp: 40,
@@ -23,4 +23,5 @@ export const gameConstants = {
     petHeight: 40,
     obstacleWidth: 65,
     positionXPet: 50,
+    targertObstacules: -80,
 }

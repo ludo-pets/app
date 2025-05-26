@@ -11,7 +11,7 @@ import {
 import Pet from '@/components/minigames/flappyPet/Pet'
 import Obstacle from '@/components/minigames/flappyPet/Obstacle'
 import { useEffect } from 'react'
-import { gameConstants } from '@/constants/game'
+import { gameConstants } from '@/constants/minigames/flappyPet/game'
 import Score from '@/components/minigames/flappyPet/Score'
 import useObstacleManager from '@/hooks/minigames/flappyPet/useObstacleManager'
 import useGamePhysics from '@/hooks/minigames/flappyPet/useGamePhysics'
@@ -48,17 +48,18 @@ export default function Renderer({ isPaused }: RendererProps) {
 
     //use effects
     useEffect(() => {
-        if (isColliding) {
-            gameManager.setGameOver(true)
+        if (!isColliding) return
+        gameManager.setFallingAnimation(true)
+        gameManager.setGameOver(true)
+
+        setTimeout(() => {
             Animated.timing(positionYPet, {
-                toValue:
-                    windowHeight -
-                    (gameConstants.heightFloor + gameConstants.petHeight * 1.4),
+                toValue: windowHeight - gameConstants.heightFloor,
                 duration: 1000,
                 useNativeDriver: true,
                 easing: Easing.linear,
-            }).start()
-        }
+            }).start(() => {})
+        }, 100)
     }, [isColliding])
 
     return (
@@ -132,7 +133,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        // height: windowHeight - gameConstants.heightFloor,
         position: 'relative',
         zIndex: 1,
         width: '100%',
@@ -142,7 +142,6 @@ const styles = StyleSheet.create({
         bottom: 0,
         width: '100%',
         height: gameConstants.heightFloor,
-        backgroundColor: 'blue',
         zIndex: 2,
     },
     pressFlyUpBox: {

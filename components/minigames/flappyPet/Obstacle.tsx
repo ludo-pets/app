@@ -1,5 +1,5 @@
 import { StyleSheet, Animated, Dimensions, Easing, Image } from 'react-native'
-import { gameConstants } from '@/constants/game'
+import { gameConstants } from '@/constants/minigames/flappyPet/game'
 
 const { height: windowHeight } = Dimensions.get('window')
 

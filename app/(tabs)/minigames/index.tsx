@@ -14,6 +14,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native'
 
 import Minigame from '@/dtos/Minigame'
 import { fetchMinigames } from '@/services/fetchMinigames'
+import { router } from 'expo-router'
 
 const { width } = Dimensions.get('window')
 const imgRad = 16
@@ -34,7 +35,7 @@ const minigameListRegistry: Record<string, MinigameListConfig> = {
         routeName: 'FoodGame',
     },
     'Flappy Pet': {
-        icon: require('@/assets/images/minigames/food-game/gato_boca_aberta.png'),
+        icon: require('@/assets/images/minigames/flappyPet/flappyPetIcon.png'),
         routeName: 'FlappyPetGame',
     },
 }
@@ -81,11 +82,16 @@ export default function MinigameScreen() {
     const handleNavigateToGame = useCallback(
         (gameName: string, gameId: string) => {
             const config = getMinigameListConfig(gameName)
+
             if (config && config.routeName) {
                 setError(null)
-                navigation.navigate(config.routeName, {
-                    minigameId: gameId,
-                    minigameName: gameName,
+
+                router.push({
+                    pathname: `/minigames/${config.routeName}` as any,
+                    params: {
+                        minigameId: gameId,
+                        minigameName: gameName,
+                    },
                 })
             } else {
                 console.warn(
@@ -94,7 +100,7 @@ export default function MinigameScreen() {
                 setError(`Game "${gameName}" cannot be opened right now.`)
             }
         },
-        [navigation]
+        []
     )
 
     const renderMinigameItem = ({ item }: { item: Minigame }) => {
@@ -115,7 +121,7 @@ export default function MinigameScreen() {
                     <View style={styles.imageContainer}>
                         <View style={styles.picBox}>
                             <Image
-                                resizeMode="cover"
+                                resizeMode="contain"
                                 style={styles.listItemImage}
                                 source={config.icon}
                             />

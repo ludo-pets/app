@@ -1,4 +1,4 @@
-import { gameConstants } from '@/constants/game'
+import { gameConstants } from '@/constants/minigames/flappyPet/game'
 import { useEffect, useRef, useState } from 'react'
 import { Animated, Dimensions } from 'react-native'
 import { DimensionsObstacle } from './useObstacleManager'
