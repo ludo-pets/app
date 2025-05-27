@@ -5,7 +5,7 @@ const { width: windowWidth, height: windowHeight } = Dimensions.get('window')
 export const gameConstants = {
     initialGravity: 1,
     flyUpStrength: -8,
-    flyDownStrength: 8,
+    flyDownStrength: 8, // força do pulo do pet
     heightSpace: 250, // Espaço entre os obstáculos
     heightFloor: 100, // Altura do chão
     initialSpeed: 100, // pixel por segundo
