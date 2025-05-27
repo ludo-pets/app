@@ -1,4 +1,4 @@
-import { GameManagerContext } from '@/provider/minigames/flappyPet/GameManagerProvider'
+import { GameManagerContext } from '@/contexts/minigames/flappyPet/GameManagerProvider'
 import { useContext } from 'react'
 
 export default function useGameManager() {

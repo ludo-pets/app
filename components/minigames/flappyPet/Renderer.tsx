@@ -31,14 +31,14 @@ export default function Renderer({ isPaused }: RendererProps) {
     const gameManager = useGameManager()
 
     const { positionXObstacles, obstacleDimensions, score, coins } =
-        useObstacleManager(gameManager.isGameOver, isPaused)
+        useObstacleManager()
 
     const {
         positionYPet,
         airPlaneDegree,
         handleFlyDirection,
         handleAirPlaneDegree,
-    } = useGamePhysics(gameManager.isGameOver, isPaused)
+    } = useGamePhysics()
 
     const isColliding = useCollisionDetection({
         positionYPet,
@@ -49,8 +49,8 @@ export default function Renderer({ isPaused }: RendererProps) {
     //use effects
     useEffect(() => {
         if (!isColliding) return
-        gameManager.setFallingAnimation(true)
         gameManager.setGameOver(true)
+        gameManager.setFallingAnimation(true)
 
         setTimeout(() => {
             Animated.timing(positionYPet, {

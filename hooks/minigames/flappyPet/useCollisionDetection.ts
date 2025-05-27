@@ -17,7 +17,9 @@ export default function useCollisionDetection({
     const { height: windowHeight } = Dimensions.get('window')
 
     const postionYGround = windowHeight - gameConstants.heightFloor
-    const faixaColisaoGround = postionYGround - gameConstants.petHeight * 1.7
+    // const faixaColisaoGround = postionYGround - gameConstants.petHeight * 1.7
+    const faixaColisaoGround = postionYGround
+
     const faixaColisaoObstaculo =
         gameConstants.petWidth + gameConstants.petWidth * 0.8
 

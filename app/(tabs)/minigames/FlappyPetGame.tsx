@@ -1,6 +1,5 @@
 import GameFlow from '@/components/minigames/flappyPet/GameFlow'
-import { GameManagerProvider } from '@/provider/minigames/flappyPet/GameManagerProvider'
-import { router } from 'expo-router'
+import { GameManagerProvider } from '@/contexts/minigames/flappyPet/GameManagerProvider'
 
 export default function FlappyPetGame() {
     return (

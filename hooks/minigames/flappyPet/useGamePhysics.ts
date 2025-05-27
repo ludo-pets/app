@@ -3,10 +3,11 @@ import { useEffect, useRef, useState } from 'react'
 import { Animated } from 'react-native'
 import useGameManager from './useGameManager'
 
-export default function useGamePhysics(gameOver: boolean, isPaused: boolean) {
+export default function useGamePhysics() {
     const gameManager = useGameManager()
     const isFallingAnimation = gameManager.isFallingAnimation
-
+    const gameOver = gameManager.isGameOver
+    const isPaused = gameManager.isGameIdle
     const prevValuePositionY = useRef(gameConstants.initialDimensions.positionY)
     const [gravity, setGravity] = useState(gameConstants.initialGravity)
     const positionYPet = useRef(

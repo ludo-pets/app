@@ -8,10 +8,7 @@ export interface DimensionsObstacle {
     heightObstacleTop: number
     heightObstacleBottom: number
 }
-export default function useObstacleManager(
-    gameOver: boolean,
-    isPaused: boolean
-) {
+export default function useObstacleManager() {
     const { width: windowWidth, height: windowHeight } =
         Dimensions.get('window')
 
@@ -27,7 +24,13 @@ export default function useObstacleManager(
         useState<DimensionsObstacle>(initialDimensions)
 
     const gameManager = useGameManager()
+    const gameOver = gameManager.isGameOver
+    const isPaused = gameManager.isGameIdle
+
     const handleObstacleReset = useCallback(() => {
+        if (gameOver || isPaused) {
+            return
+        }
         const newObstacleDimensions = generateObstacleHeights(
             windowHeight,
             gameConstants.heightSpace,
@@ -40,7 +43,7 @@ export default function useObstacleManager(
             const newSpeed = prevSpeed + prevSpeed * 0.05
             return Math.min(newSpeed, 500)
         })
-    }, [windowHeight])
+    }, [windowHeight, gameOver, isPaused])
 
     useEffect(() => {
         let isCanceled = false
