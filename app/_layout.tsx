@@ -6,10 +6,6 @@ import { useEffect } from 'react'
 import { Stack } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import {
-    useWalkthrough,
-    WalkthroughProvider,
-} from '@/contexts/WalkthroughContext'
 
 export { ErrorBoundary } from 'expo-router'
 
@@ -41,17 +37,12 @@ export default function RootLayout() {
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <WalkthroughProvider>
-                <RootLayoutNav />
-            </WalkthroughProvider>
+            <RootLayoutNav />
         </GestureHandlerRootView>
     )
 }
 
 function RootLayoutNav() {
-    const { hasCheckedStorage } = useWalkthrough()
-    if (!hasCheckedStorage) return null
-
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#fefefe' }}>
             <Stack>

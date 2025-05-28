@@ -7,7 +7,8 @@ import React, {
 } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { router, usePathname } from 'expo-router'
-const ASYNC_STORAGE_KEY = 'appGlobalWalkthroughCompleted_v1'
+
+const ASYNC_STORAGE_KEY = 'appGlobalWalkthroughCompleted_v0'
 
 export const WALKTHROUGH_STEPS_CONFIG = [
     {
@@ -67,7 +68,10 @@ export const WalkthroughProvider = ({ children }) => {
                     setCurrentStepIndex((prev) => (prev === 0 ? prev : 0))
 
                     const firstStepPath = `/${WALKTHROUGH_STEPS_CONFIG[0].screenName}`
-                    if (currentPathname !== firstStepPath) {
+                    if (
+                        currentPathname !== firstStepPath &&
+                        currentPathname != '/'
+                    ) {
                         router.replace(firstStepPath)
                     }
                 } else {
@@ -125,6 +129,7 @@ export const WalkthroughProvider = ({ children }) => {
     const contextValue = React.useMemo(
         () => ({
             isActive,
+            isCompleted: !isActive && hasCheckedStorage,
             currentStep:
                 isActive && WALKTHROUGH_STEPS_CONFIG[currentStepIndex]
                     ? WALKTHROUGH_STEPS_CONFIG[currentStepIndex]

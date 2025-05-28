@@ -19,7 +19,10 @@ import {
     View,
 } from 'react-native'
 import Tooltip from 'react-native-walkthrough-tooltip'
-import { useWalkthrough } from '@/contexts/WalkthroughContext'
+import {
+    useWalkthrough,
+    WalkthroughProvider,
+} from '@/contexts/WalkthroughContext'
 
 const iconsSize = 32
 
@@ -138,116 +141,120 @@ export default function TabLayout() {
 
     return (
         <>
-            {includeHeader.includes(simplePathname) && (
-                <Header
-                    title={headerTitle}
-                    coinsValue={
-                        simplePathname === 'store' ? user?.money : undefined
-                    }
-                    backgroundColor="#CFE2A8"
-                />
-            )}
-            <Tabs
-                screenOptions={{
-                    headerShown: false,
-                    tabBarShowLabel: false,
-                    tabBarStyle: getTabBarStyle(currentRoutePath),
-                    tabBarLabelPosition: 'beside-icon',
-                }}
-            >
-                <Tabs.Screen
-                    name="home"
-                    options={{
-                        title: 'Home',
-                        tabBarIcon: ({ color, focused }) => (
-                            <CustomTabIconWithTooltip
-                                name="home"
-                                color="black"
-                                focused={focused}
-                                iconsSize={iconsSize}
-                                targetElementId="tab_home"
-                            />
-                        ),
+            <WalkthroughProvider>
+                {includeHeader.includes(simplePathname) && (
+                    <Header
+                        title={headerTitle}
+                        coinsValue={
+                            simplePathname === 'store' ? user?.money : undefined
+                        }
+                        backgroundColor="#CFE2A8"
+                    />
+                )}
+
+                <Tabs
+                    screenOptions={{
+                        headerShown: false,
+                        tabBarShowLabel: false,
+                        tabBarStyle: getTabBarStyle(currentRoutePath),
+                        tabBarLabelPosition: 'beside-icon',
                     }}
-                />
-                <Tabs.Screen
-                    name="store"
-                    options={{
-                        title: 'Store',
-                        tabBarIcon: ({ color, focused }) => (
-                            <CustomTabIconWithTooltip
-                                name="store"
-                                color="black"
-                                focused={focused}
-                                iconsSize={iconsSize}
-                                targetElementId="tab_store"
-                            />
-                        ),
-                    }}
-                />
-                <Tabs.Screen
-                    name="minigames"
-                    options={{
-                        title: 'Minigames',
-                        tabBarIcon: ({ color, focused }) => (
-                            <CustomTabIconWithTooltip
-                                name="minigame"
-                                color="black"
-                                focused={focused}
-                                iconsSize={iconsSize}
-                                targetElementId="tab_minigames"
-                            />
-                        ),
-                    }}
-                    listeners={({ navigation, route }) => ({
-                        tabPress: (e) => {
-                            const r = route as Route<string> & {
-                                state?: NavigationState
-                            }
-                            const nestedState = r.state
-                            const currentNested =
-                                nestedState?.routes?.[nestedState.index ?? 0]
-                                    ?.name ?? 'index'
-                            if (currentNested !== 'index') {
-                                e.preventDefault()
-                                navigation.navigate('minigames', {
-                                    screen: 'index',
-                                })
-                            }
-                        },
-                    })}
-                />
-                <Tabs.Screen
-                    name="quiz"
-                    options={{
-                        title: 'Quiz',
-                        tabBarIcon: ({ color, focused }) => (
-                            <CustomTabIconWithTooltip
-                                name="quiz"
-                                color="black"
-                                focused={focused}
-                                iconsSize={iconsSize}
-                                targetElementId="tab_quiz"
-                            />
-                        ),
-                    }}
-                />
-                <Tabs.Screen
-                    name="profile"
-                    options={{
-                        title: 'Profile',
-                        tabBarIcon: ({ color, focused }) => (
-                            <CustomTabIconWithTooltip
-                                name="profile"
-                                color="black"
-                                focused={focused}
-                                iconsSize={iconsSize}
-                                targetElementId="tab_profile"
-                            />
-                        ),
-                    }}
-                />
-            </Tabs>
+                >
+                    <Tabs.Screen
+                        name="home"
+                        options={{
+                            title: 'Home',
+                            tabBarIcon: ({ color, focused }) => (
+                                <CustomTabIconWithTooltip
+                                    name="home"
+                                    color="black"
+                                    focused={focused}
+                                    iconsSize={iconsSize}
+                                    targetElementId="tab_home"
+                                />
+                            ),
+                        }}
+                    />
+                    <Tabs.Screen
+                        name="store"
+                        options={{
+                            title: 'Store',
+                            tabBarIcon: ({ color, focused }) => (
+                                <CustomTabIconWithTooltip
+                                    name="store"
+                                    color="black"
+                                    focused={focused}
+                                    iconsSize={iconsSize}
+                                    targetElementId="tab_store"
+                                />
+                            ),
+                        }}
+                    />
+                    <Tabs.Screen
+                        name="minigames"
+                        options={{
+                            title: 'Minigames',
+                            tabBarIcon: ({ color, focused }) => (
+                                <CustomTabIconWithTooltip
+                                    name="minigame"
+                                    color="black"
+                                    focused={focused}
+                                    iconsSize={iconsSize}
+                                    targetElementId="tab_minigames"
+                                />
+                            ),
+                        }}
+                        listeners={({ navigation, route }) => ({
+                            tabPress: (e) => {
+                                const r = route as Route<string> & {
+                                    state?: NavigationState
+                                }
+                                const nestedState = r.state
+                                const currentNested =
+                                    nestedState?.routes?.[
+                                        nestedState.index ?? 0
+                                    ]?.name ?? 'index'
+                                if (currentNested !== 'index') {
+                                    e.preventDefault()
+                                    navigation.navigate('minigames', {
+                                        screen: 'index',
+                                    })
+                                }
+                            },
+                        })}
+                    />
+                    <Tabs.Screen
+                        name="quiz"
+                        options={{
+                            title: 'Quiz',
+                            tabBarIcon: ({ color, focused }) => (
+                                <CustomTabIconWithTooltip
+                                    name="quiz"
+                                    color="black"
+                                    focused={focused}
+                                    iconsSize={iconsSize}
+                                    targetElementId="tab_quiz"
+                                />
+                            ),
+                        }}
+                    />
+                    <Tabs.Screen
+                        name="profile"
+                        options={{
+                            title: 'Profile',
+                            tabBarIcon: ({ color, focused }) => (
+                                <CustomTabIconWithTooltip
+                                    name="profile"
+                                    color="black"
+                                    focused={focused}
+                                    iconsSize={iconsSize}
+                                    targetElementId="tab_profile"
+                                />
+                            ),
+                        }}
+                    />
+                </Tabs>
+            </WalkthroughProvider>
         </>
     )
 }
