@@ -6,4 +6,5 @@ export default interface Item {
     category: string
     image: string
     type: string
+    animalType: string
 }

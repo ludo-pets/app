@@ -9,7 +9,11 @@ const { height, width } = Dimensions.get('window')
 
 const PetItem = () => {
     const onPress = () => {
-        console.log("don't touch the cat!")
+        if (petInfo?.type === 'cat') {
+            console.log("don't touch the cat!")
+        } else {
+            console.log("don't touch the dog!")
+        }
     }
 
     const petInfo = useUserPetStore((state) => state.pet)

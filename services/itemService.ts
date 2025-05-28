@@ -19,6 +19,7 @@ export const getAllItemService = async (): Promise<{
                 category: data.category,
                 image: data.image,
                 type: data.type,
+                animalType: data.animalType,
             }
         })
 

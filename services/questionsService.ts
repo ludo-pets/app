@@ -27,7 +27,7 @@ export const fetchAllQuestionsService = async (): Promise<{
     }
 }
 
-export const fetchQuestion = async(questionId: string): Promise<Question> => {
+export const fetchQuestion = async (questionId: string): Promise<Question> => {
     try {
         const questionDocRef = doc(db, 'Question', questionId)
         const questionSnapshot = await getDoc(questionDocRef)

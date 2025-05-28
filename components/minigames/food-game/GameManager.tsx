@@ -2,10 +2,14 @@ import { useState, useCallback, useRef, useEffect } from 'react'
 import { useGameConfig } from './GameConfig'
 import useFoods, { FoodItem, NewFood } from './Foods'
 import { Audio, AVPlaybackSource } from 'expo-av'
+import { useUserPetStore } from '@/stores/userPetStore'
 
+const petInfo = useUserPetStore.getState().pet
 const eatingGoodFood: AVPlaybackSource = require('@/assets/images/minigames/food-game/eating_good_food.mp3')
 const coinSound: AVPlaybackSource = require('@/assets/images/minigames/food-game/coin.mp3')
-const eatingBadFood: AVPlaybackSource = require('@/assets/images/minigames/food-game/angry_cat.mp3')
+const eatingBadFood: AVPlaybackSource = petInfo?.type === 'cat'
+? require('@/assets/images/minigames/food-game/angry_cat.mp3')
+: require('@/assets/images/minigames/food-game/angry_dog.mp3')
 const lifeSound: AVPlaybackSource = require('@/assets/images/minigames/food-game/lifeSound.mp3')
 
 const playSound = async (s: AVPlaybackSource) => {
