@@ -76,6 +76,7 @@ export default function StoreScreen() {
                         image: item.image,
                         is_active: isActive,
                         quantity,
+                        type: item.type
                     }}
                 />
             )
@@ -157,11 +158,13 @@ const styles = StyleSheet.create({
     },
     itemsShopBox: {
         width: '100%',
+        
         paddingVertical: 20,
         paddingHorizontal: 10,
     },
     itemShop: {
         height: 92,
+        
         backgroundColor: '#E5E5E5',
         width: '100%',
         justifyContent: 'center',
