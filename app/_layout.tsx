@@ -9,7 +9,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 export { ErrorBoundary } from 'expo-router'
 
 export const unstable_settings = {
-    initialRouteName: '(tabs)',
+    initialRouteName: 'index',
 }
 
 SplashScreen.preventAutoHideAsync()
@@ -41,10 +41,7 @@ function RootLayoutNav() {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#fefefe' }}>
             <Stack>
-                <Stack.Screen
-                    name="index"
-                    options={{ headerShown: false }}
-                />
+                <Stack.Screen name="index" options={{ headerShown: false }} />
                 <Stack.Screen
                     name="petCreate"
                     options={{ headerShown: false }}
