@@ -16,8 +16,7 @@ const MoodBar = ({ animalLevel = 1, animalMood = 0 }) => {
     const [mood, setMood] = useState(animalMood)
     useEffect(() => {
         setMood(animalMood)
-    }, [animalMood]
-    )
+    }, [animalMood])
     const [level] = useState(animalLevel)
     const animatedValue = useRef(new Animated.Value(0)).current
     const moodBarSize = 100
