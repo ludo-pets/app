@@ -10,6 +10,7 @@ interface HeaderProps {
     showBackButton?: boolean
     onBackPress?: () => void
     coinsValue?: number
+    rightComponent?: React.ReactNode // <- novo prop
 }
 
 export default function Header({
@@ -18,6 +19,7 @@ export default function Header({
     showBackButton = false,
     onBackPress,
     coinsValue,
+    rightComponent,
 }: HeaderProps) {
     return (
         <View style={[styles.container, { backgroundColor }]}>
@@ -25,7 +27,6 @@ export default function Header({
                 <TouchableOpacity
                     onPress={() => {
                         router.back()
-
                         if (onBackPress) {
                             onBackPress()
                         }
@@ -36,9 +37,18 @@ export default function Header({
                 </TouchableOpacity>
             )}
             <Text style={styles.title}>{title}</Text>
+
+            {/* Coins */}
             {coinsValue !== undefined && (
                 <View style={styles.coinsContainer}>
                     <Coin value={coinsValue} />
+                </View>
+            )}
+
+            {/* Right component (ex: logout icon) */}
+            {rightComponent && (
+                <View style={styles.rightComponent}>
+                    {rightComponent}
                 </View>
             )}
         </View>
@@ -64,6 +74,10 @@ const styles = StyleSheet.create({
         color: '#5B5B5B',
     },
     coinsContainer: {
+        position: 'absolute',
+        right: 16,
+    },
+    rightComponent: {
         position: 'absolute',
         right: 16,
     },
