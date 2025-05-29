@@ -181,10 +181,28 @@ export default function Profile() {
                     </TouchableOpacity>
                 </View>
 
-                <View style={{display: 'flex', alignItems: 'center', flexDirection: "row"}}>
-                    <Achievement title='teste' description='teste' conquered={true} />
-                    <Achievement title='teste' description='teste' conquered={false} />
-                    <Achievement title='teste' description='teste' conquered={false} />
+                <View
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        flexDirection: 'row',
+                    }}
+                >
+                    <Achievement
+                        title="teste"
+                        description="teste"
+                        conquered={true}
+                    />
+                    <Achievement
+                        title="teste"
+                        description="teste"
+                        conquered={false}
+                    />
+                    <Achievement
+                        title="teste"
+                        description="teste"
+                        conquered={false}
+                    />
                 </View>
             </View>
         </SafeAreaView>

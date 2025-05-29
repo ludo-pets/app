@@ -23,9 +23,7 @@ export default function PetCareModal({ visible, onStart, onDismiss }: Props) {
             <Pressable style={styles.backdrop} onPress={onDismiss}>
                 <Pressable style={styles.dialog}>
                     <ScrollView showsVerticalScrollIndicator={false}>
-                        <Text style={styles.title}>
-                            Guia Pet
-                        </Text>
+                        <Text style={styles.title}>Guia Pet</Text>
                         <Text style={styles.subtitle}>
                             Toque nos objetos sempre que seu amiguinho precisar!
                             {'\n'}
@@ -53,10 +51,6 @@ export default function PetCareModal({ visible, onStart, onDismiss }: Props) {
                             seu pet limpinho e confortável!
                         </Text>
                     </ScrollView>
-
-                    <Pressable style={styles.cta} onPress={onStart}>
-                        <Text style={styles.ctaText}>Começar a diversão</Text>
-                    </Pressable>
                 </Pressable>
             </Pressable>
         </Modal>
