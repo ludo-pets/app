@@ -20,6 +20,7 @@ import Cachorro from '@/assets/images/pets/cachorro.svg'
 import { PetOptionFormRegisterPet } from '@/components/PetOptionFormRegisterPet'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { useRouter } from 'expo-router'
+import Achievement from '@/components/Achievement'
 
 const editIcon = require('@/assets/images/profile/edit_icon.png')
 const coinIcon = require('@/assets/images/profile/pet_coin.png')
@@ -178,6 +179,12 @@ export default function Profile() {
                             color="#5B5B5B"
                         />
                     </TouchableOpacity>
+                </View>
+
+                <View style={{display: 'flex', alignItems: 'center', flexDirection: "row"}}>
+                    <Achievement title='teste' description='teste' conquered={true} />
+                    <Achievement title='teste' description='teste' conquered={false} />
+                    <Achievement title='teste' description='teste' conquered={false} />
                 </View>
             </View>
         </SafeAreaView>
