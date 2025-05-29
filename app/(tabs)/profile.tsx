@@ -20,6 +20,8 @@ import Cachorro from '@/assets/images/pets/cachorro.svg'
 import { PetOptionFormRegisterPet } from '@/components/PetOptionFormRegisterPet'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { useRouter } from 'expo-router'
+import AchievementType from '@/dtos/Achievement'
+import { fetchAchievements } from '@/services/fetchAchievements'
 import Achievement from '@/components/Achievement'
 
 const editIcon = require('@/assets/images/profile/edit_icon.png')
@@ -35,17 +37,32 @@ export default function Profile() {
     const petInfo = useUserPetStore((state) => state.pet)
     const [petName, setPetName] = useState(petInfo?.name || '')
     const [petColor, setPetColor] = useState(petInfo?.color || '')
-    const handlerChangePetName = (text: string) => {
-        setPetName(text)
-    }
+    const [achievements, setAchievements] = useState<AchievementType[]>([])
     const router = useRouter()
 
     useEffect(() => {
+        const loadData = async () => {
+            try {
+                const achievements = await fetchAchievements()
+                setAchievements(achievements)
+                console.log(achievements)
+            } catch (err: any) {
+                console.error('Failed to fetch achievements:', err)
+                setAchievements([])
+            }
+        }
+
+        loadData()
+
         if (petInfo) {
             setPetName(petInfo.name)
             setPetColor(petInfo.color)
         }
     }, [petInfo])
+
+    const handlerChangePetName = (text: string) => {
+        setPetName(text)
+    }
 
     const colors = colorsOptions
 
@@ -167,24 +184,15 @@ export default function Profile() {
                             <Text style={styles.saveButtonText}>Salvar</Text>
                         </TouchableOpacity>
                     )}
-
-                    <TouchableOpacity
-                        onPress={() => router.push('/')}
-                        style={styles.logoutButton}
-                    >
-                        <Text style={styles.logoutButtonText}>Sair</Text>
-                        <MaterialIcons
-                            name="exit-to-app"
-                            size={24}
-                            color="#5B5B5B"
-                        />
-                    </TouchableOpacity>
                 </View>
 
                 <View style={{display: 'flex', alignItems: 'center', flexDirection: "row"}}>
-                    <Achievement title='teste' description='teste' conquered={true} />
-                    <Achievement title='teste' description='teste' conquered={false} />
-                    <Achievement title='teste' description='teste' conquered={false} />
+                    {achievements.map((achievement) => (
+                        <Achievement
+                            key={achievement.id}
+                            title={achievement.name}
+                            description={achievement.message} conquered={false}                        />
+                    ))}
                 </View>
             </View>
         </SafeAreaView>
