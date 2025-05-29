@@ -1,6 +1,5 @@
 import { Image, View, StyleSheet, Pressable, Text } from 'react-native'
-import { FormRegisterPet } from '../components/FormRegisterPet'
-import { router, useRouter } from 'expo-router'
+import { router } from 'expo-router'
 import GoogleSigninButton from '@/components/GoogleSigninComponent'
 import * as WebBrowser from 'expo-web-browser'
 
@@ -14,12 +13,12 @@ export default function RegisterPetPage() {
     return (
         <View style={styles.containerBox}>
             <View style={styles.mainContent}>
-                <Image source={require('@/assets/images/logo.png')} />
+                <Image
+                    style={styles.image}
+                    source={require('@/assets/images/ludopets.png')}
+                />
                 <View style={styles.buttons}>
                     <GoogleSigninButton />
-                    <Pressable onPress={route}>
-                        <Text>Permanecer Desconectado</Text>
-                    </Pressable>
                 </View>
             </View>
         </View>
@@ -52,5 +51,17 @@ const styles = StyleSheet.create({
     buttons: {
         alignItems: 'center',
         gap: 10,
+    },
+    image: {
+        width: 256,
+        height: 256,
+        borderRadius: 200,
+        // iOS shadow
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 5,
+        // Android shadow
+        elevation: 80,
     },
 })

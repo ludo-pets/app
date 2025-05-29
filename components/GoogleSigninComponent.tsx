@@ -17,23 +17,17 @@ const redirectUri = AuthSession.makeRedirectUri({
     scheme: 'myapp',
 })
 
-console.log('Redirect URI:', redirectUri)
-
 export default function GoogleSigninButton() {
     const router = useRouter()
     const [request, response, promptAsync] = Google.useAuthRequest({
-        androidClientId:
-            '823465219976-5t5443kohpdm9kda4ne1k4cib0gmcutd.apps.googleusercontent.com',
-        iosClientId:
-            '823465219976-9tr8frv4ksgmeh6l3ai4tdgu4hfpcejg.apps.googleusercontent.com',
-        clientId:
-            '823465219976-5gioroqbrn0134u220jagvasotqs7rbo.apps.googleusercontent.com',
+        androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
+        iosClientId: process.env.EXPO_PUBLIC_IOS_CLIENT_ID,
+        clientId: process.env.EXPO_PUBLIC_CLIENT_ID,
         redirectUri: redirectUri,
         responseType: 'id_token',
     })
 
     useEffect(() => {
-        console.log('Auth request object:', request)
         if (response?.type === 'success') {
             const { id_token } = response.params
             const credential = GoogleAuthProvider.credential(id_token)
@@ -55,7 +49,6 @@ export default function GoogleSigninButton() {
 
                     // Only navigate, do NOT set in store yet
                     if (user && user.pet) {
-                        console.log('User with pet found:', user)
                         await useUserPetStore.getState().fetchUserAndPet(email)
                         router.replace('/home')
                     } else {

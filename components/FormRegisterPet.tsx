@@ -18,7 +18,10 @@ import { SvgProps } from 'react-native-svg'
 import { addPet } from '@/services/postPet'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { useUserPetStore } from '@/stores/userPetStore'
-import { getUserWithPetByIdService, updateUserService } from '@/services/userService'
+import {
+    getUserWithPetByIdService,
+    updateUserService,
+} from '@/services/userService'
 
 export type PetOption = {
     id?: number
@@ -52,14 +55,13 @@ export const colorsOptions: ColorOption[] = [
 ]
 
 type FormRegisterPetRouteParams = {
-    userId: string;
-    email: string;
-};
+    userId: string
+    email: string
+}
 
 export function FormRegisterPet() {
-    const route = useRoute();
-    const { userId, email } = (route.params as FormRegisterPetRouteParams) || {};
-    console.log('User in FormRegisterPet:', email)
+    const route = useRoute()
+    const { userId, email } = (route.params as FormRegisterPetRouteParams) || {}
     const navigation = useNavigation()
     const [selectedPet, setSelectedPet] = useState<PetOption>(petsTypes[0])
     const [selectedColorPet, setSelectedColorPet] = useState<ColorOption>(
@@ -91,20 +93,20 @@ export function FormRegisterPet() {
         // Call the service function to add the pet
         const newPet = await addPet(petDataToCreate)
 
-          if (newPet) {
+        if (newPet) {
             // Update user in Firestore to bind pet
-            await updateUserService(userId, { pet: newPet.id });
+            await updateUserService(userId, { pet: newPet.id })
 
             // Fetch the updated user (now with pet)
-            const updatedUser = await getUserWithPetByIdService(email);
+            const updatedUser = await getUserWithPetByIdService(email)
 
             // Now set in store
             if (updatedUser) {
-                useUserPetStore.getState().fetchUserAndPet(email);
+                useUserPetStore.getState().fetchUserAndPet(email)
             }
-            
+
             // Navigate to home
-            navigation.navigate('(tabs)' as never);
+            navigation.navigate('(tabs)' as never)
         } else {
             // Error handled in addPet function (showed an alert there)
             console.error('Failed to create pet.')
