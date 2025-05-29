@@ -1,7 +1,20 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { useGameConfig } from './GameConfig'
 import useFoods, { FoodItem, NewFood } from './Foods'
-import { useAudioPlayer , AudioPlayer} from 'expo-audio'
+import { Audio, AVPlaybackSource } from 'expo-av'
+
+const eatingGoodFood: AVPlaybackSource = require('@/assets/images/minigames/food-game/eating_good_food.mp3')
+const coinSound: AVPlaybackSource = require('@/assets/images/minigames/food-game/coin.mp3')
+const eatingBadFood: AVPlaybackSource = require('@/assets/images/minigames/food-game/angry_cat.mp3')
+const lifeSound: AVPlaybackSource = require('@/assets/images/minigames/food-game/lifeSound.mp3')
+
+const playSound = async (s: AVPlaybackSource) => {
+    const { sound } = await Audio.Sound.createAsync(s, {
+        shouldPlay: true,
+        isLooping: false,
+    })
+    await sound.playAsync()
+}
 
 export type GameManagerType = {
     startGame: () => void
@@ -21,15 +34,8 @@ export type GameManagerType = {
 
 export const useGameManager = (): GameManagerType => {
     const { config } = useGameConfig()
-    const { 
-        foods, 
-        FOOD_TYPES, 
-        createFood, 
-        setFoods, 
-        updateCurrentLives,
-        checkCollision,
-        stopAllAnimations
-    } = useFoods({ config })
+    const { foods, FOOD_TYPES, createFood, setFoods, updateCurrentLives } =
+        useFoods({ config })
 
     const [characterPosition, setCharacterPosition] = useState(
         config.SCREEN_WIDTH / 2 - config.CHARACTER_WIDTH / 2
@@ -49,20 +55,11 @@ export const useGameManager = (): GameManagerType => {
     const [lifes, setLifes] = useState(3)
     const [coins, setCoins] = useState(0)
 
-    // Adiciona um ref para controlar as colisões já processadas
-    const processedCollisions = useRef<Set<number>>(new Set())
-
-    const eatingGoodFood: AudioPlayer = useAudioPlayer(require('@/assets/images/minigames/food-game/eating_good_food.mp3'))
-    const coinSound: AudioPlayer = useAudioPlayer(require('@/assets/images/minigames/food-game/coin.mp3'))
-    const eatingBadFood: AudioPlayer = useAudioPlayer(require('@/assets/images/minigames/food-game/angry_cat.mp3'))
-    const lifeSound: AudioPlayer = useAudioPlayer(require('@/assets/images/minigames/food-game/lifeSound.mp3'))
-
     /**
      * inicia o jogo
      * seta todos os estaods e inicia os timers
      */
     const startGame = () => {
-        processedCollisions.current.clear()
         setGameStarted(true)
         setGameOver(false)
         setScore(0)
@@ -97,11 +94,11 @@ export const useGameManager = (): GameManagerType => {
      */
     const endGame = () => {
         setGameOver(true)
+        setGameOver(true)
         setGameStarted(false)
         setDifficulty(1)
         setFallSpeed(config.INITIAL_FALL_SPEED)
         setFoods([])
-        stopAllAnimations()
         if (gameTimer.current) clearInterval(gameTimer.current)
         if (difficultyTimer.current) clearInterval(difficultyTimer.current)
     }
@@ -183,21 +180,37 @@ export const useGameManager = (): GameManagerType => {
      */
     const checkCollisions = useCallback(
         (callback: (type: string) => void) => {
-            foods.forEach((food) => {
-                // Verifica se a colisão já foi processada
-                if (processedCollisions.current.has(food.id)) return
+            const characterTop =
+                config.SCREEN_HEIGHT - config.CHARACTER_HEIGHT - 20
+            const characterBottom = config.SCREEN_HEIGHT - 20
+            const characterLeft = characterPosition
+            const characterRight = characterPosition + config.CHARACTER_WIDTH
 
-                if (checkCollision(food.id, characterPosition, config.CHARACTER_WIDTH)) {
-                    // Marca a colisão como processada
-                    processedCollisions.current.add(food.id)
+            foods.forEach((food: FoodItem) => {
+                const foodTop = food.yPos
+                const foodBottom = foodTop + config.FOOD_SIZE
+                const foodLeft = food.x
+                const foodRight = food.x + config.FOOD_SIZE
 
-                    // Remove a comida
+                // Ignora alimentos fora da tela
+                if (foodTop > config.SCREEN_HEIGHT) {
+                    return
+                }
+                const horizontalOverlap =
+                    (foodLeft <= characterRight && foodLeft >= characterLeft) ||
+                    (foodRight >= characterLeft &&
+                        foodRight <= characterRight) ||
+                    (foodLeft <= characterLeft && foodRight >= characterRight)
+
+                const verticalOverlap =
+                    foodTop <= characterBottom && foodBottom >= characterTop
+
+                if (horizontalOverlap && verticalOverlap) {
                     setFoods((prevFoods) =>
                         prevFoods.filter((f) => f.id !== food.id)
                     )
-
-                    // Processa o efeito da colisão
                     if (food.type === 'bad') {
+                        //callback("bad");
                         setLifes((prevLifes) => {
                             const newLifes = prevLifes - 1
                             updateCurrentLives(newLifes)
@@ -206,43 +219,58 @@ export const useGameManager = (): GameManagerType => {
                             }
                             return newLifes
                         })
-                        eatingBadFood.seekTo(0)
-                        eatingBadFood.play()
-                    } else if (food.type === 'health') {
+                    }
+
+                    if (food.type === 'health') {
                         setLifes((prevLifes) => {
                             const newLifes = Math.min(prevLifes + 1, 3)
                             updateCurrentLives(newLifes)
                             if (prevLifes + 1 <= 3) {
-                                lifeSound.seekTo(0)
-                                lifeSound.play()
+                                playSound(lifeSound)
                             }
                             return newLifes
                         })
-                    } else if (food.type === 'coin') {
-                        setCoins((prevCoins) => prevCoins + 1)
-                        coinSound.seekTo(0)
-                        coinSound.play()
-                    } else if (food.type === 'good') {
-                        setScore((prevScore) => prevScore + food.points)
-                        eatingGoodFood.seekTo(0)
-                        eatingGoodFood.play()
                     }
+
+                    if (food.type === 'coin') {
+                        setCoins((prevCoins) => prevCoins + 1)
+                        playSound(coinSound)
+                    }
+
+                    setScore((prevScore) => {
+                        const newScore = prevScore + food.points
+                        if (food.type === 'good') {
+                            playSound(eatingGoodFood)
+                        } else if (food.type === 'bad') {
+                            playSound(eatingBadFood)
+                        }
+
+                        const nextThresholdIndex =
+                            scoreThresholds.current.findIndex(
+                                (threshold) =>
+                                    newScore >= threshold &&
+                                    prevScore < threshold
+                            )
+
+                        if (nextThresholdIndex !== -1) {
+                            increaseDifficulty()
+                        }
+
+                        return newScore
+                    })
                 }
             })
         },
-        [characterPosition, foods]
+        [
+            characterPosition,
+            foods,
+            config,
+            setFoods,
+            setLifes,
+            setScore,
+            increaseDifficulty,
+        ]
     )
-
-    // Adiciona um intervalo de verificação de colisões com frequência reduzida
-    useEffect(() => {
-        if (gameStarted && !gameOver) {
-            const collisionInterval = setInterval(() => {
-                checkCollisions(() => {})
-            }, 100) // Reduzido para 10fps para evitar múltiplas detecções
-
-            return () => clearInterval(collisionInterval)
-        }
-    }, [gameStarted, gameOver, checkCollisions])
 
     /**
      * Resta os timers no reoload

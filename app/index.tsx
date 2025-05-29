@@ -1,22 +1,25 @@
 import { Image, View, StyleSheet, Pressable, Text } from 'react-native'
-import { FormRegisterPet } from '../components/FormRegisterPet'
-import { useRouter } from 'expo-router'
+import { router } from 'expo-router'
+import GoogleSigninButton from '@/components/GoogleSigninComponent'
+import * as WebBrowser from 'expo-web-browser'
+
+const route = () => {
+    router.replace('/(tabs)/home')
+}
 
 export default function RegisterPetPage() {
-    const router = useRouter()
+    WebBrowser.maybeCompleteAuthSession()
 
     return (
         <View style={styles.containerBox}>
             <View style={styles.mainContent}>
-                <Image source={require('@/assets/images/logo.png')} />
-                <FormRegisterPet />
-                <Pressable
-                    onPress={() => {
-                        router.push('/home')
-                    }}
-                >
-                    <Text style={styles.link}>Já tenho um pet</Text>
-                </Pressable>
+                <Image
+                    style={styles.image}
+                    source={require('@/assets/images/ludopets.png')}
+                />
+                <View style={styles.buttons}>
+                    <GoogleSigninButton />
+                </View>
             </View>
         </View>
     )
@@ -44,5 +47,21 @@ const styles = StyleSheet.create({
         maxHeight: 650,
         justifyContent: 'space-between',
         alignItems: 'center',
+    },
+    buttons: {
+        alignItems: 'center',
+        gap: 10,
+    },
+    image: {
+        width: 256,
+        height: 256,
+        borderRadius: 200,
+        // iOS shadow
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 5,
+        // Android shadow
+        elevation: 80,
     },
 })

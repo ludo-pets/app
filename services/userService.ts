@@ -4,12 +4,31 @@ import { db } from '@/firebaseConfig'
 import {
     doc,
     getDoc,
+    setDoc,
     getDocs,
     updateDoc,
     collection,
     query,
     where,
 } from 'firebase/firestore'
+
+export const createUserService = async (user: { uid: string, email: string }) => {
+    const userRef = doc(db, 'User', user.uid)
+    const userSnap = await getDoc(userRef)
+    if (!userSnap.exists()) {
+        await setDoc(userRef, {
+            id: user.uid,
+            email: user.email,
+            money: 0,
+            level: 1,
+            experience: 0,
+            lastLessonConcluded: null,
+            notifications: [],
+            pet: null,
+            achievements: [],
+        })
+    }
+}
 
 export const getUserWithPetByIdService = async (
     email: string

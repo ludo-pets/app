@@ -12,7 +12,8 @@ interface UserPetState {
     pet: Pet | null
     loading: boolean
     error: string | null
-    fetchUserAndPet: (userId: string) => Promise<void>
+    fetchUser: (userEmail: string) => Promise<void>
+    fetchUserAndPet: (email: string) => Promise<void>
     updateUser: (userId: string, userData: Partial<User>) => Promise<void>
     updatePet: (petId: string, petData: Partial<Pet>) => Promise<void>
     setUser: (user: User) => void
@@ -26,14 +27,27 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
     pet: null,
     loading: true,
     error: null,
-    setAchievements(achievements) {
+    setAchievements(achievements) {},
 
-    },
-
-    fetchUserAndPet: async (userId: string) => {
+    fetchUser: async (userEmail: string) => {
         set({ loading: true, error: null })
         try {
-            const result = await getUserWithPetByIdService(userId)
+            const result = await getUserWithPetByIdService(userEmail)
+            if (result) {
+                set({ user: result.user, pet: null, loading: false })
+            } else {
+                set({ error: 'Usuário não encontrado', loading: false })
+            }
+        } catch (error: any) {
+            console.error('Error fetching user:', error)
+            set({ error: error.message, loading: false })
+        }
+    },
+
+    fetchUserAndPet: async (userEmail: string) => {
+        set({ loading: true, error: null })
+        try {
+            const result = await getUserWithPetByIdService(userEmail)
             if (result) {
                 set({ user: result.user, pet: result.pet, loading: false })
             } else {
@@ -93,8 +107,10 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
                 const alreadyOwned = user.achievements.includes(achievement)
                 if (!alreadyOwned) {
                     const newAchievements = [...user.achievements, achievement]
-                    await updateUserService(user.id, { achievements: newAchievements})
-                    set({ user: { ...user, achievements: newAchievements}})
+                    await updateUserService(user.id, {
+                        achievements: newAchievements,
+                    })
+                    set({ user: { ...user, achievements: newAchievements } })
                 }
             }
         } catch (error: any) {
