@@ -1,4 +1,8 @@
-export const calcLevelUp = (oldXp: number, level: number, newXp: number) => {
+export const calcLevelUp = (
+    oldXp: number,
+    level: number,
+    newXp: number
+) => {
     let currentXp = oldXp + newXp
     let currentLevel = level
 

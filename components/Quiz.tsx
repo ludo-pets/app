@@ -1,5 +1,11 @@
 import React, { useState } from 'react'
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native'
+import {
+    View,
+    Text,
+    TouchableOpacity,
+    Image,
+    StyleSheet,
+} from 'react-native'
 
 interface QuizProps {
     question: string
@@ -26,7 +32,7 @@ export function Quiz({
         if (option === correctAnswer) {
             onCorrectAnswer()
         } else {
-            onWrongAnswer()
+            onWrongAnswer() 
         }
     }
 

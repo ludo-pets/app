@@ -18,15 +18,9 @@ const paws = require('@/assets/images/paw.png')
 const pawsTravled = require('@/assets/images/pawTraveled.png')
 
 export default function QuizScreen() {
-    const getAllLesssons = useAllLessonsStore(
-        (state: { fetchAllLessons: any }) => state.fetchAllLessons
-    )
-    const lessons = useAllLessonsStore(
-        (state: { lessons: any }) => state.lessons
-    )
-    const loading = useAllLessonsStore(
-        (state: { loading: boolean }) => state.loading
-    )
+    const getAllLesssons = useAllLessonsStore((state: { fetchAllLessons: any }) => state.fetchAllLessons  )
+    const lessons = useAllLessonsStore((state: { lessons: any }) => state.lessons)
+    const loading = useAllLessonsStore((state: { loading: boolean }) => state.loading)
     const user = useUserPetStore((state) => state.user)
     const [lastLessonConcludedId, setLastLessonConcludedId] = useState(1)
     const { setLesson, changeToNextQuestion } = useLessonStore()
@@ -39,22 +33,12 @@ export default function QuizScreen() {
             return
         }
 
-        if (lessons.indexOf(lesson) > lastLessonConcludedId) {
+        if (lessons.indexOf(lesson) != lastLessonConcludedId) {
             alert('Você não pode acessar essa lição ainda')
             return
         }
-
+        
         const currentLesson = lesson as Lesson
-
-        if(lessons.indexOf(lesson) < lastLessonConcludedId) {
-
-            
-            setLesson(currentLesson)
-            changeToNextQuestion('', currentLesson.questions)
-
-            router.push('/quizSummary')
-            return;
-        }
         setLesson(currentLesson)
         changeToNextQuestion('', currentLesson.questions)
 
@@ -67,7 +51,7 @@ export default function QuizScreen() {
                 (item: Lesson) => item.id === user.lastLessonConcluded
             )
             if (lastIndex !== -1) {
-                setLastLessonConcludedId(lastIndex + 1)
+                setLastLessonConcludedId(lastIndex+1)
             }
         }
         if (!lessons) {
@@ -87,7 +71,8 @@ export default function QuizScreen() {
                     ) : (
                         lessons?.map((item: Lesson, index: number) => {
                             return (
-                                <View key={item.id}>
+                                <View
+                                    key={item.id}>
                                     <ItemPathQuiz
                                         pendent={lastLessonConcludedId == index}
                                         onPress={() => OnPressItem(item.id)}

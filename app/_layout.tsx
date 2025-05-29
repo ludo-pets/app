@@ -41,8 +41,10 @@ function RootLayoutNav() {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#fefefe' }}>
             <Stack>
-                <Stack.Screen name="index" options={{ headerShown: false }} />
-                <Stack.Screen name="quizSummary" options={{ headerShown: false }} />
+                <Stack.Screen
+                    name="index"
+                    options={{ headerShown: false }}
+                />
                 <Stack.Screen
                     name="quizGame"
                     options={{
