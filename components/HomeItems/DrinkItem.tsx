@@ -5,18 +5,44 @@ import {
     TouchableWithoutFeedback,
     Dimensions,
 } from 'react-native'
-import { InteractionTouch } from './InteractionTouch'
 import ItemProps from '@/dtos/ItensProps'
+import { useUserPetStore } from '@/stores/userPetStore'
+import { calcPetMood } from '@/utils/moodCalculator'
+import { useState } from 'react'
 
 const { height, width } = Dimensions.get('window')
 
 const DrinkItem = ({ update }: ItemProps) => {
+    const pet = useUserPetStore((state) => state.pet)
+    
+    const needsToDrink = () => {
+        if (pet) {
+            const {thirst} = calcPetMood(pet.wellBeing)
+            return thirst < 12.5
+        }
+        return false
+    }
+
+    const [isThirsty, setIsThirsty] = useState(needsToDrink())
     const onPress = () => {
         update('thirst')
+        setIsThirsty(needsToDrink())
     }
 
     return (
         <View style={styles.cbox}>
+            {isThirsty && (
+                <View style={styles.alertContainer}>
+                                    <Image
+                                        source={require('@/assets/images/homescreen/icone_feedback.png')}
+                                        style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            resizeMode: 'contain',
+                                        }}
+                                    />
+                                </View>
+            )}
             <TouchableWithoutFeedback onPress={onPress}>
                 <Image
                     style={{
@@ -43,6 +69,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         display: 'flex',
-        //backgroundColor: 'blue',
+    },
+    alertContainer: {
+        position: 'absolute',
+        top: -10,
+        right: -10,
+        width: 30,
+        height: 30,
+        zIndex: 1,
+        backgroundColor: 'white',
+        borderRadius: 12,
+        padding: 2,
     },
 })

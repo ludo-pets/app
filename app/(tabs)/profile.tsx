@@ -45,7 +45,6 @@ export default function Profile() {
             try {
                 const achievements = await fetchAchievements()
                 setAchievements(achievements)
-                console.log(achievements)
             } catch (err: any) {
                 console.error('Failed to fetch achievements:', err)
                 setAchievements([])

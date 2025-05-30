@@ -8,7 +8,7 @@ import Fooditem from '@/components/HomeItems/FoodItem'
 import Drinkitem from '@/components/HomeItems/DrinkItem'
 import Wallpaperitem from '@/components/HomeItems/WallpaperItem'
 import { useUserPetStore } from '@/stores/userPetStore'
-import Pet from '@/dtos/Pet'
+import { Pet } from '@/dtos/Pet'
 
 const Homescreen = () => {
     const updatePet = useUserPetStore((state) => state.updatePet)
@@ -30,11 +30,11 @@ const Homescreen = () => {
             <Wallpaperitem />
             <Flooritem />
             <Petitem />
-            <WcItem update={(item) => updateTime(item)} />
-            <Beditem update={(item) => updateTime(item)} />
-            <Toyitem update={(item) => updateTime(item)} />
-            <Fooditem update={(item) => updateTime(item)} />
-            <Drinkitem update={(item) => updateTime(item)} />
+            <WcItem update={(item) => updateTime(item as keyof Pet['wellBeing'])} />
+            <Beditem update={(item) => updateTime(item as keyof Pet['wellBeing'])} />
+            <Toyitem update={(item) => updateTime(item as keyof Pet['wellBeing'])} />
+            <Fooditem update={(item) => updateTime(item as keyof Pet['wellBeing'])} />
+            <Drinkitem update={(item) => updateTime(item as keyof Pet['wellBeing'])} />
         </View>
     )
 }
