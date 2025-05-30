@@ -2,7 +2,6 @@ import { Coordinate, Direction } from "@/dtos/GestureEventType";
 import React, { useState } from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native"
 import { PanGestureHandler } from "react-native-gesture-handler";
-import { Colors } from "react-native/Libraries/NewAppScreen"
 import Dog from "./Dog";
 import { checkGameOver } from "@/utils/checkGameOver";
 import Food from "./Food";
@@ -104,14 +103,14 @@ export default function Game(): JSX.Element {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: Colors.primary,
+        backgroundColor: "#FFFFFF",
     },
     boundaries: {
         flex: 1,
-        borderColor: Colors.primary,
+        borderColor: "#FEFEFE",
         borderWidth: 12,
         borderBottomLeftRadius: 30,
         borderBottomRightRadius: 30,
-        backgroundColor: Colors.backgroud,
+        backgroundColor: "#FFFFFF",
     }
 })
