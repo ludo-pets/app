@@ -10,7 +10,7 @@ import {
     updateDoc,
     where,
 } from 'firebase/firestore'
-import { getPetDataByReference } from './petService'
+import { getPetDataById } from './petService'
 
 /**
  * Fetches a User document and its associated Pet document from Firestore by the user's email.
@@ -26,8 +26,8 @@ export const getUserWithPetByEmail = async (
 
         const petReference = userData.pet
         if (!petReference) return null
-
-        const petData = await getPetDataByReference(petReference)
+        
+        const petData = await getPetDataById(petReference)
         if (!petData) return null
 
         const pet: Pet = { ...petData } as Pet

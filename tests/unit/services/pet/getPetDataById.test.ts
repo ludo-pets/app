@@ -1,10 +1,10 @@
-import { getPetDataByReference } from '@/services/petService'
+import { getPetDataById } from '@/services/petService'
 import { getDoc } from 'firebase/firestore'
 
 jest.mock('@/firebaseConfig', () => ({ db: {} }))
 jest.mock('firebase/firestore')
 
-describe('getPetDataByReference', () => {
+describe('getPetDataById', () => {
     const mockedGetDoc = getDoc as jest.Mock
     const dummyRef = {} as any
     const mockedPetData = { id: 'p1', name: 'Rex' }
@@ -13,7 +13,7 @@ describe('getPetDataByReference', () => {
 
     it('should return null if pet not exists', async () => {
         mockedGetDoc.mockResolvedValueOnce({ exists: () => false })
-        const result = await getPetDataByReference(dummyRef)
+        const result = await getPetDataById(dummyRef)
 
         expect(result).toBeNull()
     })
@@ -23,7 +23,7 @@ describe('getPetDataByReference', () => {
             exists: () => true,
             data: () => mockedPetData,
         })
-        const result = await getPetDataByReference(dummyRef)
+        const result = await getPetDataById(dummyRef)
         expect(result).toEqual(mockedPetData)
     })
 })

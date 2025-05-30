@@ -1,8 +1,8 @@
 import { create } from 'zustand'
-import User from '@/dtos/User'
-import Pet from '@/dtos/Pet'
 import { getUserWithPetByEmail, updateUser } from '@/services/userService'
 import { updatePet } from '@/services/petService'
+import { Pet } from '@/dtos/Pet'
+import User from '@/dtos/User'
 
 interface UserPetState {
     user: User | null

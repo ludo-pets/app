@@ -10,9 +10,8 @@ import {
 import { db } from '@/firebaseConfig'
 import { Pet } from '@/dtos/Pet'
 
-export const getPetDataByReference = async (
-    petRef: DocumentReference<unknown, DocumentData>
-) => {
+export const getPetDataById = async (pet: string) => {
+    const petRef: DocumentReference<DocumentData> = doc(db, 'Pet', pet)
     const petSnap = await getDoc(petRef)
 
     if (!petSnap.exists()) {
@@ -23,10 +22,7 @@ export const getPetDataByReference = async (
     return petSnap.data()
 }
 
-export const updatePet = async (
-    petId: string,
-    petData: Partial<Pet>
-) => {
+export const updatePet = async (petId: string, petData: Partial<Pet>) => {
     if (!petId || Object.keys(petData).length === 0) return false
 
     try {
@@ -36,7 +32,7 @@ export const updatePet = async (
         console.error('Erro ao atualizar Pet:', error)
         return false
     }
-    
+
     return true
 }
 
