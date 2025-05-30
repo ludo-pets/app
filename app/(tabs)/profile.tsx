@@ -186,12 +186,20 @@ export default function Profile() {
                     )}
                 </View>
 
-                <View style={{display: 'flex', alignItems: 'center', flexDirection: "row"}}>
+                <View
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        flexDirection: 'row',
+                    }}
+                >
                     {achievements.map((achievement) => (
                         <Achievement
                             key={achievement.id}
                             title={achievement.name}
-                            description={achievement.message} conquered={false}                        />
+                            description={achievement.message}
+                            conquered={false}
+                        />
                     ))}
                 </View>
             </View>

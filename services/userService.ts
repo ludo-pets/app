@@ -12,7 +12,10 @@ import {
     where,
 } from 'firebase/firestore'
 
-export const createUserService = async (user: { uid: string, email: string }) => {
+export const createUserService = async (user: {
+    uid: string
+    email: string
+}) => {
     const userRef = doc(db, 'User', user.uid)
     const userSnap = await getDoc(userRef)
     if (!userSnap.exists()) {
@@ -44,13 +47,12 @@ export const getUserWithPetByIdService = async (
             console.error('User não encontrado')
             return null
         }
-        
-        
+
         const userDoc = userSnap.docs[0]
         const userData = userDoc.data()
-        
-        const petSnap = await getDoc(doc(db, "Pet", userData.pet))
-        
+
+        const petSnap = await getDoc(doc(db, 'Pet', userData.pet))
+
         if (!petSnap.exists()) {
             console.error('Pet não encontrado')
             return null

@@ -106,8 +106,12 @@ export default function useFoods({ config }: FoodsProps) {
     const [foods, setFoods] = useState<FoodItem[]>([])
     const foodsRef = useRef<FoodItem[]>([])
     const currentLivesRef = useRef(3)
-    const animationRefs = useRef<{[key: number]: Animated.CompositeAnimation}>({})
-    const positionListeners = useRef<{[key: number]: { remove: () => void }}>({})
+    const animationRefs = useRef<{
+        [key: number]: Animated.CompositeAnimation
+    }>({})
+    const positionListeners = useRef<{ [key: number]: { remove: () => void } }>(
+        {}
+    )
 
     useEffect(() => {
         foodsRef.current = foods
@@ -120,8 +124,12 @@ export default function useFoods({ config }: FoodsProps) {
     const createFood = (data: NewFood, score: number) => {
         const randomX = Math.random() * (config.SCREEN_WIDTH - config.FOOD_SIZE)
 
-        const hasLifeOnScreen = foodsRef.current.some((food) => food.type === 'health')
-        const coinsOnScreen = foodsRef.current.filter((f) => f.type === 'coin').length
+        const hasLifeOnScreen = foodsRef.current.some(
+            (food) => food.type === 'health'
+        )
+        const coinsOnScreen = foodsRef.current.filter(
+            (f) => f.type === 'coin'
+        ).length
         const lives = currentLivesRef.current
 
         const foodType = getNextFoodType({
@@ -143,7 +151,7 @@ export default function useFoods({ config }: FoodsProps) {
             currentY: HUD_HEIGHT,
         }
 
-        setFoods(prevFoods => [...prevFoods, newFood])
+        setFoods((prevFoods) => [...prevFoods, newFood])
 
         // Create and store the animation
         const animation = Animated.timing(newFood.y, {
@@ -156,12 +164,12 @@ export default function useFoods({ config }: FoodsProps) {
 
         // Add listener to track position
         const listener = newFood.y.addListener(({ value }) => {
-            setFoods(prevFoods => 
-                prevFoods.map(food => {
+            setFoods((prevFoods) =>
+                prevFoods.map((food) => {
                     if (food.id === newFood.id) {
                         return {
                             ...food,
-                            currentY: value
+                            currentY: value,
                         }
                     }
                     return food
@@ -170,22 +178,28 @@ export default function useFoods({ config }: FoodsProps) {
         })
 
         positionListeners.current[newFood.id] = {
-            remove: () => newFood.y.removeListener(listener)
+            remove: () => newFood.y.removeListener(listener),
         }
 
         animation.start(({ finished }) => {
             if (finished) {
                 positionListeners.current[newFood.id]?.remove()
                 delete positionListeners.current[newFood.id]
-                setFoods(prevFoods => prevFoods.filter(food => food.id !== newFood.id))
+                setFoods((prevFoods) =>
+                    prevFoods.filter((food) => food.id !== newFood.id)
+                )
                 delete animationRefs.current[newFood.id]
             }
         })
     }
 
     // Function to check collisions using currentY
-    const checkCollision = (foodId: number, characterPosition: number, characterWidth: number): boolean => {
-        const food = foodsRef.current.find(f => f.id === foodId)
+    const checkCollision = (
+        foodId: number,
+        characterPosition: number,
+        characterWidth: number
+    ): boolean => {
+        const food = foodsRef.current.find((f) => f.id === foodId)
         if (!food) return false
 
         const foodY = food.currentY
@@ -194,7 +208,8 @@ export default function useFoods({ config }: FoodsProps) {
         const characterBottom = config.SCREEN_HEIGHT - 20
 
         // Check if food is at character height with tolerance
-        const verticalOverlap = foodY + foodSize >= characterTop && foodY <= characterBottom
+        const verticalOverlap =
+            foodY + foodSize >= characterTop && foodY <= characterBottom
 
         if (!verticalOverlap) return false
 
@@ -207,31 +222,34 @@ export default function useFoods({ config }: FoodsProps) {
         // Add small tolerance for collision
         const tolerance = 5
         return (
-            (foodLeft - tolerance <= characterRight && foodLeft + tolerance >= characterLeft) ||
-            (foodRight + tolerance >= characterLeft && foodRight - tolerance <= characterRight) ||
-            (foodLeft - tolerance <= characterLeft && foodRight + tolerance >= characterRight)
+            (foodLeft - tolerance <= characterRight &&
+                foodLeft + tolerance >= characterLeft) ||
+            (foodRight + tolerance >= characterLeft &&
+                foodRight - tolerance <= characterRight) ||
+            (foodLeft - tolerance <= characterLeft &&
+                foodRight + tolerance >= characterRight)
         )
     }
 
     // Function to stop all animations
     const stopAllAnimations = () => {
-        Object.values(animationRefs.current).forEach(animation => {
+        Object.values(animationRefs.current).forEach((animation) => {
             animation.stop()
         })
-        Object.values(positionListeners.current).forEach(listener => {
+        Object.values(positionListeners.current).forEach((listener) => {
             listener.remove()
         })
         animationRefs.current = {}
         positionListeners.current = {}
     }
 
-    return { 
-        foods, 
-        FOOD_TYPES, 
-        createFood, 
-        setFoods, 
+    return {
+        foods,
+        FOOD_TYPES,
+        createFood,
+        setFoods,
         updateCurrentLives,
         checkCollision,
-        stopAllAnimations
+        stopAllAnimations,
     }
 }

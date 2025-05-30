@@ -1,6 +1,6 @@
-import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import { initializeApp } from 'firebase/app'
+import { getFirestore } from 'firebase/firestore'
+import { getAuth, GoogleAuthProvider } from 'firebase/auth'
 
 const firebaseConfig = {
     apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
@@ -10,9 +10,9 @@ const firebaseConfig = {
     appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID,
 }
 
-const firebaseApp = initializeApp(firebaseConfig);
-const db = getFirestore(firebaseApp);
-const auth = getAuth(firebaseApp);
-const provider = new GoogleAuthProvider();
+const firebaseApp = initializeApp(firebaseConfig)
+const db = getFirestore(firebaseApp)
+const auth = getAuth(firebaseApp)
+const provider = new GoogleAuthProvider()
 
-export { firebaseApp, db, auth, provider };
+export { firebaseApp, db, auth, provider }

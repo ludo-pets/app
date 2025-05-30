@@ -46,14 +46,12 @@ export default function QuizScreen() {
 
         const currentLesson = lesson as Lesson
 
-        if(lessons.indexOf(lesson) < lastLessonConcludedId) {
-
-            
+        if (lessons.indexOf(lesson) < lastLessonConcludedId) {
             setLesson(currentLesson)
             changeToNextQuestion('', currentLesson.questions)
 
             router.push('/quizSummary')
-            return;
+            return
         }
         setLesson(currentLesson)
         changeToNextQuestion('', currentLesson.questions)

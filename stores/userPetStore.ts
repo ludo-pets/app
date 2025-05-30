@@ -17,7 +17,7 @@ interface UserPetState {
     updateUser: (userId: string, userData: Partial<User>) => Promise<void>
     updatePet: (petId: string, petData: Partial<Pet>) => Promise<void>
     setUser: (user: User) => void
-    setPet: (pet: Pet) => void
+    setPet: (pet: Pet | null) => void
     setAchievements: (achievements: string) => void
     updateAchievements: (achievements: string) => Promise<void>
 }
@@ -97,7 +97,7 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
     },
 
     setUser: (user: User) => set({ user }),
-    setPet: (pet: Pet) => set({ pet }),
+    setPet: (pet: Pet | null) => set({ pet }),
 
     updateAchievements: async (achievement: string) => {
         set({ error: null })

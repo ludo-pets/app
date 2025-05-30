@@ -18,7 +18,7 @@ export interface GameConfigType {
 
 function generateDefaultGame(): GameConfigType {
     const screenWidth = Dimensions.get('window').width
-    const screenHeight = Dimensions.get('window').height - 80;
+    const screenHeight = Dimensions.get('window').height - 80
 
     // Calcula o número máximo de comidas baseado na largura da tela
     const maxFoodsOnScreen = Math.floor(screenWidth / 70) // Uma comida a cada 70 pixels

@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { useGameConfig } from './GameConfig'
 import useFoods, { FoodItem, NewFood } from './Foods'
-import { useAudioPlayer , AudioPlayer} from 'expo-audio'
+import { useAudioPlayer, AudioPlayer } from 'expo-audio'
 
 export type GameManagerType = {
     startGame: () => void
@@ -21,14 +21,14 @@ export type GameManagerType = {
 
 export const useGameManager = (): GameManagerType => {
     const { config } = useGameConfig()
-    const { 
-        foods, 
-        FOOD_TYPES, 
-        createFood, 
-        setFoods, 
+    const {
+        foods,
+        FOOD_TYPES,
+        createFood,
+        setFoods,
         updateCurrentLives,
         checkCollision,
-        stopAllAnimations
+        stopAllAnimations,
     } = useFoods({ config })
 
     const [characterPosition, setCharacterPosition] = useState(
@@ -52,10 +52,18 @@ export const useGameManager = (): GameManagerType => {
     // Adiciona um ref para controlar as colisões já processadas
     const processedCollisions = useRef<Set<number>>(new Set())
 
-    const eatingGoodFood: AudioPlayer = useAudioPlayer(require('@/assets/images/minigames/food-game/eating_good_food.mp3'))
-    const coinSound: AudioPlayer = useAudioPlayer(require('@/assets/images/minigames/food-game/coin.mp3'))
-    const eatingBadFood: AudioPlayer = useAudioPlayer(require('@/assets/images/minigames/food-game/angry_cat.mp3'))
-    const lifeSound: AudioPlayer = useAudioPlayer(require('@/assets/images/minigames/food-game/lifeSound.mp3'))
+    const eatingGoodFood: AudioPlayer = useAudioPlayer(
+        require('@/assets/images/minigames/food-game/eating_good_food.mp3')
+    )
+    const coinSound: AudioPlayer = useAudioPlayer(
+        require('@/assets/images/minigames/food-game/coin.mp3')
+    )
+    const eatingBadFood: AudioPlayer = useAudioPlayer(
+        require('@/assets/images/minigames/food-game/angry_cat.mp3')
+    )
+    const lifeSound: AudioPlayer = useAudioPlayer(
+        require('@/assets/images/minigames/food-game/lifeSound.mp3')
+    )
 
     /**
      * inicia o jogo
@@ -187,7 +195,13 @@ export const useGameManager = (): GameManagerType => {
                 // Verifica se a colisão já foi processada
                 if (processedCollisions.current.has(food.id)) return
 
-                if (checkCollision(food.id, characterPosition, config.CHARACTER_WIDTH)) {
+                if (
+                    checkCollision(
+                        food.id,
+                        characterPosition,
+                        config.CHARACTER_WIDTH
+                    )
+                ) {
                     // Marca a colisão como processada
                     processedCollisions.current.add(food.id)
 

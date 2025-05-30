@@ -7,7 +7,7 @@ import * as WebBrowser from 'expo-web-browser'
 export default function RegisterPetPage() {
     const router = useRouter()
 
-    WebBrowser.maybeCompleteAuthSession();
+    WebBrowser.maybeCompleteAuthSession()
 
     return (
         <View style={styles.containerBox}>

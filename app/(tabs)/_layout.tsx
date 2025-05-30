@@ -6,7 +6,7 @@ import {
     Exam,
     UserCircle,
 } from 'phosphor-react-native'
-import { Route, Tabs, useRouter } from 'expo-router'
+import { Redirect, Route, Tabs, useRouter } from 'expo-router'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import Header from '@/components/Header'
 import { usePathname } from 'expo-router'
@@ -47,18 +47,16 @@ export const unstable_settings = {
 export default function TabLayout() {
     const pathname = usePathname()
 
-    const fetchUserAndPet = useUserPetStore((state) => state.fetchUserAndPet)
-    const user = useUserPetStore((state) => state.user)
+    const router = useRouter()
 
-    useEffect(() => {
-        const userId = 'ludopetsages@gmail.com'
-        if (!user) {
-            fetchUserAndPet(userId)
-        }
-    }, [fetchUserAndPet, user])
+    const { user, setPet } = useUserPetStore()
+
+    if (!user) {
+        return <Redirect href="/" />
+    }
 
     const includeHeader = ['/store', '/quiz', '/minigames', '/profile']
-    const router = useRouter()
+
     const headerTitles: Record<string, string> = {
         '/store': 'PetShop',
         '/quiz': 'Quiz',
@@ -69,16 +67,13 @@ export default function TabLayout() {
     const headerTitle = headerTitles[pathname] || ''
 
     const logout = () => {
+        setPet(null)
         router.replace('/')
     }
-    
+
     const logoutButton = (
         <TouchableOpacity onPress={logout}>
-            <MaterialIcons
-                name="exit-to-app"
-                size={24}
-                color="#5B5B5B"
-            />
+            <MaterialIcons name="exit-to-app" size={24} color="#5B5B5B" />
         </TouchableOpacity>
     )
     return (
@@ -88,7 +83,9 @@ export default function TabLayout() {
                     title={headerTitle}
                     coinsValue={pathname === '/store' ? user?.money : undefined}
                     backgroundColor="#CFE2A8"
-                    rightComponent={pathname === '/profile' ? logoutButton : undefined}
+                    rightComponent={
+                        pathname === '/profile' ? logoutButton : undefined
+                    }
                 />
             )}
             <Tabs
