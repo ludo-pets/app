@@ -1,14 +1,27 @@
 import { StyleSheet, View, Image, Dimensions } from 'react-native'
+import { HomeProps } from '../Homescreen'
 
 const { height } = Dimensions.get('window')
 
-const FloorItem = () => {
+const FloorItem = ({ image }: HomeProps) => {
     return (
         <View style={styles.cbox}>
-            <Image
-                style={{ width: `100%`, height: `100%` }}
-                source={require('@/assets/images/homescreen/chao_verde.png')}
-            />
+            {
+                image && image[0] === `#` ? (
+                    <View
+                        style={{
+                            width: `100%`,
+                            height: `100%`,
+                            backgroundColor: `${image}`,
+                        }}
+                    />
+                ) : (
+                    <Image
+                        style={{ width: `100%`, height: `100%` }}
+                        source={require('@/assets/images/homescreen/chao_verde.png')}
+                    />
+                )
+            }
         </View>
     )
 }

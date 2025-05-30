@@ -10,6 +10,10 @@ import Wallpaperitem from '@/components/HomeItems/WallpaperItem'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { Pet } from '@/dtos/Pet'
 
+export interface HomeProps {
+  image?: string
+}
+
 const Homescreen = () => {
     const updatePet = useUserPetStore((state) => state.updatePet)
     const pet = useUserPetStore((state) => state.pet)

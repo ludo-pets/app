@@ -27,13 +27,15 @@ export const addPet = async (petData: CreatePetData): Promise<Pet | null> => {
                 wc: 'abc',
                 food: 'cba',
                 bed: 'bbb',
+                wallpaper: 'ddd',
+                floor: 'ddd',
             },
             wellBeing: {
-                clean: new Date(),
-                fun: new Date(),
-                hunger: new Date(),
-                thirst: new Date(),
-                sleep: new Date(),
+                clean: new Date().toString(),
+                fun: new Date().toString(),
+                hunger: new Date().toString(),
+                thirst: new Date().toString(),
+                sleep: new Date().toString(),
             },
         }
 
