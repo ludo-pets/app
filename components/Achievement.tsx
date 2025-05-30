@@ -33,7 +33,7 @@ export default Achievement;
 
 const styles = StyleSheet.create({
     containerAchievement: {
-        width: 140,
+        width: "90%",
         justifyContent: 'center',
         alignItems: 'center',
     },
