@@ -74,6 +74,7 @@ export default function GameBoard({
         setTrimmer(trimmer_initial_position);
         setNailProgress({});
         setIsTrimming(false);
+        trimmer_current_position = trimmer_initial_position;
         entrou = true;
         isNear = false;
     };

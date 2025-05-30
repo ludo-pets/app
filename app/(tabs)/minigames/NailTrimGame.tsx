@@ -69,6 +69,8 @@ export default function NailTrimGame() {
         useCallback(() => {
             setScore(0);
             return () => {
+            setStarted(false);
+            setEnded(false);
             setScore(0);
             };
         }, [])
