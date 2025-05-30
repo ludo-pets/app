@@ -1,5 +1,5 @@
-import expo.modules.splashscreen.SplashScreenManager
 package com.ages.ludopets
+import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build
 import android.os.Bundle

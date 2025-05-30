@@ -31,7 +31,6 @@ const minigameListRegistry: Record<string, MinigameListConfig> = {
     },
     'Comilança Maluca': {
         icon: require('@/assets/images/minigames/food-game/gato_boca_aberta.png'),
-        // routeName: 'FoodGame',
         routeName: 'FoodGame',
     },
     'Flappy Pet': {
