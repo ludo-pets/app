@@ -32,9 +32,11 @@ const CUT_TIME = 1000
 let entrou = true
 let isNear = false
 export type GameBoardProps = {
-    addScore: () => void
-    pawImage: ImageSourcePropType
-    nailsSet: Nail[]
+    addScore: () => void,
+    pawImage: ImageSourcePropType,
+    nailLong: ImageSourcePropType,
+    nailShort: ImageSourcePropType | null,
+    nailsSet: Nail[],
 }
 export default function GameBoard({
     addScore,
