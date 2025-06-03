@@ -13,9 +13,10 @@ import { useState } from 'react'
 
 const { height, width } = Dimensions.get('window')
 
-const ToyItem = ({ update }: ItemProps) => {
+const ToyItem = ({ setInteractingWithItem, update }: ItemProps) => {
     const pet = useUserPetStore((state) => state.pet)
-    
+    const [itemClicked, setItemClicked] = useState(false)
+
     const needsToPlay = () => {
         if (pet) {
             const { play } = calcPetMood(pet.wellBeing)
@@ -26,32 +27,44 @@ const ToyItem = ({ update }: ItemProps) => {
 
     const [isPlayful, setIsPlayful] = useState(needsToPlay())
     const onPress = () => {
+        setInteractingWithItem(true)
+        setItemClicked(true)
         update('fun')
         setIsPlayful(needsToPlay())
+        setTimeout(() => {
+            setItemClicked(false)
+            setInteractingWithItem(false)
+        }, 2000)
     }
 
     return (
         <View style={styles.cbox}>
             {isPlayful && (
                 <View style={styles.alertContainer}>
-                                    <Image
-                                        source={require('@/assets/images/homescreen/icone_feedback.png')}
-                                        style={{
-                                            width: '100%',
-                                            height: '100%',
-                                            resizeMode: 'contain',
-                                        }}
-                                    />
-                                </View>
+                    <Image
+                        source={require('@/assets/images/homescreen/icone_feedback.png')}
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            resizeMode: 'contain',
+                        }}
+                    />
+                </View>
             )}
             <TouchableWithoutFeedback onPress={onPress}>
                 <Image
                     style={{
-                        width: `100%`,
-                        height: `100%`,
-                        resizeMode: `contain`,
+                        width: '100%',
+                        height: '100%',
+                        resizeMode: 'contain',
                     }}
-                    source={require('@/assets/images/homescreen/brinquedo.png')}
+                    source={
+                        itemClicked
+                            ? pet?.type == 'cat'
+                                ? require('@/assets/images/pets/gato-brincando.svg')
+                                : require('@/assets/images/homescreen/brinquedo.png') //!trocar para o svg do cachorro
+                            : require('@/assets/images/homescreen/brinquedo.png')
+                    }
                 />
             </TouchableWithoutFeedback>
         </View>

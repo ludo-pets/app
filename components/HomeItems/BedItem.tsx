@@ -13,12 +13,13 @@ import { useState } from 'react'
 
 const { height, width } = Dimensions.get('window')
 
-const BedItem = ({ update }: ItemProps) => {
+const BedItem = ({ setInteractingWithItem, update }: ItemProps) => {
     const pet = useUserPetStore((state) => state.pet)
+    const [itemClicked, setItemClicked] = useState(false)
 
     const needsSleep = () => {
         if (pet) {
-            const {sleep} = calcPetMood(pet.wellBeing)
+            const { sleep } = calcPetMood(pet.wellBeing)
             return sleep < 12.5
         }
         return false
@@ -26,8 +27,14 @@ const BedItem = ({ update }: ItemProps) => {
 
     const [isSleepy, setIsSleepy] = useState(needsSleep())
     const onPress = () => {
+        setInteractingWithItem(true)
+        setItemClicked(true)
         update('sleep')
         setIsSleepy(needsSleep())
+        setTimeout(() => {
+            setItemClicked(false)
+            setInteractingWithItem(false)
+        }, 2000)
     }
 
     return (
@@ -47,11 +54,17 @@ const BedItem = ({ update }: ItemProps) => {
             <TouchableWithoutFeedback onPress={onPress}>
                 <Image
                     style={{
-                        width: `100%`,
-                        height: `100%`,
+                        width: '100%',
+                        height: '100%',
                         resizeMode: 'contain',
                     }}
-                    source={require('@/assets/images/homescreen/almofada.png')}
+                    source={
+                        itemClicked
+                            ? pet?.type == 'cat'
+                                ? require('@/assets/images/pets/gato-dormindo.svg')
+                                : require('@/assets/images/pets/cachorro-dormindo.svg')
+                            : require('@/assets/images/homescreen/almofada.png')
+                    }
                 />
             </TouchableWithoutFeedback>
         </View>

@@ -4,12 +4,13 @@ import Cachorro from '@/assets/images/pets/cachorro.svg'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { PetOption } from '../FormRegisterPet'
 import GenericIcon from '../GenericIcon'
+import PetItemProps from '@/dtos/PetItemProps'
 
 const { height, width } = Dimensions.get('window')
 
-const PetItem = () => {
+const PetItem = ({ interactingWithItem }: PetItemProps) => {
     const onPress = () => {
-        console.log("don't touch the cat!")
+        console.log(`don't touch the ${petInfo?.type}!`)
     }
 
     const petInfo = useUserPetStore((state) => state.pet)
@@ -23,13 +24,15 @@ const PetItem = () => {
 
     return (
         <View style={styles.cbox}>
-            <Pressable onPress={onPress}>
-                <GenericIcon
-                    Icon={pets[0].icon}
-                    fill={petInfo?.color || '#7D5D56'}
-                    stroke={'#000'}
-                />
-            </Pressable>
+            {!interactingWithItem && (
+                <Pressable onPress={onPress}>
+                    <GenericIcon
+                        Icon={pets[0].icon}
+                        fill={petInfo?.color || '#7D5D56'}
+                        stroke={'#000'}
+                    />
+                </Pressable>
+            )}
         </View>
     )
 }

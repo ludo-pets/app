@@ -12,12 +12,13 @@ import { useState } from 'react'
 
 const { height, width } = Dimensions.get('window')
 
-const DrinkItem = ({ update }: ItemProps) => {
+const DrinkItem = ({ setInteractingWithItem, update }: ItemProps) => {
     const pet = useUserPetStore((state) => state.pet)
-    
+    const [itemClicked, setItemClicked] = useState(false)
+
     const needsToDrink = () => {
         if (pet) {
-            const {thirst} = calcPetMood(pet.wellBeing)
+            const { thirst } = calcPetMood(pet.wellBeing)
             return thirst < 12.5
         }
         return false
@@ -25,32 +26,44 @@ const DrinkItem = ({ update }: ItemProps) => {
 
     const [isThirsty, setIsThirsty] = useState(needsToDrink())
     const onPress = () => {
+        setInteractingWithItem(true)
+        setItemClicked(true)
         update('thirst')
         setIsThirsty(needsToDrink())
+        setTimeout(() => {
+            setItemClicked(false)
+            setInteractingWithItem(false)
+        }, 2000)
     }
 
     return (
         <View style={styles.cbox}>
             {isThirsty && (
                 <View style={styles.alertContainer}>
-                                    <Image
-                                        source={require('@/assets/images/homescreen/icone_feedback.png')}
-                                        style={{
-                                            width: '100%',
-                                            height: '100%',
-                                            resizeMode: 'contain',
-                                        }}
-                                    />
-                                </View>
+                    <Image
+                        source={require('@/assets/images/homescreen/icone_feedback.png')}
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            resizeMode: 'contain',
+                        }}
+                    />
+                </View>
             )}
             <TouchableWithoutFeedback onPress={onPress}>
                 <Image
                     style={{
-                        width: `100%`,
-                        height: `100%`,
+                        width: '100%',
+                        height: '100%',
                         resizeMode: 'contain',
                     }}
-                    source={require('@/assets/images/homescreen/poteB.png')}
+                    source={
+                        itemClicked
+                            ? pet?.type == 'cat'
+                                ? require('@/assets/images/pets/gato-bebendo.svg')
+                                : require('@/assets/images/pets/cachorro-bebendo.svg')
+                            : require('@/assets/images/homescreen/poteB.png')
+                    }
                 />
             </TouchableWithoutFeedback>
         </View>

@@ -1,16 +1,18 @@
 import { StyleSheet, View } from 'react-native'
-import Petitem from '@/components/HomeItems/PetItem'
+import PetItem from '@/components/HomeItems/PetItem'
 import WcItem from '@/components/HomeItems/WcItem'
-import Beditem from '@/components/HomeItems/BedItem'
-import Flooritem from '@/components/HomeItems/FloorItem'
-import Toyitem from '@/components/HomeItems/ToyItem'
-import Fooditem from '@/components/HomeItems/FoodItem'
-import Drinkitem from '@/components/HomeItems/DrinkItem'
+import BedItem from '@/components/HomeItems/BedItem'
+import FloorItem from '@/components/HomeItems/FloorItem'
+import ToyItem from '@/components/HomeItems/ToyItem'
+import FoodItem from '@/components/HomeItems/FoodItem'
+import DrinkItem from '@/components/HomeItems/DrinkItem'
 import Wallpaperitem from '@/components/HomeItems/WallpaperItem'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { Pet } from '@/dtos/Pet'
+import { useState } from 'react'
 
 const Homescreen = () => {
+    const [interactingWithItem, setInteractingWithItem] = useState(false)
     const updatePet = useUserPetStore((state) => state.updatePet)
     const pet = useUserPetStore((state) => state.pet)
 
@@ -28,13 +30,28 @@ const Homescreen = () => {
     return (
         <View style={styles.container}>
             <Wallpaperitem />
-            <Flooritem />
-            <Petitem />
-            <WcItem update={(item) => updateTime(item as keyof Pet['wellBeing'])} />
-            <Beditem update={(item) => updateTime(item as keyof Pet['wellBeing'])} />
-            <Toyitem update={(item) => updateTime(item as keyof Pet['wellBeing'])} />
-            <Fooditem update={(item) => updateTime(item as keyof Pet['wellBeing'])} />
-            <Drinkitem update={(item) => updateTime(item as keyof Pet['wellBeing'])} />
+            <FloorItem />
+            <PetItem interactingWithItem={interactingWithItem} />
+            <WcItem
+                setInteractingWithItem={setInteractingWithItem}
+                update={(item) => updateTime(item as keyof Pet['wellBeing'])}
+            />
+            <BedItem
+                setInteractingWithItem={setInteractingWithItem}
+                update={(item) => updateTime(item as keyof Pet['wellBeing'])}
+            />
+            <ToyItem
+                setInteractingWithItem={setInteractingWithItem}
+                update={(item) => updateTime(item as keyof Pet['wellBeing'])}
+            />
+            <FoodItem
+                setInteractingWithItem={setInteractingWithItem}
+                update={(item) => updateTime(item as keyof Pet['wellBeing'])}
+            />
+            <DrinkItem
+                setInteractingWithItem={setInteractingWithItem}
+                update={(item) => updateTime(item as keyof Pet['wellBeing'])}
+            />
         </View>
     )
 }
