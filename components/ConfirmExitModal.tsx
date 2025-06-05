@@ -53,8 +53,8 @@ const styles = StyleSheet.create({
     padding: 24,
     borderRadius: 12,
     alignItems: 'center',
-    elevation: 5, // sombra no Android
-    shadowColor: '#000', // sombra no iOS
+    elevation: 5,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
