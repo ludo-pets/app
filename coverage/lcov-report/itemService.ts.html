@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>12/12</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -94,21 +94,19 @@
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -117,26 +115,28 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import Item from '@/dtos/Item'
-<span class="cstat-no" title="statement not covered" >import { db } from '@/firebaseConfig'</span>
-<span class="cstat-no" title="statement not covered" >import { collection, getDocs } from 'firebase/firestore'</span>
+import { db } from '@/firebaseConfig'
+import { collection, getDocs } from 'firebase/firestore'
 &nbsp;
-export const <span class="cstat-no" title="statement not covered" >getAllItemService = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >a</span>sync </span>(): Promise&lt;{</span>
+export const getAllItems = async (): Promise&lt;{
     items: Item[]
 } | null&gt; =&gt; {
-<span class="cstat-no" title="statement not covered" >    try {</span>
-        const itemCollectionRef = <span class="cstat-no" title="statement not covered" >collection(db, 'Item')</span>
-        const itemsSnapshot = <span class="cstat-no" title="statement not covered" >await getDocs(itemCollectionRef)</span>
+    try {
+        const itemCollectionRef = collection(db, 'Item')
+        const itemsSnapshot = await getDocs(itemCollectionRef)
 &nbsp;
-        const items: Item[] = <span class="cstat-no" title="statement not covered" >itemsSnapshot.docs.map(<span class="fstat-no" title="function not covered" >(d</span>oc) =&gt; {</span>
-            const data = <span class="cstat-no" title="statement not covered" >doc.data()</span>
-<span class="cstat-no" title="statement not covered" >            return {</span>
+        const items: Item[] = itemsSnapshot.docs.map((doc) =&gt; {
+            const data = doc.data()
+            return {
                 id: doc.id,
                 name: data.name,
                 price: data.price,
@@ -147,10 +147,10 @@ export const <span class="cstat-no" title="statement not covered" >getAllItemSer
             }
         })
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        return { items }</span>
+        return { items }
     } catch (error) {
-<span class="cstat-no" title="statement not covered" >        console.error('Erro ao buscar itens:', error)</span>
-<span class="cstat-no" title="statement not covered" >        return null</span>
+        console.error('Erro ao buscar itens:', error)
+        return null
     }
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -160,7 +160,7 @@ export const <span class="cstat-no" title="statement not covered" >getAllItemSer
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-06T01:04:37.455Z
+                at 2025-06-06T19:33:51.193Z
             </div>
         <script src="prettify.js"></script>
         <script>
