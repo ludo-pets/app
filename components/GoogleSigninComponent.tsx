@@ -10,13 +10,6 @@ import {
 } from '@/services/userService'
 import { useRouter } from 'expo-router'
 import { useUserPetStore } from '@/stores/userPetStore'
-import Constants from 'expo-constants';
-
-const {
-  envWebClientId,
-  envIosClientId,
-  envAndroidClientId
-} = Constants.expoConfig?.extra || {};
 
 
 const redirectUri = AuthSession.makeRedirectUri({
