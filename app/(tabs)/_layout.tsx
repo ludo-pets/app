@@ -6,12 +6,13 @@ import {
     Exam,
     UserCircle,
 } from 'phosphor-react-native'
-import { Route, Tabs } from 'expo-router'
-import { StyleSheet, View } from 'react-native'
+import { Route, Tabs, useRouter } from 'expo-router'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import Header from '@/components/Header'
 import { usePathname } from 'expo-router'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { NavigationState } from '@react-navigation/native'
+import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 
 const iconsSize = 32
 
@@ -57,7 +58,7 @@ export default function TabLayout() {
     }, [fetchUserAndPet, user])
 
     const includeHeader = ['/store', '/quiz', '/minigames', '/profile']
-
+    const router = useRouter()
     const headerTitles: Record<string, string> = {
         '/store': 'PetShop',
         '/quiz': 'Quiz',
@@ -67,6 +68,19 @@ export default function TabLayout() {
 
     const headerTitle = headerTitles[pathname] || ''
 
+    const logout = () => {
+        router.replace('/')
+    }
+    
+    const logoutButton = (
+        <TouchableOpacity onPress={logout}>
+            <MaterialIcons
+                name="exit-to-app"
+                size={24}
+                color="#5B5B5B"
+            />
+        </TouchableOpacity>
+    )
     return (
         <>
             {includeHeader.includes(pathname) && (
@@ -74,6 +88,7 @@ export default function TabLayout() {
                     title={headerTitle}
                     coinsValue={pathname === '/store' ? user?.money : undefined}
                     backgroundColor="#CFE2A8"
+                    rightComponent={pathname === '/profile' ? logoutButton : undefined}
                 />
             )}
             <Tabs

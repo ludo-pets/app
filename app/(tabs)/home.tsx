@@ -4,18 +4,20 @@ import { useUserPetStore } from '@/stores/userPetStore'
 import { ActivityIndicator, StyleSheet, View } from 'react-native'
 import { calcPetMood } from '@/utils/moodCalculator'
 import { useEffect, useState } from 'react'
+import type { Mood } from '@/utils/moodCalculator'
 
 export default function HomeScreen() {
     const user = useUserPetStore((state) => state.user)
     const loading = useUserPetStore((state) => state.loading)
     const pet = useUserPetStore((state) => state.pet)
-    const [mood, setMood] = useState(0);
+
+    const [mood, setMood] = useState<Mood>()
+    
     useEffect(() => {
         if (pet) {
             setMood(calcPetMood(pet.wellBeing))
         }
-    }, [pet]
-    )
+    }, [pet])
 
     return (
         <View style={styles.container}>
@@ -23,14 +25,13 @@ export default function HomeScreen() {
                 <ActivityIndicator size="large" color="#5b5b5b" />
             ) : (
                 <>
-                    <MoodBar animalLevel={user?.level} animalMood={mood} />
+                    <MoodBar animalLevel={user?.level} animalMood={mood?.mood ?? 0} />
                     <Homescreen />
                 </>
             )}
         </View>
     )
 }
-
 
 const styles = StyleSheet.create({
     container: {
@@ -40,4 +41,3 @@ const styles = StyleSheet.create({
         position: 'relative',
     },
 })
-

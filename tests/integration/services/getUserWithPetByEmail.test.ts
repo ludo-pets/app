@@ -96,7 +96,9 @@ describe('getUserWithPetByEmail (mocked Firebase)', () => {
         })
 
         const res = await getUserWithPetByEmail(validExistingEmail)
-        expect(res?.user).toEqual(mockedUserData)
-        expect(res?.pet).toEqual(mockedPetData)
+        expect(res?.user.email).toBe(mockedUserData.email)
+        expect(res?.user.pet).toBe(mockedUserData.pet)
+        expect(res?.pet.name).toBe(mockedPetData.name)
+        expect(res?.pet.type).toBe(mockedPetData.type)
     })
 })

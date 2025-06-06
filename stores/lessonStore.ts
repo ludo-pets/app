@@ -1,6 +1,9 @@
 import { create } from 'zustand'
 import Lesson from '@/dtos/Lesson'
-import { getLessonByIdService, markLessonAsConcluded } from '@/services/lessonService'
+import {
+    getLessonByIdService,
+    markLessonAsConcluded,
+} from '@/services/lessonService'
 import Question from '@/dtos/Question'
 import { fetchQuestion } from '@/services/questionService'
 
@@ -56,7 +59,7 @@ export const useLessonStore = create<LessonState>((set) => ({
                 currentQuestion: null,
                 error: null,
             })
-        } catch (error: any) {            
+        } catch (error: any) {
             set({ error: error.message, loading: false })
         } finally {
             set({ loading: false })

@@ -36,7 +36,7 @@ export const getAllLessonsService = async (): Promise<{
             ...doc.data(),
         })) as Lesson[]
 
-        return { lessons: lessons.sort((a,b) => a.order-b.order) }
+        return { lessons: lessons.sort((a, b) => a.order - b.order) }
     } catch (error) {
         console.error('Erro ao buscar Lições:', error)
         return null
