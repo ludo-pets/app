@@ -1,18 +1,15 @@
 import { create } from 'zustand'
-import User from '@/dtos/User'
+import { getUserWithPetByEmail, updateUser } from '@/services/userService'
+import { updatePet } from '@/services/petService'
 import { Pet } from '@/dtos/Pet'
-import {
-    getUserWithPetByIdService,
-    updateUserService,
-} from '@/services/userService'
-import { updatePetService } from '@/services/petService'
+import User from '@/dtos/User'
 
 interface UserPetState {
     user: User | null
     pet: Pet | null
     loading: boolean
     error: string | null
-    fetchUserAndPet: (userId: string) => Promise<void>
+    fetchUserAndPetByEmail: (userEmail: string) => Promise<void>
     updateUser: (userId: string, userData: Partial<User>) => Promise<void>
     updatePet: (petId: string, petData: Partial<Pet>) => Promise<void>
     setUser: (user: User) => void
@@ -30,10 +27,10 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
 
     },
 
-    fetchUserAndPet: async (userId: string) => {
+    fetchUserAndPetByEmail: async (userEmail: string) => {
         set({ loading: true, error: null })
         try {
-            const result = await getUserWithPetByIdService(userId)
+            const result = await getUserWithPetByEmail(userEmail)
             if (result) {
                 set({ user: result.user, pet: result.pet, loading: false })
             } else {
@@ -47,7 +44,7 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
     updateUser: async (userId: string, userData: Partial<User>) => {
         set({ loading: true, error: null })
         try {
-            const success = await updateUserService(userId, userData)
+            const success = await updateUser(userId, userData)
             if (success) {
                 const oldUser = get().user
                 if (oldUser) {
@@ -66,7 +63,7 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
     updatePet: async (petId: string, petData: Partial<Pet>) => {
         set({ error: null })
         try {
-            const success = await updatePetService(petId, petData)
+            const success = await updatePet(petId, petData)
             if (success) {
                 const oldPet = get().pet
                 if (oldPet) {

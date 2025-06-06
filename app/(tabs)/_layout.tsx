@@ -47,7 +47,7 @@ export const unstable_settings = {
 export default function TabLayout() {
     const pathname = usePathname()
 
-    const fetchUserAndPet = useUserPetStore((state) => state.fetchUserAndPet)
+    const fetchUserAndPet = useUserPetStore((state) => state.fetchUserAndPetByEmail)
     const user = useUserPetStore((state) => state.user)
 
     useEffect(() => {
