@@ -90,7 +90,7 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
                 const alreadyOwned = user.achievements.includes(achievement)
                 if (!alreadyOwned) {
                     const newAchievements = [...user.achievements, achievement]
-                    await updateUserService(user.id, { achievements: newAchievements})
+                    await get().updateUser(user.id, { achievements: newAchievements})
                     set({ user: { ...user, achievements: newAchievements}})
                 }
             }
