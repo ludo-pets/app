@@ -1,7 +1,16 @@
-import Header from '@/components/Header'
-import { useUserPetStore } from '@/stores/userPetStore'
-import { NavigationState } from '@react-navigation/native'
-import { Route, Tabs, usePathname } from 'expo-router'
+import React, { useEffect } from 'react'
+import {
+    StyleSheet,
+    TouchableOpacity,
+    View,
+    Text,
+    Platform,
+    StatusBar,
+} from 'react-native'
+import { Route, Tabs, useRouter } from 'expo-router'
+import { usePathname } from 'expo-router'
+import Tooltip from 'react-native-walkthrough-tooltip'
+import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import {
     Exam,
     House,
@@ -9,13 +18,13 @@ import {
     Storefront,
     UserCircle,
 } from 'phosphor-react-native'
-import { Route, Tabs, useRouter } from 'expo-router'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import Header from '@/components/Header'
-import { usePathname } from 'expo-router'
 import { useUserPetStore } from '@/stores/userPetStore'
-import { NavigationState } from '@react-navigation/native'
-import MaterialIcons from '@expo/vector-icons/MaterialIcons'
+import {
+  useWalkthrough,
+  WalkthroughProvider,
+} from '../../contexts/WalkthroughContext'
+
 
 const iconsSize = 32
 
@@ -43,9 +52,22 @@ function CustomTabIconWithTooltip({
     targetElementId,
 }: CustomTabIconWithTooltipProps) {
     const IconComponent = iconMap[name] || House
-
     const walkthrough = useWalkthrough()
-    if (!walkthrough) return null
+
+    if (!walkthrough)
+        return (
+            <View
+                style={
+                    focused ? styles.focusedIconContainer : styles.iconContainer
+                }
+            >
+                <IconComponent
+                    color={color}
+                    size={iconsSize}
+                    weight="regular"
+                />
+            </View>
+        )
 
     const {
         isActive: isWalkthroughGloballyActive,
@@ -65,8 +87,8 @@ function CustomTabIconWithTooltip({
     if (!isWalkthroughGloballyActive || !currentStep) {
         return anchor
     }
-    const isCurrentWalkthroughTarget = currentStep.id === targetElementId
 
+    const isCurrentWalkthroughTarget = currentStep.id === targetElementId
     if (!isCurrentWalkthroughTarget) {
         return anchor
     }
@@ -108,10 +130,12 @@ export const unstable_settings = {
 }
 
 export default function TabLayout() {
-    const currentRoutePath = usePathname()
-    const simplePathname = currentRoutePath.substring(1)
+    const pathname = usePathname()
+    const simplePathname = pathname?.substring(1) || ''
 
-    const fetchUserAndPet = useUserPetStore((state) => state.fetchUserAndPetByEmail)
+    const fetchUserAndPet = useUserPetStore(
+        (state) => state.fetchUserAndPetByEmail
+    )
     const user = useUserPetStore((state) => state.user)
 
     useEffect(() => {
@@ -121,7 +145,7 @@ export default function TabLayout() {
         }
     }, [fetchUserAndPet, user])
 
-    const includeHeader = ['/store', '/quiz', '/minigames', '/profile']
+    const includeHeader = ['store', 'quiz', 'minigames', 'profile']
     const router = useRouter()
     const headerTitles: Record<string, string> = {
         store: 'PetShop',
@@ -129,126 +153,39 @@ export default function TabLayout() {
         minigames: 'Minigames',
         profile: 'Perfil',
     }
-
     const headerTitle = headerTitles[simplePathname] || ''
 
     const logout = () => {
         router.replace('/')
     }
-    
+
     const logoutButton = (
         <TouchableOpacity onPress={logout}>
-            <MaterialIcons
-                name="exit-to-app"
-                size={24}
-                color="#5B5B5B"
-            />
+            <MaterialIcons name="exit-to-app" size={24} color="#5B5B5B" />
         </TouchableOpacity>
     )
+
     return (
         <>
-            {includeHeader.includes(pathname) && (
+            {includeHeader.includes(simplePathname) && (
                 <Header
                     title={headerTitle}
-                    coinsValue={pathname === '/store' ? user?.money : undefined}
+                    coinsValue={
+                        simplePathname === 'store' ? user?.money : undefined
+                    }
                     backgroundColor="#CFE2A8"
-                    rightComponent={pathname === '/profile' ? logoutButton : undefined}
+                    rightComponent={
+                        simplePathname === 'profile' ? logoutButton : undefined
+                    }
                 />
             )}
-            <Tabs
-                screenOptions={{
-                    headerShown: false,
-                    tabBarShowLabel: false,
-                    tabBarStyle: getTabBarStyle(),
-                    tabBarLabelPosition: 'beside-icon',
-                }}
-            >
-                <Tabs.Screen
-                    name="home"
-                    options={{
-                        title: 'Home',
-                        tabBarIcon: ({ color, focused }) => (
-                            <CustomTabIcon
-                                name="home"
-                                color="black"
-                                focused={focused}
-                                iconsSize={iconsSize}
-                            />
-                        ),
-                    }}
-                />
-                <Tabs.Screen
-                    name="store"
-                    options={{
-                        title: 'Store',
-                        tabBarIcon: ({ color, focused }) => (
-                            <CustomTabIcon
-                                name="store"
-                                color="black"
-                                focused={focused}
-                                iconsSize={iconsSize}
-                            />
-                        ),
-                    }}
-                />
-                <Tabs.Screen
-                    name="minigames"
-                    options={{
-                        title: 'Minigames',
-                        tabBarIcon: ({ color, focused }) => (
-                            <CustomTabIcon
-                                name="minigame"
-                                color="black"
-                                focused={focused}
-                                iconsSize={iconsSize}
-                            />
-                        ),
-                    }}
-                    listeners={({ navigation, route }) => ({
-                        tabPress: (e) => {
-                            const r = route as Route<string> & {
-                                state?: NavigationState
-                            }
-                            const nestedState = r.state
-                            const currentNested =
-                                nestedState?.routes?.[nestedState.index ?? 0]
-                                    ?.name ?? 'index'
-                            if (currentNested !== 'index') {
-                                e.preventDefault() // stop the normal tab change
-                                navigation.navigate('minigames', {
-                                    screen: 'index',
-                                })
-                            }
-                        },
-                    })}
-                />
-                <Tabs.Screen
-                    name="quiz"
-                    options={{
-                        title: 'Quiz',
+            <WalkthroughProvider>
+                <Tabs
+                    screenOptions={{
+                        headerShown: false,
+                        tabBarShowLabel: false,
                         tabBarStyle: getTabBarStyle(pathname),
-                        tabBarIcon: ({ color, focused }) => (
-                            <CustomTabIcon
-                                name="quiz"
-                                color="black"
-                                focused={focused}
-                                iconsSize={iconsSize}
-                            />
-                        ),
-                    }}
-                />
-                <Tabs.Screen
-                    name="profile"
-                    options={{
-                        title: 'Profile',
-                        tabBarIcon: ({ color, focused }) => (
-                            <CustomTabIcon
-                                name="profile"
-                                color="black"
-                                focused={focused}
-                                iconsSize={iconsSize}
-                            />
-                        ),
+                        tabBarLabelPosition: 'beside-icon',
                     }}
                 >
                     <Tabs.Screen
@@ -298,7 +235,7 @@ export default function TabLayout() {
                         listeners={({ navigation, route }) => ({
                             tabPress: (e) => {
                                 const r = route as Route<string> & {
-                                    state?: NavigationState
+                                    state?: any
                                 }
                                 const nestedState = r.state
                                 const currentNested =
@@ -343,7 +280,8 @@ export default function TabLayout() {
                                 />
                             ),
                         }}
-                    />
+                    >
+                    </Tabs.Screen>
                 </Tabs>
             </WalkthroughProvider>
         </>
