@@ -63,7 +63,7 @@ export default function NailTrimGame() {
                     givenMoney={minigame.givenMoney}
                 />
             )}
-            {/* {pet && (
+            {pet && (
                 <GameBoard
                     key={gameKey}
                     pawImage={petSet[pet.type].pawImage}
@@ -72,9 +72,9 @@ export default function NailTrimGame() {
                     nailLong={petSet[pet.type].nailLongImage}
                     nailShort={ petSet[pet.type].nailShortImage }
                 />
-            )} */}
+            )}
             {/*para testes, apagar dps*/}
-             {pet && (
+             {/* {pet && (
                 <GameBoard
                     key={gameKey}
                     pawImage={petSet["dog"].pawImage}
@@ -83,7 +83,7 @@ export default function NailTrimGame() {
                     nailLong={petSet["dog"].nailLongImage}
                     nailShort={ petSet["dog"].nailShortImage }
                 />
-            )}
+            )} */}
         </GestureHandlerRootView>
     )
 }

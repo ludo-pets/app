@@ -74,7 +74,7 @@ export default function GameBoard({
             const nailCenterX =
                 ((width - pawSize) / 2 + nailX * pawSize) + nailSize / 4
             const nailCenterY =
-                ((height - pawSize + nailY * pawSize) - 40)+ nailSize / 2
+                ((height - pawSize + nailY * pawSize))+ nailSize
 
             const trimmerCenterX = trimmer.x
             const trimmerCenterY = trimmer.y
