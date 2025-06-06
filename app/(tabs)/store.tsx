@@ -16,13 +16,13 @@ import { useItemStore } from '@/stores/itemStore'
 type FilterTitle = {
     id: number
     name: string
-    category: 'foods' | 'toys' | 'enviroment'
+    category: 'foods' | 'toys' | 'environment'
 }
 
 const filterTitles: FilterTitle[] = [
     { id: 1, name: 'Alimentação', category: 'foods' },
     { id: 2, name: 'Brinquedos', category: 'toys' },
-    { id: 3, name: 'Ambiente', category: 'enviroment' },
+    { id: 3, name: 'Ambiente', category: 'environment' },
 ]
 
 export default function StoreScreen() {

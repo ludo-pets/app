@@ -6,21 +6,16 @@ import Homescreen from '@/components/Homescreen'
 import MoodBar from '@/components/MoodBar'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { calcPetMood } from '@/utils/moodCalculator'
-import { useWalkthrough } from '@/contexts/WalkthroughContext'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import PetCareModal from '@/components/PetCareDialog'
-
-const CARE_FLAG = 'petModalWalkthrough_v0'
+import { useEffect, useState } from 'react'
+import type { Mood } from '@/utils/moodCalculator'
 
 export default function HomeScreen() {
     const user = useUserPetStore((state) => state.user)
     const loading = useUserPetStore((state) => state.loading)
     const pet = useUserPetStore((state) => state.pet)
 
-    const { isCompleted: walkthroughDone } = useWalkthrough()
-    const [mood, setMood] = useState(0)
-    const [showModal, setModal] = useState(false)
-
+    const [mood, setMood] = useState<Mood>()
+    
     useEffect(() => {
         if (pet) setMood(calcPetMood(pet.wellBeing))
     }, [pet])
@@ -48,7 +43,7 @@ export default function HomeScreen() {
                 <ActivityIndicator size="large" color="#5b5b5b" />
             ) : (
                 <>
-                    <MoodBar animalLevel={user?.level} animalMood={mood} />
+                    <MoodBar animalLevel={user?.level} animalMood={mood?.mood ?? 0} />
                     <Homescreen />
                 </>
             )}

@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Animated, ImageSourcePropType } from 'react-native'
 import { GameConfigType } from './GameConfig'
 
@@ -20,10 +20,10 @@ export interface FoodItem {
     id: number
     x: number
     y: Animated.Value
-    yPos: number
     type: string
     image: ImageSourcePropType
     points: number
+    currentY: number
 }
 
 export interface NewFood {
@@ -104,22 +104,24 @@ const HUD_HEIGHT = 50
 
 export default function useFoods({ config }: FoodsProps) {
     const [foods, setFoods] = useState<FoodItem[]>([])
+    const foodsRef = useRef<FoodItem[]>([])
     const currentLivesRef = useRef(3)
+    const animationRefs = useRef<{[key: number]: Animated.CompositeAnimation}>({})
+    const positionListeners = useRef<{[key: number]: { remove: () => void }}>({})
+
+    useEffect(() => {
+        foodsRef.current = foods
+    }, [foods])
 
     const updateCurrentLives = (lives: number) => {
         currentLivesRef.current = lives
     }
 
-    /**
-     * Cria uma nova comida na tela, considerando a taxa de spawn de cada tipo
-     * @param data objeto com id e velocidade da animação dessa comida (o manager é o resposável por aumentar essa velocidade conforme a dificuldade)
-     * @param score score do player, usamos para saber a taxa de spawn de moedas
-     */
     const createFood = (data: NewFood, score: number) => {
         const randomX = Math.random() * (config.SCREEN_WIDTH - config.FOOD_SIZE)
 
-        const hasLifeOnScreen = foods.some((food) => food.type === 'health')
-        const coinsOnScreen = foods.filter((f) => f.type === 'coin').length
+        const hasLifeOnScreen = foodsRef.current.some((food) => food.type === 'health')
+        const coinsOnScreen = foodsRef.current.filter((f) => f.type === 'coin').length
         const lives = currentLivesRef.current
 
         const foodType = getNextFoodType({
@@ -128,42 +130,108 @@ export default function useFoods({ config }: FoodsProps) {
             coinsOnScreen,
             score,
             foodTypes: FOOD_TYPES,
-            maxCoinsOnScreen: 1, // Nunca spawna moeda se já houver uma
+            maxCoinsOnScreen: 1,
         })
 
         const newFood: FoodItem = {
             id: data.foodIDCounter.current++,
             x: randomX,
-            yPos: HUD_HEIGHT,
             y: new Animated.Value(HUD_HEIGHT),
             type: foodType!.type,
             image: foodType!.image,
             points: foodType!.points,
+            currentY: HUD_HEIGHT,
         }
 
-        setFoods((prevFoods) => [...prevFoods, newFood])
+        setFoods(prevFoods => [...prevFoods, newFood])
 
-        /**
-         * Importante: Esse listener é o que nos permite sempre atualizar o Y e verificar colisões em cada food
-         */
-        newFood.y.addListener(({ value }) => {
-            setFoods((prevFoods) =>
-                prevFoods.map((food) =>
-                    food.id === newFood.id ? { ...food, yPos: value } : food
-                )
+        // Create and store the animation
+        const animation = Animated.timing(newFood.y, {
+            toValue: config.SCREEN_HEIGHT,
+            duration: data.fallSpeed,
+            useNativeDriver: true,
+        })
+
+        animationRefs.current[newFood.id] = animation
+
+        // Add listener to track position
+        const listener = newFood.y.addListener(({ value }) => {
+            setFoods(prevFoods => 
+                prevFoods.map(food => {
+                    if (food.id === newFood.id) {
+                        return {
+                            ...food,
+                            currentY: value
+                        }
+                    }
+                    return food
+                })
             )
         })
 
-        Animated.timing(newFood.y, {
-            toValue: config.SCREEN_HEIGHT,
-            duration: data.fallSpeed,
-            useNativeDriver: false,
-        }).start(() => {
-            setFoods((prevFoods) =>
-                prevFoods.filter((food) => food.id !== newFood.id)
-            )
+        positionListeners.current[newFood.id] = {
+            remove: () => newFood.y.removeListener(listener)
+        }
+
+        animation.start(({ finished }) => {
+            if (finished) {
+                positionListeners.current[newFood.id]?.remove()
+                delete positionListeners.current[newFood.id]
+                setFoods(prevFoods => prevFoods.filter(food => food.id !== newFood.id))
+                delete animationRefs.current[newFood.id]
+            }
         })
     }
 
-    return { foods, FOOD_TYPES, createFood, setFoods, updateCurrentLives }
+    // Function to check collisions using currentY
+    const checkCollision = (foodId: number, characterPosition: number, characterWidth: number): boolean => {
+        const food = foodsRef.current.find(f => f.id === foodId)
+        if (!food) return false
+
+        const foodY = food.currentY
+        const foodSize = config.FOOD_SIZE
+        const characterTop = config.SCREEN_HEIGHT - config.CHARACTER_HEIGHT - 20
+        const characterBottom = config.SCREEN_HEIGHT - 20
+
+        // Check if food is at character height with tolerance
+        const verticalOverlap = foodY + foodSize >= characterTop && foodY <= characterBottom
+
+        if (!verticalOverlap) return false
+
+        // Check horizontal collision with tolerance
+        const foodLeft = food.x
+        const foodRight = food.x + foodSize
+        const characterLeft = characterPosition
+        const characterRight = characterPosition + characterWidth
+
+        // Add small tolerance for collision
+        const tolerance = 5
+        return (
+            (foodLeft - tolerance <= characterRight && foodLeft + tolerance >= characterLeft) ||
+            (foodRight + tolerance >= characterLeft && foodRight - tolerance <= characterRight) ||
+            (foodLeft - tolerance <= characterLeft && foodRight + tolerance >= characterRight)
+        )
+    }
+
+    // Function to stop all animations
+    const stopAllAnimations = () => {
+        Object.values(animationRefs.current).forEach(animation => {
+            animation.stop()
+        })
+        Object.values(positionListeners.current).forEach(listener => {
+            listener.remove()
+        })
+        animationRefs.current = {}
+        positionListeners.current = {}
+    }
+
+    return { 
+        foods, 
+        FOOD_TYPES, 
+        createFood, 
+        setFoods, 
+        updateCurrentLives,
+        checkCollision,
+        stopAllAnimations
+    }
 }

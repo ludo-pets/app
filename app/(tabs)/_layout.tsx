@@ -9,20 +9,13 @@ import {
     Storefront,
     UserCircle,
 } from 'phosphor-react-native'
-import React, { useEffect } from 'react'
-import {
-    Platform,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from 'react-native'
-import Tooltip from 'react-native-walkthrough-tooltip'
-import {
-    useWalkthrough,
-    WalkthroughProvider,
-} from '@/contexts/WalkthroughContext'
+import { Route, Tabs, useRouter } from 'expo-router'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import Header from '@/components/Header'
+import { usePathname } from 'expo-router'
+import { useUserPetStore } from '@/stores/userPetStore'
+import { NavigationState } from '@react-navigation/native'
+import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 
 const iconsSize = 32
 
@@ -118,7 +111,7 @@ export default function TabLayout() {
     const currentRoutePath = usePathname()
     const simplePathname = currentRoutePath.substring(1)
 
-    const fetchUserAndPet = useUserPetStore((state) => state.fetchUserAndPet)
+    const fetchUserAndPet = useUserPetStore((state) => state.fetchUserAndPetByEmail)
     const user = useUserPetStore((state) => state.user)
 
     useEffect(() => {
@@ -128,8 +121,8 @@ export default function TabLayout() {
         }
     }, [fetchUserAndPet, user])
 
-    const includeHeader = ['store', 'quiz', 'minigames', 'profile']
-
+    const includeHeader = ['/store', '/quiz', '/minigames', '/profile']
+    const router = useRouter()
     const headerTitles: Record<string, string> = {
         store: 'PetShop',
         quiz: 'Quiz',
@@ -139,25 +132,123 @@ export default function TabLayout() {
 
     const headerTitle = headerTitles[simplePathname] || ''
 
+    const logout = () => {
+        router.replace('/')
+    }
+    
+    const logoutButton = (
+        <TouchableOpacity onPress={logout}>
+            <MaterialIcons
+                name="exit-to-app"
+                size={24}
+                color="#5B5B5B"
+            />
+        </TouchableOpacity>
+    )
     return (
         <>
-            <WalkthroughProvider>
-                {includeHeader.includes(simplePathname) && (
-                    <Header
-                        title={headerTitle}
-                        coinsValue={
-                            simplePathname === 'store' ? user?.money : undefined
-                        }
-                        backgroundColor="#CFE2A8"
-                    />
-                )}
-
-                <Tabs
-                    screenOptions={{
-                        headerShown: false,
-                        tabBarShowLabel: false,
-                        tabBarStyle: getTabBarStyle(currentRoutePath),
-                        tabBarLabelPosition: 'beside-icon',
+            {includeHeader.includes(pathname) && (
+                <Header
+                    title={headerTitle}
+                    coinsValue={pathname === '/store' ? user?.money : undefined}
+                    backgroundColor="#CFE2A8"
+                    rightComponent={pathname === '/profile' ? logoutButton : undefined}
+                />
+            )}
+            <Tabs
+                screenOptions={{
+                    headerShown: false,
+                    tabBarShowLabel: false,
+                    tabBarStyle: getTabBarStyle(),
+                    tabBarLabelPosition: 'beside-icon',
+                }}
+            >
+                <Tabs.Screen
+                    name="home"
+                    options={{
+                        title: 'Home',
+                        tabBarIcon: ({ color, focused }) => (
+                            <CustomTabIcon
+                                name="home"
+                                color="black"
+                                focused={focused}
+                                iconsSize={iconsSize}
+                            />
+                        ),
+                    }}
+                />
+                <Tabs.Screen
+                    name="store"
+                    options={{
+                        title: 'Store',
+                        tabBarIcon: ({ color, focused }) => (
+                            <CustomTabIcon
+                                name="store"
+                                color="black"
+                                focused={focused}
+                                iconsSize={iconsSize}
+                            />
+                        ),
+                    }}
+                />
+                <Tabs.Screen
+                    name="minigames"
+                    options={{
+                        title: 'Minigames',
+                        tabBarIcon: ({ color, focused }) => (
+                            <CustomTabIcon
+                                name="minigame"
+                                color="black"
+                                focused={focused}
+                                iconsSize={iconsSize}
+                            />
+                        ),
+                    }}
+                    listeners={({ navigation, route }) => ({
+                        tabPress: (e) => {
+                            const r = route as Route<string> & {
+                                state?: NavigationState
+                            }
+                            const nestedState = r.state
+                            const currentNested =
+                                nestedState?.routes?.[nestedState.index ?? 0]
+                                    ?.name ?? 'index'
+                            if (currentNested !== 'index') {
+                                e.preventDefault() // stop the normal tab change
+                                navigation.navigate('minigames', {
+                                    screen: 'index',
+                                })
+                            }
+                        },
+                    })}
+                />
+                <Tabs.Screen
+                    name="quiz"
+                    options={{
+                        title: 'Quiz',
+                        tabBarStyle: getTabBarStyle(pathname),
+                        tabBarIcon: ({ color, focused }) => (
+                            <CustomTabIcon
+                                name="quiz"
+                                color="black"
+                                focused={focused}
+                                iconsSize={iconsSize}
+                            />
+                        ),
+                    }}
+                />
+                <Tabs.Screen
+                    name="profile"
+                    options={{
+                        title: 'Profile',
+                        tabBarIcon: ({ color, focused }) => (
+                            <CustomTabIcon
+                                name="profile"
+                                color="black"
+                                focused={focused}
+                                iconsSize={iconsSize}
+                            />
+                        ),
                     }}
                 >
                     <Tabs.Screen
