@@ -12,6 +12,8 @@ export default function MinigameStackLayout() {
             <Stack.Screen name="index" />
             <Stack.Screen name="NailTrimGame" />
             <Stack.Screen name="FoodGame" />
+            <Stack.Screen name="Pets2048" />
+
         </Stack>
     )
 }
