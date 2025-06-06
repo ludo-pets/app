@@ -9,6 +9,7 @@ import Drinkitem from '@/components/HomeItems/DrinkItem'
 import Wallpaperitem from '@/components/HomeItems/WallpaperItem'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { Pet } from '@/dtos/Pet'
+import { useItemStore } from '@/stores/itemStore'
 
 export interface HomeProps {
   image?: string
@@ -32,7 +33,7 @@ const Homescreen = () => {
     return (
         <View style={styles.container}>
             <Wallpaperitem />
-            <Flooritem />
+            <Flooritem image={pet?.activeItems.floor} />
             <Petitem />
             <WcItem update={(item) => updateTime(item as keyof Pet['wellBeing'])} />
             <Beditem update={(item) => updateTime(item as keyof Pet['wellBeing'])} />

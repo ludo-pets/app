@@ -18,7 +18,7 @@ const FloorItem = ({ image }: HomeProps) => {
                 ) : (
                     <Image
                         style={{ width: `100%`, height: `100%` }}
-                        source={require('@/assets/images/homescreen/chao_verde.png')}
+                        source={{ uri: image }}
                     />
                 )
             }

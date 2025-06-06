@@ -34,7 +34,11 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
         set({ loading: true, error: null })
         try {
             const result = await getUserWithPetByIdService(userId)
+
             if (result) {
+
+                // itemsAdapter(result.pet.purchasedItems)
+
                 set({ user: result.user, pet: result.pet, loading: false })
             } else {
                 set({ error: 'User ou Pet não encontrado', loading: false })
@@ -67,6 +71,10 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
         set({ error: null })
         try {
             const success = await updatePetService(petId, petData)
+
+                // itemsAdapter(result.pet.purchasedItems)
+
+
             if (success) {
                 const oldPet = get().pet
                 if (oldPet) {
