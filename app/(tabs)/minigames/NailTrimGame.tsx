@@ -57,18 +57,13 @@ export default function NailTrimGame() {
         <GestureHandlerRootView style={styles['game-container']}>
             {!started && <StartGameDialog startGame={setStarted} />}
 
-            {/**Na propriedade endGame vai a função que vai ser executada ao clicar no botão avançar
-             * A função setStarted só ta de exemplo, podem mudar ela para outra função.
-             */}
             {ended && minigame && (
                 <EndGameDialog
                     endGame={endGame}
                     givenMoney={minigame.givenMoney}
                 />
             )}
-
-            {/**minigame do gato*/}
-            {pet && (
+            {/* {pet && (
                 <GameBoard
                     key={gameKey}
                     pawImage={petSet[pet.type].pawImage}
@@ -76,6 +71,17 @@ export default function NailTrimGame() {
                     nailsSet={petSet[pet.type].nailSet}
                     nailLong={petSet[pet.type].nailLongImage}
                     nailShort={ petSet[pet.type].nailShortImage }
+                />
+            )} */}
+            {/*para testes, apagar dps*/}
+             {pet && (
+                <GameBoard
+                    key={gameKey}
+                    pawImage={petSet["dog"].pawImage}
+                    addScore={addScore}
+                    nailsSet={petSet["dog"].nailSet}
+                    nailLong={petSet["dog"].nailLongImage}
+                    nailShort={ petSet["dog"].nailShortImage }
                 />
             )}
         </GestureHandlerRootView>

@@ -4,53 +4,61 @@ import { Nail } from "./types"
 const catNailsSet: Nail[] = [
     {
         id: 1,
-        position: { x: 0.215, y: 0.57 },
-        rotation: '85deg',
+        position: { x: 0.20, y: 0.57 },
+        rotation: '345deg',
         isTrimmed: false,
+        isfliped: false
     },
     {
         id: 2,
         position: { x: 0.248, y: 0.465 },
         rotation: '0deg',
         isTrimmed: false,
+        isfliped: false
     },
     {
         id: 3,
         position: { x: 0.335, y: 0.42 },
-        rotation: '50deg',
+        rotation: '0deg',
         isTrimmed: false,
+        isfliped: false
     },
     {
         id: 4,
         position: { x: 0.48, y: 0.47 },
         rotation: '45deg',
         isTrimmed: false,
+        isfliped: false
     },
 ]
 const dogNailSet: Nail[] = [
     {
         id: 1,
-        position: { x: 0.215, y: 0.57 },
-        rotation: '85deg',
+        position: { x: 0.230, y: 0.52 },
+        rotation: '0deg',
         isTrimmed: false,
+        isfliped: false
     },
     {
         id: 2,
-        position: { x: 0.248, y: 0.465 },
+        position: { x: 0.34, y: 0.415 },
         rotation: '0deg',
         isTrimmed: false,
+        isfliped: false
     },
     {
         id: 3,
-        position: { x: 0.335, y: 0.42 },
-        rotation: '50deg',
+        position: { x: 0.50, y: 0.415 },
+        rotation: '0deg',
         isTrimmed: false,
+        isfliped: true
     },
     {
         id: 4,
-        position: { x: 0.48, y: 0.47 },
-        rotation: '45deg',
+        position: { x: 0.6, y: 0.52 },
+        rotation: '0deg',
         isTrimmed: false,
+        isfliped: true
     },
 ]
 
@@ -77,7 +85,7 @@ export const petSet: petSetType = {
 
     },
     dog: {
-        nailSet: dogNailSet, // Placeholder for dog nails set
+        nailSet: dogNailSet,
         pawImage: require('@/assets/images/minigames/nail-trimmer/dog_paw.png'),
         nailLongImage: require('@/assets/images/minigames/nail-trimmer/dog_nail.png'),
         nailShortImage: null

@@ -42,6 +42,8 @@ export default function GameBoard({
     addScore,
     pawImage,
     nailsSet,
+    nailLong,
+    nailShort
 }: GameBoardProps) {
     const [nails, setNails] = useState<Nail[]>(nailsSet)
     const [trimmer, setTrimmer] = useState(trimmer_initial_position)
@@ -70,9 +72,9 @@ export default function GameBoard({
             const nailX = nail.position.x
             const nailY = nail.position.y
             const nailCenterX =
-                (width - pawSize) / 2 + nailX * pawSize + nailSize / 2
+                ((width - pawSize) / 2 + nailX * pawSize) + nailSize / 4
             const nailCenterY =
-                height - pawSize + nailY * pawSize + nailSize / 2
+                ((height - pawSize + nailY * pawSize) - 40)+ nailSize / 2
 
             const trimmerCenterX = trimmer.x
             const trimmerCenterY = trimmer.y
@@ -82,7 +84,7 @@ export default function GameBoard({
                     (nailCenterY - trimmerCenterY - yOffset) ** 2
             )
 
-            isNear = distance < 40
+            isNear = distance < 30
             if (isNear) {
                 if (!trimmerTimeout.current[nail.id] && entrou) {
                     entrou = false
@@ -172,18 +174,16 @@ export default function GameBoard({
                             >
                                 <Animated.Image
                                     style={{
-                                        transform:
-                                            nail.id == 4
-                                                ? [{ rotate: nail.rotation }]
-                                                : undefined,
+                                        transform: [{ rotate: nail.rotation}, {scaleX: (nail.isfliped? -1 : 1)}],
                                         width: nailSize,
                                         height: nailSize,
                                         resizeMode: 'contain',
+                                        display: (nail.isTrimmed && !nailShort)? 'none' : 'flex'
                                     }}
                                     source={
                                         nail.isTrimmed
-                                            ? require('@/assets/images/minigames/nail-trimmer/nail-short.png')
-                                            : require('@/assets/images/minigames/nail-trimmer/nail-long.png')
+                                            ? nailShort || nailLong 
+                                            : nailLong
                                     }
                                 />
                                 {nailProgress[nail.id] > 0 &&
@@ -239,6 +239,7 @@ const styles = StyleSheet.create({
     },
     paw: {
         position: 'absolute',
+        resizeMode: "contain",
         width: pawSize / 2,
         height: pawSize / 2,
         bottom: 0,
