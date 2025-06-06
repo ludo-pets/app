@@ -57,5 +57,4 @@ build_apk:
             fi
 
         - firebase appdistribution:distribute app.apk --app $FIREBASE_ANDROID_APP_ID --groups "testadores"
-    only:
-        - main
+
