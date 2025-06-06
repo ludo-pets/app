@@ -10,10 +10,11 @@ import {
 } from '@/services/userService'
 import { useRouter } from 'expo-router'
 import { useUserPetStore } from '@/stores/userPetStore'
+import Constants from 'expo-constants';
 
 
 const redirectUri = AuthSession.makeRedirectUri({
-    scheme: 'com.ages.ludopets',
+    scheme: 'myapp',
 })
 
 console.log('redirectUri', redirectUri)
@@ -22,10 +23,10 @@ export default function GoogleSigninButton() {
     const router = useRouter()
 
     const [request, response, promptAsync] = Google.useAuthRequest({
-        clientId: envWebClientId,
-        webClientId: envWebClientId,
-        iosClientId: envIosClientId,
-        androidClientId: envAndroidClientId,
+        clientId: process.env.EXPO_PUBLIC_CLIENT_ID, // Web client ID (required for Expo Go)
+        webClientId: process.env.EXPO_PUBLIC_CLIENT_ID,
+        iosClientId: process.env.EXPO_PUBLIC_IOS_CLIENT_ID,
+        androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
         redirectUri,
         responseType: 'id_token',
         scopes: ['openid', 'profile', 'email'],
