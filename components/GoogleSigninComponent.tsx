@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Text, StyleSheet, Pressable, Image } from 'react-native'
+import { Text, StyleSheet, Pressable, Image, Alert } from 'react-native'
 import * as Google from 'expo-auth-session/providers/google'
 import * as AuthSession from 'expo-auth-session'
 import { GoogleAuthProvider, signInWithCredential } from 'firebase/auth'
@@ -14,17 +14,18 @@ import Constants from 'expo-constants';
 
 
 const redirectUri = AuthSession.makeRedirectUri({
-    scheme: 'myapp',
+    scheme: 'com.ages.ludopets',  
 })
 
 console.log('redirectUri', redirectUri)
+Alert.alert("Redirect URI", redirectUri);
 
 export default function GoogleSigninButton() {
     const router = useRouter()
 
     const [request, response, promptAsync] = Google.useAuthRequest({
-        clientId: process.env.EXPO_PUBLIC_CLIENT_ID, // Web client ID (required for Expo Go)
-        webClientId: process.env.EXPO_PUBLIC_CLIENT_ID,
+        webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID,
+        clientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID, // Web client ID (required for Expo Go)
         iosClientId: process.env.EXPO_PUBLIC_IOS_CLIENT_ID,
         androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
         redirectUri,
