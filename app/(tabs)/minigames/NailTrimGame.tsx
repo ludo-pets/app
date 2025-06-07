@@ -9,6 +9,10 @@ import { Nail } from '../../../components/minigames/nail-trim-game/types'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { useRouter } from 'expo-router'
 import { useMinigameStore } from '@/stores/minigameStore'
+import { useConfirmExit } from '@/hooks/usePreventNavigationExit'
+import ConfirmExitModal from '@/components/ConfirmExitModal'
+
+
 
 const { width } = Dimensions.get('window')
 
@@ -40,6 +44,8 @@ const catNailsSet: Nail[] = [
 ]
 
 export default function NailTrimGame() {
+
+    const { modalVisible, onConfirm, onCancel } = useConfirmExit()
     const [started, setStarted] = useState(false)
     const [ended, setEnded] = useState(false)
     const [score, setScore] = useState(0)
@@ -98,6 +104,9 @@ export default function NailTrimGame() {
                 addScore={addScore}
                 nailsSet={catNailsSet}
             />
+            
+
+            
 
             {/**minigame do cachorro, quando tiver os assets do cachorro*/}
             {/* <GameBoard
@@ -105,7 +114,13 @@ export default function NailTrimGame() {
                 addScore={addScore}
                 nailsSet={dogNailsSet}
             /> */}
+        <ConfirmExitModal
+                              visible={modalVisible}
+                              onConfirm={onConfirm}
+                              onCancel={onCancel}
+                            />
         </GestureHandlerRootView>
+        
     )
 }
 

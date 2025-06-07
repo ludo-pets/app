@@ -5,6 +5,9 @@ import StarterGameDialog from '../../../components/minigames/food-game/StarterGa
 import React from 'react'
 import EndGameDialog from '../../../components/minigames/food-game/EndGameDialog'
 import { useRouter } from 'expo-router'
+import { useConfirmExit } from '@/hooks/usePreventNavigationExit'
+import ConfirmExitModal from '@/components/ConfirmExitModal'
+
 
 const FoodGame = () => {
     const gameManager = useGameManager()
@@ -14,6 +17,9 @@ const FoodGame = () => {
         gameManager.setGameOver(false)
         router.push('/home')
     }
+
+    
+      const { modalVisible, onConfirm, onCancel } = useConfirmExit()
 
     return (
         <View style={styles.container}>
@@ -30,6 +36,11 @@ const FoodGame = () => {
                     coins={gameManager.coins}
                 />
             )}
+            <ConfirmExitModal
+                      visible={modalVisible}
+                      onConfirm={onConfirm}
+                      onCancel={onCancel}
+                    />
 
             <Renderer gameManager={gameManager} />
         </View>

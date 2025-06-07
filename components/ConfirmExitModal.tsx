@@ -26,7 +26,7 @@ export default function ConfirmExitModal({
     >
       <View style={styles.overlay}>
         <View style={styles.container}>
-          <Text style={styles.text}>Tem certeza que quer sair do quiz?</Text>
+          <Text style={styles.text}>Tem certeza que quer sair do minigame?</Text>
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.button} onPress={onConfirm}>
               <Text style={styles.buttonText}>Sim</Text>

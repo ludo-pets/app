@@ -7,12 +7,14 @@ interface CollisionProps {
     positionYPet: Animated.Value
     positionXObstacles: Animated.Value
     obstacleDimensions: DimensionsObstacle
+    isPaused: boolean
 }
 
 export default function useCollisionDetection({
     positionYPet,
     obstacleDimensions,
     positionXObstacles,
+    isPaused,
 }: CollisionProps) {
     const { height: windowHeight } = Dimensions.get('window')
 
@@ -44,6 +46,11 @@ export default function useCollisionDetection({
             positionXObstacles.addListener((event) => {
                 positionXObstaclesNumber = event.value
             })
+
+            if(isPaused) {
+                animatedFrameId = requestAnimationFrame(checkCollision)
+                return
+            }
 
             if (positionYPetNumber >= faixaColisaoGround) {
                 setIsColliding(true)

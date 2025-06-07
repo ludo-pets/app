@@ -17,9 +17,12 @@ export type GameManagerType = {
     coins: number
     gameOver: boolean
     setGameOver: (gameOver: boolean) => void
+    paused: boolean
+    setPaused: (paused: boolean) => void
 }
 
 export const useGameManager = (): GameManagerType => {
+    const [paused, setPaused] = useState(false)
     const { config } = useGameConfig()
     const { 
         foods, 
@@ -29,7 +32,9 @@ export const useGameManager = (): GameManagerType => {
         updateCurrentLives,
         checkCollision,
         stopAllAnimations
-    } = useFoods({ config })
+        
+    } = useFoods({ config, paused })
+
 
     const [characterPosition, setCharacterPosition] = useState(
         config.SCREEN_WIDTH / 2 - config.CHARACTER_WIDTH / 2
@@ -72,6 +77,7 @@ export const useGameManager = (): GameManagerType => {
         setFoods([])
         updateCurrentLives(3)
         setLifes(3)
+        setPaused(false)
 
         if (gameTimer.current) clearInterval(gameTimer.current)
         if (difficultyTimer.current) clearInterval(difficultyTimer.current)
@@ -235,7 +241,7 @@ export const useGameManager = (): GameManagerType => {
 
     // Adiciona um intervalo de verificação de colisões com frequência reduzida
     useEffect(() => {
-        if (gameStarted && !gameOver) {
+        if (gameStarted && !gameOver && !paused) {
             const collisionInterval = setInterval(() => {
                 checkCollisions(() => {})
             }, 100) // Reduzido para 10fps para evitar múltiplas detecções
@@ -249,8 +255,10 @@ export const useGameManager = (): GameManagerType => {
      */
     useEffect(() => {
         return () => {
+            if(gameStarted && !gameOver && !paused) {
             if (gameTimer.current) clearInterval(gameTimer.current)
             if (difficultyTimer.current) clearInterval(difficultyTimer.current)
+        }
         }
     }, [])
 
@@ -258,7 +266,7 @@ export const useGameManager = (): GameManagerType => {
      * Reseta os timers quando a mudança em spawn rate ou inicio/fim de jogo
      */
     useEffect(() => {
-        if (gameStarted && !gameOver) {
+        if (gameStarted && !gameOver && !paused) {
             if (gameTimer.current) {
                 clearInterval(gameTimer.current)
             }
@@ -273,6 +281,7 @@ export const useGameManager = (): GameManagerType => {
      * Basicamente eu tinha um problema em que paravam de spawnar comidas. este effect evita que a tela nunca fique vazia
      */
     useEffect(() => {
+        if(gameStarted && !gameOver && !paused) {
         const checkSpawnInterval = setInterval(() => {
             if (gameStarted && !gameOver && foods.length === 0) {
                 spawnFood()
@@ -280,6 +289,7 @@ export const useGameManager = (): GameManagerType => {
         }, 2000)
 
         return () => clearInterval(checkSpawnInterval)
+        }
     }, [gameStarted, gameOver, foods.length])
 
     return {
@@ -296,5 +306,7 @@ export const useGameManager = (): GameManagerType => {
         coins,
         gameOver,
         setGameOver,
+        paused,
+        setPaused
     }
 }
