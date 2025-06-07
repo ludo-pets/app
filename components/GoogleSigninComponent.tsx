@@ -14,7 +14,8 @@ import Constants from 'expo-constants';
 
 
 const redirectUri = AuthSession.makeRedirectUri({
-    scheme: 'com.ages.ludopets',  
+    scheme: 'com.ages.ludopets',
+    useProxy: false,  
 })
 
 console.log('redirectUri', redirectUri)
