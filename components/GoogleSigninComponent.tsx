@@ -30,14 +30,14 @@ export default function GoogleSigninButton() {
         iosClientId: process.env.EXPO_PUBLIC_IOS_CLIENT_ID,
         androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
         redirectUri,
-        responseType: 'id_token',
+        responseType: 'token',
         scopes: ['openid', 'profile', 'email'],
     })
 
     useEffect(() => {
         const authenticate = async () => {
             if (response?.type === 'success') {
-                const idToken = response.params?.id_token
+                const idToken = response.params?.token
                 if (!idToken) {
                     console.error('No ID token found in Google response.')
                     return
