@@ -16,7 +16,7 @@ const WallpaperItem = ({image}: HomeProps) => {
             ) : (
                 <Image
                     style={{ width: `100%`, height: `100%` }}
-                    source={require('@/assets/images/homescreen/fundohs.png')}
+                    source={{ uri: image }}
                 />
             )}
         </View>

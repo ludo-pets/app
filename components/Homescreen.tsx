@@ -32,7 +32,7 @@ const Homescreen = () => {
 
     return (
         <View style={styles.container}>
-            <Wallpaperitem />
+            <Wallpaperitem image={pet?.activeItems.wallpaper} />
             <Flooritem image={pet?.activeItems.floor} />
             <Petitem />
             <WcItem update={(item) => updateTime(item as keyof Pet['wellBeing'])} />
