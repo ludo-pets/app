@@ -18,8 +18,8 @@ const FoodGame = () => {
         router.push('/home')
     }
 
-    
-      const { modalVisible, onConfirm, onCancel } = useConfirmExit()
+    const { modalVisible, onConfirm, onCancel } = useConfirmExit({onPause: () => {},onResume: () => {}
+});
 
     return (
         <View style={styles.container}>

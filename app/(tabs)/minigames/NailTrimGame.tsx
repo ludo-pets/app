@@ -44,8 +44,8 @@ const catNailsSet: Nail[] = [
 ]
 
 export default function NailTrimGame() {
-
-    const { modalVisible, onConfirm, onCancel } = useConfirmExit()
+    const { modalVisible, onConfirm, onCancel } = useConfirmExit({onPause: () => {},onResume: () => {}
+});
     const [started, setStarted] = useState(false)
     const [ended, setEnded] = useState(false)
     const [score, setScore] = useState(0)
