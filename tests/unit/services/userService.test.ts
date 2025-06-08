@@ -14,20 +14,20 @@ describe('userService', () => {
         const validExistingEmail = 'valid@email.com'
         const validNonExistingEmail = 'valid_non_existing@email.com'
         const invalidEmail = 'invalid_email'
-    
+
         beforeEach(() => jest.clearAllMocks())
-    
+
         it('should reject invalid email format', async () => {
             const res = await getUserDataByEmail(invalidEmail)
             expect(res).toBeNull()
         })
-    
+
         it('should return null when no user exists', async () => {
             mockedGetDocs.mockResolvedValueOnce({ empty: true })
             const res = await getUserDataByEmail(validNonExistingEmail)
             expect(res).toBeNull()
         })
-    
+
         it('should return user data when found', async () => {
             mockedGetDocs.mockResolvedValueOnce({
                 empty: false,
@@ -37,25 +37,24 @@ describe('userService', () => {
             expect(res).toEqual(mockedUserData)
         })
     })
-    
-    
+
     describe('updateUser', () => {
         beforeEach(() => jest.clearAllMocks())
-    
+
         it('returns false for empty userId', async () => {
             expect(await updateUser('', { money: 350 })).toBe(false)
         })
-    
+
         it('returns false for empty userData', async () => {
             expect(await updateUser('u1', {})).toBe(false)
         })
-    
+
         it('returns true when update succeeds', async () => {
             mockedDoc.mockReturnValue({})
             mockedUpdateDoc.mockResolvedValueOnce(undefined)
             expect(await updateUser('u1', { email: 'a@b.com' })).toBe(true)
         })
-    
+
         it('returns false when updateDoc throws', async () => {
             mockedDoc.mockReturnValue({})
             mockedUpdateDoc.mockRejectedValueOnce(new Error())
