@@ -85,7 +85,11 @@ const logBoard = () => {
   }
 };
 
-const move = (direction: Direction) => {
+// --- SCORE SUPPORT ---
+let lastScore = 0; // Module-level variable to keep score between moves
+
+const move = (direction: Direction, setScore?: (score: number) => void) => {
+  let pointsGained = 0;
   switch (direction) {
     case "left": {
       for (let x = 0; x < BOARD_SIZE; ++x) {
@@ -97,7 +101,6 @@ const move = (direction: Direction) => {
           if (index === 0) {
             cell.y = y;
             y++;
-
             return;
           }
           const prevCell = line[index - 1];
@@ -107,6 +110,7 @@ const move = (direction: Direction) => {
             !doubledCells.includes(prevCell)
           ) {
             prevCell.value = prevCell.value * 2;
+            pointsGained += prevCell.value;
             removedCells.push(cell);
             doubledCells.push(prevCell);
           } else {
@@ -128,7 +132,6 @@ const move = (direction: Direction) => {
           if (index === 0) {
             cell.y = y;
             y--;
-
             return;
           }
           const prevCell = line[index - 1];
@@ -138,6 +141,7 @@ const move = (direction: Direction) => {
             !doubledCells.includes(prevCell)
           ) {
             prevCell.value = prevCell.value * 2;
+            pointsGained += prevCell.value;
             removedCells.push(cell);
             doubledCells.push(prevCell);
           } else {
@@ -159,7 +163,6 @@ const move = (direction: Direction) => {
           if (index === 0) {
             cell.x = x;
             x++;
-
             return;
           }
           const prevCell = line[index - 1];
@@ -169,6 +172,7 @@ const move = (direction: Direction) => {
             !doubledCells.includes(prevCell)
           ) {
             prevCell.value = prevCell.value * 2;
+            pointsGained += prevCell.value;
             removedCells.push(cell);
             doubledCells.push(prevCell);
           } else {
@@ -190,7 +194,6 @@ const move = (direction: Direction) => {
           if (index === 0) {
             cell.x = x;
             x--;
-
             return;
           }
           const prevCell = line[index - 1];
@@ -200,6 +203,7 @@ const move = (direction: Direction) => {
             !doubledCells.includes(prevCell)
           ) {
             prevCell.value = prevCell.value * 2;
+            pointsGained += prevCell.value;
             removedCells.push(cell);
             doubledCells.push(prevCell);
           } else {
@@ -212,16 +216,21 @@ const move = (direction: Direction) => {
       break;
     }
   }
+  if (setScore) {
+    lastScore += pointsGained;
+    setScore(lastScore);
+  }
   spawnCell();
 };
 
 export const useGame = () => {
   const forceRender = useForceRender();
   const [gameOver, setGameOver] = useState(false);
+  const [score, setScore] = useState(0);
 
   const memoizedMove = useCallback((direction: Direction) => {
     try {
-      move(direction);
+      move(direction, setScore);
     } catch (err) {
       if (err instanceof BoardFilled) {
         setGameOver(true);
@@ -236,6 +245,8 @@ export const useGame = () => {
   const memoizedStartGame = useCallback(() => {
     startGame();
     setGameOver(false);
+    lastScore = 0;
+    setScore(0);
   }, []);
 
   return {
@@ -244,5 +255,6 @@ export const useGame = () => {
     startGame: memoizedStartGame,
     logBoard,
     gameOver,
+    score, // <-- expose score
   };
 };

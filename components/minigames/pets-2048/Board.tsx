@@ -3,7 +3,6 @@ import {
   Text,
   StyleSheet,
   useWindowDimensions,
-  Pressable,
 } from "react-native";
 import React, { useEffect, useMemo } from "react";
 import {
@@ -20,7 +19,7 @@ import { runOnJS } from "react-native-reanimated";
 import Cell from "./Cell";
 import GameOverScreen from "./GameOverScreen";
 
-const Board = () => {
+const Board = ({ resetKey }: { resetKey: number }) => {
   const { width } = useWindowDimensions();
   const backgroundCells = useMemo(() => {
     return new Array(BOARD_SIZE * BOARD_SIZE)
@@ -28,7 +27,12 @@ const Board = () => {
       .map((_, index) => <BackgroundCell key={index.toString()} />);
   }, []);
 
-  const { logBoard, board, move, startGame, gameOver } = useGame();
+  // Now get score from useGame
+  const { logBoard, board, move, startGame, gameOver, score } = useGame();
+
+  useEffect(() => {
+    startGame();
+  }, [resetKey]);
 
   const flingGesture = Gesture.Pan().onEnd((e) => {
     if (gameOver) {
@@ -38,23 +42,10 @@ const Board = () => {
     const absY = Math.abs(e.translationY);
     let direction: Direction;
     if (absX < absY) {
-      if (e.translationY < 0) {
-        console.log("UP");
-        direction = "up";
-      } else {
-        direction = "down";
-        console.log("DOWN");
-      }
+      direction = e.translationY < 0 ? "up" : "down";
     } else {
-      if (e.translationX < 0) {
-        direction = "left";
-        console.log("LEFT");
-      } else {
-        direction = "right";
-        console.log("RIGHT");
-      }
+      direction = e.translationX < 0 ? "left" : "right";
     }
-
     runOnJS(move)(direction);
   });
 
@@ -64,18 +55,19 @@ const Board = () => {
     <Cell x={x} y={y} value={value} key={id} />
   ));
 
-  if (board.length === 0) {
-    startGame();
-  }
-
   return (
     <>
+      {/* Score Board */}
+      <View style={{ alignItems: "center", marginBottom: 16 }}>
+        <Text style={{ fontSize: 24, fontWeight: "bold", color: "#E8A598" }}>
+          Score: {score}
+        </Text>
+      </View>
       {gameOver && <GameOverScreen onTryAgain={startGame} />}
       <GestureDetector gesture={flingGesture}>
         <View
           style={[
             styles.container,
-            // TODO: add fix for small screens
             {
               width: width * BOARD_WIDTH_MULTIPLIER,
               height: width * BOARD_WIDTH_MULTIPLIER,
