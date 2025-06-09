@@ -14,8 +14,7 @@ import Constants from 'expo-constants';
 
 
 const redirectUri = AuthSession.makeRedirectUri({
-    scheme: 'com.ages.ludopets',
-    useProxy: false,  
+    useProxy: true,  
 })
 
 console.log('redirectUri', redirectUri)
@@ -24,27 +23,25 @@ Alert.alert("Redirect URI", redirectUri);
 export default function GoogleSigninButton() {
     const router = useRouter()
 
-    const [request, response, promptAsync] = Google.useAuthRequest({
-        webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID,
-        clientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID,
-        iosClientId: process.env.EXPO_PUBLIC_IOS_CLIENT_ID,
-        androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
-        redirectUri,
-        responseType: 'id_token',
-        scopes: ['openid', 'profile', 'email'],
-    })
+    const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+    clientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID!,
+    iosClientId: process.env.EXPO_PUBLIC_IOS_CLIENT_ID,
+    androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
+    redirectUri: redirectUri,
+    });
+
 
     useEffect(() => {
         const authenticate = async () => {
             if (response?.type === 'success') {
-                const accessToken = response.authentication?.accessToken;
-                if (!accessToken) {
+                const idToken = response.authentication?.idToken;
+                if (!idToken) {
                     console.error('No access token found in Google response.');
                     return;
                 }
 
                 try {
-                    const credential = GoogleAuthProvider.credential(accessToken);
+                    const credential = GoogleAuthProvider.credential(idToken);
 
                     const userCredential = await signInWithCredential(auth, credential);
                     const userId = userCredential.user.uid;
