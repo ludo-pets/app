@@ -14,8 +14,10 @@ import Constants from 'expo-constants';
 
 
 const redirectUri = AuthSession.makeRedirectUri({
-    useProxy: true,  
-})
+  scheme: 'com.ages.ludopets',
+  useProxy: false,
+});
+
 
 console.log('redirectUri', redirectUri)
 Alert.alert("Redirect URI", redirectUri);
@@ -24,7 +26,7 @@ export default function GoogleSigninButton() {
     const router = useRouter()
 
     const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    clientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID!,
+    clientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
     iosClientId: process.env.EXPO_PUBLIC_IOS_CLIENT_ID,
     androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
     redirectUri: redirectUri,
