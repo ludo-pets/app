@@ -26,7 +26,7 @@ export default function GoogleSigninButton() {
 
     const [request, response, promptAsync] = Google.useAuthRequest({
         webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID,
-        clientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID, // Web client ID (required for Expo Go)
+        clientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID,
         iosClientId: process.env.EXPO_PUBLIC_IOS_CLIENT_ID,
         androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
         redirectUri,
@@ -37,46 +37,55 @@ export default function GoogleSigninButton() {
     useEffect(() => {
         const authenticate = async () => {
             if (response?.type === 'success') {
-                const idToken = response.params?.token
-                if (!idToken) {
-                    console.error('No ID token found in Google response.')
-                    return
+                const accessToken = response.authentication?.accessToken;
+                if (!accessToken) {
+                    console.error('No access token found in Google response.');
+                    return;
                 }
 
-                const credential = GoogleAuthProvider.credential(idToken)
-
                 try {
-                    const userCredential = await signInWithCredential(
-                        auth,
-                        credential
-                    )
-                    const userId = userCredential.user.uid || ''
-                    const email = userCredential.user.email || ''
+                    // Option 1: If you need an ID token, you can fetch user info
+                    // and then authenticate with Firebase using the access token
+                    const userInfo = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+                        headers: { Authorization: `Bearer ${accessToken}` }
+                    }).then(res => res.json());
+                    
+                    if (!userInfo.email) {
+                        console.error('No email found in user info');
+                        return;
+                    }
 
-                    let user = await getUserWithPetByIdService(email)
+                    // Option 2: Or if you prefer to use Firebase's Google Auth Provider
+                    const credential = GoogleAuthProvider.credential(null, accessToken);
+
+                    const userCredential = await signInWithCredential(auth, credential);
+                    const userId = userCredential.user.uid;
+                    const email = userCredential.user.email;
+
+                    let user = await getUserWithPetByIdService(email!);
 
                     if (!user) {
-                        await createUserService({ uid: userId, email })
-                        user = await getUserWithPetByIdService(email)
+                        await createUserService({ uid: userId, email });
+                        user = await getUserWithPetByIdService(email!);
                     }
 
                     if (user && user.pet) {
-                        await useUserPetStore.getState().fetchUserAndPet(email)
-                        router.replace('/home')
+                        await useUserPetStore.getState().fetchUserAndPet(email!);
+                        router.replace('/home');
                     } else {
                         router.replace({
                             pathname: '/petCreate',
                             params: { userId, email },
-                        })
+                        });
                     }
                 } catch (error) {
-                    console.error('Firebase authentication error:', error)
+                    console.error('Authentication error:', error);
                 }
             }
         }
 
-        authenticate()
-    }, [response])
+        authenticate();
+    }, [response]);
 
     return (
         <Pressable
