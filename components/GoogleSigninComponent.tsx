@@ -30,7 +30,7 @@ export default function GoogleSigninButton() {
         iosClientId: process.env.EXPO_PUBLIC_IOS_CLIENT_ID,
         androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
         redirectUri,
-        responseType: 'token',
+        responseType: 'id_token',
         scopes: ['openid', 'profile', 'email'],
     })
 
@@ -44,19 +44,7 @@ export default function GoogleSigninButton() {
                 }
 
                 try {
-                    // Option 1: If you need an ID token, you can fetch user info
-                    // and then authenticate with Firebase using the access token
-                    const userInfo = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
-                        headers: { Authorization: `Bearer ${accessToken}` }
-                    }).then(res => res.json());
-                    
-                    if (!userInfo.email) {
-                        console.error('No email found in user info');
-                        return;
-                    }
-
-                    // Option 2: Or if you prefer to use Firebase's Google Auth Provider
-                    const credential = GoogleAuthProvider.credential(null, accessToken);
+                    const credential = GoogleAuthProvider.credential(accessToken);
 
                     const userCredential = await signInWithCredential(auth, credential);
                     const userId = userCredential.user.uid;
