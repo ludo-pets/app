@@ -15,6 +15,8 @@ import { useEffect, useState } from 'react'
 import React from 'react'
 import XpBar from '@/components/XpBar'
 import { colorsOptions, PetOption } from '@/components/FormRegisterPet'
+import Cat from '@/assets/images/pets/gato.svg'
+import Dog from '@/assets/images/pets/cachorro.svg'
 
 import { PetOptionFormRegisterPet } from '@/components/PetOptionFormRegisterPet'
 import { useUserPetStore } from '@/stores/userPetStore'
@@ -30,13 +32,6 @@ const coinIcon = {
     uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/profile/pet_coin.png',
 }
 
-const cat = {
-    uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/pets/cat.png',
-}
-
-const dog = {
-    uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/pets/dog.png',
-}
 
 export default function Profile() {
     const [isChecked, setIsChecked] = useState(false)
@@ -78,7 +73,7 @@ export default function Profile() {
 
     const pets: PetOption[] = [
         {
-            icon: petInfo?.type === 'cat' ? cat : dog,
+            icon: petInfo?.type === 'cat' ? Cat : Dog,
             pet_type: petInfo?.type || 'cat',
         },
     ]

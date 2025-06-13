@@ -1,6 +1,8 @@
 import { gameConstants } from '@/constants/minigames/flappyPet/game'
 import { Animated, StyleSheet, Image } from 'react-native'
 import { useUserPetStore } from '@/stores/userPetStore'
+import Cat from '@/assets/images/pets/gato.svg'
+import Dog from '@/assets/images/pets/cachorro.svg'
 
 interface PetProps {
     positionY: Animated.Value
@@ -9,14 +11,6 @@ interface PetProps {
 export default function Pet({ positionY, airPlaneDegree }: PetProps) {
     const airplane = {
         uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/minigames/flappyPet/flappyPet/airPlane.png',
-    }
-
-    const cat = {
-        uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/pets/cat.png',
-    }
-
-    const dog = {
-        uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/pets/dog.png',
     }
 
     const animal = useUserPetStore((state) => state.pet?.type)
@@ -38,15 +32,12 @@ export default function Pet({ positionY, airPlaneDegree }: PetProps) {
     function renderPet(pet: 'cat' | 'dog' | undefined) {
         if (!pet) return null
 
-        const petImage = pet === 'cat' ? cat : dog
-
-        return (
-            <Image
-                source={petImage}
-                style={styles.petImage}
-                resizeMode="contain"
-            />
-        )
+        switch (pet) {
+            case 'cat':
+                return <Cat fill={color} style={styles.catPet} />
+            case 'dog':
+                return <Dog fill={color} style={styles.dogPet} />
+        }
     }
     return (
         <Animated.View

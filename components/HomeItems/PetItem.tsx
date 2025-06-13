@@ -2,6 +2,8 @@ import { StyleSheet, View, Dimensions, Pressable, Platform } from 'react-native'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { PetOption } from '../FormRegisterPet'
 import GenericIcon from '../GenericIcon'
+import Cat from '@/assets/images/pets/gato.svg'
+import Dog from '@/assets/images/pets/cachorro.svg'
 
 const { height, width } = Dimensions.get('window')
 
@@ -11,17 +13,10 @@ const PetItem = () => {
     }
 
     const petInfo = useUserPetStore((state) => state.pet)
-    const cat = {
-        uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/pets/cat.png',
-    }
-
-    const dog = {
-        uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/pets/dog.png',
-    }
 
     const pets: PetOption[] = [
         {
-            icon: petInfo?.type === 'cat' ? cat : dog,
+            icon: petInfo?.type === 'cat' ? Cat : Dog,
             pet_type: petInfo?.type || 'cat',
         },
     ]
@@ -29,11 +24,11 @@ const PetItem = () => {
     return (
         <View style={styles.cbox}>
             <Pressable onPress={onPress}>
-                <GenericIcon
-                    Icon={{
-                        uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/pets/cat.png',
-                    }}
-                    size={100}
+            <GenericIcon
+                    Icon={pets[0].icon}
+                    fill={petInfo?.color || '#7D5D56'}
+                    stroke={'#000'}
+
                 />
             </Pressable>
         </View>
