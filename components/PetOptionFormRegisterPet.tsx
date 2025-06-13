@@ -1,8 +1,7 @@
-import { Pressable, StyleSheet, View } from 'react-native'
-import { SvgProps } from 'react-native-svg'
+import { Pressable, StyleSheet, View, Image } from 'react-native'
 
 interface PetOptionFormRegisterPetProps {
-    Icon: React.FC<SvgProps>
+    Icon: { uri: string }
     onSelect?: VoidFunction
     selected: boolean
     color: string
@@ -25,7 +24,11 @@ export function PetOptionFormRegisterPet({
             onPress={onSelect}
         >
             <View style={styles.imageContainer}>
-                <Icon fill={color} stroke={'#000'} />
+                <Image
+                    source={Icon}
+                    style={{ width: '100%', height: '100%' }}
+                    resizeMode="contain"
+                />
             </View>
         </Pressable>
     )

@@ -14,10 +14,10 @@ const { height, width } = Dimensions.get('window')
 
 const DrinkItem = ({ update }: ItemProps) => {
     const pet = useUserPetStore((state) => state.pet)
-    
+
     const needsToDrink = () => {
         if (pet) {
-            const {thirst} = calcPetMood(pet.wellBeing)
+            const { thirst } = calcPetMood(pet.wellBeing)
             return thirst < 12.5
         }
         return false
@@ -33,15 +33,17 @@ const DrinkItem = ({ update }: ItemProps) => {
         <View style={styles.cbox}>
             {isThirsty && (
                 <View style={styles.alertContainer}>
-                                    <Image
-                                        source={require('@/assets/images/homescreen/icone_feedback.png')}
-                                        style={{
-                                            width: '100%',
-                                            height: '100%',
-                                            resizeMode: 'contain',
-                                        }}
-                                    />
-                                </View>
+                    <Image
+                        source={{
+                            uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/homescreen/feedback_icon.png',
+                        }}
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            resizeMode: 'contain',
+                        }}
+                    />
+                </View>
             )}
             <TouchableWithoutFeedback onPress={onPress}>
                 <Image
@@ -50,7 +52,9 @@ const DrinkItem = ({ update }: ItemProps) => {
                         height: `100%`,
                         resizeMode: 'contain',
                     }}
-                    source={require('@/assets/images/homescreen/poteB.png')}
+                    source={{
+                        uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/homescreen/potB.png',
+                    }}
                 />
             </TouchableWithoutFeedback>
         </View>

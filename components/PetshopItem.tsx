@@ -11,7 +11,9 @@ import {
     View,
 } from 'react-native'
 
-const petCoin = require('@/assets/images/profile/pet_coin.png')
+const petCoin = {
+    uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/profile/pet_coin.png',
+}
 
 export interface PetshopItemProps {
     id: string
@@ -33,7 +35,9 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
     const pet = useUserPetStore((state) => state.pet)
     const userUpdate = useUserPetStore((state) => state.updateUser)
     const petUpdate = useUserPetStore((state) => state.updatePet)
-    const fetchUserAndPet = useUserPetStore((state) => state.fetchUserAndPet)
+    const fetchUserAndPetByEmail = useUserPetStore(
+        (state) => state.fetchUserAndPetByEmail
+    )
     const [hasItem, setHasItem] = useState(false)
     const [quantity, setQuantity] = useState<number>(item.quantity)
     const [canBuy, setCanBuy] = useState(false)
@@ -60,7 +64,7 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
             }
             activeItems[item.type || 'toy'] = item.id
             await petUpdate(pet.id, { activeItems: activeItems as any })
-            await fetchUserAndPet(user.email)
+            await fetchUserAndPetByEmail(user.email)
         }
     }
     const onDesactive = () => {
@@ -90,7 +94,7 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
 
             await userUpdate(user.id, { money: newUser.money - item.price })
             await petUpdate(pet.id, { purchasedItems: newPet.purchasedItems })
-            await fetchUserAndPet(user.email)
+            await fetchUserAndPetByEmail(user.email)
         }
     }
 

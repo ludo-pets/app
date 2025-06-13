@@ -12,9 +12,15 @@ import { GameManagerType } from './GameManager'
 import { useGameConfig } from './GameConfig'
 import { useEffect, useRef, useState } from 'react'
 
-const playerImage = require('@/assets/images/minigames/food-game/gato_boca_aberta.png')
-const heart = require('@/assets/images/minigames/food-game/heart.png')
-const coinIcon = require('@/assets/images/profile/pet_coin.png')
+const playerImage = {
+    uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/minigames/food-game/open_mouth_cat.png',
+}
+const heart = {
+    uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/minigames/food-game/heart.png',
+}
+const coinIcon = {
+    uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/profile/pet_coin.png',
+}
 
 const Renderer = ({ gameManager }: { gameManager: GameManagerType }) => {
     const {

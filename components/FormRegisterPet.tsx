@@ -12,15 +12,12 @@ import {
 } from 'react-native'
 import { PetOptionFormRegisterPet } from './PetOptionFormRegisterPet'
 import { useState } from 'react'
-import Gato from '@/assets/images/pets/gato.svg'
-import Cachorro from '@/assets/images/pets/cachorro.svg'
-import { SvgProps } from 'react-native-svg'
 import { addPet } from '@/services/petService'
 import { useNavigation } from '@react-navigation/native'
 
 export type PetOption = {
     id?: number
-    icon: React.FC<SvgProps>
+    icon: { uri: string }
     pet_type: 'cat' | 'dog'
 }
 
@@ -29,15 +26,22 @@ type ColorOption = {
     color: string
 }
 
+const catImage = {
+    uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/pets/cat.png',
+}
+const dogImage = {
+    uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/pets/dog.png',
+}
+
 export const petsTypes: PetOption[] = [
     {
         id: 1,
-        icon: Gato,
+        icon: catImage,
         pet_type: 'cat',
     },
     {
         id: 2,
-        icon: Cachorro,
+        icon: dogImage,
         pet_type: 'dog',
     },
 ]

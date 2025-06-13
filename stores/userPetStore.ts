@@ -23,9 +23,7 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
     pet: null,
     loading: true,
     error: null,
-    setAchievements(achievements) {
-
-    },
+    setAchievements(achievements) {},
 
     fetchUserAndPetByEmail: async (userEmail: string) => {
         set({ loading: true, error: null })
@@ -90,8 +88,10 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
                 const alreadyOwned = user.achievements.includes(achievement)
                 if (!alreadyOwned) {
                     const newAchievements = [...user.achievements, achievement]
-                    await get().updateUser(user.id, { achievements: newAchievements})
-                    set({ user: { ...user, achievements: newAchievements}})
+                    await get().updateUser(user.id, {
+                        achievements: newAchievements,
+                    })
+                    set({ user: { ...user, achievements: newAchievements } })
                 }
             }
         } catch (error: any) {

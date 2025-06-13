@@ -1,18 +1,25 @@
 import React from 'react'
-import { SvgProps } from 'react-native-svg'
+import { Image, ImageSourcePropType, StyleSheet } from 'react-native'
 
 interface GenericIconProps {
-    Icon: React.FC<SvgProps>
-    fill?: string
-    stroke?: string
+    Icon: ImageSourcePropType // ✅ aceita imagem local (require) ou remota ({ uri })
+    size?: number
 }
 
-const GenericIcon: React.FC<GenericIconProps> = ({
-    Icon,
-    fill = '#000',
-    stroke = '#000',
-}) => {
-    return <Icon fill={fill} stroke={stroke} />
+const GenericIcon: React.FC<GenericIconProps> = ({ Icon, size = 80 }) => {
+    return (
+        <Image
+            source={Icon}
+            style={[styles.icon, { width: size, height: size }]}
+            resizeMode="contain"
+        />
+    )
 }
 
 export default GenericIcon
+
+const styles = StyleSheet.create({
+    icon: {
+        // width e height são definidos via props
+    },
+})

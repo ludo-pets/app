@@ -1,10 +1,18 @@
 import Dialog from '@/components/Dialog/Dialog'
 import { View, Image, StyleSheet, Dimensions } from 'react-native'
 
-const bolo = require('@/assets/images/minigames/food-game/bolo.png')
-const chocolate = require('@/assets/images/minigames/food-game/chocolate.png')
-const racao = require('@/assets/images/minigames/food-game/racao.png')
-const health = require('@/assets/images/minigames/food-game/heart.png')
+const bolo = {
+    uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/minigames/food-game/cake.png',
+}
+const chocolate = {
+    uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/minigames/food-game/chocolate.png',
+}
+const food = {
+    uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/minigames/food-game/food.png',
+}
+const health = {
+    uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/minigames/food-game/heart.png',
+}
 
 const { width, height } = Dimensions.get('window')
 
@@ -23,7 +31,7 @@ export default function StarterGameDialog({
                 />
             </View>
             <View style={styles.foodItem}>
-                <Image source={racao} style={styles.foodImage} />
+                <Image source={food} style={styles.foodImage} />
                 <Dialog.Text
                     content="Ração: +10 pontos"
                     style={styles.foodText}

@@ -5,7 +5,9 @@ const WallpaperItem = () => {
         <View style={styles.cbox}>
             <Image
                 style={{ width: `100%`, height: `100%` }}
-                source={require('@/assets/images/homescreen/fundohs.png')}
+                source={{
+                    uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/homescreen/blue_homescree_bg.png',
+                }}
             />
         </View>
     )

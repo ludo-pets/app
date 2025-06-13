@@ -26,16 +26,22 @@ interface MinigameListConfig {
 
 const minigameListRegistry: Record<string, MinigameListConfig> = {
     'Hora da Patinha': {
-        icon: require('@/assets/images/minigames/minigame_icon_test.png'),
+        icon: {
+            uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/minigames/minigame_icon_test.png',
+        },
         routeName: 'NailTrimGame',
     },
     'Comilança Maluca': {
-        icon: require('@/assets/images/minigames/food-game/gato_boca_aberta.png'),
+        icon: {
+            uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/minigames/food-game/open_mouth_cat.png',
+        },
         // routeName: 'FoodGame',
         routeName: 'FoodGame',
     },
     'Flappy Pet': {
-        icon: require('@/assets/images/minigames/flappyPet/flappyPetIcon.png'),
+        icon: {
+            uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/minigames/flappyPet/flappyPet/flappyPetIcon.png',
+        },
         routeName: 'FlappyPetGame',
     },
 }

@@ -25,8 +25,12 @@ interface RendererProps {
 }
 export default function Renderer({ isPaused }: RendererProps) {
     //imagens
-    const background = require('@/assets/images/minigames/flappyPet/background.png')
-    const floor = require('@/assets/images/minigames/flappyPet/floor.png')
+    const background = {
+        uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/minigames/flappyPet/flappyPet/background.png',
+    }
+    const floor = {
+        uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/minigames/flappyPet/flappyPet/floor.png',
+    }
 
     const gameManager = useGameManager()
 

@@ -9,7 +9,7 @@ import { Nail } from '../../../components/minigames/nail-trim-game/types'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { useRouter } from 'expo-router'
 import { useMinigameStore } from '@/stores/minigameStore'
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native'
 
 const { width } = Dimensions.get('window')
 
@@ -67,14 +67,14 @@ export default function NailTrimGame() {
 
     useFocusEffect(
         useCallback(() => {
-            setScore(0);
+            setScore(0)
             return () => {
-            setStarted(false);
-            setEnded(false);
-            setScore(0);
-            };
+                setStarted(false)
+                setEnded(false)
+                setScore(0)
+            }
         }, [])
-    );
+    )
 
     const endGame = async () => {
         if (user && minigame) {
@@ -106,7 +106,9 @@ export default function NailTrimGame() {
             {/**minigame do gato*/}
             <GameBoard
                 key={gameKey}
-                pawImage={require('@/assets/images/minigames/nail-trimmer/paw.png')}
+                pawImage={{
+                    uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/minigames/nail-trimmer/paw.png',
+                }}
                 addScore={addScore}
                 nailsSet={catNailsSet}
             />

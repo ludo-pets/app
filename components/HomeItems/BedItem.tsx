@@ -18,7 +18,7 @@ const BedItem = ({ update }: ItemProps) => {
 
     const needsSleep = () => {
         if (pet) {
-            const {sleep} = calcPetMood(pet.wellBeing)
+            const { sleep } = calcPetMood(pet.wellBeing)
             return sleep < 12.5
         }
         return false
@@ -35,7 +35,9 @@ const BedItem = ({ update }: ItemProps) => {
             {isSleepy && (
                 <View style={styles.alertContainer}>
                     <Image
-                        source={require('@/assets/images/homescreen/icone_feedback.png')}
+                        source={{
+                            uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/homescreen/pillow.png',
+                        }}
                         style={{
                             width: '100%',
                             height: '100%',
@@ -51,7 +53,9 @@ const BedItem = ({ update }: ItemProps) => {
                         height: `100%`,
                         resizeMode: 'contain',
                     }}
-                    source={require('@/assets/images/homescreen/almofada.png')}
+                    source={{
+                        uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/homescreen/pillow.png',
+                    }}
                 />
             </TouchableWithoutFeedback>
         </View>

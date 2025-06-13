@@ -22,8 +22,12 @@ const { width, height } = Dimensions.get('window')
 //trimmer
 const trimmer_initial_position = { x: width / 4, y: height / 6 }
 let trimmer_current_position = trimmer_initial_position
-const openTrimmer = require('@/assets/images/minigames/nail-trimmer/trimmer-open.png')
-const closeTrimmer = require('@/assets/images/minigames/nail-trimmer/trimmer-closed.png')
+const openTrimmer = {
+    uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/minigames/nail-trimmer/trimmer-open.png',
+}
+const closeTrimmer = {
+    uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/minigames/nail-trimmer/trimmer-closed.png',
+}
 const trimmerSound: AVPlaybackSource = require('@/assets/images/minigames/nail-trimmer/trimmer-sound.mp3')
 //paw
 const pawSize = height / 2
@@ -60,32 +64,32 @@ export default function GameBoard({
 
     const cleanup = () => {
         // Limpar timers
-        Object.values(trimmerTimeout.current).forEach(timeout => {
-            if (timeout) clearTimeout(timeout);
-        });
-        Object.values(intervalRef.current).forEach(interval => {
-            if (interval) clearInterval(interval);
-        });
-        trimmerTimeout.current = {};
-        intervalRef.current = {};
+        Object.values(trimmerTimeout.current).forEach((timeout) => {
+            if (timeout) clearTimeout(timeout)
+        })
+        Object.values(intervalRef.current).forEach((interval) => {
+            if (interval) clearInterval(interval)
+        })
+        trimmerTimeout.current = {}
+        intervalRef.current = {}
 
         // Resetar estados do jogo
-        setNails(nailsSet); // <-- volta pro estado inicial
-        setTrimmer(trimmer_initial_position);
-        setNailProgress({});
-        setIsTrimming(false);
-        trimmer_current_position = trimmer_initial_position;
-        entrou = true;
-        isNear = false;
-    };
-    
+        setNails(nailsSet) // <-- volta pro estado inicial
+        setTrimmer(trimmer_initial_position)
+        setNailProgress({})
+        setIsTrimming(false)
+        trimmer_current_position = trimmer_initial_position
+        entrou = true
+        isNear = false
+    }
+
     useFocusEffect(
         useCallback(() => {
             return () => {
-                cleanup();
-            };
+                cleanup()
+            }
         }, [])
-    );
+    )
 
     const handleGesture = (e: PanGestureHandlerGestureEvent) => {
         setTrimmer({
@@ -210,8 +214,12 @@ export default function GameBoard({
                                     }}
                                     source={
                                         nail.isTrimmed
-                                            ? require('@/assets/images/minigames/nail-trimmer/nail-short.png')
-                                            : require('@/assets/images/minigames/nail-trimmer/nail-long.png')
+                                            ? {
+                                                  uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/minigames/nail-trimmer/nail-short.png',
+                                              }
+                                            : {
+                                                  uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/minigames/nail-trimmer/nail-long.png',
+                                              }
                                     }
                                 />
                                 {nailProgress[nail.id] > 0 &&
@@ -219,7 +227,9 @@ export default function GameBoard({
                                         <Svg
                                             height={nailSize}
                                             width={nailSize}
-                                            viewBox={`0 0 ${nailSize * 2} ${nailSize * 2}`}
+                                            viewBox={`0 0 ${nailSize * 2} ${
+                                                nailSize * 2
+                                            }`}
                                             style={{
                                                 position: 'absolute',
                                                 overflow: 'visible',

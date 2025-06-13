@@ -14,8 +14,12 @@ import { useLessonStore } from '@/stores/lessonStore'
 import Lesson from '@/dtos/Lesson'
 import { useAllLessonsStore } from '@/stores/allLessonsStore'
 
-const paws = require('@/assets/images/paw.png')
-const pawsTravled = require('@/assets/images/pawTraveled.png')
+const paws = {
+    uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/paw.png',
+}
+const pawsTravled = {
+    uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/pawTraveled.png',
+}
 
 export default function QuizScreen() {
     const getAllLesssons = useAllLessonsStore(
@@ -46,14 +50,12 @@ export default function QuizScreen() {
 
         const currentLesson = lesson as Lesson
 
-        if(lessons.indexOf(lesson) < lastLessonConcludedId) {
-
-            
+        if (lessons.indexOf(lesson) < lastLessonConcludedId) {
             setLesson(currentLesson)
             changeToNextQuestion('', currentLesson.questions)
 
             router.push('/quizSummary')
-            return;
+            return
         }
         setLesson(currentLesson)
         changeToNextQuestion('', currentLesson.questions)

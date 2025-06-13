@@ -30,34 +30,38 @@ export default function RegisterPetPage() {
     // Função para enviar notificações, apagar depois
     async function schedulePushNotification() {
         if (Platform.OS === 'android' && !Device.isDevice) {
-          alert('Notificação simulada no emulador - veja a aba "Logcat"');
-          console.log("Notificação seria exibida em um dispositivo real");
-          return;
+            alert('Notificação simulada no emulador - veja a aba "Logcat"')
+            console.log('Notificação seria exibida em um dispositivo real')
+            return
         }
-      
-        const { status } = await Notifications.requestPermissionsAsync();
+
+        const { status } = await Notifications.requestPermissionsAsync()
         if (status !== 'granted') {
-          alert('Permissão para notificações não concedida!');
-          return;
+            alert('Permissão para notificações não concedida!')
+            return
         }
-      
+
         await Notifications.scheduleNotificationAsync({
-          content: {
-            title: "Teste de Notificação",
-            body: 'Esta é uma notificação de teste!',
-            data: { url: '/some-route' },
-          },
-          trigger: {
-            type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
-            seconds: 2,
-        },
-        });
-      }
+            content: {
+                title: 'Teste de Notificação',
+                body: 'Esta é uma notificação de teste!',
+                data: { url: '/some-route' },
+            },
+            trigger: {
+                type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
+                seconds: 2,
+            },
+        })
+    }
 
     return (
         <View style={styles.containerBox}>
             <View style={styles.mainContent}>
-                <Image source={require('@/assets/images/logo.png')} />
+                <Image
+                    source={{
+                        uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/logo.png',
+                    }}
+                />
                 <FormRegisterPet />
                 {/* usando esse para testar as notificações sem precisar esperar/ter pet/etc (apagar depois) */}
                 {/* <Pressable

@@ -16,8 +16,6 @@ import React from 'react'
 import XpBar from '@/components/XpBar'
 import { colorsOptions, PetOption } from '@/components/FormRegisterPet'
 
-import Gato from '@/assets/images/pets/gato.svg'
-import Cachorro from '@/assets/images/pets/cachorro.svg'
 import { PetOptionFormRegisterPet } from '@/components/PetOptionFormRegisterPet'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { useRouter } from 'expo-router'
@@ -25,8 +23,20 @@ import AchievementType from '@/dtos/Achievement'
 import { fetchAchievements } from '@/services/fetchAchievements'
 import Achievement from '@/components/Achievement'
 
-const editIcon = require('@/assets/images/profile/edit_icon.png')
-const coinIcon = require('@/assets/images/profile/pet_coin.png')
+const editIcon = {
+    uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/profile/edit_icon.png',
+}
+const coinIcon = {
+    uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/profile/pet_coin.png',
+}
+
+const cat = {
+    uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/pets/cat.png',
+}
+
+const dog = {
+    uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/pets/dog.png',
+}
 
 export default function Profile() {
     const [isChecked, setIsChecked] = useState(false)
@@ -68,7 +78,7 @@ export default function Profile() {
 
     const pets: PetOption[] = [
         {
-            icon: petInfo?.type === 'cat' ? Gato : Cachorro,
+            icon: petInfo?.type === 'cat' ? cat : dog,
             pet_type: petInfo?.type || 'cat',
         },
     ]
@@ -97,11 +107,14 @@ export default function Profile() {
         <SafeAreaView style={styles.safeArea}>
             <ScrollView>
                 <View style={styles.container}>
-                    <XpBar xp={user?.experience || 0} level={user?.level || 1} />
+                    <XpBar
+                        xp={user?.experience || 0}
+                        level={user?.level || 1}
+                    />
                     <View style={styles.petContainer}>
                         <PetOptionFormRegisterPet
                             Icon={pets[0].icon}
-                            onSelect={() => { }}
+                            onSelect={() => {}}
                             selected={false}
                             onlyPet={false}
                             color={petColor || '#7D5D56'}
@@ -139,7 +152,7 @@ export default function Profile() {
                                             { backgroundColor: color.color },
                                             styles.colorOption,
                                             colorSelected &&
-                                            styles.colorOptionActive,
+                                                styles.colorOptionActive,
                                         ]}
                                         onPress={() => {
                                             if (!isEditing) {
@@ -153,8 +166,13 @@ export default function Profile() {
                         </View>
                         <View style={styles.infoContainer}>
                             <View style={styles.coinsContainer}>
-                                <Image source={coinIcon} style={styles.coinIcon} />
-                                <Text style={styles.coinsText}>{user?.money}</Text>
+                                <Image
+                                    source={coinIcon}
+                                    style={styles.coinIcon}
+                                />
+                                <Text style={styles.coinsText}>
+                                    {user?.money}
+                                </Text>
                             </View>
 
                             <View style={styles.notificationContainer}>
@@ -164,7 +182,9 @@ export default function Profile() {
                                 >
                                     {isChecked && (
                                         <Image
-                                            source={require('@/assets/images/profile/check.png')}
+                                            source={{
+                                                uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/profile/check.png',
+                                            }}
                                             style={styles.checkmark}
                                         />
                                     )}
@@ -182,13 +202,18 @@ export default function Profile() {
                                 style={styles.saveButton}
                                 onPress={() => updatePet()}
                             >
-                                <Text style={styles.saveButtonText}>Salvar</Text>
+                                <Text style={styles.saveButtonText}>
+                                    Salvar
+                                </Text>
                             </TouchableOpacity>
                         )}
                     </View>
 
                     {!isEditing && (
-                        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                        <ScrollView
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                        >
                             {achievements.map((achievement) => (
                                 <View key={achievement.id}>
                                     <Achievement
@@ -249,7 +274,7 @@ const createStyles = (isSmallScreen: boolean) =>
             borderColor: '#D9D0E3',
             borderRadius: 8,
             borderStyle: 'solid',
-            backgroundColor: '#FFF', 
+            backgroundColor: '#FFF',
         },
         header: {
             width: '100%',

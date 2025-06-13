@@ -33,20 +33,24 @@ const WcItem = ({ update }: ItemProps) => {
         <View style={styles.cbox}>
             {isDirty && (
                 <View style={styles.alertContainer}>
-                                    <Image
-                                        source={require('@/assets/images/homescreen/icone_feedback.png')}
-                                        style={{
-                                            width: '100%',
-                                            height: '100%',
-                                            resizeMode: 'contain',
-                                        }}
-                                    />
-                                </View>
+                    <Image
+                        source={{
+                            uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/homescreen/feedback_icon.png',
+                        }}
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            resizeMode: 'contain',
+                        }}
+                    />
+                </View>
             )}
             <TouchableWithoutFeedback onPress={onPress}>
                 <Image
                     style={{ width: `100%`, height: `100%` }}
-                    source={require('@/assets/images/homescreen/caixa_de_areia.png')}
+                    source={{
+                        uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/homescreen/sandbox.png',
+                    }}
                 />
             </TouchableWithoutFeedback>
         </View>
@@ -64,7 +68,7 @@ const styles = StyleSheet.create({
         left: width / 1.96,
         justifyContent: 'center',
         alignItems: 'center',
-        display: 'flex'
+        display: 'flex',
     },
     alertContainer: {
         position: 'absolute',

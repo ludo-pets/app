@@ -97,8 +97,9 @@ export default function QuizGame() {
                             currentQuestion.answers[currentQuestion.rightAnswer]
                         }
                         imageSource={
-                            currentQuestion.image ||
-                            require('@/assets/images/quiz/quiz-cat.png')
+                            currentQuestion.image || {
+                                uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/quiz/quiz-cat.png',
+                            }
                         }
                         onCorrectAnswer={() => handleCorrectAnswer()}
                         onWrongAnswer={() => handleChangeQuestion()}

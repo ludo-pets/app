@@ -15,7 +15,7 @@ const { height, width } = Dimensions.get('window')
 
 const ToyItem = ({ update }: ItemProps) => {
     const pet = useUserPetStore((state) => state.pet)
-    
+
     const needsToPlay = () => {
         if (pet) {
             const { play } = calcPetMood(pet.wellBeing)
@@ -34,15 +34,17 @@ const ToyItem = ({ update }: ItemProps) => {
         <View style={styles.cbox}>
             {isPlayful && (
                 <View style={styles.alertContainer}>
-                                    <Image
-                                        source={require('@/assets/images/homescreen/icone_feedback.png')}
-                                        style={{
-                                            width: '100%',
-                                            height: '100%',
-                                            resizeMode: 'contain',
-                                        }}
-                                    />
-                                </View>
+                    <Image
+                        source={{
+                            uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/homescreen/feedback_icon.png',
+                        }}
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            resizeMode: 'contain',
+                        }}
+                    />
+                </View>
             )}
             <TouchableWithoutFeedback onPress={onPress}>
                 <Image
@@ -51,7 +53,9 @@ const ToyItem = ({ update }: ItemProps) => {
                         height: `100%`,
                         resizeMode: `contain`,
                     }}
-                    source={require('@/assets/images/homescreen/brinquedo.png')}
+                    source={{
+                        uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/homescreen/scratcher.png',
+                    }}
                 />
             </TouchableWithoutFeedback>
         </View>

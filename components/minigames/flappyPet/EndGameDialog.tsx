@@ -1,7 +1,6 @@
 import Dialog from '@/components/Dialog/Dialog'
-import React, { useMemo } from 'react'
-import { View, StyleSheet, Dimensions } from 'react-native'
-import TrophyIcon from '@/assets/images/minigames/nail-trimmer/trophy.svg'
+import React from 'react'
+import { View, StyleSheet, Dimensions, Image } from 'react-native'
 
 const { width } = Dimensions.get('window')
 
@@ -23,7 +22,13 @@ export default function EndGameDialog({
                 <View style={styles.dialogCustomHTop}>
                     <Dialog.Icon
                         content={
-                            <TrophyIcon width={width / 3} height={width / 3} />
+                            <Image
+                                source={{
+                                    uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/minigames/nail-trimmer/trophy.png',
+                                }}
+                                style={{ width: width / 3, height: width / 3 }}
+                                resizeMode="contain"
+                            />
                         }
                     />
 

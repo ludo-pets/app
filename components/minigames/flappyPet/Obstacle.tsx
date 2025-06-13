@@ -15,8 +15,12 @@ export default function Obstacle({
     positionX,
 }: ObstacleProps) {
     //images
-    const pipeTop = require('@/assets/images/minigames/flappyPet/pipe_top.png')
-    const pipeCore = require('@/assets/images/minigames/flappyPet/pipe_core.png')
+    const pipeTop = {
+        uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/minigames/flappyPet/flappyPet/pipe_top.png',
+    }
+    const pipeCore = {
+        uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/minigames/flappyPet/flappyPet/pipe_core.png',
+    }
 
     const topPosition = isTopObstacle ? 0 : windowHeight - height - 100
     const flexDirection = isTopObstacle ? 'column-reverse' : 'column'

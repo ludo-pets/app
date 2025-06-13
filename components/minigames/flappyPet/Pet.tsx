@@ -1,17 +1,23 @@
 import { gameConstants } from '@/constants/minigames/flappyPet/game'
 import { Animated, StyleSheet, Image } from 'react-native'
 import { useUserPetStore } from '@/stores/userPetStore'
-import Gato from '@/assets/images/pets/gato.svg'
-import Cachorro from '@/assets/images/pets/cachorro.svg'
 
 interface PetProps {
     positionY: Animated.Value
     airPlaneDegree: Animated.Value
 }
-
 export default function Pet({ positionY, airPlaneDegree }: PetProps) {
-    //images
-    const airplane = require('@/assets/images/minigames/flappyPet/airPlane.png')
+    const airplane = {
+        uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/minigames/flappyPet/flappyPet/airPlane.png',
+    }
+
+    const cat = {
+        uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/pets/cat.png',
+    }
+
+    const dog = {
+        uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/pets/dog.png',
+    }
 
     const animal = useUserPetStore((state) => state.pet?.type)
 
@@ -32,14 +38,16 @@ export default function Pet({ positionY, airPlaneDegree }: PetProps) {
     function renderPet(pet: 'cat' | 'dog' | undefined) {
         if (!pet) return null
 
-        switch (pet) {
-            case 'cat':
-                return <Gato fill={color} style={styles.catPet} />
-            case 'dog':
-                return <Cachorro fill={color} style={styles.dogPet} />
-        }
-    }
+        const petImage = pet === 'cat' ? cat : dog
 
+        return (
+            <Image
+                source={petImage}
+                style={styles.petImage}
+                resizeMode="contain"
+            />
+        )
+    }
     return (
         <Animated.View
             style={[
@@ -64,6 +72,14 @@ export default function Pet({ positionY, airPlaneDegree }: PetProps) {
 }
 
 const styles = StyleSheet.create({
+    petImage: {
+        width: '50%',
+        height: '50%',
+        position: 'absolute',
+        bottom: '38%',
+        left: '20%',
+        transform: [{ scaleX: -1 }, { rotate: '30deg' }],
+    },
     petContainer: {
         width: gameConstants.petWidth,
         height: gameConstants.petHeight,

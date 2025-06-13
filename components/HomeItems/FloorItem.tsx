@@ -7,7 +7,9 @@ const FloorItem = () => {
         <View style={styles.cbox}>
             <Image
                 style={{ width: `100%`, height: `100%` }}
-                source={require('@/assets/images/homescreen/chao_verde.png')}
+                source={{
+                    uri: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/homescreen/green_flor.png',
+                }}
             />
         </View>
     )
