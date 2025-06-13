@@ -1,0 +1,106 @@
+name: CI
+
+on:
+  push:
+    branches: [ feature/pipeline-migration, main ]
+
+jobs:
+  build_android:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+
+      - name: Cache de node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Decodificar credenciais Google
+        run: |
+          echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" | base64 -d > /tmp/service-account.json
+        shell: bash
+
+      - name: Exportar variável GOOGLE_APPLICATION_CREDENTIALS
+        run: echo "GOOGLE_APPLICATION_CREDENTIALS=/tmp/service-account.json" >> $GITHUB_ENV
+
+      - name: Gerar APK via EAS
+        run: |
+          npx eas build --platform android --profile production --non-interactive --json > result.json
+          APK_URL=$(jq -r '.[0].artifacts.buildUrl' result.json)
+          echo "APK URL: $APK_URL"
+          curl -L -o app.apk "$APK_URL"
+          file app.apk
+          if file app.apk | grep -q 'Zip archive data'; then
+            echo "Arquivo APK válido."
+          else
+            echo "Erro: o arquivo baixado não é um APK válido."
+            cat app.apk
+            exit 1
+          fi
+
+      - name: Distribuir via Firebase App Distribution
+        env:
+          FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
+        run: npx firebase appdistribution:distribute app.apk --app $FIREBASE_ANDROID_APP_ID --groups "testadores"
+
+  export_pwa:
+    name: Export PWA para Web
+    runs-on: ubuntu-latest
+    needs: build_android
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+
+      - name: Cache de node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Exportar PWA (Expo)
+        run: npx expo export --platform web --output-dir dist
+
+      - name: Upload de artefatos
+        uses: actions/upload-artifact@v3
+        with:
+          name: pwa-dist
+          path: dist/
+
+  deploy_pwa_vercel:
+    name: Deploy PWA no Vercel
+    runs-on: ubuntu-latest
+    needs: export_pwa
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Download de artefatos
+        uses: actions/download-artifact@v3
+        with:
+          name: pwa-dist
+          path: dist
+
+      - name: Deploy no Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: vercel deploy dist --yes --prod --token $VERCEL_TOKEN
