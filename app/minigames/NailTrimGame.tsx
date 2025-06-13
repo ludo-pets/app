@@ -10,6 +10,7 @@ import { useUserPetStore } from '@/stores/userPetStore'
 import { useRouter } from 'expo-router'
 import { useMinigameStore } from '@/stores/minigameStore'
 import { useFocusEffect } from '@react-navigation/native';
+import Header from '@/components/Header'
 
 const { width } = Dimensions.get('window')
 
@@ -91,6 +92,11 @@ export default function NailTrimGame() {
 
     return (
         <GestureHandlerRootView style={styles['game-container']}>
+            <Header
+                title="Hora da Patinha"
+                backgroundColor="#CFE2A8"
+                showBackButton
+            />
             {!started && <StartGameDialog startGame={setStarted} />}
 
             {/**Na propriedade endGame vai a função que vai ser executada ao clicar no botão avançar
