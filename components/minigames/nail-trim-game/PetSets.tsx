@@ -65,29 +65,29 @@ const dogNailSet: Nail[] = [
 type petSetType = {
     cat: {
         nailSet: Nail[];
-        pawImage: ImageSourcePropType;
-        nailShortImage: ImageSourcePropType | null;
-        nailLongImage: ImageSourcePropType;
+        pawImage: string;
+        nailShortImage: string | null;
+        nailLongImage: string;
     },
     dog:  {
         nailSet: Nail[];
-        pawImage: ImageSourcePropType;
-        nailShortImage: ImageSourcePropType | null;
-        nailLongImage: ImageSourcePropType;
+        pawImage: string;
+        nailShortImage: string | null;
+        nailLongImage: string;
     }
 }
 export const petSet: petSetType = {
     cat: {
         nailSet: catNailsSet,
-        pawImage: require('@/assets/images/minigames/nail-trimmer/paw.png'),
-        nailShortImage: require('@/assets/images/minigames/nail-trimmer/nail-short.png'),
-        nailLongImage: require('@/assets/images/minigames/nail-trimmer/nail-long.png'),
+        pawImage: "https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/minigames/nail-trimmer/paw.png",
+        nailShortImage: "https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/minigames/nail-trimmer/nail-short.png",
+        nailLongImage: "https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/minigames/nail-trimmer/nail-long.png",
 
     },
     dog: {
         nailSet: dogNailSet,
-        pawImage: require('@/assets/images/minigames/nail-trimmer/dog_paw.png'),
-        nailLongImage: require('@/assets/images/minigames/nail-trimmer/dog_nail.png'),
+        pawImage: "https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/minigames/nail-trimmer/dog_paw-min.png",
+        nailLongImage: "https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/minigames/nail-trimmer/dog_nail-min.png",
         nailShortImage: null
     },
 }

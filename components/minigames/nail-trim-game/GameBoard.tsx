@@ -33,9 +33,9 @@ let entrou = true
 let isNear = false
 export type GameBoardProps = {
     addScore: () => void,
-    pawImage: ImageSourcePropType,
-    nailLong: ImageSourcePropType,
-    nailShort: ImageSourcePropType | null,
+    pawImage: string,
+    nailLong: string,
+    nailShort: string | null,
     nailsSet: Nail[],
 }
 export default function GameBoard({
@@ -74,7 +74,7 @@ export default function GameBoard({
             const nailCenterX =
                 ((width - pawSize) / 2 + nailX * pawSize) + nailSize / 4
             const nailCenterY =
-                ((height - pawSize + nailY * pawSize)) - nailSize /2
+                ((height - pawSize + nailY * pawSize))
 
             const trimmerCenterX = trimmer.x
             const trimmerCenterY = trimmer.y
@@ -158,7 +158,7 @@ export default function GameBoard({
             </PanGestureHandler>
 
             <Animated.View style={styles.pawContainer}>
-                <Animated.Image source={pawImage} style={styles.paw} />
+                <Animated.Image source={{uri: pawImage}} style={styles.paw} />
                 {nails.map(
                     (nail) =>
                         nail && (
@@ -181,9 +181,11 @@ export default function GameBoard({
                                         display: (nail.isTrimmed && !nailShort)? 'none' : 'flex'
                                     }}
                                     source={
-                                        nail.isTrimmed
+                                        {uri:
+                                            nail.isTrimmed
                                             ? nailShort || nailLong 
                                             : nailLong
+                                        }
                                     }
                                 />
                                 {nailProgress[nail.id] > 0 &&
