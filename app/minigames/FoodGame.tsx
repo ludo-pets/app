@@ -1,9 +1,9 @@
 import { View, StatusBar, StyleSheet } from 'react-native'
-import { useGameManager } from '../../../components/minigames/food-game/GameManager'
-import Renderer from '../../../components/minigames/food-game/Renderer'
-import StarterGameDialog from '../../../components/minigames/food-game/StarterGameDialog'
+import { useGameManager } from '@/components/minigames/food-game/GameManager'
+import Renderer from '@/components/minigames/food-game/Renderer'
+import StarterGameDialog from '@/components/minigames/food-game/StarterGameDialog'
 import React from 'react'
-import EndGameDialog from '../../../components/minigames/food-game/EndGameDialog'
+import EndGameDialog from '@/components/minigames/food-game/EndGameDialog'
 import { useRouter } from 'expo-router'
 import { useFocusEffect } from '@react-navigation/native'
 

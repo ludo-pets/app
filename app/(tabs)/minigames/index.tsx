@@ -27,16 +27,15 @@ interface MinigameListConfig {
 const minigameListRegistry: Record<string, MinigameListConfig> = {
     'Hora da Patinha': {
         icon: require('@/assets/images/minigames/minigame_icon_test.png'),
-        routeName: 'NailTrimGame',
+        routeName: '/minigames/NailTrimGame',
     },
     'Comilança Maluca': {
         icon: require('@/assets/images/minigames/food-game/gato_boca_aberta.png'),
-        // routeName: 'FoodGame',
-        routeName: 'FoodGame',
+        routeName: '/minigames/FoodGame',
     },
     'Flappy Pet': {
         icon: require('@/assets/images/minigames/flappyPet/flappyPetIcon.png'),
-        routeName: 'FlappyPetGame',
+        routeName: '/minigames/FlappyPetGame',
     },
 }
 
@@ -87,7 +86,7 @@ export default function MinigameScreen() {
                 setError(null)
 
                 router.push({
-                    pathname: `/minigames/${config.routeName}` as any,
+                    pathname: config.routeName as any,
                     params: {
                         minigameId: gameId,
                         minigameName: gameName,
