@@ -29,6 +29,7 @@ export default function GoogleSigninButton() {
         clientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID, // Web client ID (required for Expo Go)
         iosClientId: process.env.EXPO_PUBLIC_IOS_CLIENT_ID,
         androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
+        expoClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
         redirectUri,
         responseType: 'token',
         scopes: ['openid', 'profile', 'email'],
@@ -37,7 +38,7 @@ export default function GoogleSigninButton() {
     useEffect(() => {
         const authenticate = async () => {
             if (response?.type === 'success') {
-                const idToken = response.params?.token
+                const idToken = response.params?.access_token
                 if (!idToken) {
                     console.error('No ID token found in Google response.')
                     return
