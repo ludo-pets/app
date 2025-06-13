@@ -1,46 +1,54 @@
 {
-    "project_info": {
-        "project_number": "823465219976",
-        "project_id": "ludo-pets",
-        "storage_bucket": "ludo-pets.firebasestorage.app"
-    },
-    "client": [
-        {
-            "client_info": {
-                "mobilesdk_app_id": "1:823465219976:android:cd5b86d09b91269a5d8c3d",
-                "android_client_info": {
-                    "package_name": "com.ages.ludopets"
-                }
-            },
-            "oauth_client": [
-                {
-                    "client_id": "823465219976-5gioroqbrn0134u220jagvasotqs7rbo.apps.googleusercontent.com",
-                    "client_type": 3
-                }
-            ],
-            "api_key": [
-                {
-                    "current_key": "AIzaSyAFoi2BYgJB2YOeafkWz4g7_x71BYvFvKE"
-                }
-            ],
-            "services": {
-                "appinvite_service": {
-                    "other_platform_oauth_client": [
-                        {
-                            "client_id": "823465219976-5gioroqbrn0134u220jagvasotqs7rbo.apps.googleusercontent.com",
-                            "client_type": 3
-                        },
-                        {
-                            "client_id": "823465219976-9tr8frv4ksgmeh6l3ai4tdgu4hfpcejg.apps.googleusercontent.com",
-                            "client_type": 2,
-                            "ios_info": {
-                                "bundle_id": "com.ages.ludopets"
-                            }
-                        }
-                    ]
-                }
-            }
+  "project_info": {
+    "project_number": "823465219976",
+    "project_id": "ludo-pets",
+    "storage_bucket": "ludo-pets.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:823465219976:android:cd5b86d09b91269a5d8c3d",
+        "android_client_info": {
+          "package_name": "com.ages.ludopets"
         }
-    ],
-    "configuration_version": "1"
+      },
+      "oauth_client": [
+        {
+          "client_id": "823465219976-5t5443kohpdm9kda4ne1k4cib0gmcutd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ages.ludopets",
+            "certificate_hash": "ee8e0c1576d4873a0352f9e2c1a958fe2bd4d661"
+          }
+        },
+        {
+          "client_id": "823465219976-5gioroqbrn0134u220jagvasotqs7rbo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFoi2BYgJB2YOeafkWz4g7_x71BYvFvKE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "823465219976-5gioroqbrn0134u220jagvasotqs7rbo.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "823465219976-9tr8frv4ksgmeh6l3ai4tdgu4hfpcejg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ages.ludopets"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
 }
