@@ -56,7 +56,6 @@ jobs:
   export_pwa:
     name: Export PWA para Web
     runs-on: [ self-hosted, linux, x64 ]
-    needs: build_android
     steps:
       - name: Checkout do código
         uses: actions/checkout@v3
