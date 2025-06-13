@@ -2,21 +2,24 @@ name: CI
 
 on:
   push:
-    branches: [ feature/pipeline-migration, main ]
+    branches: [ main ]
+
+env:
+  GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
 
 jobs:
-  build:
+  build_android:
+    name: Build APK Android
     runs-on: [ self-hosted, Linux, X64 ]
     steps:
-      - name: Checkout do código
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Setup Node.js 22
         uses: actions/setup-node@v3
         with:
           node-version: 22
 
-      - name: Cache de node_modules
+      - name: Cache node_modules
         uses: actions/cache@v3
         with:
           path: node_modules
@@ -30,25 +33,20 @@ jobs:
           echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" | base64 -d > /tmp/service-account.json
         shell: bash
 
-      - name: Exportar variável GOOGLE_APPLICATION_CREDENTIALS
+      - name: Exportar GOOGLE_APPLICATION_CREDENTIALS
         run: echo "GOOGLE_APPLICATION_CREDENTIALS=/tmp/service-account.json" >> $GITHUB_ENV
 
       - name: Gerar APK via EAS
         run: |
           npx eas build --platform android --profile production --non-interactive --json > result.json
           APK_URL=$(jq -r '.[0].artifacts.buildUrl' result.json)
-          echo "APK URL: $APK_URL"
           curl -L -o app.apk "$APK_URL"
           file app.apk
-          if file app.apk | grep -q 'Zip archive data'; then
-            echo "Arquivo APK válido."
-          else
-            echo "Erro: o arquivo baixado não é um APK válido."
-            cat app.apk
-            exit 1
+          if ! file app.apk | grep -q 'Zip archive data'; then
+            echo "APK inválido!" && exit 1
           fi
 
-      - name: Distribuir via Firebase App Distribution
+      - name: Distribute via Firebase App Distribution
         env:
           FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
         run: npx firebase appdistribution:distribute app.apk --app $FIREBASE_ANDROID_APP_ID --groups "testadores"
@@ -56,16 +54,16 @@ jobs:
   export_pwa:
     name: Export PWA para Web
     runs-on: [ self-hosted, Linux, X64 ]
+    needs: build_android
     steps:
-      - name: Checkout do código
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Setup Node.js 22
         uses: actions/setup-node@v3
         with:
           node-version: 22
 
-      - name: Cache de node_modules
+      - name: Cache node_modules
         uses: actions/cache@v3
         with:
           path: node_modules
@@ -77,7 +75,7 @@ jobs:
       - name: Exportar PWA (Expo)
         run: npx expo export --platform web --output-dir dist
 
-      - name: Upload de artefatos
+      - name: Upload de dist
         uses: actions/upload-artifact@v3
         with:
           name: pwa-dist
@@ -87,12 +85,10 @@ jobs:
     name: Deploy PWA no Vercel
     runs-on: [ self-hosted, Linux, X64 ]
     needs: export_pwa
-    if: github.ref == 'refs/heads/main'
     steps:
-      - name: Checkout do código
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Download de artefatos
+      - name: Download de dist
         uses: actions/download-artifact@v3
         with:
           name: pwa-dist
