@@ -65,7 +65,7 @@ const isValidEmail = (email: string): boolean => {
 }
 
 export const updateUser = async (
-    userId: string,
+    userId: string, 
     userData: Partial<User>
 ): Promise<boolean> => {
     if (!userId || Object.keys(userData).length === 0) return false
@@ -73,11 +73,6 @@ export const updateUser = async (
     try {
         const userReference = doc(db, 'User', userId)
         await updateDoc(userReference, { ...userData });
-        console.log("atualizou")
-
-        setTimeout(() => {
-            showToast("Usuário atualizado com sucesghfdhjfdsfhjhfjdsghjkljggfdsghgjhkljghfdsso!",  'success' );
-        }, 100);
     } catch (error) {
         console.error('Erro ao atualizar User:', error)
         setTimeout(() => {

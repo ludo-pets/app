@@ -22,15 +22,15 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     Animated.timing(opacity, {
       toValue: 1,
       duration: 300,
-      useNativeDriver: true,
+      useNativeDriver: false,
     }).start(() => {
       setTimeout(() => {
         Animated.timing(opacity, {
           toValue: 0,
           duration: 300,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }).start(() => setToast(null));
-      }, 3000);
+      }, 4000);
     });
   };
 

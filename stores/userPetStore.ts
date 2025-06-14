@@ -3,6 +3,8 @@ import { getUserWithPetByEmail, updateUser } from '@/services/userService'
 import { updatePet } from '@/services/petService'
 import { Pet } from '@/dtos/Pet'
 import User from '@/dtos/User'
+import { CheckAchievementLevel, getAchievementByName } from '@/utils/AchievementHelper'
+import { showToast } from '@/utils/Toast'
 
 interface UserPetState {
     user: User | null
@@ -15,7 +17,7 @@ interface UserPetState {
     setUser: (user: User) => void
     setPet: (pet: Pet) => void
     setAchievements: (achievements: string) => void
-    updateAchievements: (achievements: string) => Promise<void>
+    updateAchievements: (achievement: string, title: string, content: string) => Promise<void>
 }
 
 export const useUserPetStore = create<UserPetState>((set, get) => ({
@@ -48,7 +50,8 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
             if (success) {
                 const oldUser = get().user
                 if (oldUser) {
-                    set({ user: { ...oldUser, ...userData } })
+                    set({ user: { ...oldUser, ...userData } })            
+                    CheckAchievementLevel(oldUser.level, userData.level);     
                 }
             } else {
                 set({ error: 'Erro ao atualizar o usuário' })
@@ -82,7 +85,7 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
     setUser: (user: User) => set({ user }),
     setPet: (pet: Pet) => set({ pet }),
 
-    updateAchievements: async (achievement: string) => {
+    updateAchievements: async (achievement: string, title: string, content: string) => {
         set({ error: null })
         try {
             const user = get().user
@@ -90,8 +93,13 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
                 const alreadyOwned = user.achievements.includes(achievement)
                 if (!alreadyOwned) {
                     const newAchievements = [...user.achievements, achievement]
+                    console.log(`Updating achievements for user ${user.id}:`, newAchievements)
                     await get().updateUser(user.id, { achievements: newAchievements})
                     set({ user: { ...user, achievements: newAchievements}})
+
+                     setTimeout(() => {
+                        showToast(title + ': ' + content, 'success' );
+                    }, 100);
                 }
             }
         } catch (error: any) {

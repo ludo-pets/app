@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Device from 'expo-device';
 import { Platform } from 'react-native';
 import { ToastProvider } from '@/components/Toast/ToastProvider';
+import { useAllAchievementsStore } from '@/stores/allAchievementsStore';
 
 type PetNeeds = {
   lastFed: number;
@@ -91,6 +92,11 @@ export default function RootLayout() {
               },
     });
   };
+
+  const fetchAllAchievements = useAllAchievementsStore(state => state.fetchAllAchievements)
+  useEffect(() => {
+    fetchAllAchievements()
+  }, [fetchAllAchievements]) 
 
   return (
       <ToastProvider>
