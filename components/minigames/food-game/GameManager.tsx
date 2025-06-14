@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, useEffect } from 'react'
 import { useGameConfig } from './GameConfig'
 import useFoods, { FoodItem, NewFood } from './Foods'
 import { useAudioPlayer , AudioPlayer} from 'expo-audio'
+import { useConfirmExit } from '@/hooks/usePreventNavigationExit'
 
 export type GameManagerType = {
     startGame: () => void
@@ -19,6 +20,8 @@ export type GameManagerType = {
     setGameOver: (gameOver: boolean) => void
     paused: boolean
     setPaused: (paused: boolean) => void
+    pauseGame: () => void
+    resumeGame: () => void
 }
 
 export const useGameManager = (): GameManagerType => {
@@ -110,6 +113,42 @@ export const useGameManager = (): GameManagerType => {
         stopAllAnimations()
         if (gameTimer.current) clearInterval(gameTimer.current)
         if (difficultyTimer.current) clearInterval(difficultyTimer.current)
+    }
+    /**
+     * Pausa o game
+     * Para os timers, animações e seta o estado de paused para true
+     */
+    function pauseGame () {
+        setPaused(true)
+        stopAllAnimations()
+
+        if(gameTimer.current){
+             clearInterval(gameTimer.current)
+             gameTimer.current = null
+        }
+        if(difficultyTimer.current) {
+            clearInterval(difficultyTimer.current)
+            difficultyTimer.current = null
+        }
+    }
+
+    function resumeGame() {
+        setPaused(false)
+        setFoods([])
+
+        if (gameTimer.current) clearInterval(gameTimer.current)
+        gameTimer.current = setInterval(() => {
+            if (gameStarted && !gameOver && !paused) {
+                spawnFood()
+            }
+        }, 2000)
+
+        if (difficultyTimer.current) clearInterval(difficultyTimer.current)
+        difficultyTimer.current = setInterval(() => {
+            if (!gameOver && !paused) {
+                increaseDifficulty()
+            }
+        }, 30000)
     }
 
     /**
@@ -307,6 +346,8 @@ export const useGameManager = (): GameManagerType => {
         gameOver,
         setGameOver,
         paused,
-        setPaused
+        setPaused,
+        pauseGame,
+        resumeGame
     }
 }

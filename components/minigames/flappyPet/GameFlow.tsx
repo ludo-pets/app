@@ -9,6 +9,7 @@ import { useConfirmExit } from '@/hooks/usePreventNavigationExit'
 import ConfirmExitModal from '@/components/ConfirmExitModal'
 
 export default function GameFlow() {
+    const gameManager = useGameManager()
     function onResume() {
         gameManager.setGameIdle(false)
         setGamePaused(false)
@@ -24,7 +25,7 @@ export default function GameFlow() {
         onPause,
     })
 
-    const gameManager = useGameManager()
+    
 
     const [gameKey, setGameKey] = useState(0)
     const [gamePaused, setGamePaused] = useState(false)

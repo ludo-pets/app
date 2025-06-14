@@ -1,9 +1,9 @@
-import { useEffect, useState, useContext } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import { useEffect, useState } from 'react'
+import { useNavigation, useFocusEffect } from '@react-navigation/native'
 
 interface useConfirmeExitProps {
-    onResume: VoidFunction
-    onPause: VoidFunction
+    onResume?: VoidFunction
+    onPause?: VoidFunction
 }
 
 export function useConfirmExit({ onResume, onPause }: useConfirmeExitProps) {
@@ -11,16 +11,20 @@ export function useConfirmExit({ onResume, onPause }: useConfirmeExitProps) {
     const [modalVisible, setModalVisible] = useState(false)
     const [pendingAction, setPendingAction] = useState<any>(null)
 
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('beforeRemove', (e) => {
+    useFocusEffect(() => {
+        const onBeforeRemove = (e: any) => {
             e.preventDefault()
             setModalVisible(true)
             setPendingAction(e.data.action)
-            onPause()
-        })
+            onPause?.()
+        }
 
-        return unsubscribe
-    }, [navigation])
+        const unsubscribe = navigation.addListener('beforeRemove', onBeforeRemove)
+
+        return () => {
+            unsubscribe()
+        }
+    })
 
     function onConfirm() {
         if (pendingAction) {
@@ -33,7 +37,7 @@ export function useConfirmExit({ onResume, onPause }: useConfirmeExitProps) {
     function onCancel() {
         setModalVisible(false)
         setPendingAction(null)
-        onResume()
+        onResume?.()
     }
 
     return {

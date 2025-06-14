@@ -8,7 +8,6 @@ import { useRouter } from 'expo-router'
 import { useConfirmExit } from '@/hooks/usePreventNavigationExit'
 import ConfirmExitModal from '@/components/ConfirmExitModal'
 
-
 const FoodGame = () => {
     const gameManager = useGameManager()
     const router = useRouter()
@@ -18,8 +17,10 @@ const FoodGame = () => {
         router.push('/home')
     }
 
-    const { modalVisible, onConfirm, onCancel } = useConfirmExit({onPause: () => {},onResume: () => {}
-});
+    const { modalVisible, onConfirm, onCancel } = useConfirmExit({
+        onPause: () => gameManager.pauseGame(),
+        onResume: () => gameManager.resumeGame(),
+    })
 
     return (
         <View style={styles.container}>
@@ -36,11 +37,12 @@ const FoodGame = () => {
                     coins={gameManager.coins}
                 />
             )}
+
             <ConfirmExitModal
-                      visible={modalVisible}
-                      onConfirm={onConfirm}
-                      onCancel={onCancel}
-                    />
+                visible={modalVisible}
+                onConfirm={onConfirm}
+                onCancel={onCancel}
+            />
 
             <Renderer gameManager={gameManager} />
         </View>
