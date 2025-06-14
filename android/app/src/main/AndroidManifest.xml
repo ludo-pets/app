@@ -28,6 +28,7 @@
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="myapp"/>
         <data android:scheme="exp+ludopets"/>
+        <data android:scheme="com.ages.ludopets"/>
       </intent-filter>
     </activity>
   </application>

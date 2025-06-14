@@ -14,6 +14,14 @@
             },
             "oauth_client": [
                 {
+                    "client_id": "823465219976-5t5443kohpdm9kda4ne1k4cib0gmcutd.apps.googleusercontent.com",
+                    "client_type": 1,
+                    "android_info": {
+                        "package_name": "com.ages.ludopets",
+                        "certificate_hash": "ee8e0c1576d4873a0352f9e2c1a958fe2bd4d661"
+                    }
+                },
+                {
                     "client_id": "823465219976-5gioroqbrn0134u220jagvasotqs7rbo.apps.googleusercontent.com",
                     "client_type": 3
                 }

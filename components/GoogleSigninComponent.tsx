@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
-import { Text, StyleSheet, Pressable, Image, Alert } from 'react-native'
-import * as Google from 'expo-auth-session/providers/google'
+import { Text, StyleSheet, Pressable, Image, Platform } from 'react-native'
 import * as AuthSession from 'expo-auth-session'
 import { GoogleAuthProvider, signInWithCredential } from 'firebase/auth'
 import { auth } from '../firebaseConfig'
@@ -10,69 +9,63 @@ import {
 } from '@/services/userService'
 import { useRouter } from 'expo-router'
 import { useUserPetStore } from '@/stores/userPetStore'
-import Constants from 'expo-constants';
-
+import { useIdTokenAuthRequest } from 'expo-auth-session/providers/google'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const redirectUri = AuthSession.makeRedirectUri({
-  scheme: 'com.ages.ludopets',
-  useProxy: false,
-});
-
-
-console.log('redirectUri', redirectUri)
-Alert.alert("Redirect URI", redirectUri);
+    useProxy: true,
+})
 
 export default function GoogleSigninButton() {
     const router = useRouter()
-
-    const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    clientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
-    iosClientId: process.env.EXPO_PUBLIC_IOS_CLIENT_ID,
-    androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
-    redirectUri: redirectUri,
-    });
-
+    const [request, response, promptAsync] = useIdTokenAuthRequest({
+        iosClientId: process.env.EXPO_PUBLIC_IOS_CLIENT_ID,
+        androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
+        expoClientId: process.env.EXPO_PUBLIC_EXPO_CLIENT_ID,
+        redirectUri,
+    })
 
     useEffect(() => {
         const authenticate = async () => {
-            if (response?.type === 'success') {
-                const idToken = response.authentication?.idToken;
-                if (!idToken) {
-                    console.error('No access token found in Google response.');
-                    return;
+            if (response?.type !== 'success') return
+
+            const idToken = response.params.id_token
+
+            if (!idToken) {
+                console.warn('No ID token returned from Google')
+                return
+            }
+
+            try {
+                const credential = GoogleAuthProvider.credential(idToken)
+                const userCredential = await signInWithCredential(
+                    auth,
+                    credential
+                )
+                const { uid, email } = userCredential.user
+
+                let user = await getUserWithPetByIdService(email!)
+                if (!user) {
+                    await createUserService({ uid, email })
+                    user = await getUserWithPetByIdService(email!)
                 }
 
-                try {
-                    const credential = GoogleAuthProvider.credential(idToken);
-
-                    const userCredential = await signInWithCredential(auth, credential);
-                    const userId = userCredential.user.uid;
-                    const email = userCredential.user.email;
-
-                    let user = await getUserWithPetByIdService(email!);
-
-                    if (!user) {
-                        await createUserService({ uid: userId, email });
-                        user = await getUserWithPetByIdService(email!);
-                    }
-
-                    if (user && user.pet) {
-                        await useUserPetStore.getState().fetchUserAndPet(email!);
-                        router.replace('/home');
-                    } else {
-                        router.replace({
-                            pathname: '/petCreate',
-                            params: { userId, email },
-                        });
-                    }
-                } catch (error) {
-                    console.error('Authentication error:', error);
+                if (user?.pet) {
+                    await useUserPetStore.getState().fetchUserAndPet(email!)
+                    router.replace('/home')
+                } else {
+                    router.replace({
+                        pathname: '/petCreate',
+                        params: { userId: uid, email },
+                    })
                 }
+            } catch (error) {
+                console.error('Authentication error:', error)
             }
         }
 
-        authenticate();
-    }, [response]);
+        authenticate()
+    }, [response])
 
     return (
         <Pressable

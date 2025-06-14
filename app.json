@@ -63,7 +63,9 @@
                 {
                     "iosUrlScheme": "com.googleusercontent.apps.823465219976-9tr8frv4ksgmeh6l3ai4tdgu4hfpcejg"
                 }
-            ]
+            ],
+            "expo-audio",
+            "expo-secure-store"
         ],
         "experiments": {
             "typedRoutes": true

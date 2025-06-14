@@ -7,9 +7,9 @@ const route = () => {
     router.replace('/(tabs)/home')
 }
 
-export default function RegisterPetPage() {
-    WebBrowser.maybeCompleteAuthSession()
+WebBrowser.maybeCompleteAuthSession()
 
+export default function RegisterPetPage() {
     return (
         <View style={styles.containerBox}>
             <View style={styles.mainContent}>

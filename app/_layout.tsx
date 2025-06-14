@@ -1,10 +1,13 @@
 import * as React from 'react'
 import * as SplashScreen from 'expo-splash-screen'
+import * as WebBrowser from 'expo-web-browser'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { useFonts } from 'expo-font'
 import { useEffect } from 'react'
-import { Stack } from 'expo-router'
+import { Stack, Redirect } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
+
+WebBrowser.maybeCompleteAuthSession()
 
 export { ErrorBoundary } from 'expo-router'
 
@@ -25,14 +28,10 @@ export default function RootLayout() {
     }, [error])
 
     useEffect(() => {
-        if (loaded) {
-            SplashScreen.hideAsync()
-        }
+        if (loaded) SplashScreen.hideAsync()
     }, [loaded])
 
-    if (!loaded) {
-        return null
-    }
+    if (!loaded) return null
 
     return <RootLayoutNav />
 }
@@ -41,6 +40,11 @@ function RootLayoutNav() {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#fefefe' }}>
             <Stack>
+                <Stack.Screen
+                    name="oauthredirect"
+                    options={{ headerShown: false }}
+                />
+
                 <Stack.Screen name="index" options={{ headerShown: false }} />
                 <Stack.Screen
                     name="quizSummary"
@@ -52,9 +56,7 @@ function RootLayoutNav() {
                 />
                 <Stack.Screen
                     name="quizGame"
-                    options={{
-                        headerShown: false, // Remove the default header
-                    }}
+                    options={{ headerShown: false }}
                 />
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             </Stack>

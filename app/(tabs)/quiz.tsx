@@ -28,7 +28,7 @@ export default function QuizScreen() {
         (state: { loading: boolean }) => state.loading
     )
     const user = useUserPetStore((state) => state.user)
-    const [lastLessonConcludedId, setLastLessonConcludedId] = useState(1)
+    const [lastLessonConcludedId, setLastLessonConcludedId] = useState(0)
     const { setLesson, changeToNextQuestion } = useLessonStore()
     const router = useRouter()
 

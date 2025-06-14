@@ -27,7 +27,8 @@
                 "EXPO_PUBLIC_FIREBASE_APP_ID": "1:823465219976:android:cd5b86d09b91269a5d8c3d",
                 "EXPO_PUBLIC_ANDROID_CLIENT_ID": "823465219976-5t5443kohpdm9kda4ne1k4cib0gmcutd.apps.googleusercontent.com",
                 "EXPO_PUBLIC_IOS_CLIENT_ID": "823465219976-9tr8frv4ksgmeh6l3ai4tdgu4hfpcejg.apps.googleusercontent.com",
-                "EXPO_PUBLIC_WEB_CLIENT_ID": "823465219976-5gioroqbrn0134u220jagvasotqs7rbo.apps.googleusercontent.com"
+                "EXPO_PUBLIC_WEB_CLIENT_ID": "823465219976-5gioroqbrn0134u220jagvasotqs7rbo.apps.googleusercontent.com",
+                "EXPO_PUBLIC_AUTH_STATE_KEY": "LUDOPETS_AUTH_STATE_KEY"
             }
         }
     }
