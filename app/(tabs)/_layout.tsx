@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import {
     House,
     Storefront,
@@ -13,6 +13,8 @@ import { usePathname } from 'expo-router'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { NavigationState } from '@react-navigation/native'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
+import { auth } from '@/firebaseConfig'
+import { signOut } from 'firebase/auth'
 
 const iconsSize = 32
 
@@ -49,7 +51,7 @@ export default function TabLayout() {
 
     const router = useRouter()
 
-    const { user, setPet } = useUserPetStore()
+    const { user, setPet, setUser } = useUserPetStore()
 
     if (!user) {
         return <Redirect href="/" />
@@ -66,9 +68,12 @@ export default function TabLayout() {
 
     const headerTitle = headerTitles[pathname] || ''
 
-    const logout = () => {
+    const logout = async () => {
+        await signOut(auth)
+        setUser(null)
         setPet(null)
-        router.replace('/')
+
+        router.replace("/")
     }
 
     const logoutButton = (
