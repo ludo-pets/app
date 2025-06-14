@@ -3,7 +3,7 @@ import { getUserWithPetByEmail, updateUser } from '@/services/userService'
 import { updatePet } from '@/services/petService'
 import { Pet } from '@/dtos/Pet'
 import User from '@/dtos/User'
-import { CheckAchievementLevel, getAchievementByName } from '@/utils/AchievementHelper'
+import { CheckAchievementLevel, CheckAchievementMoney, getAchievementByName } from '@/utils/AchievementHelper'
 import { showToast } from '@/utils/Toast'
 
 interface UserPetState {
@@ -51,7 +51,8 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
                 const oldUser = get().user
                 if (oldUser) {
                     set({ user: { ...oldUser, ...userData } })            
-                    CheckAchievementLevel(oldUser.level, userData.level);     
+                    CheckAchievementLevel(oldUser.level, userData.level);
+                    CheckAchievementMoney(oldUser.money, userData.money || oldUser.money);     
                 }
             } else {
                 set({ error: 'Erro ao atualizar o usuário' })
