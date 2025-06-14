@@ -30,6 +30,7 @@ jobs:
 
       - name: Decodificar credenciais Google
         run: |
+          sudo su
           echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" | base64 -d > /tmp/service-account.json
         shell: bash
 
@@ -38,7 +39,6 @@ jobs:
 
       - name: Gerar APK via EAS
         run: |
-          sudo su
           npx eas build --platform android --profile production --non-interactive --json > result.json
           APK_URL=$(jq -r '.[0].artifacts.buildUrl' result.json)
           curl -L -o app.apk "$APK_URL"
