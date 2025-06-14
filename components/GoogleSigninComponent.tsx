@@ -10,7 +10,6 @@ import {
 import { useRouter } from 'expo-router'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { useIdTokenAuthRequest } from 'expo-auth-session/providers/google'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const redirectUri = AuthSession.makeRedirectUri({
     useProxy: true,
