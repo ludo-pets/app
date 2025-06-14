@@ -1,6 +1,6 @@
 import { StyleSheet, View, Dimensions, Pressable, Platform } from 'react-native'
-import Gato from '@/assets/images/pets/gato.svg'
-import Cachorro from '@/assets/images/pets/cachorro.svg'
+import Gato from '@/assets/images/pets/gato/gato.svg'
+import Cachorro from '@/assets/images/pets/cachorro/cachorro.svg'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { PetOption } from '../FormRegisterPet'
 import GenericIcon from '../GenericIcon'

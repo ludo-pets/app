@@ -16,8 +16,8 @@ import React from 'react'
 import XpBar from '@/components/XpBar'
 import { colorsOptions, PetOption } from '@/components/FormRegisterPet'
 
-import Gato from '@/assets/images/pets/gato.svg'
-import Cachorro from '@/assets/images/pets/cachorro.svg'
+import Gato from '@/assets/images/pets/gato/gato.svg'
+import Cachorro from '@/assets/images/pets/cachorro/cachorro.svg'
 import { PetOptionFormRegisterPet } from '@/components/PetOptionFormRegisterPet'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { useRouter } from 'expo-router'
@@ -97,11 +97,14 @@ export default function Profile() {
         <SafeAreaView style={styles.safeArea}>
             <ScrollView>
                 <View style={styles.container}>
-                    <XpBar xp={user?.experience || 0} level={user?.level || 1} />
+                    <XpBar
+                        xp={user?.experience || 0}
+                        level={user?.level || 1}
+                    />
                     <View style={styles.petContainer}>
                         <PetOptionFormRegisterPet
                             Icon={pets[0].icon}
-                            onSelect={() => { }}
+                            onSelect={() => {}}
                             selected={false}
                             onlyPet={false}
                             color={petColor || '#7D5D56'}
@@ -139,7 +142,7 @@ export default function Profile() {
                                             { backgroundColor: color.color },
                                             styles.colorOption,
                                             colorSelected &&
-                                            styles.colorOptionActive,
+                                                styles.colorOptionActive,
                                         ]}
                                         onPress={() => {
                                             if (!isEditing) {
@@ -153,8 +156,13 @@ export default function Profile() {
                         </View>
                         <View style={styles.infoContainer}>
                             <View style={styles.coinsContainer}>
-                                <Image source={coinIcon} style={styles.coinIcon} />
-                                <Text style={styles.coinsText}>{user?.money}</Text>
+                                <Image
+                                    source={coinIcon}
+                                    style={styles.coinIcon}
+                                />
+                                <Text style={styles.coinsText}>
+                                    {user?.money}
+                                </Text>
                             </View>
 
                             <View style={styles.notificationContainer}>
@@ -182,13 +190,18 @@ export default function Profile() {
                                 style={styles.saveButton}
                                 onPress={() => updatePet()}
                             >
-                                <Text style={styles.saveButtonText}>Salvar</Text>
+                                <Text style={styles.saveButtonText}>
+                                    Salvar
+                                </Text>
                             </TouchableOpacity>
                         )}
                     </View>
 
                     {!isEditing && (
-                        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                        <ScrollView
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                        >
                             {achievements.map((achievement) => (
                                 <View key={achievement.id}>
                                     <Achievement
@@ -249,7 +262,7 @@ const createStyles = (isSmallScreen: boolean) =>
             borderColor: '#D9D0E3',
             borderRadius: 8,
             borderStyle: 'solid',
-            backgroundColor: '#FFF', 
+            backgroundColor: '#FFF',
         },
         header: {
             width: '100%',

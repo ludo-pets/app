@@ -38,7 +38,18 @@ const BedItem = ({ setInteractingWithItem, update }: ItemProps) => {
     }
 
     return (
-        <View style={styles.cbox}>
+        <View
+            style={{
+                width: itemClicked ? 210 : '44.2%',
+                height: itemClicked ? 120 : '15%',
+                position: 'absolute',
+                bottom: Platform.OS === 'ios' ? height / 4.0 : height / 3.33,
+                left: width / 1.8,
+                justifyContent: 'center',
+                alignItems: 'center',
+                display: 'flex',
+            }}
+        >
             {isSleepy && (
                 <View style={styles.alertContainer}>
                     <Image
@@ -51,18 +62,25 @@ const BedItem = ({ setInteractingWithItem, update }: ItemProps) => {
                     />
                 </View>
             )}
-            <TouchableWithoutFeedback onPress={onPress}>
+            <TouchableWithoutFeedback
+                onPress={onPress}
+                style={
+                    itemClicked
+                        ? { width: 210, height: 120 }
+                        : { width: '100%', height: '100%' }
+                }
+            >
                 <Image
-                    style={{
-                        width: '100%',
-                        height: '100%',
-                        resizeMode: 'contain',
-                    }}
+                    style={
+                        itemClicked
+                            ? { width: 210, height: 120 }
+                            : { width: '100%', height: '100%' }
+                    }
                     source={
                         itemClicked
                             ? pet?.type == 'cat'
-                                ? require('@/assets/images/pets/gato-dormindo.svg')
-                                : require('@/assets/images/pets/cachorro-dormindo.svg')
+                                ? require('@/assets/images/pets/gato/gato-dormindo.png')
+                                : require('@/assets/images/pets/cachorro/cachorro-dormindo.png')
                             : require('@/assets/images/homescreen/almofada.png')
                     }
                 />

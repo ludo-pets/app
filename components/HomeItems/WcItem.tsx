@@ -53,11 +53,21 @@ const WcItem = ({ setInteractingWithItem, update }: ItemProps) => {
             )}
             <TouchableWithoutFeedback onPress={onPress}>
                 <Image
-                    style={{ width: '100%', height: '100%' }}
+                    style={
+                        itemClicked
+                            ? {
+                                  width: 226,
+                                  height: 172,
+                                  position: 'absolute',
+                                  bottom: 0,
+                                  right: 0,
+                              }
+                            : { width: '100%', height: '100%' }
+                    }
                     source={
                         itemClicked
                             ? pet?.type == 'cat'
-                                ? require('@/assets/images/pets/gato-banheiro.svg')
+                                ? require('@/assets/images/pets/gato/gato-banheiro.png')
                                 : require('@/assets/images/homescreen/caixa_de_areia.png') //!trocar para o svg do cachorro
                             : require('@/assets/images/homescreen/caixa_de_areia.png')
                     }

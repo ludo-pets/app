@@ -52,16 +52,16 @@ const FoodItem = ({ setInteractingWithItem, update }: ItemProps) => {
             )}
             <TouchableWithoutFeedback onPress={onPress}>
                 <Image
-                    style={{
-                        width: '100%',
-                        height: '100%',
-                        resizeMode: 'contain',
-                    }}
+                    style={
+                        itemClicked
+                            ? { width: 196, height: 136, position: 'absolute', bottom: 4, left: -2 }
+                            : { width: '100%', height: '100%' }
+                    }
                     source={
                         itemClicked
                             ? pet?.type == 'cat'
-                                ? require('@/assets/images/pets/gato-comendo.svg')
-                                : require('@/assets/images/pets/cachorro-comendo.svg')
+                                ? require('@/assets/images/pets/gato/gato-comendo.png')
+                                : require('@/assets/images/pets/cachorro/cachorro-comendo.png')
                             : require('@/assets/images/homescreen/poteC.png')
                     }
                 />

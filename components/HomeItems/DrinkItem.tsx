@@ -52,16 +52,22 @@ const DrinkItem = ({ setInteractingWithItem, update }: ItemProps) => {
             )}
             <TouchableWithoutFeedback onPress={onPress}>
                 <Image
-                    style={{
-                        width: '100%',
-                        height: '100%',
-                        resizeMode: 'contain',
-                    }}
+                    style={
+                        itemClicked
+                            ? {
+                                  width: 236,
+                                  height: 166,
+                                  position: 'absolute',
+                                  bottom: 0,
+                                  left: 0,
+                              }
+                            : { width: '100%', height: '100%' }
+                    }
                     source={
                         itemClicked
                             ? pet?.type == 'cat'
-                                ? require('@/assets/images/pets/gato-bebendo.svg')
-                                : require('@/assets/images/pets/cachorro-bebendo.svg')
+                                ? require('@/assets/images/pets/gato/gato-bebendo.png')
+                                : require('@/assets/images/pets/cachorro/cachorro-bebendo.png')
                             : require('@/assets/images/homescreen/poteB.png')
                     }
                 />

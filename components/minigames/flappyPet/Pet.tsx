@@ -1,8 +1,8 @@
 import { gameConstants } from '@/constants/minigames/flappyPet/game'
 import { Animated, StyleSheet, Image } from 'react-native'
 import { useUserPetStore } from '@/stores/userPetStore'
-import Gato from '@/assets/images/pets/gato.svg'
-import Cachorro from '@/assets/images/pets/cachorro.svg'
+import Gato from '@/assets/images/pets/gato/gato.svg'
+import Cachorro from '@/assets/images/pets/cachorro/cachorro.svg'
 
 interface PetProps {
     positionY: Animated.Value

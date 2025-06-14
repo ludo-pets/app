@@ -53,15 +53,15 @@ const ToyItem = ({ setInteractingWithItem, update }: ItemProps) => {
             )}
             <TouchableWithoutFeedback onPress={onPress}>
                 <Image
-                    style={{
-                        width: '100%',
-                        height: '100%',
-                        resizeMode: 'contain',
-                    }}
+                style={
+                    itemClicked
+                        ? { width: 270, height: 305, position: 'absolute', bottom: 16, left: -14 }
+                        : { width: '100%', height: '100%', resizeMode: 'contain'}
+                }
                     source={
                         itemClicked
                             ? pet?.type == 'cat'
-                                ? require('@/assets/images/pets/gato-brincando.svg')
+                                ? require('@/assets/images/pets/gato/gato-brincando.png')
                                 : require('@/assets/images/homescreen/brinquedo.png') //!trocar para o svg do cachorro
                             : require('@/assets/images/homescreen/brinquedo.png')
                     }
