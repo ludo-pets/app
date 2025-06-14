@@ -45,7 +45,46 @@ const CheckAchievementLevel = async (oldLevel : number, newLevel : undefined | n
     }
 }
 
-export {getAchievementByName, CheckAchievementLevel};
+
+const CheckAchievementMoney = async (oldMoney: number, newMoney: number) => {
+    if (newMoney <= oldMoney) {
+        return;
+    }
+
+    // Moeda I
+    if (oldMoney < 100 && newMoney >= 100) {
+        const achievement = getAchievementByName("Primeira Fortuna");
+        if (achievement) {
+            await useUserPetStore.getState().updateAchievements(achievement.id, achievement.name, achievement.message);
+        }
+    }
+
+    // Moeda II
+    if (oldMoney < 500 && newMoney >= 500) {
+        const achievement = getAchievementByName("Cofrinho Recheado");
+        if (achievement) {
+            await useUserPetStore.getState().updateAchievements(achievement.id, achievement.name, achievement.message);
+        }
+    }
+
+    // Moeda III
+    if (oldMoney < 1000 && newMoney >= 1000) {
+        const achievement = getAchievementByName("Magnata");
+        if (achievement) {
+            await useUserPetStore.getState().updateAchievements(achievement.id, achievement.name, achievement.message);
+        }
+    }
+
+    // Moeda IV
+    if (oldMoney < 10000 && newMoney >= 10000) {
+        const achievement = getAchievementByName("Milhonário");
+        if (achievement) {
+            await useUserPetStore.getState().updateAchievements(achievement.id, achievement.name, achievement.message);
+        }
+    }    
+}
+
+export {getAchievementByName, CheckAchievementLevel, CheckAchievementMoney};
 
 
 
