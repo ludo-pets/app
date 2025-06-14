@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1749440224091" clover="3.2.0">
-  <project timestamp="1749440224091" name="All files">
+<coverage generated="1749862456049" clover="3.2.0">
+  <project timestamp="1749862456049" name="All files">
     <metrics statements="164" coveredstatements="164" conditionals="35" coveredconditionals="35" methods="22" coveredmethods="22" elements="221" coveredelements="221" complexity="0" loc="164" ncloc="164" packages="1" files="7" classes="7"/>
     <file name="achievementService.ts" path="C:\Users\erikv\OneDrive\Documentos\Faculdade\5_sem\AGES II\app\services\achievementService.ts">
       <metrics statements="13" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
