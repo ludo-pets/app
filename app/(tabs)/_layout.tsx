@@ -27,6 +27,7 @@ import {
 
 
 const iconsSize = 32
+export const toastRef: any = React.createRef();
 
 const iconMap = {
     home: House,

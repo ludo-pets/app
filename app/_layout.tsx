@@ -5,6 +5,7 @@ import * as Notifications from 'expo-notifications';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Device from 'expo-device';
 import { Platform } from 'react-native';
+import { ToastProvider } from '@/components/Toast/ToastProvider';
 
 type PetNeeds = {
   lastFed: number;
@@ -92,18 +93,15 @@ export default function RootLayout() {
   };
 
   return (
+      <ToastProvider>
         <SafeAreaView style={{ flex: 1, backgroundColor: '#fefefe' }}>
-            <Stack>
-                <Stack.Screen name="index" options={{ headerShown: false }} />
-                <Stack.Screen name="quizSummary" options={{ headerShown: false }} />
-                <Stack.Screen
-                    name="quizGame"
-                    options={{
-                        headerShown: false,
-                    }}
-                />
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            </Stack>
+          <Stack>
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name="quizSummary" options={{ headerShown: false }} />
+            <Stack.Screen name="quizGame" options={{ headerShown: false }} />
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          </Stack>
         </SafeAreaView>
+      </ToastProvider>       
     )
 }
