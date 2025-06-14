@@ -1,52 +1,68 @@
-import React, { useEffect, useState } from 'react'
-import { ActivityIndicator, Image, StyleSheet, View } from 'react-native'
+import React, { useEffect, useState, useCallback } from 'react'
+import { ActivityIndicator, StyleSheet, View } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Homescreen from '@/components/Homescreen'
 import MoodBar from '@/components/MoodBar'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { calcPetMood } from '@/utils/moodCalculator'
 import type { Mood } from '@/utils/moodCalculator'
-
 import PetCareModal from '@/components/PetCareDialog'
 import { useWalkthrough } from '@/contexts/WalkthroughContext'
-import { usePathname } from 'expo-router'
 
 const CARE_FLAG = 'appCareFlagModal_v0'
 
 export default function HomeScreen() {
-    const pathname = usePathname()
-    const user = useUserPetStore((state) => state.user)
-    const loading = useUserPetStore((state) => state.loading)
-    const pet = useUserPetStore((state) => state.pet)
+    const user = useUserPetStore((s) => s.user)
+    const loading = useUserPetStore((s) => s.loading)
+    const pet = useUserPetStore((s) => s.pet)
 
     const [mood, setMood] = useState<Mood>()
+    const [showModal, setShowModal] = useState(false)
+    const [ready, setReady] = useState(false)
 
-    const [showModal, setModal] = useState(false)
-    const { isCompleted } = useWalkthrough();
-    
+    const { isCompleted } = useWalkthrough()
+
     useEffect(() => {
         if (pet) setMood(calcPetMood(pet.wellBeing))
     }, [pet])
 
     useEffect(() => {
-    if (pathname !== '/home' || !isCompleted) return
+        if (!isCompleted) return
 
-    let cancelled = false
-    ;(async () => {
-      const flag = await AsyncStorage.getItem(CARE_FLAG)
-      if (!cancelled && flag === null) {
-        setModal(true)
-      }
-    })()
-    return () => {
-      cancelled = true
-    }
-  }, [pathname, isCompleted])
+        let cancelled = false
+        ;(async () => {
+            try {
+                const flag = await AsyncStorage.getItem(CARE_FLAG)
+                if (!cancelled && flag !== 'true') setShowModal(true)
+            } finally {
+                if (!cancelled) setReady(true)
+            }
+        })()
 
-    const handleStart = async () => {
-        await AsyncStorage.setItem(CARE_FLAG, 'true')
-        setModal(false)
-    }
+        return () => {
+            cancelled = true
+        }
+    }, [isCompleted])
+
+    const persistFlag = useCallback(async () => {
+        try {
+            await AsyncStorage.setItem(CARE_FLAG, 'true')
+        } catch (err) {
+            console.error('Failed to persist care flag', err)
+        }
+    }, [])
+
+    const handleStart = useCallback(async () => {
+        await persistFlag()
+        setShowModal(false)
+    }, [persistFlag])
+
+    const handleDismiss = useCallback(async () => {
+        await persistFlag()
+        setShowModal(false)
+    }, [persistFlag])
+
+    if (!ready) return null
 
     return (
         <View style={styles.container}>
@@ -65,7 +81,7 @@ export default function HomeScreen() {
             <PetCareModal
                 visible={showModal}
                 onStart={handleStart}
-                onDismiss={() => setModal(false)}
+                onDismiss={handleDismiss}
             />
         </View>
     )
