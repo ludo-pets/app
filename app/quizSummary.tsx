@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     },
     wrongAnswer: {
         backgroundColor :"#EDB0B0",
-        padding: 15,
+        padding: 2,
         color: "#5B5B5B",
         fontSize: 14,
         borderColor: "#5B5B5B",
@@ -153,6 +153,8 @@ const styles = StyleSheet.create({
         textAlign: "center",
         alignItems: "center",
         minHeight: 60,
+        alignContent: 'center',
+        justifyContent: 'center',
     },
     summary: {
         fontSize: 16,
