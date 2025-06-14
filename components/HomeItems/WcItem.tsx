@@ -9,6 +9,7 @@ import ItemProps from '@/dtos/ItensProps'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { calcPetMood } from '@/utils/moodCalculator'
 import { useState } from 'react'
+import { useEffect } from 'react'
 
 const { height, width } = Dimensions.get('window')
 
@@ -22,6 +23,10 @@ const WcItem = ({ update }: ItemProps) => {
         }
         return false
     }
+
+    useEffect(() => {
+        setIsDirty(needsCleaning())
+    }, [pet])
 
     const [isDirty, setIsDirty] = useState(needsCleaning())
     const onPress = () => {
