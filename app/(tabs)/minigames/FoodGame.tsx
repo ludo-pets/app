@@ -5,10 +5,19 @@ import StarterGameDialog from '../../../components/minigames/food-game/StarterGa
 import React from 'react'
 import EndGameDialog from '../../../components/minigames/food-game/EndGameDialog'
 import { useRouter } from 'expo-router'
+import { useFocusEffect } from '@react-navigation/native'
 
 const FoodGame = () => {
     const gameManager = useGameManager()
     const router = useRouter()
+
+    useFocusEffect(
+            React.useCallback(() => {
+                return () => {
+                    gameManager.cleanup();
+                };
+            }, [])
+        );
 
     const handleContinue = () => {
         gameManager.setGameOver(false)

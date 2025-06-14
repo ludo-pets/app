@@ -20,6 +20,8 @@ export const getMinigameByIdService = async (
             id: minigameData.id,
             givenMoney: minigameData.givenMoney,
             name: minigameData.name,
+            image: '',
+            description: ''
         }
 
         return { minigame }

@@ -15,7 +15,7 @@ import { useState } from 'react'
 import Gato from '@/assets/images/pets/gato.svg'
 import Cachorro from '@/assets/images/pets/cachorro.svg'
 import { SvgProps } from 'react-native-svg'
-import { addPet } from '@/services/postPet'
+import { addPet } from '@/services/petService'
 import { useNavigation } from '@react-navigation/native'
 
 export type PetOption = {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { Dimensions, StyleSheet } from 'react-native'
 
@@ -9,6 +9,7 @@ import { Nail } from '../../../components/minigames/nail-trim-game/types'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { useRouter } from 'expo-router'
 import { useMinigameStore } from '@/stores/minigameStore'
+import { useFocusEffect } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window')
 
@@ -63,6 +64,17 @@ export default function NailTrimGame() {
             fetchMinigame(minigameId)
         }
     }, [minigame, minigameId, fetchMinigame])
+
+    useFocusEffect(
+        useCallback(() => {
+            setScore(0);
+            return () => {
+            setStarted(false);
+            setEnded(false);
+            setScore(0);
+            };
+        }, [])
+    );
 
     const endGame = async () => {
         if (user && minigame) {
