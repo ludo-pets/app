@@ -110,6 +110,7 @@ export default function QuizScreen() {
                                                         ? paws
                                                         : pawsTravled
                                                 }
+                                                style={styles.pawImage}
                                             />
                                             <Image
                                                 source={
@@ -118,6 +119,7 @@ export default function QuizScreen() {
                                                         ? paws
                                                         : pawsTravled
                                                 }
+                                                style={styles.pawImage}
                                             />
                                         </View>
                                     )}
@@ -151,4 +153,8 @@ const styles = StyleSheet.create({
         marginTop: 5,
         marginBottom: 7,
     },
+    pawImage: {
+        height: 30,
+        width: 30,
+    }
 })
