@@ -10,6 +10,7 @@ import { useUserPetStore } from '@/stores/userPetStore'
 import { useRouter } from 'expo-router'
 import { useMinigameStore } from '@/stores/minigameStore'
 import { useFocusEffect } from '@react-navigation/native';
+import { checkAchievementMinigameFirstTime } from '@/utils/AchievementHelper'
 
 const { width } = Dimensions.get('window')
 
@@ -81,6 +82,7 @@ export default function NailTrimGame() {
             await userUpdate(user.id, {
                 money: user.money + minigame.givenMoney,
             })
+            checkAchievementMinigameFirstTime("Cortar Unhas")
             setGameKey(gameKey + 1)
             setStarted(false)
             setEnded(false)

@@ -6,6 +6,7 @@ import React from 'react'
 import EndGameDialog from '../../../components/minigames/food-game/EndGameDialog'
 import { useRouter } from 'expo-router'
 import { useFocusEffect } from '@react-navigation/native'
+import { checkAchievementMinigameFirstTime } from '@/utils/AchievementHelper'
 
 const FoodGame = () => {
     const gameManager = useGameManager()
@@ -21,6 +22,7 @@ const FoodGame = () => {
 
     const handleContinue = () => {
         gameManager.setGameOver(false)
+        checkAchievementMinigameFirstTime("Barriga Cheia")
         router.push('/home')
     }
 

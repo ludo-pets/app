@@ -45,7 +45,37 @@ const CheckAchievementLevel = async (oldLevel : number, newLevel : undefined | n
     }
 }
 
-export {getAchievementByName, CheckAchievementLevel};
+const checkAchievementMinigameFirstTime = async (achievementName : string) => {
+    const user = useUserPetStore.getState().user;
+
+    // Jogo Hora da Patinha
+    if(achievementName === "Cortar Unhas") {
+        const achievement = getAchievementByName(achievementName);
+        if(achievement != null && !(user?.achievements.includes(achievement.id))) {
+            await useUserPetStore.getState().updateAchievements(achievement.id, achievement.name, achievement.message);
+        }
+    }
+
+    // Jogo Comilança Maluca
+    if(achievementName === "Barriga Cheia") {
+        const achievement = getAchievementByName(achievementName);
+        if(achievement != null && !(user?.achievements.includes(achievement.id))) {
+            await useUserPetStore.getState().updateAchievements(achievement.id, achievement.name, achievement.message);
+        }
+    }
+
+    // Jogo Flappy Pet
+    if(achievementName === "Olha o aviãozinho!") {
+        const achievement = getAchievementByName(achievementName);
+        if(achievement != null && !(user?.achievements.includes(achievement.id))) {
+            await useUserPetStore.getState().updateAchievements(achievement.id, achievement.name, achievement.message);
+        }
+    }
+
+    
+}
+
+export {getAchievementByName, CheckAchievementLevel, checkAchievementMinigameFirstTime};
 
 
 

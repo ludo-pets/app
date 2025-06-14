@@ -5,6 +5,7 @@ import { router, useNavigation } from 'expo-router'
 import { useLayoutEffect, useState } from 'react'
 import useGameManager from '@/hooks/minigames/flappyPet/useGameManager'
 import { View, Pressable, StyleSheet, Text, Image } from 'react-native'
+import { checkAchievementMinigameFirstTime } from '@/utils/AchievementHelper'
 
 export default function GameFlow() {
     // images
@@ -32,6 +33,7 @@ export default function GameFlow() {
     function handleContinue() {
         gameManager.resetGame()
         setGameKey((prev) => prev + 1)
+        checkAchievementMinigameFirstTime("Olha o aviãozinho!")
         router.push('/home')
     }
 
