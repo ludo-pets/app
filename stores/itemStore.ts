@@ -27,7 +27,7 @@ export const useItemStore = create<ItemStoreState>((set) => ({
             }
         } catch (error: any) {
             set({
-                error: error.message || 'Erro ao buscar itens',
+                error: error.message ?? 'Erro ao buscar itens',
                 loading: false,
             })
         }

@@ -14,6 +14,7 @@ const config: Config = {
   collectCoverage: true,
   collectCoverageFrom: [
     "services/**/*.ts",
+    "stores/**/*.ts",
   ],
   coverageDirectory: './coverage',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],

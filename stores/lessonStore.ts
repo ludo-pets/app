@@ -1,9 +1,6 @@
 import { create } from 'zustand'
 import Lesson from '@/dtos/Lesson'
-import {
-    getLessonByIdService,
-    markLessonAsConcluded,
-} from '@/services/lessonService'
+import { getLessonByIdService } from '@/services/lessonService'
 import Question from '@/dtos/Question'
 import { fetchQuestion } from '@/services/questionsService'
 
@@ -51,6 +48,10 @@ export const useLessonStore = create<LessonState>((set) => ({
     finishLesson: async (lesson: Lesson) => {
         set({ loading: true, error: null })
         try {
+            if (!lesson) {
+                throw new Error('Tentativa de finalizar uma lição nula.')
+            }
+
             set({
                 lesson: {
                     ...lesson,
