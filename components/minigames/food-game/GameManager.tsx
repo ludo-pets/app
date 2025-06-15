@@ -35,9 +35,7 @@ export const useGameManager = (): GameManagerType => {
         updateCurrentLives,
         checkCollision,
         stopAllAnimations
-        
     } = useFoods({ config, paused })
-
 
     const [characterPosition, setCharacterPosition] = useState(
         config.SCREEN_WIDTH / 2 - config.CHARACTER_WIDTH / 2
@@ -57,7 +55,14 @@ export const useGameManager = (): GameManagerType => {
     const [lifes, setLifes] = useState(3)
     const [coins, setCoins] = useState(0)
 
-    // Adiciona um ref para controlar as colisões já processadas
+    const pausedRef = useRef(paused)
+    const gameStartedRef = useRef(gameStarted)
+    const gameOverRef = useRef(gameOver)
+
+    useEffect(() => { pausedRef.current = paused }, [paused])
+    useEffect(() => { gameStartedRef.current = gameStarted }, [gameStarted])
+    useEffect(() => { gameOverRef.current = gameOver }, [gameOver])
+
     const processedCollisions = useRef<Set<number>>(new Set())
 
     const eatingGoodFood: AudioPlayer = useAudioPlayer(require('@/assets/images/minigames/food-game/eating_good_food.mp3'))
@@ -65,10 +70,6 @@ export const useGameManager = (): GameManagerType => {
     const eatingBadFood: AudioPlayer = useAudioPlayer(require('@/assets/images/minigames/food-game/angry_cat.mp3'))
     const lifeSound: AudioPlayer = useAudioPlayer(require('@/assets/images/minigames/food-game/lifeSound.mp3'))
 
-    /**
-     * inicia o jogo
-     * seta todos os estaods e inicia os timers
-     */
     const startGame = () => {
         processedCollisions.current.clear()
         setGameStarted(true)
@@ -81,29 +82,8 @@ export const useGameManager = (): GameManagerType => {
         updateCurrentLives(3)
         setLifes(3)
         setPaused(false)
-
-        if (gameTimer.current) clearInterval(gameTimer.current)
-        if (difficultyTimer.current) clearInterval(difficultyTimer.current)
-
-        // Inicia o timer de spawn
-        gameTimer.current = setInterval(() => {
-            if (gameStarted && !gameOver) {
-                spawnFood()
-            }
-        }, 1500)
-
-        // Inicia o timer de dificuldade
-        difficultyTimer.current = setInterval(() => {
-            if (!gameOver) {
-                increaseDifficulty()
-            }
-        }, 30000)
     }
 
-    /**
-     * Finaliza o jogo
-     * seta todos os estados e limpa os timers
-     */
     const endGame = () => {
         setGameOver(true)
         setGameStarted(false)
@@ -111,55 +91,53 @@ export const useGameManager = (): GameManagerType => {
         setFallSpeed(config.INITIAL_FALL_SPEED)
         setFoods([])
         stopAllAnimations()
-        if (gameTimer.current) clearInterval(gameTimer.current)
-        if (difficultyTimer.current) clearInterval(difficultyTimer.current)
+        clearTimers()
     }
-    /**
-     * Pausa o game
-     * Para os timers, animações e seta o estado de paused para true
-     */
-    function pauseGame () {
-        setPaused(true)
-        stopAllAnimations()
 
-        if(gameTimer.current){
-             clearInterval(gameTimer.current)
-             gameTimer.current = null
+    const clearTimers = () => {
+        if (gameTimer.current) {
+            clearInterval(gameTimer.current)
+            gameTimer.current = null
         }
-        if(difficultyTimer.current) {
+        if (difficultyTimer.current) {
             clearInterval(difficultyTimer.current)
             difficultyTimer.current = null
         }
+    }
+
+    const createOrResetTimers = (intervalSpawnRate: number) => {
+    setTimeout(() => {
+        gameTimer.current = setInterval(() => {
+            if (
+                gameStartedRef.current &&
+                !gameOverRef.current &&
+                !pausedRef.current
+            ) {
+                spawnFood()
+            }
+        }, intervalSpawnRate)
+    }, intervalSpawnRate)
+}
+
+    function pauseGame () {
+        setPaused(true)
+        stopAllAnimations()
+        clearTimers()
     }
 
     function resumeGame() {
         setPaused(false)
         setFoods([])
 
-        if (gameTimer.current) clearInterval(gameTimer.current)
-        gameTimer.current = setInterval(() => {
-            if (gameStarted && !gameOver && !paused) {
-                spawnFood()
-            }
-        }, 2000)
+        clearTimers()
+        createOrResetTimers(spawnRate)
 
-        if (difficultyTimer.current) clearInterval(difficultyTimer.current)
-        difficultyTimer.current = setInterval(() => {
-            if (!gameOver && !paused) {
-                increaseDifficulty()
-            }
-        }, 30000)
     }
 
-    /**
-     * Aumenta a dificuldade do jhogo
-     * aumenta a velocidade das comidas
-     */
     const increaseDifficulty = () => {
         setDifficulty((prev) => {
             const newDifficulty = Math.min(prev + 1, 10)
 
-            // Calcula a nova velocidade baseada na dificuldade
             const speedMultiplier = Math.pow(
                 config.DIFFICULTY_SPEED_MULTIPLIER,
                 newDifficulty
@@ -170,7 +148,6 @@ export const useGameManager = (): GameManagerType => {
             )
             setFallSpeed(newFallSpeed)
 
-            // Calcula a nova taxa de spawn
             const baseSpawnRate = 1500
             const minSpawnRate = 400
             const newSpawnRate = Math.max(
@@ -184,27 +161,21 @@ export const useGameManager = (): GameManagerType => {
         })
     }
 
-    /**
-     * Cria uma nova comida
-     */
     const spawnFood = () => {
-        if (!gameStarted || gameOver) return
+        if (!gameStartedRef.current || gameOverRef.current) return
 
         const createItemParam: NewFood = {
             foodIDCounter: foodIdCounter,
             fallSpeed: fallSpeed,
         }
 
-        // Verifica se pode spawnar mais comidas
         const foodMultiplier =
             1 + difficulty * config.DIFFICULTY_FOOD_MULTIPLIER
         const maxFoods = Math.floor(config.MAX_FOODS_ON_SCREEN * foodMultiplier)
 
-        // Garante que sempre tenha pelo menos uma comida na tela
         if (foods.length === 0 || foods.length < maxFoods) {
             createFood(createItemParam, score)
 
-            // // Spawn de comida extra em níveis mais altos
             if (difficulty > 3) {
                 const extraFoodChance = (difficulty - 3) * 15
                 if (
@@ -212,7 +183,7 @@ export const useGameManager = (): GameManagerType => {
                     foods.length < maxFoods
                 ) {
                     setTimeout(() => {
-                        if (gameStarted && !gameOver) {
+                        if (gameStartedRef.current && !gameOverRef.current) {
                             createFood(createItemParam, score)
                         }
                     }, 300)
@@ -221,27 +192,18 @@ export const useGameManager = (): GameManagerType => {
         }
     }
 
-    /**
-     * Testa as colisões entre o player e os itens
-     * usa callback para não reenderizar o player em casos de não modificar a posição (causava travamentos)
-     * @param callback função a ser chamada quando o player come uma comida
-     */
     const checkCollisions = useCallback(
         (callback: (type: string) => void) => {
             foods.forEach((food) => {
-                // Verifica se a colisão já foi processada
                 if (processedCollisions.current.has(food.id)) return
 
                 if (checkCollision(food.id, characterPosition, config.CHARACTER_WIDTH)) {
-                    // Marca a colisão como processada
                     processedCollisions.current.add(food.id)
 
-                    // Remove a comida
                     setFoods((prevFoods) =>
                         prevFoods.filter((f) => f.id !== food.id)
                     )
 
-                    // Processa o efeito da colisão
                     if (food.type === 'bad') {
                         setLifes((prevLifes) => {
                             const newLifes = prevLifes - 1
@@ -278,58 +240,40 @@ export const useGameManager = (): GameManagerType => {
         [characterPosition, foods]
     )
 
-    // Adiciona um intervalo de verificação de colisões com frequência reduzida
     useEffect(() => {
         if (gameStarted && !gameOver && !paused) {
             const collisionInterval = setInterval(() => {
                 checkCollisions(() => {})
-            }, 100) // Reduzido para 10fps para evitar múltiplas detecções
+            }, 100)
 
             return () => clearInterval(collisionInterval)
         }
-    }, [gameStarted, gameOver, checkCollisions])
+    }, [gameStarted, gameOver, checkCollisions, paused])
 
-    /**
-     * Resta os timers no reoload
-     */
     useEffect(() => {
         return () => {
-            if(gameStarted && !gameOver && !paused) {
-            if (gameTimer.current) clearInterval(gameTimer.current)
-            if (difficultyTimer.current) clearInterval(difficultyTimer.current)
-        }
+            clearTimers()
         }
     }, [])
 
-    /**
-     * Reseta os timers quando a mudança em spawn rate ou inicio/fim de jogo
-     */
     useEffect(() => {
         if (gameStarted && !gameOver && !paused) {
-            if (gameTimer.current) {
-                clearInterval(gameTimer.current)
-            }
-            gameTimer.current = setInterval(() => {
-                spawnFood()
-            }, spawnRate)
+            clearTimers()
+            createOrResetTimers(spawnRate)
         }
-    }, [gameStarted, gameOver, spawnRate])
+    }, [spawnRate, gameStarted, gameOver, paused])
 
-    /**
-     * Controle para corrigir bug de comidas faltantes
-     * Basicamente eu tinha um problema em que paravam de spawnar comidas. este effect evita que a tela nunca fique vazia
-     */
     useEffect(() => {
-        if(gameStarted && !gameOver && !paused) {
-        const checkSpawnInterval = setInterval(() => {
-            if (gameStarted && !gameOver && foods.length === 0) {
-                spawnFood()
-            }
-        }, 2000)
+        if (gameStarted && !gameOver && !paused) {
+            const checkSpawnInterval = setInterval(() => {
+                if (foods.length === 0) {
+                    spawnFood()
+                }
+            }, spawnRate)
 
-        return () => clearInterval(checkSpawnInterval)
+            return () => clearInterval(checkSpawnInterval)
         }
-    }, [gameStarted, gameOver, foods.length])
+    }, [foods.length, gameStarted, gameOver, paused, spawnRate])
 
     return {
         startGame,
