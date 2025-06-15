@@ -6,7 +6,6 @@ const getAchievementByName = (name: string) => {
     return achievements?.find(achievement => achievement.name === name);
 }
 
-
 const CheckAchievementLevel = async (oldLevel : number, newLevel : undefined | number) => {
     if (newLevel === undefined) {
         return;
@@ -44,7 +43,6 @@ const CheckAchievementLevel = async (oldLevel : number, newLevel : undefined | n
         }
     }
 }
-
 
 const CheckAchievementMoney = async (oldMoney: number, newMoney: number) => {
     if (newMoney <= oldMoney) {
@@ -109,12 +107,61 @@ const checkAchievementMinigameFirstTime = async (achievementName : string) => {
         if(achievement != null && !(user?.achievements.includes(achievement.id))) {
             await useUserPetStore.getState().updateAchievements(achievement.id, achievement.name, achievement.message);
         }
-    }
-
-    
+    }    
 }
 
-export {getAchievementByName, CheckAchievementLevel, CheckAchievementMoney, checkAchievementMinigameFirstTime};
+const CheckAchievementFirtsLesson = async (nLesson : number, strLastLesson: string | null | undefined) => {
+    if (nLesson === 1 && (!strLastLesson || strLastLesson)) {
+        const achievement = getAchievementByName("Primeira Aula");
+        if (achievement) {
+            await useUserPetStore.getState().updateAchievements(achievement.id, achievement.name, achievement.message);
+        }
+    }   
+}
+
+const CheckAchievementAllQuestionsCorrect = async () => {
+    const user = useUserPetStore.getState().user;
+    const achievement = getAchievementByName("Guru dos pets");
+
+    console.log(achievement)
+
+    if (achievement != null && !(user?.achievements.includes(achievement.id))) {
+        await useUserPetStore.getState().updateAchievements(achievement.id, achievement.name, achievement.message);  
+    }
+}
+
+const CheckAchievementLastLesson = async (lessonID: string) => {
+    const achievements = useAllAchievementsStore.getState().achievements; 
+    if (!achievements || achievements.length === 0) {
+        return;
+    }  
+    if(lessonID == achievements[achievements.length - 1].id) {
+        const achievement = achievements[achievements.length - 1];   
+        if (achievement) {
+            await useUserPetStore.getState().updateAchievements(achievement.id, achievement.name, achievement.message);
+        }   
+    }
+}
+
+const CheckAchievementChangeColor = async () => {
+    const user = useUserPetStore.getState().user;
+    const achievement = getAchievementByName("Mudando de aparência");
+
+    if (achievement != null && !(user?.achievements.includes(achievement.id))) {
+        await useUserPetStore.getState().updateAchievements(achievement.id, achievement.name, achievement.message);
+    }
+}
+
+export {
+    getAchievementByName, 
+    CheckAchievementLevel, 
+    CheckAchievementMoney, 
+    checkAchievementMinigameFirstTime, 
+    CheckAchievementFirtsLesson,
+    CheckAchievementAllQuestionsCorrect,
+    CheckAchievementLastLesson,
+    CheckAchievementChangeColor
+};
 
 
 

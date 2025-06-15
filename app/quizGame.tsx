@@ -1,17 +1,19 @@
 import { StyleSheet, View, Text, Modal, ActivityIndicator } from 'react-native'
 import Header from '@/components/Header'
 import { Quiz } from '@/components/Quiz'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import QuizSummaryModal from '@/components/QuizSummaryModal'
 import { useLessonStore } from '@/stores/lessonStore'
 import { router } from 'expo-router'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { calcLevelUp } from '@/utils/CalcLevelUp'
 import EndGameDialog from '@/components/minigames/food-game/EndGameDialog'
+import { CheckAchievementAllQuestionsCorrect, CheckAchievementFirtsLesson, CheckAchievementLastLesson } from '@/utils/AchievementHelper'
 
 export default function QuizGame() {
     const [quizFinished, setQuizFinished] = useState(false)
     const [correctCount, setCorrectCount] = useState(0)
+    let correctCountRef = useRef(0);
 
     const {
         loading,
@@ -27,7 +29,9 @@ export default function QuizGame() {
     useEffect(() => {}, [currentQuestion])
 
     const handleCorrectAnswer = () => {
-        setCorrectCount((prev) => prev + 1)
+        setCorrectCount((prev) => prev + 1);
+        console.log("Acertou " + correctCountRef);
+        correctCountRef.current++;
         handleChangeQuestion()
     }
 
@@ -49,6 +53,9 @@ export default function QuizGame() {
                         user.level,
                         lesson.givenExperience
                     )
+                   
+                    CheckAchievementFirtsLesson(lesson.order, user.lastLessonConcluded);
+                    CheckAchievementLastLesson(lesson.id);
 
                     updateUser(user?.id, {
                         lastLessonConcluded: lesson.id,
@@ -58,6 +65,10 @@ export default function QuizGame() {
                     })
                 }
                 finishLesson(lesson)
+                console.log(correctCountRef);
+                if (lesson.questions.length === correctCountRef.current) {    
+                    CheckAchievementAllQuestionsCorrect();
+                }
             }
         }, 2000)
     }

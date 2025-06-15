@@ -24,6 +24,7 @@ import { useRouter } from 'expo-router'
 import AchievementType from '@/dtos/Achievement'
 import { fetchAchievements } from '@/services/fetchAchievements'
 import Achievement from '@/components/Achievement'
+import { CheckAchievementChangeColor } from '@/utils/AchievementHelper'
 
 const editIcon = require('@/assets/images/profile/edit_icon.png')
 const coinIcon = require('@/assets/images/profile/pet_coin.png')
@@ -83,6 +84,11 @@ export default function Profile() {
                 setIsEditing(false)
                 return
             }
+            
+            if(petColor !==  petInfo.color) {
+                CheckAchievementChangeColor();        
+            }
+
             await petUpdate(petInfo.id, {
                 name: petName,
                 color: petColor,
