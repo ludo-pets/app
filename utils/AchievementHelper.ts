@@ -88,7 +88,7 @@ const checkAchievementMinigameFirstTime = async (achievementName : string) => {
     // Jogo Hora da Patinha
     if(achievementName === "Cortar Unhas") {
         const achievement = getAchievementByName(achievementName);
-        if(achievement != null && !(user?.achievements.includes(achievement.id))) {
+        if(achievement && !(user?.achievements.includes(achievement.id))) {
             await useUserPetStore.getState().updateAchievements(achievement.id, achievement.name, achievement.message);
         }
     }
@@ -96,7 +96,7 @@ const checkAchievementMinigameFirstTime = async (achievementName : string) => {
     // Jogo Comilança Maluca
     if(achievementName === "Barriga Cheia") {
         const achievement = getAchievementByName(achievementName);
-        if(achievement != null && !(user?.achievements.includes(achievement.id))) {
+        if(achievement && !(user?.achievements.includes(achievement.id))) {
             await useUserPetStore.getState().updateAchievements(achievement.id, achievement.name, achievement.message);
         }
     }
@@ -104,7 +104,7 @@ const checkAchievementMinigameFirstTime = async (achievementName : string) => {
     // Jogo Flappy Pet
     if(achievementName === "Olha o aviãozinho!") {
         const achievement = getAchievementByName(achievementName);
-        if(achievement != null && !(user?.achievements.includes(achievement.id))) {
+        if(achievement && !(user?.achievements.includes(achievement.id))) {
             await useUserPetStore.getState().updateAchievements(achievement.id, achievement.name, achievement.message);
         }
     }    
