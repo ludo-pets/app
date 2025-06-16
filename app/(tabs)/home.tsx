@@ -10,9 +10,9 @@ export default function HomeScreen() {
     const user = useUserPetStore((state) => state.user)
     const loading = useUserPetStore((state) => state.loading)
     const pet = useUserPetStore((state) => state.pet)
+    const itemsAdapter = useUserPetStore((state) => state.itemsAdapter)
 
     const [mood, setMood] = useState<Mood>()
-    
     useEffect(() => {
         if (pet) {
             setMood(calcPetMood(pet.wellBeing))

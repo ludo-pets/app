@@ -15,6 +15,7 @@ const { height, width } = Dimensions.get('window')
 
 const BedItem = ({ update }: ItemProps) => {
     const pet = useUserPetStore((state) => state.pet)
+    const itemsAdapter = useUserPetStore((state) => state.itemsAdapter)
 
     const needsSleep = () => {
         if (pet) {
@@ -51,7 +52,7 @@ const BedItem = ({ update }: ItemProps) => {
                         height: `100%`,
                         resizeMode: 'contain',
                     }}
-                    source={require('@/assets/images/homescreen/almofada.png')}
+                    source={{ uri: itemsAdapter.bed ? itemsAdapter.bed : require('@/assets/images/homescreen/almofada.png') }}
                 />
             </TouchableWithoutFeedback>
         </View>

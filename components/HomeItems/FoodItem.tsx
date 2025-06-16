@@ -14,6 +14,7 @@ const { height, width } = Dimensions.get('window')
 
 const FoodItem = ({ update }: ItemProps) => {
     const pet = useUserPetStore((state) => state.pet)
+    const itemsAdapter = useUserPetStore((state) => state.itemsAdapter)
     
     const needsFood = () => {
         if (pet) {
@@ -47,7 +48,7 @@ const FoodItem = ({ update }: ItemProps) => {
                         height: '100%',
                         resizeMode: 'contain',
                     }}
-                    source={require('@/assets/images/homescreen/poteC.png')}
+                    source={{ uri: itemsAdapter.foodBowl ? itemsAdapter.foodBowl : require('@/assets/images/homescreen/poteC.png') }}
                 />
             </TouchableWithoutFeedback>
         </View>

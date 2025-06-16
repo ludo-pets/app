@@ -12,6 +12,7 @@ interface UserPetState {
     pet: Pet | null
     loading: boolean
     error: string | null
+    itemsAdapter: { bed?: string; food?: string; wc?: string; toy?: string; floor?: string; wallpaper?: string; water?: string; foodBowl?: string; };
     fetchUserAndPet: (userId: string) => Promise<void>
     updateUser: (userId: string, userData: Partial<User>) => Promise<void>
     updatePet: (petId: string, petData: Partial<Pet>) => Promise<void>
@@ -26,6 +27,7 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
     pet: null,
     loading: true,
     error: null,
+    itemsAdapter: {},
     setAchievements(achievements) {
 
     },
@@ -36,10 +38,17 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
             const result = await getUserWithPetByIdService(userId)
 
             if (result) {
+                const itemsMapped = ['bed', 'food', 'wc', 'toy', 'floor', 'wallpaper', 'water', 'foodBowl'].reduce((acc, item) => {
+                    const itemId = result.pet.activeItems[item as keyof typeof result.pet.activeItems];
+                    const itemDetails = result.pet.purchasedItems.find((purchasedItem) => purchasedItem.itemId === itemId);  
 
-                // itemsAdapter(result.pet.purchasedItems)
+                    if (itemDetails && 'image' in itemDetails) {
+                        acc[item as keyof typeof acc] = (itemDetails as { image: string }).image;
+                    }
+                    return acc;
+                }, {} as { [key in 'bed' | 'food' | 'wc' | 'toy' | 'floor' | 'wallpaper' | 'water' | 'foodBowl']?: string });
 
-                set({ user: result.user, pet: result.pet, loading: false })
+                set({ user: result.user, pet: result.pet, itemsAdapter: itemsMapped, loading: false })
             } else {
                 set({ error: 'User ou Pet não encontrado', loading: false })
             }
@@ -68,25 +77,34 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
     },
 
     updatePet: async (petId: string, petData: Partial<Pet>) => {
-        set({ error: null })
+        set({ error: null });
         try {
-            const success = await updatePetService(petId, petData)
-
-                // itemsAdapter(result.pet.purchasedItems)
-
+            const success = await updatePetService(petId, petData);
 
             if (success) {
-                const oldPet = get().pet
+                const itemsMapped = ['bed', 'food', 'wc', 'toy', 'floor', 'wallpaper', 'water', 'foodBowl'].reduce((acc, item) => {
+                    const itemId = petData.activeItems?.[item as keyof typeof petData.activeItems]; 
+                    const itemDetails = petData.purchasedItems?.find((purchasedItem) => purchasedItem.itemId === itemId);
+
+                    if (itemDetails && 'image' in itemDetails) {
+                        acc[item as 'bed' | 'food' | 'wc' | 'toy' | 'floor' | 'wallpaper' | 'water'| 'foodBowl'] = (itemDetails as { image: string }).image;
+                    } else {
+                        acc[item as 'bed' | 'food' | 'wc' | 'toy' | 'floor' | 'wallpaper' | 'water'| 'foodBowl' ] = get().itemsAdapter[item as 'bed' | 'food' | 'wc' | 'toy' | 'floor' | 'wallpaper' | 'water' | 'foodBowl'] ?? '';
+                    }
+                    return acc;
+                }, {} as { [key in 'bed' | 'food' | 'wc' | 'toy' | 'floor' | 'wallpaper' | 'water'| 'foodBowl']?: string });
+
+                const oldPet = get().pet;
                 if (oldPet) {
-                    set({ pet: { ...oldPet, ...petData } })
+                    set({ pet: { ...oldPet, ...petData }, itemsAdapter: itemsMapped });
                 }
             } else {
-                set({ error: 'Erro ao atualizar o pet' })
+                set({ error: 'Erro ao atualizar o pet' });
             }
         } catch (error: any) {
-            set({ error: error.message })
+            set({ error: error.message });
         } finally {
-            set({ loading: false })
+            set({ loading: false });
         }
     },
 

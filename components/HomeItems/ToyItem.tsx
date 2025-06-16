@@ -15,6 +15,7 @@ const { height, width } = Dimensions.get('window')
 
 const ToyItem = ({ update }: ItemProps) => {
     const pet = useUserPetStore((state) => state.pet)
+    const itemsAdapter = useUserPetStore((state) => state.itemsAdapter)
     
     const needsToPlay = () => {
         if (pet) {
@@ -51,7 +52,7 @@ const ToyItem = ({ update }: ItemProps) => {
                         height: `100%`,
                         resizeMode: `contain`,
                     }}
-                    source={require('@/assets/images/homescreen/brinquedo.png')}
+                    source={ itemsAdapter.toy ? { uri: itemsAdapter.toy } : require('@/assets/images/homescreen/brinquedo.png') }
                 />
             </TouchableWithoutFeedback>
         </View>

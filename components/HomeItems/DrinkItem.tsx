@@ -14,6 +14,7 @@ const { height, width } = Dimensions.get('window')
 
 const DrinkItem = ({ update }: ItemProps) => {
     const pet = useUserPetStore((state) => state.pet)
+    const itemsAdapter = useUserPetStore((state) => state.itemsAdapter)
     
     const needsToDrink = () => {
         if (pet) {
@@ -50,7 +51,7 @@ const DrinkItem = ({ update }: ItemProps) => {
                         height: `100%`,
                         resizeMode: 'contain',
                     }}
-                    source={require('@/assets/images/homescreen/poteB.png')}
+                    source={{ uri: itemsAdapter.water ? itemsAdapter.water : require('@/assets/images/homescreen/poteB.png') }}
                 />
             </TouchableWithoutFeedback>
         </View>
