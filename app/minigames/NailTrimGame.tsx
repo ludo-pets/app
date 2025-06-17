@@ -2,15 +2,16 @@ import { useEffect, useState, useCallback } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { Dimensions, StyleSheet } from 'react-native'
 
-import StartGameDialog from '../../../components/minigames/nail-trim-game/StatGameDialog'
-import EndGameDialog from '../../../components/minigames/nail-trim-game/EndGameDialog'
-import GameBoard from '../../../components/minigames/nail-trim-game/GameBoard'
+import StartGameDialog from '../../components/minigames/nail-trim-game/StatGameDialog'
+import EndGameDialog from '../../components/minigames/nail-trim-game/EndGameDialog'
+import GameBoard from '../../components/minigames/nail-trim-game/GameBoard'
 import { petSet } from '@/components/minigames/nail-trim-game/PetSets'
 
 import { useUserPetStore } from '@/stores/userPetStore'
 import { useRouter } from 'expo-router'
 import { useMinigameStore } from '@/stores/minigameStore'
 import { useFocusEffect } from '@react-navigation/native'
+import Header from '@/components/Header'
 
 const { width } = Dimensions.get('window')
 
@@ -66,6 +67,11 @@ export default function NailTrimGame() {
     useEffect(() => {}, [pet])
     return (
         <GestureHandlerRootView style={styles['game-container']}>
+            <Header
+                title="Hora da Patinha"
+                backgroundColor="#CFE2A8"
+                showBackButton
+            />
             {!started && <StartGameDialog startGame={setStarted} />}
 
             {ended && minigame && (
