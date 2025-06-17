@@ -10,10 +10,9 @@ import { petSet } from '@/components/minigames/nail-trim-game/PetSets'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { useRouter } from 'expo-router'
 import { useMinigameStore } from '@/stores/minigameStore'
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native'
 
-const { width } = Dimensions.get('window');
-
+const { width } = Dimensions.get('window')
 
 export default function NailTrimGame() {
     const [started, setStarted] = useState(false)
@@ -43,14 +42,14 @@ export default function NailTrimGame() {
 
     useFocusEffect(
         useCallback(() => {
-            setScore(0);
+            setScore(0)
             return () => {
-            setStarted(false);
-            setEnded(false);
-            setScore(0);
-            };
+                setStarted(false)
+                setEnded(false)
+                setScore(0)
+            }
         }, [])
-    );
+    )
 
     const endGame = async () => {
         if (user && minigame) {
@@ -64,7 +63,7 @@ export default function NailTrimGame() {
             router.push('/home')
         }
     }
-    useEffect(()=>{}, [pet]);
+    useEffect(() => {}, [pet])
     return (
         <GestureHandlerRootView style={styles['game-container']}>
             {!started && <StartGameDialog startGame={setStarted} />}
@@ -75,27 +74,17 @@ export default function NailTrimGame() {
                     givenMoney={minigame.givenMoney}
                 />
             )}
-            {/* {pet && (
+            {pet && (
                 <GameBoard
                     key={gameKey}
                     pawImage={petSet[pet.type].pawImage}
                     addScore={addScore}
                     nailsSet={petSet[pet.type].nailSet}
                     nailLong={petSet[pet.type].nailLongImage}
-                    nailShort={ petSet[pet.type].nailShortImage }
-                />
-            )} */}
-            {/*para testes, apagar dps*/}
-             {pet && (
-                <GameBoard
-                    key={gameKey}
-                    pawImage={petSet["dog"].pawImage}
-                    addScore={addScore}
-                    nailsSet={petSet["dog"].nailSet}
-                    nailLong={petSet["dog"].nailLongImage}
-                    nailShort={ petSet["dog"].nailShortImage }
+                    nailShort={petSet[pet.type].nailShortImage}
                 />
             )}
+            {/*para testes, apagar dps*/}
         </GestureHandlerRootView>
     )
 }
