@@ -8,7 +8,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "test": "jest --watchAll",
+    "test": "jest --watchAll --config jest.config.ts",
     "lint": "expo lint"
   },
   "jest": {
@@ -48,6 +48,7 @@
     "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "~4.10.0",
     "react-native-svg": "15.11.2",
+    "react-native-walkthrough-tooltip": "^1.6.0",
     "react-native-web": "^0.20.0",
     "react-native-webview": "13.13.5",
     "zustand": "^5.0.3"
@@ -61,7 +62,9 @@
     "jest-expo": "~53.0.5",
     "react-native-svg-transformer": "^1.5.0",
     "react-test-renderer": "19.0.0",
-    "typescript": "^5.3.3"
+    "ts-jest": "^29.3.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
   },
   "private": true
 }
