@@ -2,7 +2,7 @@ import Item from '@/dtos/Item'
 import { db } from '@/firebaseConfig'
 import { collection, getDocs } from 'firebase/firestore'
 
-export const getAllItemService = async (): Promise<{
+export const getAllItems = async (): Promise<{
     items: Item[]
 } | null> => {
     try {
