@@ -192,7 +192,7 @@ export default function Profile() {
                                     <Achievement
                                         title={achievement.name}
                                         description={achievement.message}
-                                        conquered={false}
+                                        conquered={user?.achievements.includes(achievement.id)  || false}
                                     />
                                 </View>
                             ))}
