@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import Question from '@/dtos/Question'
 
-import { fetchAllQuestionsService } from '@/services/questionsService'
+import { fetchAllQuestionsService } from '@/services/questionService'
 
 interface QuestionsStoreState {
     questions: Question[]
