@@ -1,5 +1,4 @@
 import { Pet } from '@/dtos/Pet'
-import Item from '@/dtos/Item'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { useEffect, useState } from 'react'
 import {
