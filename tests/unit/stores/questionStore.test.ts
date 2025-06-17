@@ -1,9 +1,9 @@
 import { act } from '@testing-library/react-native'
-import { fetchAllQuestionsService } from '@/services/questionsService'
 import Question from '@/dtos/Question'
 import { useQuestionsStore } from '@/stores/questionsStore'
+import { fetchAllQuestionsService } from '@/services/questionService'
 
-jest.mock('@/services/questionsService', () => ({
+jest.mock('@/services/questionService', () => ({
     fetchAllQuestionsService: jest.fn(),
 }))
 

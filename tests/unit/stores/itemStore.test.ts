@@ -1,13 +1,13 @@
 import { act } from '@testing-library/react-native'
-import { getAllItemService } from '@/services/itemService'
 import Item from '@/dtos/Item'
 import { useItemStore } from '@/stores/itemStore'
+import { getAllItems } from '@/services/itemService'
 
 jest.mock('@/services/itemService', () => ({
-    getAllItemService: jest.fn(),
+    getAllItems: jest.fn(),
 }))
 
-const mockedGetAllItemService = getAllItemService as jest.Mock
+const mockedGetAllItemService = getAllItems as jest.Mock
 
 const mockItems: Item[] = [
     {

@@ -1,6 +1,6 @@
 import { act } from '@testing-library/react-native'
 import { getLessonByIdService } from '@/services/lessonService'
-import { fetchQuestion } from '@/services/questionsService'
+import { fetchQuestionById } from '@/services/questionService'
 import Lesson from '@/dtos/Lesson'
 import Question from '@/dtos/Question'
 import { useLessonStore } from '@/stores/lessonStore'
@@ -8,12 +8,12 @@ import { useLessonStore } from '@/stores/lessonStore'
 jest.mock('@/services/lessonService', () => ({
     getLessonByIdService: jest.fn(),
 }))
-jest.mock('@/services/questionsService', () => ({
-    fetchQuestion: jest.fn(),
+jest.mock('@/services/questionService', () => ({
+    fetchQuestionById: jest.fn(),
 }))
 
 const mockedGetLessonByIdService = getLessonByIdService as jest.Mock
-const mockedFetchQuestion = fetchQuestion as jest.Mock
+const mockedFetchQuestion = fetchQuestionById as jest.Mock
 
 const mockLesson: Lesson = {
     id: 'lesson1',
@@ -141,12 +141,12 @@ describe('useLessonStore', () => {
         })
 
         it('should handle errors when finishing a lesson and set an error state', async () => {
-            await useLessonStore.getState().finishLesson(null as any);
+            await useLessonStore.getState().finishLesson(null as any)
 
-            const { error } = useLessonStore.getState();
+            const { error } = useLessonStore.getState()
 
-            expect(error).toEqual(expect.any(String));
-        });
+            expect(error).toEqual(expect.any(String))
+        })
     })
 
     describe('setLesson', () => {
