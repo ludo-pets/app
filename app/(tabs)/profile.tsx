@@ -10,7 +10,6 @@ import {
     Pressable,
     ScrollView,
 } from 'react-native'
-import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { useEffect, useState } from 'react'
 import React from 'react'
 import XpBar from '@/components/XpBar'
@@ -22,7 +21,7 @@ import { PetOptionFormRegisterPet } from '@/components/PetOptionFormRegisterPet'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { useRouter } from 'expo-router'
 import AchievementType from '@/dtos/Achievement'
-import { fetchAchievements } from '@/services/fetchAchievements'
+import { fetchAchievements } from '@/services/achievementService'
 import Achievement from '@/components/Achievement'
 
 const editIcon = require('@/assets/images/profile/edit_icon.png')
@@ -39,7 +38,6 @@ export default function Profile() {
     const [petName, setPetName] = useState(petInfo?.name || '')
     const [petColor, setPetColor] = useState(petInfo?.color || '')
     const [achievements, setAchievements] = useState<AchievementType[]>([])
-    const router = useRouter()
 
     useEffect(() => {
         const loadData = async () => {
@@ -194,7 +192,7 @@ export default function Profile() {
                                     <Achievement
                                         title={achievement.name}
                                         description={achievement.message}
-                                        conquered={false}
+                                        conquered={user?.achievements.includes(achievement.id)  || false}
                                     />
                                 </View>
                             ))}

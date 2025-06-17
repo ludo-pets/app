@@ -3,5 +3,6 @@ export interface Nail {
     position: { x: number; y: number }
     rotation: `${string}deg`
     isTrimmed: boolean
+    isfliped?: boolean
 }
 export type NailProgress = { [key: number]: number }

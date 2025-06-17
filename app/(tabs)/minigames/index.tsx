@@ -13,8 +13,8 @@ import {
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
 
 import Minigame from '@/dtos/Minigame'
-import { fetchMinigames } from '@/services/fetchMinigames'
 import { router } from 'expo-router'
+import { fetchMinigames } from '@/services/minigameService'
 
 const { width } = Dimensions.get('window')
 const imgRad = 16
