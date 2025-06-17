@@ -10,6 +10,7 @@ import ItemProps from '@/dtos/ItensProps'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { calcPetMood } from '@/utils/moodCalculator'
 import { useState } from 'react'
+import { useEffect } from 'react'
 
 const { height, width } = Dimensions.get('window')
 
@@ -23,6 +24,10 @@ const ToyItem = ({ update }: ItemProps) => {
         }
         return false
     }
+
+    useEffect(() => {
+        setIsPlayful(needsToPlay())
+    }, [pet])
 
     const [isPlayful, setIsPlayful] = useState(needsToPlay())
     const onPress = () => {

@@ -12,9 +12,10 @@ import {
     State,
 } from 'react-native-gesture-handler'
 import { Nail, NailProgress } from './types'
-import { useRef, useState } from 'react'
+import { useRef, useState, useCallback } from 'react'
 import Svg, { Circle } from 'react-native-svg'
 import { Audio, AVPlaybackSource } from 'expo-av'
+import { useFocusEffect } from '@react-navigation/native'
 
 const { width, height } = Dimensions.get('window')
 
@@ -60,6 +61,35 @@ export default function GameBoard({
         })
         await sound.playAsync()
     }
+
+    const cleanup = () => {
+        // Limpar timers
+        Object.values(trimmerTimeout.current).forEach(timeout => {
+            if (timeout) clearTimeout(timeout);
+        });
+        Object.values(intervalRef.current).forEach(interval => {
+            if (interval) clearInterval(interval);
+        });
+        trimmerTimeout.current = {};
+        intervalRef.current = {};
+
+        // Resetar estados do jogo
+        setNails(nailsSet); // <-- volta pro estado inicial
+        setTrimmer(trimmer_initial_position);
+        setNailProgress({});
+        setIsTrimming(false);
+        trimmer_current_position = trimmer_initial_position;
+        entrou = true;
+        isNear = false;
+    };
+    
+    useFocusEffect(
+        useCallback(() => {
+            return () => {
+                cleanup();
+            };
+        }, [])
+    );
 
     const handleGesture = (e: PanGestureHandlerGestureEvent) => {
         setTrimmer({
