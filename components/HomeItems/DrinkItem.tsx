@@ -9,6 +9,8 @@ import ItemProps from '@/dtos/ItensProps'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { calcPetMood } from '@/utils/moodCalculator'
 import { useState } from 'react'
+import GenericIcon from '../GenericIcon'
+import { SvgProps } from 'react-native-svg'
 
 const { height, width } = Dimensions.get('window')
 
@@ -36,6 +38,8 @@ const DrinkItem = ({ setInteractingWithItem, update }: ItemProps) => {
         }, 2000)
     }
 
+    const petInfo = useUserPetStore((state) => state.pet)
+
     return (
         <View style={styles.cbox}>
             {isThirsty && (
@@ -51,7 +55,7 @@ const DrinkItem = ({ setInteractingWithItem, update }: ItemProps) => {
                 </View>
             )}
             <TouchableWithoutFeedback onPress={onPress}>
-                <Image
+                {/* <Image
                     style={
                         itemClicked
                             ? {
@@ -70,7 +74,47 @@ const DrinkItem = ({ setInteractingWithItem, update }: ItemProps) => {
                                 : require('@/assets/images/pets/cachorro/cachorro-bebendo.png')
                             : require('@/assets/images/homescreen/poteB.png')
                     }
-                />
+                /> */}
+                {itemClicked ? (
+                    <>
+                        {petInfo?.type === 'cat' ? (
+                            <GenericIcon
+                                Icon={() => (
+                                    <Image
+                                        source={require('@/assets/images/pets/gato/gato-bebendo.png')}
+                                        style={{ width: 236, height: 166, position: 'absolute', bottom: 0, left: 0 }}
+                                        resizeMode="contain"
+                                    />
+                                )}
+                                fill={petInfo?.color || '#7D5D56'}
+                                stroke={'#000'}
+                            />
+                        ) : (
+                            <GenericIcon
+                                Icon={() => (
+                                    <Image
+                                        source={require('@/assets/images/pets/cachorro/cachorro-bebendo.png')}
+                                        style={{ width: 236, height: 166, position: 'absolute', bottom: 0, left: 0 }}
+                                        resizeMode="contain"
+                                    />
+                                )}
+                                fill={petInfo?.color || '#7D5D56'}
+                                stroke={'#000'}
+                            />
+                        )}
+                        <GenericIcon
+                            Icon={() => (
+                                <Image
+                                    source={require('@/assets/images/homescreen/poteB.png')}
+                                    style={{ width: '100%', height: '100%' }}
+                                    resizeMode="contain"
+                                />
+                            )}
+                            fill={petInfo?.color || '#7D5D56'}
+                            stroke={'#000'}
+                        />
+                    </>
+                ) : null}
             </TouchableWithoutFeedback>
         </View>
     )

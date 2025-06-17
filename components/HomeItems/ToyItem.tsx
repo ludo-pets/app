@@ -10,6 +10,7 @@ import ItemProps from '@/dtos/ItensProps'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { calcPetMood } from '@/utils/moodCalculator'
 import { useState } from 'react'
+import GenericIcon from '../GenericIcon'
 
 const { height, width } = Dimensions.get('window')
 
@@ -37,6 +38,8 @@ const ToyItem = ({ setInteractingWithItem, update }: ItemProps) => {
         }, 2000)
     }
 
+    const petInfo = useUserPetStore((state) => state.pet)
+
     return (
         <View style={styles.cbox}>
             {isPlayful && (
@@ -52,20 +55,88 @@ const ToyItem = ({ setInteractingWithItem, update }: ItemProps) => {
                 </View>
             )}
             <TouchableWithoutFeedback onPress={onPress}>
-                <Image
-                style={
-                    itemClicked
-                        ? { width: 270, height: 305, position: 'absolute', bottom: 16, left: -14 }
-                        : { width: '100%', height: '100%', resizeMode: 'contain'}
-                }
-                    source={
+                {/* <Image
+                    style={
                         itemClicked
-                            ? pet?.type == 'cat'
-                                ? require('@/assets/images/pets/gato/gato-brincando.png')
-                                : require('@/assets/images/homescreen/brinquedo.png') //!trocar para o svg do cachorro
-                            : require('@/assets/images/homescreen/brinquedo.png')
+                            ? {
+                                  width: 270,
+                                  height: 305,
+                                  position: 'absolute',
+                                  bottom: 16,
+                                  left: -14,
+                              }
+                            : {
+                                  width: '100%',
+                                  height: '100%',
+                                  resizeMode: 'contain',
+                              }
                     }
-                />
+                    source={
+                        pet?.type == 'cat'
+                            ? itemClicked
+                                ? require('@/assets/images/pets/gato/gato-brincando.png')
+                                : require('@/assets/images/homescreen/arranhador-salmao.png')
+                            : itemClicked
+                            ? require('@/assets/images/pets/cachorro/cachorro-brincando.png')
+                            : require('@/assets/images/homescreen/bola-tenis.png')
+                    }
+                /> */}
+
+                {itemClicked ? (
+                    petInfo?.type === 'cat' ? (
+                        <GenericIcon
+                            Icon={() => (
+                                <Image
+                                    source={require('@/assets/images/pets/gato/gato-brincando.png')}
+                                    style={{
+                                        width: 270,
+                                        height: 305,
+                                        position: 'absolute',
+                                        bottom: 16,
+                                        left: -14,
+                                    }}
+                                    resizeMode="contain"
+                                />
+                            )}
+                            fill={petInfo?.color || '#7D5D56'}
+                            stroke={'#000'}
+                        />
+                    ) : (
+                        <GenericIcon
+                            Icon={() => (
+                                <Image
+                                    source={require('@/assets/images/pets/cachorro/cachorro-brincando.png')}
+                                    style={{
+                                        width: 270,
+                                        height: 305,
+                                        position: 'absolute',
+                                        bottom: 16,
+                                        left: -14,
+                                    }}
+                                    resizeMode="contain"
+                                />
+                            )}
+                            fill={petInfo?.color || '#7D5D56'}
+                            stroke={'#000'}
+                        />
+                    )
+                ) : (
+                    <GenericIcon
+                        Icon={() => (
+                            <Image
+                                source={
+                                    petInfo?.type === 'cat'
+                                        ? require('@/assets/images/homescreen/bola-tenis.png')
+                                        : require('@/assets/images/homescreen/arranhador-salmao.png')
+                                }
+                                style={{ width: '100%', height: '100%' }}
+                                resizeMode="contain"
+                            />
+                        )}
+                        fill={petInfo?.color || '#7D5D56'}
+                        stroke={'#000'}
+                    />
+                )}
             </TouchableWithoutFeedback>
         </View>
     )

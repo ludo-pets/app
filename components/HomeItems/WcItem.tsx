@@ -9,7 +9,7 @@ import ItemProps from '@/dtos/ItensProps'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { calcPetMood } from '@/utils/moodCalculator'
 import { useState } from 'react'
-import Pet from '../minigames/flappyPet/Pet'
+import GenericIcon from '../GenericIcon'
 
 const { height, width } = Dimensions.get('window')
 
@@ -37,6 +37,8 @@ const WcItem = ({ setInteractingWithItem, update }: ItemProps) => {
         }, 2000)
     }
 
+    const petInfo = useUserPetStore((state) => state.pet)
+
     return (
         <View style={styles.cbox}>
             {isDirty && (
@@ -52,7 +54,7 @@ const WcItem = ({ setInteractingWithItem, update }: ItemProps) => {
                 </View>
             )}
             <TouchableWithoutFeedback onPress={onPress}>
-                <Image
+                {/* <Image
                     style={
                         itemClicked
                             ? {
@@ -65,13 +67,78 @@ const WcItem = ({ setInteractingWithItem, update }: ItemProps) => {
                             : { width: '100%', height: '100%' }
                     }
                     source={
-                        itemClicked
-                            ? pet?.type == 'cat'
+                        pet?.type === 'cat'
+                            ? itemClicked
                                 ? require('@/assets/images/pets/gato/gato-banheiro.png')
-                                : require('@/assets/images/homescreen/caixa_de_areia.png') //!trocar para o svg do cachorro
-                            : require('@/assets/images/homescreen/caixa_de_areia.png')
+                                : require('@/assets/images/homescreen/caixa_de_areia.png')
+                            : itemClicked
+                            ? require('@/assets/images/pets/cachorro/cachorro-banheiro.png')
+                            : require('@/assets/images/homescreen/wc-cachorro.png')
                     }
-                />
+                /> */}
+                {itemClicked ? (
+                    petInfo?.type === 'cat' ? (
+                        <GenericIcon
+                            Icon={() => (
+                                <Image
+                                    source={require('@/assets/images/pets/gato/gato-banheiro.png')}
+                                    style={{
+                                        width: 270,
+                                        height: 305,
+                                        position: 'absolute',
+                                        bottom: 16,
+                                        left: -14,
+                                    }}
+                                    resizeMode="contain"
+                                />
+                            )}
+                            fill={petInfo?.color || '#7D5D56'}
+                            stroke={'#000'}
+                        />
+                    ) : (
+                        <GenericIcon
+                            Icon={() => (
+                                <Image
+                                    source={require('@/assets/images/pets/cachorro/cachorro-banheiro.png')}
+                                    style={{
+                                        width: 270,
+                                        height: 305,
+                                        position: 'absolute',
+                                        bottom: 16,
+                                        left: -14,
+                                    }}
+                                    resizeMode="contain"
+                                />
+                            )}
+                            fill={petInfo?.color || '#7D5D56'}
+                            stroke={'#000'}
+                        />
+                    )
+                ) : petInfo?.type === 'cat' ? (
+                    <GenericIcon
+                        Icon={() => (
+                            <Image
+                                source={require('@/assets/images/homescreen/caixa_de_areia.png')}
+                                style={{ width: '100%', height: '100%' }}
+                                resizeMode="contain"
+                            />
+                        )}
+                        fill={petInfo?.color || '#7D5D56'}
+                        stroke={'#000'}
+                    />
+                ) : (
+                    <GenericIcon
+                        Icon={() => (
+                            <Image
+                                source={require('@/assets/images/homescreen/wc-cachorro.png')}
+                                style={{ width: '100%', height: '100%' }}
+                                resizeMode="contain"
+                            />
+                        )}
+                        fill={petInfo?.color || '#7D5D56'}
+                        stroke={'#000'}
+                    />
+                )}
             </TouchableWithoutFeedback>
         </View>
     )

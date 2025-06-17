@@ -9,6 +9,7 @@ import ItemProps from '@/dtos/ItensProps'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { calcPetMood } from '@/utils/moodCalculator'
 import { useState } from 'react'
+import GenericIcon from '../GenericIcon'
 
 const { height, width } = Dimensions.get('window')
 
@@ -36,6 +37,8 @@ const FoodItem = ({ setInteractingWithItem, update }: ItemProps) => {
         }, 2000)
     }
 
+    const petInfo = useUserPetStore((state) => state.pet)
+
     return (
         <View style={styles.cbox}>
             {isHungry && (
@@ -51,7 +54,7 @@ const FoodItem = ({ setInteractingWithItem, update }: ItemProps) => {
                 </View>
             )}
             <TouchableWithoutFeedback onPress={onPress}>
-                <Image
+                {/* <Image
                     style={
                         itemClicked
                             ? { width: 196, height: 136, position: 'absolute', bottom: 4, left: -2 }
@@ -64,7 +67,58 @@ const FoodItem = ({ setInteractingWithItem, update }: ItemProps) => {
                                 : require('@/assets/images/pets/cachorro/cachorro-comendo.png')
                             : require('@/assets/images/homescreen/poteC.png')
                     }
-                />
+                /> */}
+                {itemClicked ? (
+                    petInfo?.type === 'cat' ? (
+                        <GenericIcon
+                            Icon={() => (
+                                <Image
+                                    source={require('@/assets/images/pets/gato/gato-comendo.png')}
+                                    style={{
+                                        width: 270,
+                                        height: 305,
+                                        position: 'absolute',
+                                        bottom: 16,
+                                        left: -14,
+                                    }}
+                                    resizeMode="contain"
+                                />
+                            )}
+                            fill={petInfo?.color || '#7D5D56'}
+                            stroke={'#000'}
+                        />
+                    ) : (
+                        <GenericIcon
+                            Icon={() => (
+                                <Image
+                                    source={require('@/assets/images/pets/cachorro/cachorro-comendo.png')}
+                                    style={{
+                                        width: 270,
+                                        height: 305,
+                                        position: 'absolute',
+                                        bottom: 16,
+                                        left: -14,
+                                    }}
+                                    resizeMode="contain"
+                                />
+                            )}
+                            fill={petInfo?.color || '#7D5D56'}
+                            stroke={'#000'}
+                        />
+                    )
+                ) : (
+                    <GenericIcon
+                        Icon={() => (
+                            <Image
+                                source={require('@/assets/images/homescreen/poteC.png')}
+                                style={{ width: '100%', height: '100%' }}
+                                resizeMode="contain"
+                            />
+                        )}
+                        fill={petInfo?.color || '#7D5D56'}
+                        stroke={'#000'}
+                    />
+                )}
             </TouchableWithoutFeedback>
         </View>
     )
