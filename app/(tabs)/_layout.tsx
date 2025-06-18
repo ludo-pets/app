@@ -21,10 +21,9 @@ import {
 import Header from '@/components/Header'
 import { useUserPetStore } from '@/stores/userPetStore'
 import {
-  useWalkthrough,
-  WalkthroughProvider,
+    useWalkthrough,
+    WalkthroughProvider,
 } from '../../contexts/WalkthroughContext'
-
 
 const iconsSize = 32
 
@@ -139,8 +138,20 @@ export default function TabLayout() {
     const user = useUserPetStore((state) => state.user)
 
     useEffect(() => {
+        // const userId = 'gabrielBohn'
         const userId = 'ludopetsages@gmail.com'
+
+        // const userGet = async () => {
+        //     try {
+        //         await fetchUserAndPet(userId)
+        //     } catch (error) {
+        //         console.log('Error fetching user and pet:', error)
+        //     }
+        // }
+        // userGet()
+
         if (!user) {
+            console.log('User not found, fetching user and pet...')
             fetchUserAndPet(userId)
         }
     }, [fetchUserAndPet, user])
@@ -280,8 +291,7 @@ export default function TabLayout() {
                                 />
                             ),
                         }}
-                    >
-                    </Tabs.Screen>
+                    ></Tabs.Screen>
                 </Tabs>
             </WalkthroughProvider>
         </>

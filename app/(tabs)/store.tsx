@@ -106,7 +106,7 @@ export default function StoreScreen() {
             ) : (
                 <View style={styles.itemsShopBox}>
                     <FlatList
-                        style={{ width: '100%' }}
+                        style={{ width: '100%', marginBottom: 20, paddingBottom: 20 }}
                         data={items.filter(
                             (item) => item.category === selectedFilter.category
                         )}
@@ -158,7 +158,6 @@ const styles = StyleSheet.create({
     },
     itemsShopBox: {
         width: '100%',
-
         paddingVertical: 20,
         paddingHorizontal: 10,
     },

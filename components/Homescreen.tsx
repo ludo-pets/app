@@ -18,6 +18,8 @@ export interface HomeProps {
 const Homescreen = () => {
     const updatePet = useUserPetStore((state) => state.updatePet)
     const pet = useUserPetStore((state) => state.pet)
+    const itemsAdapter = useUserPetStore((state) => state.itemsAdapter)
+    
 
     const updateTime = (item: keyof Pet['wellBeing']) => {
         if (pet) {
@@ -32,14 +34,14 @@ const Homescreen = () => {
 
     return (
         <View style={styles.container}>
-            <Wallpaperitem image={pet?.activeItems.wallpaper} />
-            <Flooritem image={pet?.activeItems.floor} />
+            <Wallpaperitem image={itemsAdapter.wallpaper} />
+            <Flooritem image={itemsAdapter.floor} />
             <Petitem />
-            <WcItem update={(item) => updateTime(item as keyof Pet['wellBeing'])} />
-            <Beditem update={(item) => updateTime(item as keyof Pet['wellBeing'])} />
-            <Toyitem update={(item) => updateTime(item as keyof Pet['wellBeing'])} />
-            <Fooditem update={(item) => updateTime(item as keyof Pet['wellBeing'])} />
-            <Drinkitem update={(item) => updateTime(item as keyof Pet['wellBeing'])} />
+            <WcItem image={itemsAdapter.wc} update={(item) => updateTime(item as keyof Pet['wellBeing'])} />
+            <Beditem image={itemsAdapter.bed} update={(item) => updateTime(item as keyof Pet['wellBeing'])} />
+            <Toyitem image={itemsAdapter.toy} update={(item) => updateTime(item as keyof Pet['wellBeing'])} />
+            <Fooditem image={itemsAdapter.food} update={(item) => updateTime(item as keyof Pet['wellBeing'])} />
+            <Drinkitem image={itemsAdapter.water} update={(item) => updateTime(item as keyof Pet['wellBeing'])} />
         </View>
     )
 }

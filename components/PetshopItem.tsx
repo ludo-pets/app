@@ -31,7 +31,7 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
     const user = useUserPetStore((state) => state.user)
     const pet = useUserPetStore((state) => state.pet)
     const userUpdate = useUserPetStore((state) => state.updateUser)
-    const petUpdate = useUserPetStore((state) => state.updatePet)
+    const { updatePet, updatePetItens } = useUserPetStore()
     const [hasItem, setHasItem] = useState(false)
     const [quantity, setQuantity] = useState<number>(item.quantity)
     const [canBuy, setCanBuy] = useState(false)
@@ -43,7 +43,7 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
         if (pet) {
             activeItems = { ...pet.activeItems }
 
-            setIsActive(activeItems[item.type || 'toy'] == item.id)
+            setIsActive(activeItems[item.type] == item.id)
             const thisItem = pet.purchasedItems.find((i) => i.itemId == item.id)
 
             setHasItem(thisItem != null)
@@ -62,7 +62,6 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
                     buy = false
                 }
                 setCantBuy(buy)
-                console.log(buy)
             }
         }
     }, [user, pet])
@@ -72,37 +71,38 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
             const activeItems: { [Key: string]: string } = {
                 ...pet.activeItems,
             }
-            activeItems[item.type || 'toy'] = item.id
-            await petUpdate(pet.id, { activeItems: activeItems as any })
+            activeItems[item.type] = item.id
+            await updatePetItens(pet.id, { activeItems: activeItems as any })
         }
-    }
-    const onDesactive = () => {
-        // console.log(item.quantity)
     }
     const onBuy = async () => {
         if (user && pet) {
             const newUser = { ...user }
             const newPet: Pet = { ...pet }
             let curItem = null
-            newPet.purchasedItems.forEach((i) => {
+            newPet.purchasedItems = newPet.purchasedItems.map((i) => {
                 if (i.itemId == item.id) {
-                    curItem = i
-                    i.quantity = i.quantity! + 1
-                    return
+                    curItem = {
+                        itemId: i.itemId,
+                        image: i.image,
+                        quantity: i.quantity! + 1,
+                    }
+                    return curItem
                 }
+                return i
             })
+            
             if (!curItem) {
                 const newItem = {
-                    ...item,
                     quantity: 1,
-                    type: item.type || 'toy',
                     itemId: item.id,
+                    image: item.image,
                 }
-                newPet.purchasedItems.push(...pet.purchasedItems, newItem)
+                newPet.purchasedItems.push(newItem)
             }
 
             await userUpdate(user.id, { money: newUser.money - item.price })
-            await petUpdate(pet.id, { purchasedItems: newPet.purchasedItems })
+            await updatePet(pet.id, { purchasedItems: newPet.purchasedItems })
         }
     }
 
@@ -115,6 +115,9 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
                             width: `100%`,
                             height: `100%`,
                             backgroundColor: `${item.image}`,
+                            borderRadius: 8,
+                            borderColor: '#EDEDED',
+                            borderWidth: 1,
                         }}
                     />
                 ) : (
@@ -124,7 +127,7 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
                         resizeMode="contain"
                     />
                 )}
-                {item.type === 'food' && (
+                {item.quantity > 0 && item.price > 0 && (
                     <View style={styles.quantityBadge}>
                         <Text style={styles.quantityText}>{quantity}</Text>
                     </View>
@@ -134,10 +137,12 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
             <View style={styles.details}>
                 <View style={styles.rowTop}>
                     <Text style={styles.name}>{item.name}</Text>
-                    <View style={styles.price}>
-                        <Image source={petCoin} style={styles.coin} />
-                        <Text style={styles.priceText}>{item.price}</Text>
-                    </View>
+                    {item.price > 0 && (
+                        <View style={styles.price}>
+                            <Image source={petCoin} style={styles.coin} />
+                            <Text style={styles.priceText}>{item.price}</Text>
+                        </View>
+                    )}
                 </View>
 
                 <View style={styles.rowButtons}>
@@ -156,21 +161,23 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
                                     isActive && styles.buttonActiveText,
                                 ]}
                             >
-                                {isActive ? 'DESATIVAR' : 'ATIVAR'}
+                                {isActive ? 'ATIVO' : 'ATIVAR'}
                             </Text>
                         </Pressable>
+                    ) }
+                    {item.price > 0 && (
+                        <Pressable
+                            style={[
+                                styles.button,
+                                cantBuy ? styles.unlocked : styles.locked,
+                                styles.buyButton,
+                            ]}
+                            onPress={() => onBuy()}
+                            disabled={!cantBuy}
+                        >
+                            <Text style={styles.buttonText}>COMPRAR</Text>
+                        </Pressable>
                     )}
-                    <Pressable
-                        style={[
-                            styles.button,
-                            cantBuy ? styles.unlocked : styles.locked,
-                            styles.buyButton,
-                        ]}
-                        onPress={() => onBuy()}
-                        disabled={!cantBuy}
-                    >
-                        <Text style={styles.buttonText}>COMPRAR</Text>
-                    </Pressable>
                 </View>
             </View>
         </View>
@@ -277,7 +284,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#4682B4',
     },
     desactive: {
-        backgroundColor: '#EDB0B0',
+        backgroundColor: '#CFE2A8',
     },
     unlocked: {
         backgroundColor: '#6DA92C',

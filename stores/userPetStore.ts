@@ -17,11 +17,11 @@ interface UserPetState {
         floor?: string
         wallpaper?: string
         water?: string
-        foodBowl?: string
     }
     fetchUserAndPetByEmail: (userEmail: string) => Promise<void>
     updateUser: (userId: string, userData: Partial<User>) => Promise<void>
     updatePet: (petId: string, petData: Partial<Pet>) => Promise<void>
+    updatePetItens: (petId: string, petData: Partial<Pet>) => Promise<void>
     setUser: (user: User) => void
     setPet: (pet: Pet) => void
     setAchievements: (achievements: string) => void
@@ -41,36 +41,22 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
         try {
             const result = await getUserWithPetByEmail(userEmail)
             if (result) {
-                const itemsMapped = [
-                    'bed',
-                    'food',
-                    'wc',
-                    'toy',
-                    'floor',
-                    'wallpaper',
-                    'water',
-                    'foodBowl',
-                ].reduce((acc, item) => {
-                    const itemId =
-                        result.pet.activeItems[
-                            item as keyof typeof result.pet.activeItems
-                        ]
-                    const itemDetails = result.pet.purchasedItems.find(
-                        (purchasedItem) => purchasedItem.itemId === itemId
+                const activeItemsWithImages = Object.fromEntries(
+                    Object.entries(result.pet.activeItems).map(
+                        ([slot, itemId]) => {
+                            const purchase = result.pet.purchasedItems.find(
+                                (pi) => pi.itemId === itemId
+                            )
+                            const image = purchase ? purchase.image : ''
+                            return [slot, image]
+                        }
                     )
-
-                    if (itemDetails && 'image' in itemDetails) {
-                        acc[item as keyof typeof acc] = (
-                            itemDetails as { image: string }
-                        ).image
-                    }
-                    return acc
-                }, {} as { [key in 'bed' | 'food' | 'wc' | 'toy' | 'floor' | 'wallpaper' | 'water' | 'foodBowl']?: string })
+                )
 
                 set({
                     user: result.user,
                     pet: result.pet,
-                    itemsAdapter: itemsMapped,
+                    itemsAdapter: activeItemsWithImages,
                     loading: false,
                 })
             } else {
@@ -105,68 +91,43 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
         try {
             const success = await updatePet(petId, petData)
             if (success) {
-                const itemsMapped = [
-                    'bed',
-                    'food',
-                    'wc',
-                    'toy',
-                    'floor',
-                    'wallpaper',
-                    'water',
-                    'foodBowl',
-                ].reduce((acc, item) => {
-                    const itemId =
-                        petData.activeItems?.[
-                            item as keyof typeof petData.activeItems
-                        ]
-                    const itemDetails = petData.purchasedItems?.find(
-                        (purchasedItem) => purchasedItem.itemId === itemId
-                    )
-
-                    if (itemDetails && 'image' in itemDetails) {
-                        acc[
-                            item as
-                                | 'bed'
-                                | 'food'
-                                | 'wc'
-                                | 'toy'
-                                | 'floor'
-                                | 'wallpaper'
-                                | 'water'
-                                | 'foodBowl'
-                        ] = (itemDetails as { image: string }).image
-                    } else {
-                        acc[
-                            item as
-                                | 'bed'
-                                | 'food'
-                                | 'wc'
-                                | 'toy'
-                                | 'floor'
-                                | 'wallpaper'
-                                | 'water'
-                                | 'foodBowl'
-                        ] =
-                            get().itemsAdapter[
-                                item as
-                                    | 'bed'
-                                    | 'food'
-                                    | 'wc'
-                                    | 'toy'
-                                    | 'floor'
-                                    | 'wallpaper'
-                                    | 'water'
-                                    | 'foodBowl'
-                            ] ?? ''
-                    }
-                    return acc
-                }, {} as { [key in 'bed' | 'food' | 'wc' | 'toy' | 'floor' | 'wallpaper' | 'water' | 'foodBowl']?: string })
-
                 const oldPet = get().pet
                 if (oldPet) {
                     set({
                         pet: { ...oldPet, ...petData },
-                        itemsAdapter: itemsMapped,
+                    })
+                }
+            } else {
+                set({ error: 'Erro ao atualizar o pet' })
+            }
+        } catch (error: any) {
+            set({ error: error.message })
+        } finally {
+            set({ loading: false })
+        }
+    },
+
+    updatePetItens: async (petId: string, petData: Partial<Pet>) => {
+        set({ error: null })
+        try {
+            const success = await updatePet(petId, petData)
+            if (success) {
+                const newItems = petData.activeItems
+                const oldPet = get().pet
+                const activeItemsWithImages = Object.fromEntries(
+                    Object.entries(newItems).map(([slot, itemId]) => {
+                        const purchase = oldPet?.purchasedItems.find(
+                            (pi) => pi.itemId === itemId
+                        )
+                        const image = purchase ? purchase.image : null
+                        return [slot, image]
+                    })
+                )
+
+                if (oldPet) {
+                    set({
+                        pet: { ...oldPet, ...petData },
+                        itemsAdapter: activeItemsWithImages,
                     })
                 }
             } else {

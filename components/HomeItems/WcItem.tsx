@@ -13,9 +13,8 @@ import { useEffect } from 'react'
 
 const { height, width } = Dimensions.get('window')
 
-const WcItem = ({ update }: ItemProps) => {
+const WcItem = ({ update, image }: ItemProps) => {
     const pet = useUserPetStore((state) => state.pet)
-    const itemsAdapter = useUserPetStore((state) => state.itemsAdapter)
 
     const needsCleaning = () => {
         if (pet) {
@@ -52,7 +51,7 @@ const WcItem = ({ update }: ItemProps) => {
             <TouchableWithoutFeedback onPress={onPress}>
                 <Image
                     style={{ width: `100%`, height: `100%`, resizeMode: 'contain' }}
-                    source={{uri: itemsAdapter.wc ? itemsAdapter.wc : require('@/assets/images/homescreen/caixa_de_areia.png')}}
+                    source={{uri: image || require('@/assets/images/homescreen/caixa_de_areia.png')}}
                 />
             </TouchableWithoutFeedback>
         </View>
