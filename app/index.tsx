@@ -1,56 +1,74 @@
-import { useEffect, useState } from 'react';
-import { View, Image, ActivityIndicator, StyleSheet } from 'react-native';
-import { onAuthStateChanged } from 'firebase/auth';
-import { router } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import * as WebBrowser from 'expo-web-browser';
+import React, { useEffect, useState } from 'react'
+import {
+  View,
+  Image,
+  ActivityIndicator,
+  StyleSheet,
+  Platform,
+} from 'react-native'
+import { onAuthStateChanged } from 'firebase/auth'
+import { router } from 'expo-router'
+import * as SplashScreen from 'expo-splash-screen'
+import * as WebBrowser from 'expo-web-browser'
+import * as Notifications from 'expo-notifications'
 
-import { auth } from '@/firebaseConfig';
-import GoogleSigninButton from '@/components/GoogleSigninComponent';
-import { useUserPetStore } from '@/stores/userPetStore';
+import { auth } from '@/firebaseConfig'
+import GoogleSigninButton from '@/components/GoogleSigninComponent'
+import { useUserPetStore } from '@/stores/userPetStore'
 
-WebBrowser.maybeCompleteAuthSession();
+WebBrowser.maybeCompleteAuthSession()
 
 export default function AuthCheck() {
-  const [ready, setReady] = useState(false);
+  const [ready, setReady] = useState(false)
 
   useEffect(() => {
-    SplashScreen.preventAutoHideAsync().catch(() => {});
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.HIGH,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      })
+    }
+  }, [])
+
+  useEffect(() => {
+    SplashScreen.preventAutoHideAsync().catch(() => {})
 
     const unsub = onAuthStateChanged(auth, async (user) => {
       try {
         if (user) {
-          const email = user.email!;
-          const { fetchUserAndPet } = useUserPetStore.getState();
-          await fetchUserAndPet(email);
+          const email = user.email!
+          const { fetchUserAndPetByEmail } = useUserPetStore.getState()
+          await fetchUserAndPetByEmail(email)
 
-          const { pet } = useUserPetStore.getState();
+          const { pet } = useUserPetStore.getState()
 
           router.replace(
             pet
               ? '/(tabs)/home'
               : { pathname: '/petCreate', params: { userId: user.uid, email } },
-          );
+          )
         } else {
-          setReady(true);
+          setReady(true)
         }
       } catch (err) {
-        console.error('AuthCheck fatal:', err);
-        setReady(true);
+        console.error('AuthCheck fatal:', err)
+        setReady(true)
       } finally {
-        SplashScreen.hideAsync().catch(() => {});
+        SplashScreen.hideAsync().catch(() => {})
       }
-    });
+    })
 
-    return unsub;
-  }, []);
+    return unsub
+  }, [])
 
   if (!ready) {
     return (
       <View style={styles.containerBox}>
         <ActivityIndicator size="large" />
       </View>
-    );
+    )
   }
 
   return (
@@ -60,14 +78,14 @@ export default function AuthCheck() {
           source={require('@/assets/images/ludopets.png')}
           style={styles.image}
         />
+
         <View style={styles.buttons}>
           <GoogleSigninButton />
         </View>
       </View>
     </View>
-  );
+  )
 }
-
 
 const styles = StyleSheet.create({
   containerBox: {
@@ -106,4 +124,4 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 80,
   },
-});
+})

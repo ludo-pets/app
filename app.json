@@ -65,7 +65,18 @@
                 }
             ],
             "expo-audio",
-            "expo-secure-store"
+            "expo-secure-store",
+            [
+                "expo-notifications",
+                {
+                  "icon": "./assets/images/favicon.png",
+                  "color": "#ffffff",
+                  "defaultChannel": "default",
+                  "sounds": [
+                  ],
+                  "enableBackgroundRemoteNotifications": false
+                }
+            ]
         ],
         "experiments": {
             "typedRoutes": true

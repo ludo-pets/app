@@ -64,7 +64,7 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
         }
     }
     const onDesactive = () => {
-        console.log(item.quantity)
+        // console.log(item.quantity)
     }
     const onBuy = async () => {
         if (user && pet) {

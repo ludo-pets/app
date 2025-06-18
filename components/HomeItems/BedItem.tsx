@@ -6,18 +6,44 @@ import {
     Dimensions,
     Platform,
 } from 'react-native'
-import { InteractionTouch } from './InteractionTouch'
 import ItemProps from '@/dtos/ItensProps'
+import { useUserPetStore } from '@/stores/userPetStore'
+import { calcPetMood } from '@/utils/moodCalculator'
+import { useState } from 'react'
 
 const { height, width } = Dimensions.get('window')
 
 const BedItem = ({ update }: ItemProps) => {
+    const pet = useUserPetStore((state) => state.pet)
+
+    const needsSleep = () => {
+        if (pet) {
+            const {sleep} = calcPetMood(pet.wellBeing)
+            return sleep < 12.5
+        }
+        return false
+    }
+
+    const [isSleepy, setIsSleepy] = useState(needsSleep())
     const onPress = () => {
         update('sleep')
+        setIsSleepy(needsSleep())
     }
 
     return (
         <View style={styles.cbox}>
+            {isSleepy && (
+                <View style={styles.alertContainer}>
+                    <Image
+                        source={require('@/assets/images/homescreen/icone_feedback.png')}
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            resizeMode: 'contain',
+                        }}
+                    />
+                </View>
+            )}
             <TouchableWithoutFeedback onPress={onPress}>
                 <Image
                     style={{
@@ -44,6 +70,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         display: 'flex',
-        //backgroundColor: 'blue',
+    },
+    alertContainer: {
+        position: 'absolute',
+        top: 4,
+        right: -2,
+        width: 30,
+        height: 30,
+        zIndex: 1,
+        backgroundColor: 'white',
+        borderRadius: 30,
+        padding: 2,
     },
 })
