@@ -13,7 +13,8 @@ import {
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
 
 import Minigame from '@/dtos/Minigame'
-import { fetchMinigames } from '@/services/fetchMinigames'
+import { router } from 'expo-router'
+import { fetchMinigames } from '@/services/minigameService'
 
 const { width } = Dimensions.get('window')
 const imgRad = 16
@@ -26,11 +27,15 @@ interface MinigameListConfig {
 const minigameListRegistry: Record<string, MinigameListConfig> = {
     'Hora da Patinha': {
         icon: require('@/assets/images/minigames/minigame_icon_test.png'),
-        routeName: 'NailTrimGame',
+        routeName: '/minigames/NailTrimGame',
     },
     'Comilança Maluca': {
         icon: require('@/assets/images/minigames/food-game/gato_boca_aberta.png'),
-        routeName: 'FoodGame',
+        routeName: '/minigames/FoodGame',
+    },
+    'Flappy Pet': {
+        icon: require('@/assets/images/minigames/flappyPet/flappyPetIcon.png'),
+        routeName: '/minigames/FlappyPetGame',
     },
 }
 
@@ -52,6 +57,7 @@ export default function MinigameScreen() {
             setError(null)
             try {
                 const fetchedMinigames = await fetchMinigames()
+
                 setMinigames(fetchedMinigames)
             } catch (err: any) {
                 console.error('Failed to fetch minigames:', err)
@@ -75,11 +81,16 @@ export default function MinigameScreen() {
     const handleNavigateToGame = useCallback(
         (gameName: string, gameId: string) => {
             const config = getMinigameListConfig(gameName)
+
             if (config && config.routeName) {
                 setError(null)
-                navigation.navigate(config.routeName, {
-                    minigameId: gameId,
-                    minigameName: gameName,
+
+                router.push({
+                    pathname: config.routeName as any,
+                    params: {
+                        minigameId: gameId,
+                        minigameName: gameName,
+                    },
                 })
             } else {
                 console.warn(
@@ -88,7 +99,7 @@ export default function MinigameScreen() {
                 setError(`Game "${gameName}" cannot be opened right now.`)
             }
         },
-        [navigation]
+        []
     )
 
     const renderMinigameItem = ({ item }: { item: Minigame }) => {
@@ -109,7 +120,7 @@ export default function MinigameScreen() {
                     <View style={styles.imageContainer}>
                         <View style={styles.picBox}>
                             <Image
-                                resizeMode="cover"
+                                resizeMode="contain"
                                 style={styles.listItemImage}
                                 source={config.icon}
                             />
@@ -149,6 +160,7 @@ export default function MinigameScreen() {
         )
     }
 
+    console.log('🚀 ~ MinigameScreen ~ minigames:', minigames)
     return (
         <View style={styles.container}>
             <FlatList

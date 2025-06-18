@@ -16,13 +16,13 @@ import { useItemStore } from '@/stores/itemStore'
 type FilterTitle = {
     id: number
     name: string
-    category: 'foods' | 'toys' | 'enviroment'
+    category: 'foods' | 'toys' | 'environment'
 }
 
 const filterTitles: FilterTitle[] = [
     { id: 1, name: 'Alimentação', category: 'foods' },
     { id: 2, name: 'Brinquedos', category: 'toys' },
-    { id: 3, name: 'Ambiente', category: 'enviroment' },
+    { id: 3, name: 'Ambiente', category: 'environment' },
 ]
 
 export default function StoreScreen() {
@@ -76,6 +76,7 @@ export default function StoreScreen() {
                         image: item.image,
                         is_active: isActive,
                         quantity,
+                        type: item.type,
                     }}
                 />
             )
@@ -157,11 +158,13 @@ const styles = StyleSheet.create({
     },
     itemsShopBox: {
         width: '100%',
+
         paddingVertical: 20,
         paddingHorizontal: 10,
     },
     itemShop: {
         height: 92,
+
         backgroundColor: '#E5E5E5',
         width: '100%',
         justifyContent: 'center',

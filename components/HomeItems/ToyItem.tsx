@@ -6,18 +6,49 @@ import {
     Dimensions,
     Platform,
 } from 'react-native'
-import { InteractionTouch } from './InteractionTouch'
 import ItemProps from '@/dtos/ItensProps'
+import { useUserPetStore } from '@/stores/userPetStore'
+import { calcPetMood } from '@/utils/moodCalculator'
+import { useState } from 'react'
+import { useEffect } from 'react'
 
 const { height, width } = Dimensions.get('window')
 
 const ToyItem = ({ update }: ItemProps) => {
+    const pet = useUserPetStore((state) => state.pet)
+    
+    const needsToPlay = () => {
+        if (pet) {
+            const { play } = calcPetMood(pet.wellBeing)
+            return play < 6
+        }
+        return false
+    }
+
+    useEffect(() => {
+        setIsPlayful(needsToPlay())
+    }, [pet])
+
+    const [isPlayful, setIsPlayful] = useState(needsToPlay())
     const onPress = () => {
         update('fun')
+        setIsPlayful(needsToPlay())
     }
 
     return (
         <View style={styles.cbox}>
+            {isPlayful && (
+                <View style={styles.alertContainer}>
+                                    <Image
+                                        source={require('@/assets/images/homescreen/icone_feedback.png')}
+                                        style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            resizeMode: 'contain',
+                                        }}
+                                    />
+                                </View>
+            )}
             <TouchableWithoutFeedback onPress={onPress}>
                 <Image
                     style={{
@@ -44,6 +75,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         display: 'flex',
-        //backgroundColor: 'blue',
+    },
+    alertContainer: {
+        position: 'absolute',
+        top: -10,
+        right: -10,
+        width: 30,
+        height: 30,
+        zIndex: 1,
+        backgroundColor: 'white',
+        borderRadius: 12,
+        padding: 2,
     },
 })

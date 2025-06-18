@@ -8,8 +8,8 @@ import {
     useWindowDimensions,
     TextInput,
     Pressable,
+    ScrollView,
 } from 'react-native'
-import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { useEffect, useState } from 'react'
 import React from 'react'
 import XpBar from '@/components/XpBar'
@@ -20,6 +20,9 @@ import Cachorro from '@/assets/images/pets/cachorro.svg'
 import { PetOptionFormRegisterPet } from '@/components/PetOptionFormRegisterPet'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { useRouter } from 'expo-router'
+import AchievementType from '@/dtos/Achievement'
+import { fetchAchievements } from '@/services/achievementService'
+import Achievement from '@/components/Achievement'
 
 const editIcon = require('@/assets/images/profile/edit_icon.png')
 const coinIcon = require('@/assets/images/profile/pet_coin.png')
@@ -34,17 +37,30 @@ export default function Profile() {
     const petInfo = useUserPetStore((state) => state.pet)
     const [petName, setPetName] = useState(petInfo?.name || '')
     const [petColor, setPetColor] = useState(petInfo?.color || '')
-    const handlerChangePetName = (text: string) => {
-        setPetName(text)
-    }
-    const router = useRouter()
+    const [achievements, setAchievements] = useState<AchievementType[]>([])
 
     useEffect(() => {
+        const loadData = async () => {
+            try {
+                const achievements = await fetchAchievements()
+                setAchievements(achievements)
+            } catch (err: any) {
+                console.error('Failed to fetch achievements:', err)
+                setAchievements([])
+            }
+        }
+
+        loadData()
+
         if (petInfo) {
             setPetName(petInfo.name)
             setPetColor(petInfo.color)
         }
     }, [petInfo])
+
+    const handlerChangePetName = (text: string) => {
+        setPetName(text)
+    }
 
     const colors = colorsOptions
 
@@ -77,109 +93,113 @@ export default function Profile() {
 
     return (
         <SafeAreaView style={styles.safeArea}>
-            <View style={styles.container}>
-                <XpBar xp={user?.experience || 0} level={user?.level || 1} />
-                <View style={styles.petContainer}>
-                    <PetOptionFormRegisterPet
-                        Icon={pets[0].icon}
-                        onSelect={() => {}}
-                        selected={false}
-                        onlyPet={false}
-                        color={petColor || '#7D5D56'}
-                    />
-                    <View style={styles.nameContainer}>
-                        {isEditing ? (
-                            <TextInput
-                                style={[styles.inputBox]}
-                                onChangeText={handlerChangePetName}
-                                value={petName}
-                            />
-                        ) : (
-                            <>
-                                <Text style={styles.petName}>
-                                    {petInfo?.name}
-                                </Text>
-                                <TouchableOpacity
-                                    onPress={() => setIsEditing(!isEditing)}
-                                >
-                                    <Image
-                                        source={editIcon}
-                                        style={styles.editIcon}
+            <ScrollView>
+                <View style={styles.container}>
+                    <XpBar xp={user?.experience || 0} level={user?.level || 1} />
+                    <View style={styles.petContainer}>
+                        <PetOptionFormRegisterPet
+                            Icon={pets[0].icon}
+                            onSelect={() => { }}
+                            selected={false}
+                            onlyPet={false}
+                            color={petColor || '#7D5D56'}
+                        />
+                        <View style={styles.nameContainer}>
+                            {isEditing ? (
+                                <TextInput
+                                    style={[styles.inputBox]}
+                                    onChangeText={handlerChangePetName}
+                                    value={petName}
+                                />
+                            ) : (
+                                <>
+                                    <Text style={styles.petName}>
+                                        {petInfo?.name}
+                                    </Text>
+                                    <TouchableOpacity
+                                        onPress={() => setIsEditing(!isEditing)}
+                                    >
+                                        <Image
+                                            source={editIcon}
+                                            style={styles.editIcon}
+                                        />
+                                    </TouchableOpacity>
+                                </>
+                            )}
+                        </View>
+                        <View style={styles.colorOptionBox}>
+                            {colors.map((color) => {
+                                const colorSelected = color.color === petColor
+                                return (
+                                    <Pressable
+                                        key={color.id}
+                                        style={[
+                                            { backgroundColor: color.color },
+                                            styles.colorOption,
+                                            colorSelected &&
+                                            styles.colorOptionActive,
+                                        ]}
+                                        onPress={() => {
+                                            if (!isEditing) {
+                                                return
+                                            }
+                                            setPetColor(color.color)
+                                        }}
                                     />
+                                )
+                            })}
+                        </View>
+                        <View style={styles.infoContainer}>
+                            <View style={styles.coinsContainer}>
+                                <Image source={coinIcon} style={styles.coinIcon} />
+                                <Text style={styles.coinsText}>{user?.money}</Text>
+                            </View>
+
+                            <View style={styles.notificationContainer}>
+                                <TouchableOpacity
+                                    style={styles.checkbox}
+                                    onPress={toggleCheckbox}
+                                >
+                                    {isChecked && (
+                                        <Image
+                                            source={require('@/assets/images/profile/check.png')}
+                                            style={styles.checkmark}
+                                        />
+                                    )}
                                 </TouchableOpacity>
-                            </>
+                                <Text style={styles.notificationText}>
+                                    Notificações
+                                </Text>
+                            </View>
+                        </View>
+                    </View>
+
+                    <View style={styles.buttonContainer}>
+                        {isEditing && (
+                            <TouchableOpacity
+                                style={styles.saveButton}
+                                onPress={() => updatePet()}
+                            >
+                                <Text style={styles.saveButtonText}>Salvar</Text>
+                            </TouchableOpacity>
                         )}
                     </View>
-                    <View style={styles.colorOptionBox}>
-                        {colors.map((color) => {
-                            const colorSelected = color.color === petColor
-                            return (
-                                <Pressable
-                                    key={color.id}
-                                    style={[
-                                        { backgroundColor: color.color },
-                                        styles.colorOption,
-                                        colorSelected &&
-                                            styles.colorOptionActive,
-                                    ]}
-                                    onPress={() => {
-                                        if (!isEditing) {
-                                            return
-                                        }
-                                        setPetColor(color.color)
-                                    }}
-                                />
-                            )
-                        })}
-                    </View>
-                    <View style={styles.infoContainer}>
-                        <View style={styles.coinsContainer}>
-                            <Image source={coinIcon} style={styles.coinIcon} />
-                            <Text style={styles.coinsText}>{user?.money}</Text>
-                        </View>
 
-                        <View style={styles.notificationContainer}>
-                            <TouchableOpacity
-                                style={styles.checkbox}
-                                onPress={toggleCheckbox}
-                            >
-                                {isChecked && (
-                                    <Image
-                                        source={require('@/assets/images/profile/check.png')}
-                                        style={styles.checkmark}
+                    {!isEditing && (
+                        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                            {achievements.map((achievement) => (
+                                <View key={achievement.id}>
+                                    <Achievement
+                                        title={achievement.name}
+                                        description={achievement.message}
+                                        conquered={user?.achievements.includes(achievement.id)  || false}
                                     />
-                                )}
-                            </TouchableOpacity>
-                            <Text style={styles.notificationText}>
-                                Notificações
-                            </Text>
-                        </View>
-                    </View>
-                </View>
-
-                <View style={styles.buttonContainer}>
-                    {isEditing && (
-                        <TouchableOpacity
-                            style={styles.saveButton}
-                            onPress={() => updatePet()}
-                        >
-                            <Text style={styles.saveButtonText}>Salvar</Text>
-                        </TouchableOpacity>
+                                </View>
+                            ))}
+                        </ScrollView>
                     )}
-
-                    <TouchableOpacity
-                        onPress={() => router.push('/')}
-                        style={styles.logoutButton}
-                    >
-                        <Text style={styles.logoutButtonText}>Sair</Text>
-                        <MaterialIcons
-                            name="exit-to-app"
-                            size={24}
-                            color="#5B5B5B"
-                        />
-                    </TouchableOpacity>
                 </View>
-            </View>
+            </ScrollView>
         </SafeAreaView>
     )
 }
@@ -227,7 +247,7 @@ const createStyles = (isSmallScreen: boolean) =>
             borderColor: '#D9D0E3',
             borderRadius: 8,
             borderStyle: 'solid',
-            backgroundColor: '#FFF', // Added background
+            backgroundColor: '#FFF', 
         },
         header: {
             width: '100%',

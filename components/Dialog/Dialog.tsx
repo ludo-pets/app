@@ -40,7 +40,7 @@ const style = StyleSheet.create({
     startDialog: {
         padding: 25,
         width: width * 0.8,
-        height: width * 0.8,
+        // height: width * 0.8,
         backgroundColor: '#fefefe',
         borderRadius: 25,
         display: 'flex',
