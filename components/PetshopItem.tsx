@@ -23,6 +23,7 @@ export interface PetshopItemProps {
     has_item: boolean
     is_active: boolean
     type: string
+    requiredLevel?: number
 }
 
 const { width } = Dimensions.get('window')
@@ -127,7 +128,7 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
                         resizeMode="contain"
                     />
                 )}
-                {item.quantity > 0 && item.price > 0 && (
+                {quantity > 0 && item.price > 0 && item.type === 'food' && (
                     <View style={styles.quantityBadge}>
                         <Text style={styles.quantityText}>{quantity}</Text>
                     </View>
@@ -146,7 +147,7 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
                 </View>
 
                 <View style={styles.rowButtons}>
-                    {hasItem && (
+                    {hasItem ? (
                         <Pressable
                             style={[
                                 styles.button,
@@ -164,7 +165,10 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
                                 {isActive ? 'ATIVO' : 'ATIVAR'}
                             </Text>
                         </Pressable>
-                    ) }
+                    ) : item.has_required_level ? <></> : (
+                        <Text style={styles.levelReach}>
+                            Liberado no nível {item.requiredLevel}
+                        </Text>)}
                     {item.price > 0 && (
                         <Pressable
                             style={[
@@ -241,12 +245,17 @@ const styles = StyleSheet.create({
     },
     rowButtons: {
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'flex-end',
     },
     name: {
         fontSize: 16,
         fontWeight: '500',
         color: '#333',
+    },
+    levelReach: {
+        fontSize: 12,
+        fontWeight: '500',
+        color: '#5B5B5B',
     },
     price: {
         flexDirection: 'row',

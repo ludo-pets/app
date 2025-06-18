@@ -77,6 +77,7 @@ export default function StoreScreen() {
                         is_active: isActive,
                         quantity,
                         type: item.type,
+                        requiredLevel: item.requiredLevel,
                     }}
                 />
             )
@@ -106,7 +107,7 @@ export default function StoreScreen() {
             ) : (
                 <View style={styles.itemsShopBox}>
                     <FlatList
-                        style={{ width: '100%', marginBottom: 20, paddingBottom: 20 }}
+                        style={{ width: '100%', height: '100%', marginBottom: 20, paddingBottom: 20 }}
                         data={items.filter(
                             (item) => item.category === selectedFilter.category
                         )}
