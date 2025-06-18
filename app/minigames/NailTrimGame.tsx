@@ -97,7 +97,12 @@ export default function NailTrimGame() {
                     nailShort={petSet[pet.type].nailShortImage}
                 />
             )}
-            {/*para testes, apagar dps*/}
+
+            <ConfirmExitModal
+                visible={modalVisible}
+                onConfirm={onConfirm}
+                onCancel={onCancel}
+            />
         </GestureHandlerRootView>
     )
 }
