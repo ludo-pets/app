@@ -11,8 +11,7 @@ import * as AuthSession from 'expo-auth-session';
 import { GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
 import { auth } from '../firebaseConfig';
 import {
-    createUserService,
-    getUserWithPetByIdService,
+    getUserWithPetByEmail,
 } from '@/services/userService';
 import { useRouter } from 'expo-router';
 import { useUserPetStore } from '@/stores/userPetStore';
@@ -49,14 +48,13 @@ export default function GoogleSigninButton() {
                 const userCredential = await signInWithCredential(auth, credential);
                 const { uid, email } = userCredential.user;
 
-                let user = await getUserWithPetByIdService(email!);
+                let user = await getUserWithPetByEmail(email!);
                 if (!user) {
-                    await createUserService({ uid, email });
-                    user = await getUserWithPetByIdService(email!);
+                    user = await getUserWithPetByEmail(email!);
                 }
 
                 if (user?.pet) {
-                    await useUserPetStore.getState().fetchUserAndPet(email!);
+                    await useUserPetStore.getState().fetchUserAndPetByEmail(email!);
                     router.replace('/home');
                 } else {
                     router.replace({

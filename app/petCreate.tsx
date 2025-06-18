@@ -1,8 +1,6 @@
 import { Image, View, StyleSheet, Pressable, Text } from 'react-native'
 import { FormRegisterPet } from '../components/FormRegisterPet'
 import { useRouter } from 'expo-router'
-import GoogleSigninButton from '@/components/GoogleSigninComponent'
-import * as WebBrowser from 'expo-web-browser'
 
 export default function RegisterPetPage() {
     const router = useRouter()
@@ -17,7 +15,6 @@ export default function RegisterPetPage() {
                         router.push('/home')
                     }}
                 >
-                    <Text style={styles.link}>Já tenho um pet</Text>
                 </Pressable>
             </View>
         </View>

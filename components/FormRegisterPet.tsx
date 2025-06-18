@@ -18,7 +18,7 @@ import { SvgProps } from 'react-native-svg'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { addPet } from '@/services/petService'
-import { getUserWithPetByEmail } from '@/services/userService'
+import { createUser, getUserWithPetByEmail } from '@/services/userService'
 import { updateUser } from '@/services/userService'
 
 export type PetOption = {
@@ -61,6 +61,7 @@ export function FormRegisterPet() {
     const route = useRoute()
     const { userId, email } = (route.params as FormRegisterPetRouteParams) || {}
     const navigation = useNavigation()
+
     const [selectedPet, setSelectedPet] = useState<PetOption>(petsTypes[0])
     const [selectedColorPet, setSelectedColorPet] = useState<ColorOption>(
         colorsOptions[0]
@@ -78,34 +79,42 @@ export function FormRegisterPet() {
             )
             return
         }
-
-        // Set loading state to true
         setIsLoading(true)
 
         const petDataToCreate = {
-            name: petName.trim(), // Trim whitespace
+            name: petName.trim(),
             color: selectedColorPet.color,
-            type: selectedPet.pet_type, // Changed from petType to type to match service
+            type: selectedPet.pet_type,
         }
 
-        // Call the service function to add the pet
-        const newPet = await addPet(petDataToCreate)
+        const newPet = await addPet({
+            name: petName.trim(),
+            color: selectedColorPet.color,
+            type: selectedPet.pet_type,
+        })
 
-        if (newPet) {
-            // Update user in Firestore to bind pet
-            await updateUser(userId, { pet: newPet.id })
-
-            // Fetch the updated user (now with pet)
-            const updatedUser = await getUserWithPetByEmail(email)
-
-            // Now set in store
-            if (updatedUser) {
-                useUserPetStore.getState().getUserWithPetByEmail(email)
-            }
-            navigation.navigate('(tabs)' as never)
-        } else {
+        if (!newPet) {
             console.error('Failed to create pet.')
+            setIsLoading(false)
+            return
         }
+
+        let user = await getUserWithPetByEmail(email)
+        if (!user) {
+            user = await createUser({
+                id: userId,
+                email: email,
+            })
+            await updateUser(user.id, { pet: newPet.id })
+        }
+
+        if (user) {
+            await useUserPetStore
+            .getState()
+            .fetchUserAndPetByEmail(email)
+    }
+
+    navigation.navigate('(tabs)' as never)
     }
 
     function handlerChangePetName(newName: string) {

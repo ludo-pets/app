@@ -8,9 +8,7 @@ import {
   StatusBar,
 } from 'react-native'
 import {
-  Route,
   Tabs,
-  useRouter,
   usePathname,
   Redirect,
   router,
@@ -26,14 +24,13 @@ import {
 } from 'phosphor-react-native'
 import Header from '@/components/Header'
 import { useUserPetStore } from '@/stores/userPetStore'
-import { NavigationState } from '@react-navigation/native'
 import { auth } from '@/firebaseConfig'
 import { signOut } from 'firebase/auth'
 import {
   useWalkthrough,
   WalkthroughProvider,
 } from '@/contexts/WalkthroughContext'
-
+import type { RouteProp, ParamListBase } from '@react-navigation/native'
 
 
 const iconsSize = 32
@@ -244,7 +241,7 @@ export default function TabLayout() {
                         }}
                         listeners={({ navigation, route }) => ({
                             tabPress: (e) => {
-                                const r = route as Route<string> & {
+                                const r = route as RouteProp<ParamListBase, string> & {
                                     state?: any
                                 }
                                 const nestedState = r.state

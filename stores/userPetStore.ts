@@ -5,6 +5,7 @@ import { Pet } from '@/dtos/Pet'
 import User from '@/dtos/User'
 
 interface UserPetState {
+    [x: string]: any
     user: User | null
     pet: Pet | null
     loading: boolean
