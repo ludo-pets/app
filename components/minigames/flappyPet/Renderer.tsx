@@ -20,10 +20,7 @@ import useGameManager from '@/hooks/minigames/flappyPet/useGameManager'
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get('window')
 
-interface RendererProps {
-    isPaused: boolean
-}
-export default function Renderer({ isPaused }: RendererProps) {
+export default function Renderer() {
     //imagens
     const background = require('@/assets/images/minigames/flappyPet/background.png')
     const floor = require('@/assets/images/minigames/flappyPet/floor.png')

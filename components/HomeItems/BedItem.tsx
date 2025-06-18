@@ -10,6 +10,7 @@ import ItemProps from '@/dtos/ItensProps'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { calcPetMood } from '@/utils/moodCalculator'
 import { useState } from 'react'
+import { useEffect } from 'react'
 
 const { height, width } = Dimensions.get('window')
 
@@ -17,6 +18,7 @@ const BedItem = ({ update }: ItemProps) => {
     const pet = useUserPetStore((state) => state.pet)
     const itemsAdapter = useUserPetStore((state) => state.itemsAdapter)
 
+  
     const needsSleep = () => {
         if (pet) {
             const {sleep} = calcPetMood(pet.wellBeing)
@@ -24,6 +26,10 @@ const BedItem = ({ update }: ItemProps) => {
         }
         return false
     }
+
+      useEffect(() => {
+        setIsSleepy(needsSleep())
+    }, [pet])
 
     const [isSleepy, setIsSleepy] = useState(needsSleep())
     const onPress = () => {
