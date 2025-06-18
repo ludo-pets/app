@@ -10,12 +10,19 @@ import { petSet } from '@/components/minigames/nail-trim-game/PetSets'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { useRouter } from 'expo-router'
 import { useMinigameStore } from '@/stores/minigameStore'
+import { useConfirmExit } from '@/hooks/usePreventNavigationExit'
+import ConfirmExitModal from '@/components/ConfirmExitModal'
+
 import { useFocusEffect } from '@react-navigation/native'
 import Header from '@/components/Header'
 
 const { width } = Dimensions.get('window')
 
 export default function NailTrimGame() {
+    const { modalVisible, onConfirm, onCancel } = useConfirmExit({
+        onPause: () => {},
+        onResume: () => {},
+    })
     const [started, setStarted] = useState(false)
     const [ended, setEnded] = useState(false)
     const [score, setScore] = useState(0)
@@ -90,7 +97,12 @@ export default function NailTrimGame() {
                     nailShort={petSet[pet.type].nailShortImage}
                 />
             )}
-            {/*para testes, apagar dps*/}
+
+            <ConfirmExitModal
+                visible={modalVisible}
+                onConfirm={onConfirm}
+                onCancel={onCancel}
+            />
         </GestureHandlerRootView>
     )
 }

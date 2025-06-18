@@ -5,6 +5,8 @@ import StarterGameDialog from '@/components/minigames/food-game/StarterGameDialo
 import React from 'react'
 import EndGameDialog from '@/components/minigames/food-game/EndGameDialog'
 import { useRouter } from 'expo-router'
+import { useConfirmExit } from '@/hooks/usePreventNavigationExit'
+import ConfirmExitModal from '@/components/ConfirmExitModal'
 import { useFocusEffect } from '@react-navigation/native'
 import Header from '@/components/Header'
 
@@ -13,17 +15,22 @@ const FoodGame = () => {
     const router = useRouter()
 
     useFocusEffect(
-            React.useCallback(() => {
-                return () => {
-                    gameManager.cleanup();
-                };
-            }, [])
-        );
+        React.useCallback(() => {
+            return () => {
+                gameManager.cleanup()
+            }
+        }, [])
+    )
 
     const handleContinue = () => {
         gameManager.setGameOver(false)
         router.push('/home')
     }
+
+    const { modalVisible, onConfirm, onCancel } = useConfirmExit({
+        onPause: () => gameManager.pauseGame(),
+        onResume: () => gameManager.resumeGame(),
+    })
 
     return (
         <View style={styles.container}>
@@ -45,6 +52,12 @@ const FoodGame = () => {
                     coins={gameManager.coins}
                 />
             )}
+
+            <ConfirmExitModal
+                visible={modalVisible}
+                onConfirm={onConfirm}
+                onCancel={onCancel}
+            />
 
             <Renderer gameManager={gameManager} />
         </View>

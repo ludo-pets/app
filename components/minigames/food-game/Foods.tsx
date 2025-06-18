@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { Animated, ImageSourcePropType } from 'react-native'
 import { GameConfigType } from './GameConfig'
+import { Pause } from 'phosphor-react-native'
 
 const bolo = require('@/assets/images/minigames/food-game/bolo.png')
 const chocolate = require('@/assets/images/minigames/food-game/chocolate.png')
@@ -33,6 +34,7 @@ export interface NewFood {
 
 interface FoodsProps {
     config: GameConfigType
+    paused: boolean
 }
 
 interface GetNextFoodTypeParams {
@@ -102,7 +104,7 @@ function getNextFoodType({
 
 const HUD_HEIGHT = 50
 
-export default function useFoods({ config }: FoodsProps) {
+export default function useFoods({ config, paused }: FoodsProps) {
     const [foods, setFoods] = useState<FoodItem[]>([])
     const foodsRef = useRef<FoodItem[]>([])
     const currentLivesRef = useRef(3)
@@ -118,6 +120,7 @@ export default function useFoods({ config }: FoodsProps) {
     }
 
     const createFood = (data: NewFood, score: number) => {
+        if(paused) return;
         const randomX = Math.random() * (config.SCREEN_WIDTH - config.FOOD_SIZE)
 
         const hasLifeOnScreen = foodsRef.current.some((food) => food.type === 'health')

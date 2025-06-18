@@ -5,16 +5,28 @@ import { router, useNavigation } from 'expo-router'
 import { useState } from 'react'
 import useGameManager from '@/hooks/minigames/flappyPet/useGameManager'
 import { View } from 'react-native'
+import { useConfirmExit } from '@/hooks/usePreventNavigationExit'
+import ConfirmExitModal from '@/components/ConfirmExitModal'
 
 export default function GameFlow() {
-    // images
-    // const imageIconPause = require('@/assets/images/minigames/flappyPet/pauseIcon.png')
-    // const imageIconPlay = require('@/assets/images/minigames/flappyPet/playIcon.png')
-
     const gameManager = useGameManager()
+    function onResume() {
+        gameManager.setGameIdle(false)
+        setGamePaused(false)
+    }
+
+    function onPause() {
+        gameManager.setGameIdle(true)
+        setGamePaused(true)
+    }
+
+    const { modalVisible, onConfirm, onCancel } = useConfirmExit({
+        onResume,
+        onPause,
+    })
 
     const [gameKey, setGameKey] = useState(0)
-
+    const [gamePaused, setGamePaused] = useState(false)
 
     function handleContinue() {
         gameManager.resetGame()
@@ -26,32 +38,11 @@ export default function GameFlow() {
         gameManager.setGameIdle(false)
     }
 
-    function togglePause() {
-        gameManager.setGameIdle(!gameManager.isGameIdle)
-    }
-
     return (
         <View style={{ flex: 1 }}>
-            {/* Botão de Pause/Play */}
-            {/* {!gameManager.isGameOver && (
-                <Pressable
-                    style={styles.containerPauseButton}
-                    onPress={togglePause}
-                >
-                    <Image
-                        style={styles.imgPauseButton}
-                        source={
-                            gameManager.isGameIdle
-                                ? imageIconPlay
-                                : imageIconPause
-                        }
-                    />
-                </Pressable>
-            )} */}
-
-            {gameManager.isGameIdle && !gameManager.isGameOver && (
-                <StartGameDialog startGame={handleStartGame} />
-            )}
+            {gameManager.isGameIdle &&
+                !gameManager.isGameOver &&
+                !gamePaused && <StartGameDialog startGame={handleStartGame} />}
 
             {!gameManager.isGameIdle && gameManager.isGameOver && (
                 <EndGameDialog
@@ -61,31 +52,13 @@ export default function GameFlow() {
                 />
             )}
 
-            <Renderer key={gameKey} isPaused={gameManager.isGameIdle} />
+            <ConfirmExitModal
+                visible={modalVisible}
+                onConfirm={onConfirm}
+                onCancel={onCancel}
+            />
+
+            <Renderer key={gameKey} />
         </View>
     )
 }
-
-// const styles = StyleSheet.create({
-//     containerPauseButton: {
-//         position: 'absolute',
-//         top: 20,
-//         right: 20,
-//         width: 50,
-//         height: 50,
-//         zIndex: 4,
-//         backgroundColor: '#fff',
-//         borderRadius: 25,
-//         alignItems: 'center',
-//         justifyContent: 'center',
-//         elevation: 5,
-//         shadowColor: '#000',
-//         shadowOffset: { width: 0, height: 2 },
-//         shadowOpacity: 0.25,
-//         shadowRadius: 3.84,
-//     },
-//     imgPauseButton: {
-//         width: '100%',
-//         height: '100%',
-//     },
-// })
