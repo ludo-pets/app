@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { useGameConfig } from './GameConfig'
 import useFoods, { FoodItem, NewFood } from './Foods'
-import { useAudioPlayer , AudioPlayer} from 'expo-audio'
+import { useAudioPlayer, AudioPlayer } from 'expo-audio'
 import { useConfirmExit } from '@/hooks/usePreventNavigationExit'
 
 export type GameManagerType = {
@@ -22,19 +22,20 @@ export type GameManagerType = {
     setPaused: (paused: boolean) => void
     pauseGame: () => void
     resumeGame: () => void
+    cleanup: () => void
 }
 
 export const useGameManager = (): GameManagerType => {
     const [paused, setPaused] = useState(false)
     const { config } = useGameConfig()
-    const { 
-        foods, 
-        FOOD_TYPES, 
-        createFood, 
-        setFoods, 
+    const {
+        foods,
+        FOOD_TYPES,
+        createFood,
+        setFoods,
         updateCurrentLives,
         checkCollision,
-        stopAllAnimations
+        stopAllAnimations,
     } = useFoods({ config, paused })
 
     const [characterPosition, setCharacterPosition] = useState(
@@ -59,16 +60,30 @@ export const useGameManager = (): GameManagerType => {
     const gameStartedRef = useRef(gameStarted)
     const gameOverRef = useRef(gameOver)
 
-    useEffect(() => { pausedRef.current = paused }, [paused])
-    useEffect(() => { gameStartedRef.current = gameStarted }, [gameStarted])
-    useEffect(() => { gameOverRef.current = gameOver }, [gameOver])
+    useEffect(() => {
+        pausedRef.current = paused
+    }, [paused])
+    useEffect(() => {
+        gameStartedRef.current = gameStarted
+    }, [gameStarted])
+    useEffect(() => {
+        gameOverRef.current = gameOver
+    }, [gameOver])
 
     const processedCollisions = useRef<Set<number>>(new Set())
 
-    const eatingGoodFood: AudioPlayer = useAudioPlayer(require('@/assets/images/minigames/food-game/eating_good_food.mp3'))
-    const coinSound: AudioPlayer = useAudioPlayer(require('@/assets/images/minigames/food-game/coin.mp3'))
-    const eatingBadFood: AudioPlayer = useAudioPlayer(require('@/assets/images/minigames/food-game/angry_cat.mp3'))
-    const lifeSound: AudioPlayer = useAudioPlayer(require('@/assets/images/minigames/food-game/lifeSound.mp3'))
+    const eatingGoodFood: AudioPlayer = useAudioPlayer(
+        require('@/assets/images/minigames/food-game/eating_good_food.mp3')
+    )
+    const coinSound: AudioPlayer = useAudioPlayer(
+        require('@/assets/images/minigames/food-game/coin.mp3')
+    )
+    const eatingBadFood: AudioPlayer = useAudioPlayer(
+        require('@/assets/images/minigames/food-game/angry_cat.mp3')
+    )
+    const lifeSound: AudioPlayer = useAudioPlayer(
+        require('@/assets/images/minigames/food-game/lifeSound.mp3')
+    )
 
     const startGame = () => {
         processedCollisions.current.clear()
@@ -106,20 +121,20 @@ export const useGameManager = (): GameManagerType => {
     }
 
     const createOrResetTimers = (intervalSpawnRate: number) => {
-    setTimeout(() => {
-        gameTimer.current = setInterval(() => {
-            if (
-                gameStartedRef.current &&
-                !gameOverRef.current &&
-                !pausedRef.current
-            ) {
-                spawnFood()
-            }
+        setTimeout(() => {
+            gameTimer.current = setInterval(() => {
+                if (
+                    gameStartedRef.current &&
+                    !gameOverRef.current &&
+                    !pausedRef.current
+                ) {
+                    spawnFood()
+                }
+            }, intervalSpawnRate)
         }, intervalSpawnRate)
-    }, intervalSpawnRate)
-}
+    }
 
-    function pauseGame () {
+    function pauseGame() {
         setPaused(true)
         stopAllAnimations()
         clearTimers()
@@ -131,7 +146,6 @@ export const useGameManager = (): GameManagerType => {
 
         clearTimers()
         createOrResetTimers(spawnRate)
-
     }
 
     const increaseDifficulty = () => {
@@ -161,6 +175,23 @@ export const useGameManager = (): GameManagerType => {
         })
     }
 
+    const cleanup = useCallback(() => {
+        if (gameTimer.current) clearInterval(gameTimer.current)
+        if (difficultyTimer.current) clearInterval(difficultyTimer.current)
+        setGameStarted(false)
+        setGameOver(false)
+        setScore(0)
+        setFallSpeed(config.INITIAL_FALL_SPEED)
+        setDifficulty(1)
+        setSpawnRate(1500)
+        setFoods([])
+        setLifes(3)
+        setCoins(0)
+    }, [])
+
+    /**
+     * Cria uma nova comida
+     */
     const spawnFood = () => {
         if (!gameStartedRef.current || gameOverRef.current) return
 
@@ -197,7 +228,13 @@ export const useGameManager = (): GameManagerType => {
             foods.forEach((food) => {
                 if (processedCollisions.current.has(food.id)) return
 
-                if (checkCollision(food.id, characterPosition, config.CHARACTER_WIDTH)) {
+                if (
+                    checkCollision(
+                        food.id,
+                        characterPosition,
+                        config.CHARACTER_WIDTH
+                    )
+                ) {
                     processedCollisions.current.add(food.id)
 
                     setFoods((prevFoods) =>
@@ -292,6 +329,7 @@ export const useGameManager = (): GameManagerType => {
         paused,
         setPaused,
         pauseGame,
-        resumeGame
+        resumeGame,
+        cleanup,
     }
 }

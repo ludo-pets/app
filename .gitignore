@@ -39,3 +39,6 @@ yarn-error.*
 .vercel
 .idea
 .qodo
+
+#Test coverage
+coverage/

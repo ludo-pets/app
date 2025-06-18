@@ -12,9 +12,10 @@ import {
     State,
 } from 'react-native-gesture-handler'
 import { Nail, NailProgress } from './types'
-import { useRef, useState } from 'react'
+import { useRef, useState, useCallback } from 'react'
 import Svg, { Circle } from 'react-native-svg'
 import { Audio, AVPlaybackSource } from 'expo-av'
+import { useFocusEffect } from '@react-navigation/native'
 
 const { width, height } = Dimensions.get('window')
 
@@ -32,14 +33,18 @@ const CUT_TIME = 1000
 let entrou = true
 let isNear = false
 export type GameBoardProps = {
-    addScore: () => void
-    pawImage: ImageSourcePropType
-    nailsSet: Nail[]
+    addScore: () => void,
+    pawImage: string,
+    nailLong: string,
+    nailShort: string | null,
+    nailsSet: Nail[],
 }
 export default function GameBoard({
     addScore,
     pawImage,
     nailsSet,
+    nailLong,
+    nailShort
 }: GameBoardProps) {
     const [nails, setNails] = useState<Nail[]>(nailsSet)
     const [trimmer, setTrimmer] = useState(trimmer_initial_position)
@@ -57,6 +62,35 @@ export default function GameBoard({
         await sound.playAsync()
     }
 
+    const cleanup = () => {
+        // Limpar timers
+        Object.values(trimmerTimeout.current).forEach(timeout => {
+            if (timeout) clearTimeout(timeout);
+        });
+        Object.values(intervalRef.current).forEach(interval => {
+            if (interval) clearInterval(interval);
+        });
+        trimmerTimeout.current = {};
+        intervalRef.current = {};
+
+        // Resetar estados do jogo
+        setNails(nailsSet); // <-- volta pro estado inicial
+        setTrimmer(trimmer_initial_position);
+        setNailProgress({});
+        setIsTrimming(false);
+        trimmer_current_position = trimmer_initial_position;
+        entrou = true;
+        isNear = false;
+    };
+    
+    useFocusEffect(
+        useCallback(() => {
+            return () => {
+                cleanup();
+            };
+        }, [])
+    );
+
     const handleGesture = (e: PanGestureHandlerGestureEvent) => {
         setTrimmer({
             x: trimmer_current_position.x + e.nativeEvent.translationX,
@@ -68,9 +102,9 @@ export default function GameBoard({
             const nailX = nail.position.x
             const nailY = nail.position.y
             const nailCenterX =
-                (width - pawSize) / 2 + nailX * pawSize + nailSize / 2
+                ((width - pawSize) / 2 + nailX * pawSize) + nailSize / 4
             const nailCenterY =
-                height - pawSize + nailY * pawSize + nailSize / 2
+                ((height - pawSize + nailY * pawSize))
 
             const trimmerCenterX = trimmer.x
             const trimmerCenterY = trimmer.y
@@ -80,7 +114,7 @@ export default function GameBoard({
                     (nailCenterY - trimmerCenterY - yOffset) ** 2
             )
 
-            isNear = distance < 40
+            isNear = distance < 30
             if (isNear) {
                 if (!trimmerTimeout.current[nail.id] && entrou) {
                     entrou = false
@@ -154,7 +188,7 @@ export default function GameBoard({
             </PanGestureHandler>
 
             <Animated.View style={styles.pawContainer}>
-                <Animated.Image source={pawImage} style={styles.paw} />
+                <Animated.Image source={{uri: pawImage}} style={styles.paw} />
                 {nails.map(
                     (nail) =>
                         nail && (
@@ -170,18 +204,18 @@ export default function GameBoard({
                             >
                                 <Animated.Image
                                     style={{
-                                        transform:
-                                            nail.id == 4
-                                                ? [{ rotate: nail.rotation }]
-                                                : undefined,
+                                        transform: [{ rotate: nail.rotation}, {scaleX: (nail.isfliped? -1 : 1)}],
                                         width: nailSize,
                                         height: nailSize,
                                         resizeMode: 'contain',
+                                        display: (nail.isTrimmed && !nailShort)? 'none' : 'flex'
                                     }}
                                     source={
-                                        nail.isTrimmed
-                                            ? require('@/assets/images/minigames/nail-trimmer/nail-short.png')
-                                            : require('@/assets/images/minigames/nail-trimmer/nail-long.png')
+                                        {uri:
+                                            nail.isTrimmed
+                                            ? nailShort || nailLong 
+                                            : nailLong
+                                        }
                                     }
                                 />
                                 {nailProgress[nail.id] > 0 &&
@@ -237,6 +271,7 @@ const styles = StyleSheet.create({
     },
     paw: {
         position: 'absolute',
+        resizeMode: "contain",
         width: pawSize / 2,
         height: pawSize / 2,
         bottom: 0,

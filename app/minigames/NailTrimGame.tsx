@@ -1,56 +1,34 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { Dimensions, StyleSheet } from 'react-native'
 
-import StartGameDialog from '../../../components/minigames/nail-trim-game/StatGameDialog'
-import EndGameDialog from '../../../components/minigames/nail-trim-game/EndGameDialog'
-import GameBoard from '../../../components/minigames/nail-trim-game/GameBoard'
-import { Nail } from '../../../components/minigames/nail-trim-game/types'
+import StartGameDialog from '../../components/minigames/nail-trim-game/StatGameDialog'
+import EndGameDialog from '../../components/minigames/nail-trim-game/EndGameDialog'
+import GameBoard from '../../components/minigames/nail-trim-game/GameBoard'
+import { petSet } from '@/components/minigames/nail-trim-game/PetSets'
+
 import { useUserPetStore } from '@/stores/userPetStore'
 import { useRouter } from 'expo-router'
 import { useMinigameStore } from '@/stores/minigameStore'
 import { useConfirmExit } from '@/hooks/usePreventNavigationExit'
 import ConfirmExitModal from '@/components/ConfirmExitModal'
 
-
+import { useFocusEffect } from '@react-navigation/native'
+import Header from '@/components/Header'
 
 const { width } = Dimensions.get('window')
 
-const catNailsSet: Nail[] = [
-    {
-        id: 1,
-        position: { x: 0.215, y: 0.57 },
-        rotation: '85deg',
-        isTrimmed: false,
-    },
-    {
-        id: 2,
-        position: { x: 0.248, y: 0.465 },
-        rotation: '0deg',
-        isTrimmed: false,
-    },
-    {
-        id: 3,
-        position: { x: 0.335, y: 0.42 },
-        rotation: '50deg',
-        isTrimmed: false,
-    },
-    {
-        id: 4,
-        position: { x: 0.48, y: 0.47 },
-        rotation: '45deg',
-        isTrimmed: false,
-    },
-]
-
 export default function NailTrimGame() {
-    const { modalVisible, onConfirm, onCancel } = useConfirmExit({onPause: () => {},onResume: () => {}
-});
+    const { modalVisible, onConfirm, onCancel } = useConfirmExit({
+        onPause: () => {},
+        onResume: () => {},
+    })
     const [started, setStarted] = useState(false)
     const [ended, setEnded] = useState(false)
     const [score, setScore] = useState(0)
     const [gameKey, setGameKey] = useState(0)
     const user = useUserPetStore((state) => state.user)
+    const pet = useUserPetStore((state) => state.pet)
     const userUpdate = useUserPetStore((state) => state.updateUser)
     const router = useRouter()
     const { minigame, fetchMinigame } = useMinigameStore()
@@ -70,6 +48,17 @@ export default function NailTrimGame() {
         }
     }, [minigame, minigameId, fetchMinigame])
 
+    useFocusEffect(
+        useCallback(() => {
+            setScore(0)
+            return () => {
+                setStarted(false)
+                setEnded(false)
+                setScore(0)
+            }
+        }, [])
+    )
+
     const endGame = async () => {
         if (user && minigame) {
             await userUpdate(user.id, {
@@ -82,45 +71,34 @@ export default function NailTrimGame() {
             router.push('/home')
         }
     }
-
+    useEffect(() => {}, [pet])
     return (
         <GestureHandlerRootView style={styles['game-container']}>
+            <Header
+                title="Hora da Patinha"
+                backgroundColor="#CFE2A8"
+                showBackButton
+            />
             {!started && <StartGameDialog startGame={setStarted} />}
 
-            {/**Na propriedade endGame vai a função que vai ser executada ao clicar no botão avançar
-             * A função setStarted só ta de exemplo, podem mudar ela para outra função.
-             */}
             {ended && minigame && (
                 <EndGameDialog
                     endGame={endGame}
                     givenMoney={minigame.givenMoney}
                 />
             )}
-
-            {/**minigame do gato*/}
-            <GameBoard
-                key={gameKey}
-                pawImage={require('@/assets/images/minigames/nail-trimmer/paw.png')}
-                addScore={addScore}
-                nailsSet={catNailsSet}
-            />
-            
-
-            
-
-            {/**minigame do cachorro, quando tiver os assets do cachorro*/}
-            {/* <GameBoard
-                pawImage={require("@/assets/images/minigames/nail-trimmer/paw-dog.png")}
-                addScore={addScore}
-                nailsSet={dogNailsSet}
-            /> */}
-        <ConfirmExitModal
-                              visible={modalVisible}
-                              onConfirm={onConfirm}
-                              onCancel={onCancel}
-                            />
+            {pet && (
+                <GameBoard
+                    key={gameKey}
+                    pawImage={petSet[pet.type].pawImage}
+                    addScore={addScore}
+                    nailsSet={petSet[pet.type].nailSet}
+                    nailLong={petSet[pet.type].nailLongImage}
+                    nailShort={petSet[pet.type].nailShortImage}
+                />
+            )}
+            {/*para testes, apagar dps*/}
         </GestureHandlerRootView>
-        
     )
 }
 

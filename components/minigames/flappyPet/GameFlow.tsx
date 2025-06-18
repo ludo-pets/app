@@ -25,8 +25,6 @@ export default function GameFlow() {
         onPause,
     })
 
-    
-
     const [gameKey, setGameKey] = useState(0)
     const [gamePaused, setGamePaused] = useState(false)
 
