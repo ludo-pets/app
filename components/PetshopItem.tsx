@@ -32,10 +32,10 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
     const pet = useUserPetStore((state) => state.pet)
     const userUpdate = useUserPetStore((state) => state.updateUser)
     const petUpdate = useUserPetStore((state) => state.updatePet)
-    const fetchUserAndPet = useUserPetStore((state) => state.fetchUserAndPetByEmail)
     const [hasItem, setHasItem] = useState(false)
     const [quantity, setQuantity] = useState<number>(item.quantity)
     const [canBuy, setCanBuy] = useState(false)
+    const [cantBuy, setCantBuy] = useState(false)
     const [isActive, setIsActive] = useState(item.is_active)
 
     useEffect(() => {
@@ -48,8 +48,23 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
 
             setHasItem(thisItem != null)
             setQuantity(thisItem?.quantity || 0)
+            if (user) {
+                setCanBuy(user.money >= item.price)
+                let buy = true
+
+                if (!item.has_required_level) {
+                    buy = false
+                }
+                if (thisItem != null && item.type !== 'food') {
+                    buy = false
+                }
+                if (user.money < item.price) {
+                    buy = false
+                }
+                setCantBuy(buy)
+                console.log(buy)
+            }
         }
-        if (user) setCanBuy(user?.money >= item.price)
     }, [user, pet])
 
     const onActive = async () => {
@@ -59,7 +74,6 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
             }
             activeItems[item.type || 'toy'] = item.id
             await petUpdate(pet.id, { activeItems: activeItems as any })
-            await fetchUserAndPet(user.email)
         }
     }
     const onDesactive = () => {
@@ -89,22 +103,32 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
 
             await userUpdate(user.id, { money: newUser.money - item.price })
             await petUpdate(pet.id, { purchasedItems: newPet.purchasedItems })
-            await fetchUserAndPet(user.email)
         }
     }
 
     return (
         <View style={styles.card}>
             <View style={styles.imageContainer}>
-                <Image
-                    source={item.image ? { uri: item.image } : undefined}
-                    style={styles.image}
-                    resizeMode="contain"
-                />
-
-                <View style={styles.quantityBadge}>
-                    <Text style={styles.quantityText}>{quantity}</Text>
-                </View>
+                {item.image && item.image[0] === `#` ? (
+                    <View
+                        style={{
+                            width: `100%`,
+                            height: `100%`,
+                            backgroundColor: `${item.image}`,
+                        }}
+                    />
+                ) : (
+                    <Image
+                        source={item.image ? { uri: item.image } : undefined}
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+                )}
+                {item.type === 'food' && (
+                    <View style={styles.quantityBadge}>
+                        <Text style={styles.quantityText}>{quantity}</Text>
+                    </View>
+                )}
             </View>
 
             <View style={styles.details}>
@@ -139,13 +163,11 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
                     <Pressable
                         style={[
                             styles.button,
-                            item.has_required_level
-                                ? styles.unlocked
-                                : styles.locked,
+                            cantBuy ? styles.unlocked : styles.locked,
                             styles.buyButton,
                         ]}
                         onPress={() => onBuy()}
-                        disabled={!item.has_required_level}
+                        disabled={!cantBuy}
                     >
                         <Text style={styles.buttonText}>COMPRAR</Text>
                     </Pressable>
@@ -252,7 +274,7 @@ const styles = StyleSheet.create({
         color: '#5B5B5B',
     },
     active: {
-        backgroundColor: '#D4E4EB',
+        backgroundColor: '#4682B4',
     },
     desactive: {
         backgroundColor: '#EDB0B0',
