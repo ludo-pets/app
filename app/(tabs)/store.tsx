@@ -110,7 +110,7 @@ export default function StoreScreen() {
                         style={{ width: '100%', height: '100%', marginBottom: 20, paddingBottom: 20 }}
                         data={items.filter(
                             (item) => item.category === selectedFilter.category
-                        )}
+                        ).sort((a, b) => a.name.localeCompare(b.name))}
                         keyExtractor={(item) => item.id.toString()}
                         renderItem={renderPetshopItem}
                         showsVerticalScrollIndicator={false}
