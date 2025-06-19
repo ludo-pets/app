@@ -104,6 +104,7 @@ export function FormRegisterPet() {
             user = await createUser({
                 id: userId,
                 email: email,
+                newPetId: newPet.id,
             })
             await updateUser(user.id, { pet: newPet.id })
         }
