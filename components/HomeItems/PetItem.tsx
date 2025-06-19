@@ -9,7 +9,7 @@ const { height, width } = Dimensions.get('window')
 
 const PetItem = () => {
     const onPress = () => {
-        console.log("don't touch the cat!")
+        console.log("Don't touch the cat!")
     }
 
     const petInfo = useUserPetStore((state) => state.pet)

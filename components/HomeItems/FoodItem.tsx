@@ -9,6 +9,7 @@ import ItemProps from '@/dtos/ItensProps'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { calcPetMood} from '@/utils/moodCalculator'
 import { useState } from 'react'
+import { useEffect } from 'react'
 
 const { height, width } = Dimensions.get('window')
 
@@ -22,6 +23,10 @@ const FoodItem = ({ update }: ItemProps) => {
         }
         return false
     }
+
+    useEffect(() => {
+        setIsHungry(needsFood())
+    }, [pet])
 
     const [isHungry, setIsHungry] = useState(needsFood())
     const onPress = () => {

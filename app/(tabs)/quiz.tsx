@@ -28,7 +28,7 @@ export default function QuizScreen() {
         (state: { loading: boolean }) => state.loading
     )
     const user = useUserPetStore((state) => state.user)
-    const [lastLessonConcludedId, setLastLessonConcludedId] = useState(1)
+    const [lastLessonConcludedId, setLastLessonConcludedId] = useState(0)
     const { setLesson, changeToNextQuestion } = useLessonStore()
     const router = useRouter()
 
@@ -46,14 +46,12 @@ export default function QuizScreen() {
 
         const currentLesson = lesson as Lesson
 
-        if(lessons.indexOf(lesson) < lastLessonConcludedId) {
-
-            
+        if (lessons.indexOf(lesson) < lastLessonConcludedId) {
             setLesson(currentLesson)
             changeToNextQuestion('', currentLesson.questions)
 
             router.push('/quizSummary')
-            return;
+            return
         }
         setLesson(currentLesson)
         changeToNextQuestion('', currentLesson.questions)

@@ -1,5 +1,4 @@
 import { Pet } from '@/dtos/Pet'
-import Item from '@/dtos/Item'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { useEffect, useState } from 'react'
 import {
@@ -33,7 +32,7 @@ export default function PetshopItem({ item }: { item: PetshopItemProps }) {
     const pet = useUserPetStore((state) => state.pet)
     const userUpdate = useUserPetStore((state) => state.updateUser)
     const petUpdate = useUserPetStore((state) => state.updatePet)
-    const fetchUserAndPet = useUserPetStore((state) => state.fetchUserAndPet)
+    const fetchUserAndPet = useUserPetStore((state) => state.fetchUserAndPetByEmail)
     const [hasItem, setHasItem] = useState(false)
     const [quantity, setQuantity] = useState<number>(item.quantity)
     const [canBuy, setCanBuy] = useState(false)
