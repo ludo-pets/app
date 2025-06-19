@@ -1,7 +1,6 @@
 // src/components/ToastProvider.tsx
 import React, { createContext, useContext, useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Animated, Dimensions } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+import { View, Text, StyleSheet, Animated } from 'react-native';
 import { registerShowToast } from '@/utils/Toast';
 import { Trophy } from 'phosphor-react-native';
 
@@ -61,15 +60,6 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     <ToastContext.Provider value={{ showToast }}>
       {children}
       {toast && (
-        // <Animated.View style={[styles.toastContainer, { opacity, backgroundColor: getStyle().backgroundColor }]}>
-        //     <Trophy color={'#fcc41f'} size={38} />
-            
-        //     <View>
-        //         <Text style={styles.title}>Conquista desbloqueada: </Text>       
-        //         <Text style={styles.toastText}> {toast.message}</Text>
-        //     </View>    
-        // </Animated.View>
-
         <Animated.View style={[styles.toastContainer, { opacity }]}>
             <Trophy color={'#fcc41f'} size={38} />
             <View style={styles.content}>

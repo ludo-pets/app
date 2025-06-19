@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import Achievement from '@/dtos/Achievement'
-import { fetchAchievements }  from '@/services/fetchAchievements'
+import { fetchAchievements } from '@/services/achievementService';
 
 interface AllAchievementsStore {
     achievements: Achievement[] | null
