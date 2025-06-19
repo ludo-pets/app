@@ -10,7 +10,7 @@ interface HeaderProps {
     showBackButton?: boolean
     onBackPress?: () => void
     coinsValue?: number
-    rightComponent?: React.ReactNode
+    rightComponent?: React.ReactNode // <- novo prop
 }
 
 export default function Header({
@@ -47,7 +47,9 @@ export default function Header({
 
             {/* Right component (ex: logout icon) */}
             {rightComponent && (
-                <View style={styles.rightComponent}>{rightComponent}</View>
+                <View style={styles.rightComponent}>
+                    {rightComponent}
+                </View>
             )}
         </View>
     )

@@ -4,7 +4,7 @@ export default interface User {
     money: number
     level: number
     experience: number
-    lastLessonConcluded: string | null
+    lastLessonConcluded: string
     notifications: boolean
     pet: string
     achievements: string[]
