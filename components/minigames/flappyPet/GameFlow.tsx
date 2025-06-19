@@ -1,10 +1,11 @@
 import Renderer from '@/components/minigames/flappyPet/Renderer'
 import StartGameDialog from '@/components/minigames/flappyPet/StatGameDialog'
 import EndGameDialog from '@/components/minigames/flappyPet/EndGameDialog'
-import { router, useNavigation } from 'expo-router'
+import { router } from 'expo-router'
 import { useState } from 'react'
 import useGameManager from '@/hooks/minigames/flappyPet/useGameManager'
 import { View } from 'react-native'
+import { checkAchievementMinigameFirstTime } from '@/utils/AchievementHelper'
 import { useConfirmExit } from '@/hooks/usePreventNavigationExit'
 import ConfirmExitModal from '@/components/ConfirmExitModal'
 
@@ -31,6 +32,7 @@ export default function GameFlow() {
     function handleContinue() {
         gameManager.resetGame()
         setGameKey((prev) => prev + 1)
+        checkAchievementMinigameFirstTime("Olha o aviãozinho!")
         router.push('/home')
     }
 

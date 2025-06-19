@@ -12,6 +12,7 @@ import {
     where,
 } from 'firebase/firestore'
 import { getPetDataById } from './petService'
+import { showToast } from '@/utils/Toast'
 
 /**
  * Fetches a User document and its associated Pet document from Firestore by the user's email.
@@ -92,16 +93,19 @@ export const createUser = async (
 }
 
 export const updateUser = async (
-    userId: string,
+    userId: string, 
     userData: Partial<User>
 ): Promise<boolean> => {
     if (!userId || Object.keys(userData).length === 0) return false
 
     try {
         const userReference = doc(db, 'User', userId)
-        await updateDoc(userReference, { ...userData })
+        await updateDoc(userReference, { ...userData });
     } catch (error) {
         console.error('Erro ao atualizar User:', error)
+        setTimeout(() => {
+            showToast("Erro ao atualizar usuário",  'error' );
+        }, 100);
         return false
     }
 

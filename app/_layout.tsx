@@ -12,6 +12,8 @@ import * as SplashScreen from 'expo-splash-screen'
 import * as WebBrowser from 'expo-web-browser'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { useFonts } from 'expo-font'
+import { useAllAchievementsStore } from '@/stores/allAchievementsStore'
+import { ToastProvider } from '@/components/Toast/ToastProvider'
 
 WebBrowser.maybeCompleteAuthSession()
 export { ErrorBoundary } from 'expo-router'
@@ -35,6 +37,11 @@ export default function RootLayout() {
     Inter: require('@/assets/fonts/Inter.ttf'),
     ...FontAwesome.font,
   })
+
+  const fetchAllAchievements = useAllAchievementsStore(state => state.fetchAllAchievements)
+    useEffect(() => {
+      fetchAllAchievements()
+    }, [fetchAllAchievements])
 
   useEffect(() => {
     if (fontError) throw fontError
@@ -112,7 +119,9 @@ export default function RootLayout() {
 
   if (!loaded) return null
 
+
  return (
+  <ToastProvider>
   <GestureHandlerRootView style={{ flex: 1 }}>
      <SafeAreaView style={{ flex: 1, backgroundColor: '#fefefe' }}>
       <Stack>
@@ -126,6 +135,6 @@ export default function RootLayout() {
       </Stack>
     </SafeAreaView>
   </GestureHandlerRootView>
-   
+  </ToastProvider>
   )
 }
