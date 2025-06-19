@@ -39,3 +39,7 @@ yarn-error.*
 .vercel
 .idea
 .qodo
+
+# build folders
+android/*
+ios/*
