@@ -1,11 +1,8 @@
 import { create } from 'zustand'
 import Lesson from '@/dtos/Lesson'
-import {
-    getLessonByIdService,
-    markLessonAsConcluded,
-} from '@/services/lessonService'
+import { getLessonByIdService } from '@/services/lessonService'
 import Question from '@/dtos/Question'
-import { fetchQuestion } from '@/services/questionsService'
+import { fetchQuestionById } from '@/services/questionService'
 
 interface LessonState {
     lesson: Lesson | null
@@ -51,6 +48,10 @@ export const useLessonStore = create<LessonState>((set) => ({
     finishLesson: async (lesson: Lesson) => {
         set({ loading: true, error: null })
         try {
+            if (!lesson) {
+                throw new Error('Tentativa de finalizar uma lição nula.')
+            }
+
             set({
                 lesson: {
                     ...lesson,
@@ -81,7 +82,7 @@ export const useLessonStore = create<LessonState>((set) => ({
             }
             nextQuestionId = questionList[currentQuestionIdIndex + 1]
         }
-        const nextQuestion = await fetchQuestion(nextQuestionId)
+        const nextQuestion = await fetchQuestionById(nextQuestionId)
         set({ currentQuestion: nextQuestion, loading: false })
         return true
     },

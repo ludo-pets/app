@@ -7,6 +7,7 @@ import { CheckAchievementLevel, CheckAchievementMoney, getAchievementByName } fr
 import { showToast } from '@/utils/Toast'
 
 interface UserPetState {
+    [x: string]: any
     user: User | null
     pet: Pet | null
     loading: boolean
@@ -15,7 +16,7 @@ interface UserPetState {
     updateUser: (userId: string, userData: Partial<User>) => Promise<void>
     updatePet: (petId: string, petData: Partial<Pet>) => Promise<void>
     setUser: (user: User) => void
-    setPet: (pet: Pet) => void
+    setPet: (pet: Pet | null) => void
     setAchievements: (achievements: string) => void
     updateAchievements: (achievement: string, title: string, content: string) => Promise<void>
 }
@@ -25,9 +26,7 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
     pet: null,
     loading: true,
     error: null,
-    setAchievements(achievements) {
-
-    },
+    setAchievements(achievements) {},
 
     fetchUserAndPetByEmail: async (userEmail: string) => {
         set({ loading: true, error: null })
@@ -65,7 +64,7 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
     },
 
     updatePet: async (petId: string, petData: Partial<Pet>) => {
-        set({ error: null })
+        set({ loading: true, error: null })
         try {
             const success = await updatePet(petId, petData)
             if (success) {
@@ -84,7 +83,7 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
     },
 
     setUser: (user: User) => set({ user }),
-    setPet: (pet: Pet) => set({ pet }),
+    setPet: (pet: Pet | null) => set({ pet }),
 
     updateAchievements: async (achievement: string, title: string, content: string) => {
         set({ error: null })

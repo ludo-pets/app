@@ -6,8 +6,6 @@ const chocolate = require('@/assets/images/minigames/food-game/chocolate.png')
 const racao = require('@/assets/images/minigames/food-game/racao.png')
 const health = require('@/assets/images/minigames/food-game/heart.png')
 
-const { width, height } = Dimensions.get('window')
-
 export default function StarterGameDialog({
     startGame,
 }: {
@@ -56,9 +54,6 @@ export default function StarterGameDialog({
 
 const styles = StyleSheet.create({
     dialogCustom: {
-        width: width * 0.92,
-        minHeight: height * 0.6,
-        maxWidth: 440,
         paddingHorizontal: 32,
         paddingTop: 28,
         paddingBottom: 18,

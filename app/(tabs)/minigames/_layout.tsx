@@ -3,10 +3,10 @@ import React from 'react'
 
 export default function MinigameStackLayout() {
     return (
-        <Stack 
-            screenOptions={{ 
+        <Stack
+            screenOptions={{
                 headerShown: false,
-                animation: 'none'
+                animation: 'none',
             }}
         >
             <Stack.Screen name="index" />

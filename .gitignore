@@ -43,3 +43,12 @@ yarn-error.*
 # build folders
 android/*
 ios/*
+
+# lock files
+package-lock.json
+
+# IDEs and text editors
+.vscode/
+
+#Test coverage
+coverage/

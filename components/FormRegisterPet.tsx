@@ -15,8 +15,11 @@ import { useState } from 'react'
 import Gato from '@/assets/images/pets/gato.svg'
 import Cachorro from '@/assets/images/pets/cachorro.svg'
 import { SvgProps } from 'react-native-svg'
+import { useNavigation, useRoute } from '@react-navigation/native'
+import { useUserPetStore } from '@/stores/userPetStore'
 import { addPet } from '@/services/petService'
-import { useNavigation } from '@react-navigation/native'
+import { createUser, getUserWithPetByEmail } from '@/services/userService'
+import { updateUser } from '@/services/userService'
 
 export type PetOption = {
     id?: number
@@ -49,7 +52,14 @@ export const colorsOptions: ColorOption[] = [
     { id: 4, color: '#FFD997' },
 ]
 
+type FormRegisterPetRouteParams = {
+    userId: string
+    email: string
+}
+
 export function FormRegisterPet() {
+    const route = useRoute()
+    const { userId, email } = (route.params as FormRegisterPetRouteParams) || {}
     const navigation = useNavigation()
 
     const [selectedPet, setSelectedPet] = useState<PetOption>(petsTypes[0])
@@ -69,45 +79,47 @@ export function FormRegisterPet() {
             )
             return
         }
-
-        // Set loading state to true
         setIsLoading(true)
 
         const petDataToCreate = {
-            name: petName.trim(), // Trim whitespace
+            name: petName.trim(),
             color: selectedColorPet.color,
-            type: selectedPet.pet_type, // Changed from petType to type to match service
+            type: selectedPet.pet_type,
         }
 
-        // Call the service function to add the pet
-        const newPet = await addPet(petDataToCreate)
+        const newPet = await addPet({
+            name: petName.trim(),
+            color: selectedColorPet.color,
+            type: selectedPet.pet_type,
+        })
 
-        // Set loading state back to false
-        setIsLoading(false)
-
-        if (newPet) {
-            // Success!
-            Alert.alert('Sucesso!', `Seu pet ${newPet.name} foi criado!`, [
-                {
-                    text: 'OK',
-                    onPress: () => {
-                        // Reset form state if needed
-                        navigation.navigate('(tabs)' as never)
-                        setSelectedPet(petsTypes[0])
-                        setSelectedColorPet(colorsOptions[0])
-                        setPetName('')
-                    },
-                },
-            ])
-            navigation.navigate('(tabs)' as never)
-        } else {
-            // Error handled in addPet function (showed an alert there)
+        if (!newPet) {
             console.error('Failed to create pet.')
+            setIsLoading(false)
+            return
         }
+
+        let user = await getUserWithPetByEmail(email)
+        if (!user) {
+            user = await createUser({
+                id: userId,
+                email: email,
+                newPetId: newPet.id,
+            })
+            await updateUser(user.id, { pet: newPet.id })
+        }
+
+        if (user) {
+            await useUserPetStore
+            .getState()
+            .fetchUserAndPetByEmail(email)
+    }
+
+    navigation.navigate('(tabs)' as never)
     }
 
     function handlerChangePetName(newName: string) {
-        const newNameFormated = newName.replace(/[^a-zA-Z\s]/g, '') // Allow spaces too? Adjust regex if needed
+        const newNameFormated = newName.replace(/[^a-zA-Z\s]/g, '')
         setPetName(newNameFormated)
     }
 
@@ -131,15 +143,14 @@ export function FormRegisterPet() {
 
             {/* Pet Name Input */}
             <TextInput
-                style={[styles.inputBox, isLoading && styles.disabledInput]} // Style when disabled
+                style={[styles.inputBox, isLoading && styles.disabledInput]}
                 placeholder="Escolha um nome ..."
                 placeholderTextColor={'#79747E'}
                 onChangeText={handlerChangePetName}
                 value={petName}
-                editable={!isLoading} // Disable input while loading
+                editable={!isLoading}
             />
 
-            {/* Color Selection */}
             <View style={styles.colorOptionBox}>
                 {colorsOptions.map((color) => {
                     const colorSelected = color.id === selectedColorPet?.id
@@ -150,57 +161,52 @@ export function FormRegisterPet() {
                                 { backgroundColor: color.color },
                                 styles.colorOption,
                                 colorSelected && styles.colorOptionActive,
-                                isLoading && styles.disabledInput, // Visually disable
+                                isLoading && styles.disabledInput,
                             ]}
                             onPress={() => {
                                 if (!isLoading) {
                                     setSelectedColorPet(color)
                                 }
                             }}
-                            disabled={isLoading} // Disable pressable while loading
+                            disabled={isLoading}
                         />
                     )
                 })}
             </View>
 
-            {/* Submit Button */}
             <TouchableOpacity
                 onPress={handlerSubmitForm}
                 style={[
                     styles.submitButtom,
                     isLoading && styles.submitButtonDisabled,
-                ]} // Style when disabled
-                disabled={isLoading} // Disable button while loading
+                ]}
+                disabled={isLoading}
             >
                 {isLoading ? (
-                    <ActivityIndicator size="small" color="#FFF" /> // Show loader
+                    <ActivityIndicator size="small" color="#FFF" />
                 ) : (
-                    <Text style={styles.submitButtonText}>Avançar</Text> // Show text
+                    <Text style={styles.submitButtonText}>Avançar</Text> 
                 )}
             </TouchableOpacity>
         </KeyboardAvoidingView>
     )
 }
 
-// --- Add styles for disabled states ---
 const styles = StyleSheet.create({
     formBox: {
         paddingHorizontal: 25,
         paddingVertical: 19,
         alignItems: 'center',
         justifyContent: 'space-between',
-        // Removed fixed height to be more flexible
-        // height: '60%',
-        // maxHeight: 445,
         width: '100%',
         maxWidth: 400,
     },
     optionBox: {
         flexDirection: 'row',
-        justifyContent: 'space-around', // Changed for better spacing
+        justifyContent: 'space-around',
         alignItems: 'center',
         width: '100%',
-        marginBottom: 20, // Added margin
+        marginBottom: 20,
     },
     inputBox: {
         width: '100%',
@@ -211,15 +217,15 @@ const styles = StyleSheet.create({
         borderColor: '#D9D0E3',
         borderRadius: 8,
         borderStyle: 'solid',
-        marginBottom: 20, // Added margin
-        backgroundColor: '#FFF', // Added background
+        marginBottom: 20,
+        backgroundColor: '#FFF',
     },
     colorOptionBox: {
         flexDirection: 'row',
-        flexWrap: 'wrap', // Allow wrapping if many colors
-        justifyContent: 'center', // Center colors
-        gap: 15, // Increased gap
-        marginBottom: 30, // Increased margin
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        gap: 15,
+        marginBottom: 30,
     },
     colorOption: {
         width: 32,
@@ -227,9 +233,9 @@ const styles = StyleSheet.create({
         shadowColor: '#000000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
-        shadowRadius: 3.84, // Adjusted shadow
-        borderRadius: 5, // Make it circular
-        elevation: 5, // Add elevation for Android
+        shadowRadius: 3.84,
+        borderRadius: 5,
+        elevation: 5,
     },
     colorOptionActive: {
         borderWidth: 3,
@@ -238,13 +244,13 @@ const styles = StyleSheet.create({
     },
     submitButtom: {
         paddingHorizontal: 24,
-        paddingVertical: 10, // Adjusted padding
-        minWidth: 113, // Use minWidth
-        height: 48, // Adjusted height
+        paddingVertical: 10,
+        minWidth: 113,
+        height: 48,
         backgroundColor: '#FFAFD4',
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 8, // Make it more rounded
+        borderRadius: 8,
         elevation: 3,
     },
     submitButtonText: {
@@ -253,13 +259,12 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#FFF',
     },
-    // Styles for disabled/loading states
     disabledInput: {
         opacity: 0.6,
-        backgroundColor: '#E0E0E0', // Lighter background when disabled
+        backgroundColor: '#E0E0E0',
     },
     submitButtonDisabled: {
-        backgroundColor: '#E0A0C0', // Different color when disabled
+        backgroundColor: '#E0A0C0',
         opacity: 0.7,
     },
 })

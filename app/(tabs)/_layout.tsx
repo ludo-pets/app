@@ -1,29 +1,36 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import {
-    StyleSheet,
-    TouchableOpacity,
-    View,
-    Text,
-    Platform,
-    StatusBar,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Text,
+  Platform,
+  StatusBar,
 } from 'react-native'
-import { Route, Tabs, useRouter } from 'expo-router'
-import { usePathname } from 'expo-router'
+import {
+  Tabs,
+  usePathname,
+  Redirect,
+  router,
+} from 'expo-router'
 import Tooltip from 'react-native-walkthrough-tooltip'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import {
-    Exam,
-    House,
-    Joystick,
-    Storefront,
-    UserCircle,
+  Exam,
+  House,
+  Joystick,
+  Storefront,
+  UserCircle,
 } from 'phosphor-react-native'
 import Header from '@/components/Header'
 import { useUserPetStore } from '@/stores/userPetStore'
+import { auth } from '@/firebaseConfig'
+import { signOut } from 'firebase/auth'
 import {
   useWalkthrough,
   WalkthroughProvider,
-} from '../../contexts/WalkthroughContext'
+} from '@/contexts/WalkthroughContext'
+import type { RouteProp, ParamListBase } from '@react-navigation/native'
 
 
 const iconsSize = 32
@@ -53,7 +60,7 @@ function CustomTabIconWithTooltip({
     targetElementId,
 }: CustomTabIconWithTooltipProps) {
     const IconComponent = iconMap[name] || House
-    const walkthrough = useWalkthrough()
+    const walkthrough = useWalkthrough() as any
 
     if (!walkthrough)
         return (
@@ -137,17 +144,13 @@ export default function TabLayout() {
     const fetchUserAndPet = useUserPetStore(
         (state) => state.fetchUserAndPetByEmail
     )
-    const user = useUserPetStore((state) => state.user)
+    const { user, setPet, setUser } = useUserPetStore()
 
-    useEffect(() => {
-        const userId = 'ludopetsages@gmail.com'
-        if (!user) {
-            fetchUserAndPet(userId)
-        }
-    }, [fetchUserAndPet, user])
+    if (!user) {
+        return <Redirect href="/" />
+    }
 
     const includeHeader = ['store', 'quiz', 'minigames', 'profile']
-    const router = useRouter()
     const headerTitles: Record<string, string> = {
         store: 'PetShop',
         quiz: 'Quiz',
@@ -156,8 +159,12 @@ export default function TabLayout() {
     }
     const headerTitle = headerTitles[simplePathname] || ''
 
-    const logout = () => {
-        router.replace('/')
+    const logout = async () => {
+        await signOut(auth)
+        // setUser(null)
+        setPet(null)
+
+        router.replace("/")
     }
 
     const logoutButton = (
@@ -235,7 +242,7 @@ export default function TabLayout() {
                         }}
                         listeners={({ navigation, route }) => ({
                             tabPress: (e) => {
-                                const r = route as Route<string> & {
+                                const r = route as RouteProp<ParamListBase, string> & {
                                     state?: any
                                 }
                                 const nestedState = r.state
