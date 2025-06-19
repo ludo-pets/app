@@ -140,24 +140,9 @@ export default function TabLayout() {
     )
     const { user, setPet, setUser } = useUserPetStore()
 
-    useEffect(() => {
-        // const userId = 'gabrielBohn'
-        const userId = 'ludopetsages@gmail.com'
-
-        // const userGet = async () => {
-        //     try {
-        //         await fetchUserAndPet(userId)
-        //     } catch (error) {
-        //         console.log('Error fetching user and pet:', error)
-        //     }
-        // }
-        // userGet()
-
-        if (!user) {
-            console.log('User not found, fetching user and pet...')
-            fetchUserAndPet(userId)
-        }
-    }, [fetchUserAndPet, user])
+    if (!user) {
+        return <Redirect href="/" />
+    }
 
     const includeHeader = ['store', 'quiz', 'minigames', 'profile']
     const headerTitles: Record<string, string> = {

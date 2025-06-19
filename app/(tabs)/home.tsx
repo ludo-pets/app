@@ -33,7 +33,7 @@ export default function HomeScreen() {
     const handlePress = async () => {
         // await addItem()
         // await duplicateDocument()
-        
+
         //         const defaultItems = [
         //     {
         //         itemId: 'defaultToy',
@@ -71,19 +71,19 @@ export default function HomeScreen() {
         //         image: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/objects/objetos/Ativo+41.png',
         //     },
         // ]
-        
+
         // if (pet) {
         //   const purchasedItems= [
         //       // ...pet.purchasedItems,
         //       ...defaultItems
         //   ]
-          
+
         //   await updatePet(pet.id, { purchasedItems: purchasedItems })
-          
+
         //   await updatePet(pet.id, { activeItems: {
         //       toy: 'defaultToy',
         //       bed: 'defaultBed',
-        //       food: 'defaultFood', 
+        //       food: 'defaultFood',
         //       wc: 'defaultWC',
         //       floor: 'defaultFloor',
         //       wallpaper: 'defaultWallpaper',
@@ -143,9 +143,9 @@ export default function HomeScreen() {
                         animalMood={mood?.mood ?? 0}
                     />
                     <Homescreen />
-                    <Pressable onPress={() => handlePress()}>
+                    {/* <Pressable onPress={() => handlePress()}>
                         <Text>ADICIONAR ITEM</Text>
-                    </Pressable>
+                    </Pressable> */}
                 </>
             )}
 
