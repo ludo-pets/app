@@ -110,7 +110,7 @@ export default function RootLayout() {
 
   if (!loaded) return null
 
-  return (
+ return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fefefe' }}>
       <Stack>
         <Stack.Screen name="oauthredirect" options={{ headerShown: false }} />
@@ -118,6 +118,7 @@ export default function RootLayout() {
         <Stack.Screen name="quizSummary" options={{ headerShown: false }} />
         <Stack.Screen name="petCreate" options={{ headerShown: false }} />
         <Stack.Screen name="quizGame" options={{ headerShown: false }} />
+        <Stack.Screen name="minigames" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       </Stack>
     </SafeAreaView>

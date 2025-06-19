@@ -41,3 +41,6 @@ yarn-error.*
 .qodo
 package-lock.json
 .vscode/
+
+#Test coverage
+coverage/

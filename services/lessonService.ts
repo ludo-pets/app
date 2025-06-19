@@ -45,12 +45,15 @@ export const getAllLessonsService = async (): Promise<{
 
 export const markLessonAsConcluded = async (
     lessonId: string
-): Promise<void | null> => {
+): Promise<boolean> => {
+    if (!lessonId) return false
+
     try {
         const lessonRef = doc(db, 'Lesson', lessonId)
         await updateDoc(lessonRef, { concluded: true })
     } catch (error) {
         console.error('Erro ao atualizar lição:', error)
-        return null
+        return false
     }
+    return true
 }

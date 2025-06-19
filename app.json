@@ -1,94 +1,93 @@
 {
-    "expo": {
-        "name": "LudoPets",
-        "slug": "ludopets",
-        "version": "1.0.0",
+  "expo": {
+    "name": "LudoPets",
+    "slug": "ludopets",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "com.ages.ludopets",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "bundleIdentifier": "com.ages.ludopets"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.ages.ludopets",
+      "googleServicesFile": "./google-services.json"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png",
+      "manifest": {
+        "short_name": "Ludopets",
+        "name": "Ludopets",
+        "start_url": ".",
+        "display": "standalone",
         "orientation": "portrait",
-        "icon": "./assets/images/icon.png",
-        "scheme": "com.ages.ludopets",
-        "userInterfaceStyle": "automatic",
-        "newArchEnabled": true,
-        "ios": {
-            "supportsTablet": true,
-            "googleServicesFile": "./GoogleService-Info.plist",
-            "bundleIdentifier": "com.ages.ludopets"
-        },
-        "android": {
-            "adaptiveIcon": {
-                "foregroundImage": "./assets/images/adaptive-icon.png",
-                "backgroundColor": "#ffffff"
-            },
-            "package": "com.ages.ludopets",
-            "googleServicesFile": "./google-services.json"
-        },
-        "web": {
-            "bundler": "metro",
-            "output": "static",
-            "favicon": "./assets/images/favicon.png",
-            "manifest": {
-                "short_name": "Ludopets",
-                "name": "Ludopets",
-                "start_url": ".",
-                "display": "standalone",
-                "orientation": "portrait",
-                "background_color": "#ffffff",
-                "theme_color": "#6A1B9A",
-                "icons": [
-                    {
-                        "src": "./assets/images/icon-192.png",
-                        "sizes": "192x192",
-                        "type": "image/png"
-                    },
-                    {
-                        "src": "./assets/images/icon-512.png",
-                        "sizes": "512x512",
-                        "type": "image/png"
-                    }
-                ]
-            }
-        },
-        "plugins": [
-            "expo-router",
-            [
-                "expo-splash-screen",
-                {
-                    "image": "./assets/images/splash-icon.png",
-                    "imageWidth": 200,
-                    "resizeMode": "contain",
-                    "backgroundColor": "#ffffff"
-                }
-            ],
-            [
-                "@react-native-google-signin/google-signin",
-                {
-                    "iosUrlScheme": "com.googleusercontent.apps.823465219976-9tr8frv4ksgmeh6l3ai4tdgu4hfpcejg"
-                }
-            ],
-            "expo-audio",
-            "expo-secure-store",
-            [
-                "expo-notifications",
-                {
-                  "icon": "./assets/images/favicon.png",
-                  "color": "#ffffff",
-                  "defaultChannel": "default",
-                  "sounds": [
-                  ],
-                  "enableBackgroundRemoteNotifications": false
-                }
-            ]
-        ],
-        "experiments": {
-            "typedRoutes": true
-        },
-        "extra": {
-            "router": {
-                "origin": false
-            },
-            "eas": {
-                "projectId": "5e3a24d7-b598-468a-bf60-e89a614e7b7e"
-            }
-        },
-        "owner": "llopex"
-    }
+        "background_color": "#ffffff",
+        "theme_color": "#6A1B9A",
+        "icons": [
+          {
+            "src": "./assets/images/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+          },
+          {
+            "src": "./assets/images/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+          }
+        ]
+      }
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff"
+        }
+      ],
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.823465219976-9tr8frv4ksgmeh6l3ai4tdgu4hfpcejg"
+        }
+      ],
+      "expo-audio",
+      "expo-secure-store",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/favicon.png",
+          "color": "#ffffff",
+          "defaultChannel": "default",
+          "sounds": [],
+          "enableBackgroundRemoteNotifications": false
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "5e3a24d7-b598-468a-bf60-e89a614e7b7e"
+      }
+    },
+    "owner": "llopex"
+  }
 }

@@ -85,9 +85,16 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
         set({ loading: true, error: null })
         try {
             const user = get().user
-            if (user && !user.achievements.includes(achievement)) {
+            if (!user) {
+                throw new Error('Usuário não encontrado')
+            }
+
+            const alreadyOwned = user.achievements.includes(achievement)
+            if (!alreadyOwned) {
                 const newAchievements = [...user.achievements, achievement]
-                await get().updateUser(user.id, { achievements: newAchievements })
+                await get().updateUser(user.id, {
+                    achievements: newAchievements,
+                })
                 set({ user: { ...user, achievements: newAchievements } })
             }
         } catch (error: any) {
