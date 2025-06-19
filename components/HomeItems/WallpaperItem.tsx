@@ -1,12 +1,24 @@
 import { StyleSheet, View, Image } from 'react-native'
+import { HomeProps } from '../Homescreen'
 
-const WallpaperItem = () => {
+const WallpaperItem = ({image}: HomeProps) => {
+  
     return (
         <View style={styles.cbox}>
-            <Image
-                style={{ width: `100%`, height: `100%` }}
-                source={require('@/assets/images/homescreen/fundohs.png')}
-            />
+            {image && image[0] === `#` ? (
+                <View
+                    style={{
+                        width: `100%`,
+                        height: `100%`,
+                        backgroundColor: `${image}`,
+                    }}
+                />
+            ) : (
+                <Image
+                    style={{ width: `100%`, height: `100%` }}
+                    source={{ uri: image }}
+                />
+            )}
         </View>
     )
 }

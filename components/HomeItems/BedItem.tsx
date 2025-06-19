@@ -14,7 +14,7 @@ import { useEffect } from 'react'
 
 const { height, width } = Dimensions.get('window')
 
-const BedItem = ({ update }: ItemProps) => {
+const BedItem = ({ update, image }: ItemProps) => {
     const pet = useUserPetStore((state) => state.pet)
 
   
@@ -57,7 +57,7 @@ const BedItem = ({ update }: ItemProps) => {
                         height: `100%`,
                         resizeMode: 'contain',
                     }}
-                    source={require('@/assets/images/homescreen/almofada.png')}
+                    source={{ uri: image || require('@/assets/images/homescreen/almofada.png') }}
                 />
             </TouchableWithoutFeedback>
         </View>

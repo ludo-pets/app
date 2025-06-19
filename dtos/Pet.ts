@@ -6,6 +6,7 @@ export interface Pet {
     purchasedItems: {
         itemId: string
         quantity?: number
+        image?: string
     }[]
     activeItems: {
         bed: string
@@ -14,6 +15,7 @@ export interface Pet {
         wc: string
         floor: string
         wallpaper: string
+        water: string
     }
     wellBeing: Wellbeing
 }

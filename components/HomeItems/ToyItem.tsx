@@ -14,7 +14,7 @@ import { useEffect } from 'react'
 
 const { height, width } = Dimensions.get('window')
 
-const ToyItem = ({ update }: ItemProps) => {
+const ToyItem = ({ update, image }: ItemProps) => {
     const pet = useUserPetStore((state) => state.pet)
     
     const needsToPlay = () => {
@@ -56,7 +56,7 @@ const ToyItem = ({ update }: ItemProps) => {
                         height: `100%`,
                         resizeMode: `contain`,
                     }}
-                    source={require('@/assets/images/homescreen/brinquedo.png')}
+                    source={{ uri: image || require('@/assets/images/homescreen/brinquedo.png') }}
                 />
             </TouchableWithoutFeedback>
         </View>

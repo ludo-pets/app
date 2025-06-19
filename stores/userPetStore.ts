@@ -14,9 +14,19 @@ interface UserPetState {
     pet: Pet | null
     loading: boolean
     error: string | null
+    itemsAdapter: {
+        bed?: string
+        food?: string
+        wc?: string
+        toy?: string
+        floor?: string
+        wallpaper?: string
+        water?: string
+    }
     fetchUserAndPetByEmail: (userEmail: string) => Promise<void>
     updateUser: (userId: string, userData: Partial<User>) => Promise<void>
     updatePet: (petId: string, petData: Partial<Pet>) => Promise<void>
+    updatePetItens: (petId: string, petData: Partial<Pet>) => Promise<void>
     setUser: (user: User) => void
     setPet: (pet: Pet | null) => void
     setAchievements: (achievements: string) => void
@@ -29,13 +39,31 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
     loading: true,
     error: null,
     setAchievements(achievements) {},
+    itemsAdapter: {},
 
     fetchUserAndPetByEmail: async (userEmail: string) => {
         set({ loading: true, error: null })
         try {
             const result = await getUserWithPetByEmail(userEmail)
             if (result) {
-                set({ user: result.user, pet: result.pet, loading: false })
+                const activeItemsWithImages = Object.fromEntries(
+                    Object.entries(result.pet.activeItems).map(
+                        ([slot, itemId]) => {
+                            const purchase = result.pet.purchasedItems.find(
+                                (pi) => pi.itemId === itemId
+                            )
+                            const image = purchase ? purchase.image : ''
+                            return [slot, image]
+                        }
+                    )
+                )
+
+                set({
+                    user: result.user,
+                    pet: result.pet,
+                    itemsAdapter: activeItemsWithImages,
+                    loading: false,
+                })
             } else {
                 set({ error: 'User ou Pet não encontrado', loading: false })
             }
@@ -72,7 +100,42 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
             if (success) {
                 const oldPet = get().pet
                 if (oldPet) {
-                    set({ pet: { ...oldPet, ...petData } })
+                    set({
+                        pet: { ...oldPet, ...petData },
+                    })
+                }
+            } else {
+                set({ error: 'Erro ao atualizar o pet' })
+            }
+        } catch (error: any) {
+            set({ error: error.message })
+        } finally {
+            set({ loading: false })
+        }
+    },
+
+    updatePetItens: async (petId: string, petData: Partial<Pet>) => {
+        set({ error: null })
+        try {
+            const success = await updatePet(petId, petData)
+            if (success) {
+                const newItems = petData.activeItems
+                const oldPet = get().pet
+                const activeItemsWithImages = Object.fromEntries(
+                    Object.entries(newItems).map(([slot, itemId]) => {
+                        const purchase = oldPet?.purchasedItems.find(
+                            (pi) => pi.itemId === itemId
+                        )
+                        const image = purchase ? purchase.image : null
+                        return [slot, image]
+                    })
+                )
+
+                if (oldPet) {
+                    set({
+                        pet: { ...oldPet, ...petData },
+                        itemsAdapter: activeItemsWithImages,
+                    })
                 }
             } else {
                 set({ error: 'Erro ao atualizar o pet' })

@@ -7,18 +7,18 @@ import {
 } from 'react-native'
 import ItemProps from '@/dtos/ItensProps'
 import { useUserPetStore } from '@/stores/userPetStore'
-import { calcPetMood} from '@/utils/moodCalculator'
+import { calcPetMood } from '@/utils/moodCalculator'
 import { useState } from 'react'
 import { useEffect } from 'react'
 
 const { height, width } = Dimensions.get('window')
 
-const FoodItem = ({ update }: ItemProps) => {
+const FoodItem = ({ update, image }: ItemProps) => {
     const pet = useUserPetStore((state) => state.pet)
-    
+
     const needsFood = () => {
         if (pet) {
-            const {hunger} = calcPetMood(pet.wellBeing)
+            const { hunger } = calcPetMood(pet.wellBeing)
             return hunger < 12.5
         }
         return false
@@ -38,11 +38,14 @@ const FoodItem = ({ update }: ItemProps) => {
         <View style={styles.cbox}>
             {isHungry && (
                 <View style={styles.alertContainer}>
-                    <Image source={require('@/assets/images/homescreen/icone_feedback.png')} style={{
-                        width: '100%',
-                        height: '100%',
-                        resizeMode: 'contain',
-                    }}/>
+                    <Image
+                        source={require('@/assets/images/homescreen/icone_feedback.png')}
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            resizeMode: 'contain',
+                        }}
+                    />
                 </View>
             )}
             <TouchableWithoutFeedback onPress={onPress}>
@@ -52,7 +55,11 @@ const FoodItem = ({ update }: ItemProps) => {
                         height: '100%',
                         resizeMode: 'contain',
                     }}
-                    source={require('@/assets/images/homescreen/poteC.png')}
+                    source={{
+                        uri:
+                            image ||
+                            require('@/assets/images/homescreen/poteC.png'),
+                    }}
                 />
             </TouchableWithoutFeedback>
         </View>
@@ -70,7 +77,7 @@ const styles = StyleSheet.create({
         right: width / 1.45,
         justifyContent: 'center',
         alignItems: 'center',
-        display: 'flex'
+        display: 'flex',
     },
     alertContainer: {
         position: 'absolute',
@@ -82,5 +89,5 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 30,
         padding: 2,
-    }
+    },
 })

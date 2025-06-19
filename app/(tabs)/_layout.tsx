@@ -1,40 +1,34 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Text,
-  Platform,
-  StatusBar,
+    StyleSheet,
+    TouchableOpacity,
+    View,
+    Text,
+    Platform,
+    StatusBar,
 } from 'react-native'
-import {
-  Tabs,
-  usePathname,
-  Redirect,
-  router,
-} from 'expo-router'
+import { Tabs, usePathname, Redirect, router } from 'expo-router'
 import Tooltip from 'react-native-walkthrough-tooltip'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import {
-  Exam,
-  House,
-  Joystick,
-  Storefront,
-  UserCircle,
+    Exam,
+    House,
+    Joystick,
+    Storefront,
+    UserCircle,
 } from 'phosphor-react-native'
 import Header from '@/components/Header'
 import { useUserPetStore } from '@/stores/userPetStore'
 import { auth } from '@/firebaseConfig'
 import { signOut } from 'firebase/auth'
 import {
-  useWalkthrough,
-  WalkthroughProvider,
+    useWalkthrough,
+    WalkthroughProvider,
 } from '@/contexts/WalkthroughContext'
 import type { RouteProp, ParamListBase } from '@react-navigation/native'
 
-
 const iconsSize = 32
-export const toastRef: any = React.createRef();
+export const toastRef: any = React.createRef()
 
 const iconMap = {
     home: House,
@@ -164,7 +158,7 @@ export default function TabLayout() {
         // setUser(null)
         setPet(null)
 
-        router.replace("/")
+        router.replace('/')
     }
 
     const logoutButton = (
@@ -242,7 +236,10 @@ export default function TabLayout() {
                         }}
                         listeners={({ navigation, route }) => ({
                             tabPress: (e) => {
-                                const r = route as RouteProp<ParamListBase, string> & {
+                                const r = route as RouteProp<
+                                    ParamListBase,
+                                    string
+                                > & {
                                     state?: any
                                 }
                                 const nestedState = r.state
@@ -288,8 +285,7 @@ export default function TabLayout() {
                                 />
                             ),
                         }}
-                    >
-                    </Tabs.Screen>
+                    ></Tabs.Screen>
                 </Tabs>
             </WalkthroughProvider>
         </>

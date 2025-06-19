@@ -15,7 +15,7 @@ export const getPetDataById = async (pet: string) => {
     const petSnap = await getDoc(petRef)
 
     if (!petSnap.exists()) {
-        console.error('Pet não encontrado')
+        console.log('Pet não encontrado')
         return null
     }
 
@@ -29,7 +29,7 @@ export const updatePet = async (petId: string, petData: Partial<Pet>) => {
         const petRef = doc(db, 'Pet', petId)
         await updateDoc(petRef, { ...petData })
     } catch (error) {
-        console.error('Erro ao atualizar Pet:', error)
+        console.log('Erro ao atualizar Pet:', error)
         return false
     }
 
@@ -56,12 +56,48 @@ export const addPet = async (petData: CreatePetData): Promise<Pet | null> => {
             name: petData.name,
             color: petData.color,
             type: petData.type,
-            purchasedItems: [],
+            purchasedItems: [
+                {
+                    itemId: 'defaultToy',
+                    quantity: 1,
+                    image: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/objects/objetos/Ativo+4.png',
+                },
+                {
+                    itemId: 'defaultBed',
+                    quantity: 1,
+                    image: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/objects/objetos/Ativo+7.png',
+                },
+                {
+                    itemId: 'defaultFood',
+                    quantity: 1000,
+                    image: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/objects/objetos/Ativo+36.png',
+                },
+                {
+                    itemId: 'defaultWC',
+                    quantity: 1,
+                    image: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/objects/objetos/Ativo+21.png',
+                },
+                {
+                    itemId: 'defaultFloor',
+                    quantity: 1,
+                    image: '#B6E683',
+                },
+                {
+                    itemId: 'defaultWallpaper',
+                    quantity: 1,
+                    image: '#C0DFF3',
+                },
+                {
+                    itemId: 'defaultWater',
+                    quantity: 1,
+                    image: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/objects/objetos/Ativo+41.png',
+                },
+            ],
             activeItems: {
-                toy: 'abc',
-                wc: 'abc',
-                food: 'cba',
-                bed: 'bbb',
+                toy: 'defaultToy',
+                wc: 'defaultWC',
+                food: 'defaultFood',
+                bed: 'defaultBed',
                 floor: 'defaultFloor',
                 wallpaper: 'defaultWallpaper',
             },
@@ -85,7 +121,7 @@ export const addPet = async (petData: CreatePetData): Promise<Pet | null> => {
 
         return createdPet
     } catch (error) {
-        console.error('Erro ao adicionar Pet:', error)
+        console.log('Erro ao adicionar Pet:', error)
         return null
     }
 }
