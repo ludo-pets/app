@@ -1,13 +1,15 @@
+import 'react-native-gesture-handler';
+import { useEffect } from 'react';
+import { Stack } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import * as Notifications from 'expo-notifications';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Device from 'expo-device';
+import { Platform } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import * as React from 'react'
-import { useEffect } from 'react'
-import { Platform } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { Stack } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import * as WebBrowser from 'expo-web-browser'
-import * as Notifications from 'expo-notifications'
-import * as Device from 'expo-device'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { useFonts } from 'expo-font'
 import { useAllAchievementsStore } from '@/stores/allAchievementsStore'
@@ -120,7 +122,8 @@ export default function RootLayout() {
 
  return (
   <ToastProvider>
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#fefefe' }}>
+  <GestureHandlerRootView style={{ flex: 1 }}>
+     <SafeAreaView style={{ flex: 1, backgroundColor: '#fefefe' }}>
       <Stack>
         <Stack.Screen name="oauthredirect" options={{ headerShown: false }} />
         <Stack.Screen name="index" options={{ headerShown: false }} />
@@ -131,6 +134,7 @@ export default function RootLayout() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       </Stack>
     </SafeAreaView>
+  </GestureHandlerRootView>
   </ToastProvider>
   )
 }
