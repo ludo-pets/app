@@ -68,7 +68,6 @@ export const createUser = async (
     params: { id: string; email: string; newPetId: string}
 ): Promise<User | null> => {
     const { id, email, newPetId} = params
-
     const userRef = doc(db, 'User', id)
 
     const newUser: User = {
