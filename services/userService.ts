@@ -65,21 +65,22 @@ const isValidEmail = (email: string): boolean => {
 }
 
 export const createUser = async (
-    params: { id: string; email: string; }
+    params: { id: string; email: string; newPetId: string}
 ): Promise<User | null> => {
-    const { id, email } = params
+    const { id, email, newPetId} = params
 
     const userRef = doc(db, 'User', id)
 
     const newUser: User = {
         id,
         email,
-        achievements: {},
+        pet: newPetId,
+        achievements: [],
         experience: 0,
         level: 1,
         money: 0,
         lastLessonConcluded: null,
-        notifications: {}
+        notifications: true
     } as User
 
     try {
