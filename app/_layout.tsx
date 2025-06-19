@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import { useEffect } from 'react';
 import { Stack } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -5,6 +6,7 @@ import * as Notifications from 'expo-notifications';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Device from 'expo-device';
 import { Platform } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 type PetNeeds = {
   lastFed: number;
@@ -92,7 +94,8 @@ export default function RootLayout() {
   };
 
   return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: '#fefefe' }}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#fefefe' }}>
             <Stack>
                 <Stack.Screen name="index" options={{ headerShown: false }} />
                 <Stack.Screen name="quizSummary" options={{ headerShown: false }} />
@@ -105,5 +108,6 @@ export default function RootLayout() {
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             </Stack>
         </SafeAreaView>
+    </GestureHandlerRootView>
     )
 }
