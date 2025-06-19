@@ -39,8 +39,8 @@ const minigameListRegistry: Record<string, MinigameListConfig> = {
     },
     '2048 Pets': {
         icon: require('@/assets/images/minigames/pets2048/video-game.png'),
-        routeName: 'Pets2048'
-    }
+        routeName: '/minigames/Pets2048',
+    },
 }
 
 const getMinigameListConfig = (

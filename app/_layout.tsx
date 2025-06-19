@@ -1,12 +1,12 @@
-import 'react-native-gesture-handler';
-import { useEffect } from 'react';
-import { Stack } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import * as Notifications from 'expo-notifications';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Device from 'expo-device';
-import { Platform } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import 'react-native-gesture-handler'
+import { useEffect } from 'react'
+import { Stack } from 'expo-router'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import * as Notifications from 'expo-notifications'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import * as Device from 'expo-device'
+import { Platform } from 'react-native'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import * as React from 'react'
 import * as SplashScreen from 'expo-splash-screen'
 import * as WebBrowser from 'expo-web-browser'
@@ -19,122 +19,144 @@ WebBrowser.maybeCompleteAuthSession()
 export { ErrorBoundary } from 'expo-router'
 
 export const unstable_settings = {
-  initialRouteName: 'index',
+    initialRouteName: 'index',
 }
 
 SplashScreen.preventAutoHideAsync().catch(() => {})
 
 type PetNeeds = {
-  lastFed: number
-  lastDrank: number
-  lastSlept: number
-  lastCleaned: number
-  lastPlayed: number
+    lastFed: number
+    lastDrank: number
+    lastSlept: number
+    lastCleaned: number
+    lastPlayed: number
 }
 
 export default function RootLayout() {
-  const [loaded, fontError] = useFonts({
-    Inter: require('@/assets/fonts/Inter.ttf'),
-    ...FontAwesome.font,
-  })
+    const [loaded, fontError] = useFonts({
+        Inter: require('@/assets/fonts/Inter.ttf'),
+        ...FontAwesome.font,
+    })
 
-  const fetchAllAchievements = useAllAchievementsStore(state => state.fetchAllAchievements)
+    const fetchAllAchievements = useAllAchievementsStore(
+        (state) => state.fetchAllAchievements
+    )
     useEffect(() => {
-      fetchAllAchievements()
+        fetchAllAchievements()
     }, [fetchAllAchievements])
 
-  useEffect(() => {
-    if (fontError) throw fontError
-  }, [fontError])
+    useEffect(() => {
+        if (fontError) throw fontError
+    }, [fontError])
 
-  useEffect(() => {
-    if (loaded) SplashScreen.hideAsync().catch(() => {})
-  }, [loaded])
+    useEffect(() => {
+        if (loaded) SplashScreen.hideAsync().catch(() => {})
+    }, [loaded])
 
-  useEffect(() => {
-    /* Android channel */
-    if (Platform.OS === 'android') {
-      Notifications.setNotificationChannelAsync('default', {
-        name: 'default',
-        importance: Notifications.AndroidImportance.HIGH,
-        vibrationPattern: [0, 250, 250, 250],
-        lightColor: '#FF231F7C',
-      })
+    useEffect(() => {
+        /* Android channel */
+        if (Platform.OS === 'android') {
+            Notifications.setNotificationChannelAsync('default', {
+                name: 'default',
+                importance: Notifications.AndroidImportance.HIGH,
+                vibrationPattern: [0, 250, 250, 250],
+                lightColor: '#FF231F7C',
+            })
+        }
+
+        const interval = setInterval(async () => {
+            const petNeeds = await loadPetData()
+            if (petNeeds) {
+                await checkPetNeedsAndNotify(petNeeds)
+            }
+        }, 60_000)
+
+        return () => clearInterval(interval)
+    }, [])
+
+    const loadPetData = async (): Promise<PetNeeds | null> => {
+        try {
+            const saved = await AsyncStorage.getItem('petNeeds')
+            return saved ? JSON.parse(saved) : null
+        } catch (err) {
+            console.error('Erro ao carregar dados do pet:', err)
+            return null
+        }
     }
 
-    const interval = setInterval(async () => {
-      const petNeeds = await loadPetData()
-      if (petNeeds) {
-        await checkPetNeedsAndNotify(petNeeds)
-      }
-    }, 60_000)
+    const checkPetNeedsAndNotify = async (pet: PetNeeds) => {
+        const now = Math.floor(Date.now() / 1000)
+        const needs = [
+            { type: 'comida', last: pet.lastFed, max: 216_000 },
+            { type: 'água', last: pet.lastDrank, max: 216_000 },
+            { type: 'sono', last: pet.lastSlept, max: 216_000 },
+            { type: 'limpeza', last: pet.lastCleaned, max: 432_000 },
+            { type: 'brincadeira', last: pet.lastPlayed, max: 43_200 },
+        ]
 
-    return () => clearInterval(interval)
-  }, [])
-
-  const loadPetData = async (): Promise<PetNeeds | null> => {
-    try {
-      const saved = await AsyncStorage.getItem('petNeeds')
-      return saved ? JSON.parse(saved) : null
-    } catch (err) {
-      console.error('Erro ao carregar dados do pet:', err)
-      return null
+        for (const n of needs) {
+            const elapsed = now - n.last
+            if (elapsed > n.max) {
+                await sendNotification(
+                    `🐾 Seu pet precisa de ${n.type}!`,
+                    `Está há ${Math.floor(elapsed / 3600)} horas sem ${n.type}.`
+                )
+            }
+        }
     }
-  }
 
-  const checkPetNeedsAndNotify = async (pet: PetNeeds) => {
-    const now = Math.floor(Date.now() / 1000)
-    const needs = [
-      { type: 'comida', last: pet.lastFed, max: 216_000 },
-      { type: 'água', last: pet.lastDrank, max: 216_000 },
-      { type: 'sono', last: pet.lastSlept, max: 216_000 },
-      { type: 'limpeza', last: pet.lastCleaned, max: 432_000 },
-      { type: 'brincadeira', last: pet.lastPlayed, max: 43_200 },
-    ]
+    const sendNotification = async (title: string, body: string) => {
+        if (Platform.OS === 'android' && !Device.isDevice) {
+            console.log(`[Notificação Simulada]: ${title} - ${body}`)
+            return
+        }
+        const { status } = await Notifications.requestPermissionsAsync()
+        if (status !== 'granted') return
 
-    for (const n of needs) {
-      const elapsed = now - n.last
-      if (elapsed > n.max) {
-        await sendNotification(
-          `🐾 Seu pet precisa de ${n.type}!`,
-          `Está há ${Math.floor(elapsed / 3600)} horas sem ${n.type}.`,
-        )
-      }
+        await Notifications.scheduleNotificationAsync({
+            content: { title, body, data: { url: '/pet-care' } },
+            trigger: { seconds: 2 },
+        })
     }
-  }
 
-  const sendNotification = async (title: string, body: string) => {
-    if (Platform.OS === 'android' && !Device.isDevice) {
-      console.log(`[Notificação Simulada]: ${title} - ${body}`)
-      return
-    }
-    const { status } = await Notifications.requestPermissionsAsync()
-    if (status !== 'granted') return
+    if (!loaded) return null
 
-    await Notifications.scheduleNotificationAsync({
-      content: { title, body, data: { url: '/pet-care' } },
-      trigger: { seconds: 2 },
-    })
-  }
-
-  if (!loaded) return null
-
-
- return (
-  <ToastProvider>
-  <GestureHandlerRootView style={{ flex: 1 }}>
-     <SafeAreaView style={{ flex: 1, backgroundColor: '#fefefe' }}>
-      <Stack>
-        <Stack.Screen name="oauthredirect" options={{ headerShown: false }} />
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="quizSummary" options={{ headerShown: false }} />
-        <Stack.Screen name="petCreate" options={{ headerShown: false }} />
-        <Stack.Screen name="quizGame" options={{ headerShown: false }} />
-        <Stack.Screen name="minigames" options={{ headerShown: false }} />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      </Stack>
-    </SafeAreaView>
-  </GestureHandlerRootView>
-  </ToastProvider>
-  )
+    return (
+        <ToastProvider>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+                <SafeAreaView style={{ flex: 1, backgroundColor: '#fefefe' }}>
+                    <Stack>
+                        <Stack.Screen
+                            name="oauthredirect"
+                            options={{ headerShown: false }}
+                        />
+                        <Stack.Screen
+                            name="index"
+                            options={{ headerShown: false }}
+                        />
+                        <Stack.Screen
+                            name="quizSummary"
+                            options={{ headerShown: false }}
+                        />
+                        <Stack.Screen
+                            name="petCreate"
+                            options={{ headerShown: false }}
+                        />
+                        <Stack.Screen
+                            name="quizGame"
+                            options={{ headerShown: false }}
+                        />
+                        <Stack.Screen
+                            name="minigames"
+                            options={{ headerShown: false }}
+                        />
+                        <Stack.Screen
+                            name="(tabs)"
+                            options={{ headerShown: false }}
+                        />
+                    </Stack>
+                </SafeAreaView>
+            </GestureHandlerRootView>
+        </ToastProvider>
+    )
 }
