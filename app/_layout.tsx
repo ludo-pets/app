@@ -10,6 +10,8 @@ import * as Device from 'expo-device'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { useFonts } from 'expo-font'
+import { useAllAchievementsStore } from '@/stores/allAchievementsStore'
+import { ToastProvider } from '@/components/Toast/ToastProvider'
 
 WebBrowser.maybeCompleteAuthSession()
 export { ErrorBoundary } from 'expo-router'
@@ -33,6 +35,11 @@ export default function RootLayout() {
     Inter: require('@/assets/fonts/Inter.ttf'),
     ...FontAwesome.font,
   })
+
+  const fetchAllAchievements = useAllAchievementsStore(state => state.fetchAllAchievements)
+    useEffect(() => {
+      fetchAllAchievements()
+    }, [fetchAllAchievements])
 
   useEffect(() => {
     if (fontError) throw fontError
@@ -110,7 +117,9 @@ export default function RootLayout() {
 
   if (!loaded) return null
 
+
  return (
+  <ToastProvider>
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fefefe' }}>
       <Stack>
         <Stack.Screen name="oauthredirect" options={{ headerShown: false }} />
@@ -122,5 +131,6 @@ export default function RootLayout() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       </Stack>
     </SafeAreaView>
+  </ToastProvider>
   )
 }

@@ -5,6 +5,8 @@ import { Pet } from '@/dtos/Pet'
 import User from '@/dtos/User'
 import { CheckAchievementLevel, CheckAchievementMoney, getAchievementByName } from '@/utils/AchievementHelper'
 import { showToast } from '@/utils/Toast'
+import { arrayUnion, doc, updateDoc } from 'firebase/firestore'
+import { db } from '@/firebaseConfig'
 
 interface UserPetState {
     [x: string]: any
@@ -85,27 +87,33 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
     setUser: (user: User) => set({ user }),
     setPet: (pet: Pet | null) => set({ pet }),
 
-    updateAchievements: async (achievement: string, title: string, content: string) => {
-        set({ error: null })
-        try {
-            const user = get().user
-            if (user) {
-                const alreadyOwned = user.achievements.includes(achievement)
-                if (!alreadyOwned) {
-                    const newAchievements = [...user.achievements, achievement]
-                    console.log(`Updating achievements for user ${user.id}:`, newAchievements)
-                    await get().updateUser(user.id, { achievements: newAchievements})
-                    set({ user: { ...user, achievements: newAchievements}})
+    updateAchievements: async (achievementId, title, content) => {
+    const user = get().user
+    if (!user) {
+      set({ error: 'User not found', loading: false })
+      return
+    }
+    if (user.achievements.includes(achievementId)) {
+      set({ loading: false })
+      return
+    }
 
-                     setTimeout(() => {
-                        showToast(title + ': ' + content, 'success' );
-                    }, 100);
-                }
-            }
-        } catch (error: any) {
-            set({ error: error.message })
-        } finally {
-            set({ loading: false })
-        }
-    },
+    set({ loading: true, error: null })
+
+    try {
+      const userRef = doc(db, 'User', user.id)
+      await updateDoc(userRef, {
+        achievements: arrayUnion(achievementId)
+      })
+
+      const newAchievements = [...user.achievements, achievementId]
+      set({ user: { ...user, achievements: newAchievements } })
+
+      showToast(`${title}: ${content}`, 'success')
+    } catch (err: any) {
+      set({ error: err.message })
+    } finally {
+      set({ loading: false })
+    }
+  },
 }))

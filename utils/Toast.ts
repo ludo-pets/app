@@ -4,15 +4,12 @@ export function registerShowToast(fn: typeof showToastFn) {
   showToastFn = fn;
 }
 
-export function showToast(message: string, type: 'success' | 'error' | 'info' = 'info') {
+type ToastType = 'success' | 'error' | 'info';
+
+export function showToast(message: string, type: ToastType = 'info') {
   if (showToastFn) {
-    showToastFn(message, type);
+    setTimeout(() => showToastFn!(message, type), 0);
   } else {
     console.warn('Toast system not initialized');
   }
 }
-
-
-
-
-
