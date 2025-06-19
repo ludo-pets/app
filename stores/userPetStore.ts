@@ -5,6 +5,7 @@ import { Pet } from '@/dtos/Pet'
 import User from '@/dtos/User'
 
 interface UserPetState {
+    [x: string]: any
     user: User | null
     pet: Pet | null
     loading: boolean
@@ -13,7 +14,7 @@ interface UserPetState {
     updateUser: (userId: string, userData: Partial<User>) => Promise<void>
     updatePet: (petId: string, petData: Partial<Pet>) => Promise<void>
     setUser: (user: User) => void
-    setPet: (pet: Pet) => void
+    setPet: (pet: Pet | null) => void
     setAchievements: (achievements: string) => void
     updateAchievements: (achievements: string) => Promise<void>
 }
@@ -59,7 +60,7 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
     },
 
     updatePet: async (petId: string, petData: Partial<Pet>) => {
-        set({ error: null })
+        set({ loading: true, error: null })
         try {
             const success = await updatePet(petId, petData)
             if (success) {
@@ -78,13 +79,12 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
     },
 
     setUser: (user: User) => set({ user }),
-    setPet: (pet: Pet) => set({ pet }),
+    setPet: (pet: Pet | null) => set({ pet }),
 
     updateAchievements: async (achievement: string) => {
-        set({ error: null })
+        set({ loading: true, error: null })
         try {
             const user = get().user
-
             if (!user) {
                 throw new Error('Usuário não encontrado')
             }

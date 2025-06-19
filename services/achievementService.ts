@@ -28,7 +28,7 @@ export const fetchAchievements = async (): Promise<Achievement[]> => {
             achievements.push({
                 id: data.id,
                 name: data.name,
-                message: data.message
+                message: data.message,
             } as Achievement)
         })
         return achievements

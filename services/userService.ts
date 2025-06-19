@@ -7,6 +7,7 @@ import {
     DocumentData,
     getDocs,
     query,
+    setDoc,
     updateDoc,
     where,
 } from 'firebase/firestore'
@@ -61,6 +62,33 @@ export const getUserDataByEmail = async (
 
 const isValidEmail = (email: string): boolean => {
     return /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(email)
+}
+
+export const createUser = async (
+    params: { id: string; email: string; }
+): Promise<User | null> => {
+    const { id, email } = params
+
+    const userRef = doc(db, 'User', id)
+
+    const newUser: User = {
+        id,
+        email,
+        achievements: {},
+        experience: 0,
+        level: 1,
+        money: 0,
+        lastLessonConcluded: null,
+        notifications: {}
+    } as User
+
+    try {
+        await setDoc(userRef, newUser)
+        return newUser
+    } catch (err) {
+        console.error('createUser: Firestore write failed ->', err)
+        return null
+    }
 }
 
 export const updateUser = async (

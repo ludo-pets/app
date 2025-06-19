@@ -2,7 +2,6 @@ import { useState, useCallback, useRef, useEffect } from 'react'
 import { useGameConfig } from './GameConfig'
 import useFoods, { FoodItem, NewFood } from './Foods'
 import { useAudioPlayer, AudioPlayer } from 'expo-audio'
-import { useConfirmExit } from '@/hooks/usePreventNavigationExit'
 
 export type GameManagerType = {
     startGame: () => void

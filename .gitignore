@@ -39,6 +39,8 @@ yarn-error.*
 .vercel
 .idea
 .qodo
+package-lock.json
+.vscode/
 
 #Test coverage
 coverage/
