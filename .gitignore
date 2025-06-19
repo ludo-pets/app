@@ -44,3 +44,6 @@ package-lock.json
 
 #Test coverage
 coverage/
+
+# Android build files
+android/*
