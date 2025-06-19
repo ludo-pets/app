@@ -37,6 +37,10 @@ const minigameListRegistry: Record<string, MinigameListConfig> = {
         icon: require('@/assets/images/minigames/flappyPet/flappyPetIcon.png'),
         routeName: '/minigames/FlappyPetGame',
     },
+    '2048 Pets': {
+        icon: require('@/assets/images/minigames/pets2048/video-game.png'),
+        routeName: 'Pets2048'
+    }
 }
 
 const getMinigameListConfig = (

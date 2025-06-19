@@ -1,22 +1,25 @@
 {
   "expo": {
-    "name": "ludopets",
+    "name": "LudoPets",
     "slug": "ludopets",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/logo.png",
-    "scheme": "myapp",
+    "icon": "./assets/images/icon.png",
+    "scheme": "com.ages.ludopets",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "bundleIdentifier": "com.ages.ludopets"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.ages.ludopets"
+      "package": "com.ages.ludopets",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",
@@ -56,6 +59,14 @@
         }
       ],
       [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.823465219976-9tr8frv4ksgmeh6l3ai4tdgu4hfpcejg"
+        }
+      ],
+      "expo-audio",
+      "expo-secure-store",
+      [
         "expo-notifications",
         {
           "icon": "./assets/images/favicon.png",
@@ -64,8 +75,7 @@
           "sounds": [],
           "enableBackgroundRemoteNotifications": false
         }
-      ],
-      "expo-audio"
+      ]
     ],
     "experiments": {
       "typedRoutes": true

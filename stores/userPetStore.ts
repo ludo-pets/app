@@ -3,8 +3,13 @@ import { getUserWithPetByEmail, updateUser } from '@/services/userService'
 import { updatePet } from '@/services/petService'
 import { Pet } from '@/dtos/Pet'
 import User from '@/dtos/User'
+import { CheckAchievementLevel, CheckAchievementMoney, getAchievementByName } from '@/utils/AchievementHelper'
+import { showToast } from '@/utils/Toast'
+import { arrayUnion, doc, updateDoc } from 'firebase/firestore'
+import { db } from '@/firebaseConfig'
 
 interface UserPetState {
+    [x: string]: any
     user: User | null
     pet: Pet | null
     loading: boolean
@@ -23,9 +28,9 @@ interface UserPetState {
     updatePet: (petId: string, petData: Partial<Pet>) => Promise<void>
     updatePetItens: (petId: string, petData: Partial<Pet>) => Promise<void>
     setUser: (user: User) => void
-    setPet: (pet: Pet) => void
+    setPet: (pet: Pet | null) => void
     setAchievements: (achievements: string) => void
-    updateAchievements: (achievements: string) => Promise<void>
+    updateAchievements: (achievement: string, title: string, content: string) => Promise<void>
 }
 
 export const useUserPetStore = create<UserPetState>((set, get) => ({
@@ -74,7 +79,9 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
             if (success) {
                 const oldUser = get().user
                 if (oldUser) {
-                    set({ user: { ...oldUser, ...userData } })
+                    set({ user: { ...oldUser, ...userData } })            
+                    CheckAchievementLevel(oldUser.level, userData.level);
+                    CheckAchievementMoney(oldUser.money, userData.money || oldUser.money);     
                 }
             } else {
                 set({ error: 'Erro ao atualizar o usuário' })
@@ -87,7 +94,7 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
     },
 
     updatePet: async (petId: string, petData: Partial<Pet>) => {
-        set({ error: null })
+        set({ loading: true, error: null })
         try {
             const success = await updatePet(petId, petData)
             if (success) {
@@ -141,29 +148,35 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
     },
 
     setUser: (user: User) => set({ user }),
-    setPet: (pet: Pet) => set({ pet }),
+    setPet: (pet: Pet | null) => set({ pet }),
 
-    updateAchievements: async (achievement: string) => {
-        set({ error: null })
-        try {
-            const user = get().user
+    updateAchievements: async (achievementId, title, content) => {
+    const user = get().user
+    if (!user) {
+      set({ error: 'User not found', loading: false })
+      return
+    }
+    if (user.achievements.includes(achievementId)) {
+      set({ loading: false })
+      return
+    }
 
-            if (!user) {
-                throw new Error('Usuário não encontrado')
-            }
+    set({ loading: true, error: null })
 
-            const alreadyOwned = user.achievements.includes(achievement)
-            if (!alreadyOwned) {
-                const newAchievements = [...user.achievements, achievement]
-                await get().updateUser(user.id, {
-                    achievements: newAchievements,
-                })
-                set({ user: { ...user, achievements: newAchievements } })
-            }
-        } catch (error: any) {
-            set({ error: error.message })
-        } finally {
-            set({ loading: false })
-        }
-    },
+    try {
+      const userRef = doc(db, 'User', user.id)
+      await updateDoc(userRef, {
+        achievements: arrayUnion(achievementId)
+      })
+
+      const newAchievements = [...user.achievements, achievementId]
+      set({ user: { ...user, achievements: newAchievements } })
+
+      showToast(`${title}: ${content}`, 'success')
+    } catch (err: any) {
+      set({ error: err.message })
+    } finally {
+      set({ loading: false })
+    }
+  },
 }))

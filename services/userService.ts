@@ -7,10 +7,12 @@ import {
     DocumentData,
     getDocs,
     query,
+    setDoc,
     updateDoc,
     where,
 } from 'firebase/firestore'
 import { getPetDataById } from './petService'
+import { showToast } from '@/utils/Toast'
 
 /**
  * Fetches a User document and its associated Pet document from Firestore by the user's email.
@@ -63,17 +65,47 @@ const isValidEmail = (email: string): boolean => {
     return /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(email)
 }
 
+export const createUser = async (
+    params: { id: string; email: string; newPetId: string}
+): Promise<User | null> => {
+    const { id, email, newPetId} = params
+    const userRef = doc(db, 'User', id)
+
+    const newUser: User = {
+        id,
+        email,
+        pet: newPetId,
+        achievements: [],
+        experience: 0,
+        level: 1,
+        money: 0,
+        lastLessonConcluded: null,
+        notifications: true
+    } as User
+
+    try {
+        await setDoc(userRef, newUser)
+        return newUser
+    } catch (err) {
+        console.error('createUser: Firestore write failed ->', err)
+        return null
+    }
+}
+
 export const updateUser = async (
-    userId: string,
+    userId: string, 
     userData: Partial<User>
 ): Promise<boolean> => {
     if (!userId || Object.keys(userData).length === 0) return false
 
     try {
         const userReference = doc(db, 'User', userId)
-        await updateDoc(userReference, { ...userData })
+        await updateDoc(userReference, { ...userData });
     } catch (error) {
         console.error('Erro ao atualizar User:', error)
+        setTimeout(() => {
+            showToast("Erro ao atualizar usuário",  'error' );
+        }, 100);
         return false
     }
 

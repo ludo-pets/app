@@ -8,8 +8,8 @@ import { useRouter } from 'expo-router'
 import { useConfirmExit } from '@/hooks/usePreventNavigationExit'
 import ConfirmExitModal from '@/components/ConfirmExitModal'
 import { useFocusEffect } from '@react-navigation/native'
+import { checkAchievementMinigameFirstTime } from '@/utils/AchievementHelper'
 import Header from '@/components/Header'
-
 const FoodGame = () => {
     const gameManager = useGameManager()
     const router = useRouter()
@@ -24,6 +24,7 @@ const FoodGame = () => {
 
     const handleContinue = () => {
         gameManager.setGameOver(false)
+        checkAchievementMinigameFirstTime("Barriga Cheia")
         router.push('/home')
     }
 

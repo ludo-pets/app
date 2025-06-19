@@ -7,8 +7,7 @@ import {
     Platform,
     StatusBar,
 } from 'react-native'
-import { Route, Tabs, useRouter } from 'expo-router'
-import { usePathname } from 'expo-router'
+import { Tabs, usePathname, Redirect, router } from 'expo-router'
 import Tooltip from 'react-native-walkthrough-tooltip'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import {
@@ -20,12 +19,16 @@ import {
 } from 'phosphor-react-native'
 import Header from '@/components/Header'
 import { useUserPetStore } from '@/stores/userPetStore'
+import { auth } from '@/firebaseConfig'
+import { signOut } from 'firebase/auth'
 import {
     useWalkthrough,
     WalkthroughProvider,
-} from '../../contexts/WalkthroughContext'
+} from '@/contexts/WalkthroughContext'
+import type { RouteProp, ParamListBase } from '@react-navigation/native'
 
 const iconsSize = 32
+export const toastRef: any = React.createRef()
 
 const iconMap = {
     home: House,
@@ -51,7 +54,7 @@ function CustomTabIconWithTooltip({
     targetElementId,
 }: CustomTabIconWithTooltipProps) {
     const IconComponent = iconMap[name] || House
-    const walkthrough = useWalkthrough()
+    const walkthrough = useWalkthrough() as any
 
     if (!walkthrough)
         return (
@@ -135,7 +138,7 @@ export default function TabLayout() {
     const fetchUserAndPet = useUserPetStore(
         (state) => state.fetchUserAndPetByEmail
     )
-    const user = useUserPetStore((state) => state.user)
+    const { user, setPet, setUser } = useUserPetStore()
 
     useEffect(() => {
         // const userId = 'gabrielBohn'
@@ -157,7 +160,6 @@ export default function TabLayout() {
     }, [fetchUserAndPet, user])
 
     const includeHeader = ['store', 'quiz', 'minigames', 'profile']
-    const router = useRouter()
     const headerTitles: Record<string, string> = {
         store: 'PetShop',
         quiz: 'Quiz',
@@ -166,7 +168,11 @@ export default function TabLayout() {
     }
     const headerTitle = headerTitles[simplePathname] || ''
 
-    const logout = () => {
+    const logout = async () => {
+        await signOut(auth)
+        // setUser(null)
+        setPet(null)
+
         router.replace('/')
     }
 
@@ -245,7 +251,10 @@ export default function TabLayout() {
                         }}
                         listeners={({ navigation, route }) => ({
                             tabPress: (e) => {
-                                const r = route as Route<string> & {
+                                const r = route as RouteProp<
+                                    ParamListBase,
+                                    string
+                                > & {
                                     state?: any
                                 }
                                 const nestedState = r.state

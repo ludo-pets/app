@@ -3,15 +3,17 @@ import React from 'react'
 
 export default function MinigameStackLayout() {
     return (
-        <Stack 
-            screenOptions={{ 
+        <Stack
+            screenOptions={{
                 headerShown: false,
-                animation: 'none'
+                animation: 'none',
             }}
         >
             <Stack.Screen name="index" />
             <Stack.Screen name="NailTrimGame" />
             <Stack.Screen name="FoodGame" />
+            <Stack.Screen name="Pets2048" />
+
         </Stack>
     )
 }
