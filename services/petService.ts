@@ -99,6 +99,7 @@ export const addPet = async (petData: CreatePetData): Promise<Pet | null> => {
                 food: 'defaultFood',
                 bed: 'defaultBed',
                 floor: 'defaultFloor',
+                water: 'defaultWater',
                 wallpaper: 'defaultWallpaper',
             },
             wellBeing: {

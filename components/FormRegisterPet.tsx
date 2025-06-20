@@ -17,7 +17,7 @@ import Cachorro from '@/assets/images/pets/cachorro.svg'
 import { SvgProps } from 'react-native-svg'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { useUserPetStore } from '@/stores/userPetStore'
-import { addPet } from '@/services/petService'
+import { addPet, updatePet } from '@/services/petService'
 import { createUser, getUserWithPetByEmail } from '@/services/userService'
 import { updateUser } from '@/services/userService'
 
@@ -108,6 +108,7 @@ export function FormRegisterPet() {
             })
             await updateUser(user.id, { pet: newPet.id })
         }
+        updatePet(newPet.id, {id: newPet.id})
 
         if (user) {
             await useUserPetStore

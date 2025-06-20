@@ -34,62 +34,62 @@ export default function HomeScreen() {
         // await addItem()
         // await duplicateDocument()
 
-        //         const defaultItems = [
-        //     {
-        //         itemId: 'defaultToy',
-        //         quantity: 1,
-        //         image: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/objects/objetos/Ativo+4.png',
-        //     },
-        //     {
-        //         itemId: 'defaultBed',
-        //         quantity: 1,
-        //         image: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/objects/objetos/Ativo+7.png',
-        //     },
-        //     {
-        //         itemId: 'defaultFood',
-        //         quantity: 1000,
-        //         image: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/objects/objetos/Ativo+36.png',
-        //     },
-        //     {
-        //         itemId: 'defaultWC',
-        //         quantity: 1,
-        //         image: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/objects/objetos/Ativo+21.png',
-        //     },
-        //     {
-        //         itemId: 'defaultFloor',
-        //         quantity: 1,
-        //         image: '#B6E683',
-        //     },
-        //     {
-        //         itemId: 'defaultWallpaper',
-        //         quantity: 1,
-        //         image: '#C0DFF3',
-        //     },
-        //     {
-        //         itemId: 'defaultWater',
-        //         quantity: 1,
-        //         image: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/objects/objetos/Ativo+41.png',
-        //     },
-        // ]
+                const defaultItems = [
+            {
+                itemId: 'defaultToy',
+                quantity: 1,
+                image: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/objects/objetos/Ativo+4.png',
+            },
+            {
+                itemId: 'defaultBed',
+                quantity: 1,
+                image: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/objects/objetos/Ativo+7.png',
+            },
+            {
+                itemId: 'defaultFood',
+                quantity: 1000,
+                image: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/objects/objetos/Ativo+36.png',
+            },
+            {
+                itemId: 'defaultWC',
+                quantity: 1,
+                image: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/objects/objetos/Ativo+21.png',
+            },
+            {
+                itemId: 'defaultFloor',
+                quantity: 1,
+                image: '#B6E683',
+            },
+            {
+                itemId: 'defaultWallpaper',
+                quantity: 1,
+                image: '#C0DFF3',
+            },
+            {
+                itemId: 'defaultWater',
+                quantity: 1,
+                image: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/objects/objetos/Ativo+41.png',
+            },
+        ]
 
-        // if (pet) {
-        //   const purchasedItems= [
-        //       // ...pet.purchasedItems,
-        //       ...defaultItems
-        //   ]
+        if (pet) {
+          const purchasedItems= [
+              // ...pet.purchasedItems,
+              ...defaultItems
+          ]
 
-        //   await updatePet(pet.id, { purchasedItems: purchasedItems })
+          await updatePet(pet.id, { purchasedItems: purchasedItems })
 
-        //   await updatePet(pet.id, { activeItems: {
-        //       toy: 'defaultToy',
-        //       bed: 'defaultBed',
-        //       food: 'defaultFood',
-        //       wc: 'defaultWC',
-        //       floor: 'defaultFloor',
-        //       wallpaper: 'defaultWallpaper',
-        //       water: 'defaultWater',
-        //   } })
-        // }
+          await updatePet(pet.id, { activeItems: {
+              toy: 'defaultToy',
+              bed: 'defaultBed',
+              food: 'defaultFood',
+              wc: 'defaultWC',
+              floor: 'defaultFloor',
+              wallpaper: 'defaultWallpaper',
+              water: 'defaultWater',
+          } })
+        }
 
         console.log('Item adicionado com sucesso!')
     }
