@@ -38,7 +38,7 @@ export const getUserWithPetByEmail = async (
 
         return { user, pet }
     } catch (error) {
-        console.error('Erro ao buscar User e Pet:', error)
+        console.log('Erro ao buscar User e Pet:', error)
         return null
     }
 }
@@ -47,14 +47,14 @@ export const getUserDataByEmail = async (
     email: string
 ): Promise<DocumentData | null> => {
     if (!isValidEmail(email)) {
-        console.error('Formato do e-mail inválido')
+        console.log('Formato do e-mail inválido')
         return null
     }
 
     const userQuery = query(collection(db, 'User'), where('email', '==', email))
     const userSnap = await getDocs(userQuery)
     if (userSnap.empty) {
-        console.error('User não encontrado')
+        console.log('User não encontrado')
         return null
     }
 
@@ -87,7 +87,7 @@ export const createUser = async (
         await setDoc(userRef, newUser)
         return newUser
     } catch (err) {
-        console.error('createUser: Firestore write failed ->', err)
+        console.log('createUser: Firestore write failed ->', err)
         return null
     }
 }
@@ -102,7 +102,7 @@ export const updateUser = async (
         const userReference = doc(db, 'User', userId)
         await updateDoc(userReference, { ...userData });
     } catch (error) {
-        console.error('Erro ao atualizar User:', error)
+        console.log('Erro ao atualizar User:', error)
         setTimeout(() => {
             showToast("Erro ao atualizar usuário",  'error' );
         }, 100);

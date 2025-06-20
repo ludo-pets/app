@@ -16,6 +16,7 @@ import {
     Joystick,
     Storefront,
     UserCircle,
+    SealCheck
 } from 'phosphor-react-native'
 import Header from '@/components/Header'
 import { useUserPetStore } from '@/stores/userPetStore'
@@ -34,7 +35,7 @@ const iconMap = {
     home: House,
     store: Storefront,
     minigame: Joystick,
-    quiz: Exam,
+    quiz: SealCheck,
     profile: UserCircle,
 } as const
 

@@ -33,61 +33,63 @@ export const addItem = async (): Promise<null> => {
     try {
         const itemCollectionRef = collection(db, 'Item')
         const item = {
-                category: 'foods',
-                id: 'defaultWallpaper',
-                image: '#C0DFF3',
-                name: 'Parede Padrão',
-                price: 0,
-                requiredLevel: 0,
-                type: 'wallpaper',
+                category: 'toys',
+                id: 'erqipuyunycw',
+                image: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/objects/objetos/Ativo+6.png',
+                name: 'Arranhador Simples',
+                price: 15,
+                requiredLevel: 3,
+                type: 'toy',
             }
 
-        const defaultItems = [
-            {
-                itemId: 'defaultToy',
-                quantity: 1,
-                image: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/objects/objetos/Ativo+4.png',
-            },
-            {
-                itemId: 'defaultBed',
-                quantity: 1,
-                image: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/objects/objetos/Ativo+7.png',
-            },
-            {
-                itemId: 'defaultFood',
-                quantity: 1000,
-                image: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/objects/objetos/Ativo+36.png',
-            },
-            {
-                itemId: 'defaultWC',
-                quantity: 1,
-                image: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/objects/objetos/Ativo+21.png',
-            },
-            {
-                itemId: 'defaultFloor',
-                quantity: 1,
-                image: '#B6E683',
-            },
-            {
-                itemId: 'defaultWallpaper',
-                quantity: 1,
-                image: '#C0DFF3',
-            },
-            {
-                itemId: 'defaultWater',
-                quantity: 1,
-                image: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/objects/objetos/Ativo+41.png',
-            },
-        ]
-        
-        addDoc(itemCollectionRef, item)
+        await addDoc(itemCollectionRef, item)
         
 
-        Promise.all(
-            defaultItems.map((item) => {
-                addDoc(itemCollectionRef, item)
-            })
-        )
+        // const defaultItems = [
+        //     {
+        //         itemId: 'defaultToy',
+        //         quantity: 1,
+        //         image: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/objects/objetos/Ativo+4.png',
+        //     },
+        //     {
+        //         itemId: 'defaultBed',
+        //         quantity: 1,
+        //         image: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/objects/objetos/Ativo+7.png',
+        //     },
+        //     {
+        //         itemId: 'defaultFood',
+        //         quantity: 1000,
+        //         image: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/objects/objetos/Ativo+36.png',
+        //     },
+        //     {
+        //         itemId: 'defaultWC',
+        //         quantity: 1,
+        //         image: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/objects/objetos/Ativo+21.png',
+        //     },
+        //     {
+        //         itemId: 'defaultFloor',
+        //         quantity: 1,
+        //         image: '#B6E683',
+        //     },
+        //     {
+        //         itemId: 'defaultWallpaper',
+        //         quantity: 1,
+        //         image: '#C0DFF3',
+        //     },
+        //     {
+        //         itemId: 'defaultWater',
+        //         quantity: 1,
+        //         image: 'https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/objects/objetos/Ativo+41.png',
+        //     },
+        // ]
+        
+        
+
+        // Promise.all(
+        //     defaultItems.map((item) => {
+        //         addDoc(itemCollectionRef, item)
+        //     })
+        // )
 
         return null
     } catch (error) {

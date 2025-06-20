@@ -54,10 +54,12 @@ export default function QuizGame() {
                         lesson.givenExperience
                     )
                    
-                    CheckAchievementFirtsLesson(lesson.order, user.lastLessonConcluded);
-                    CheckAchievementLastLesson(lesson.id);
-
-                    updateUser(user?.id, {
+                    await CheckAchievementFirtsLesson(lesson.order, user.lastLessonConcluded);
+                    await CheckAchievementLastLesson(lesson.id);
+                    if (lesson.questions.length === correctCountRef.current) {    
+                        await CheckAchievementAllQuestionsCorrect();
+                }
+                     await updateUser(user?.id, {
                         lastLessonConcluded: lesson.id,
                         level: level,
                         experience: xp,
@@ -65,10 +67,7 @@ export default function QuizGame() {
                     })
                 }
                 finishLesson(lesson)
-                console.log(correctCountRef);
-                if (lesson.questions.length === correctCountRef.current) {    
-                    CheckAchievementAllQuestionsCorrect();
-                }
+                
             }
         }, 2000)
     }

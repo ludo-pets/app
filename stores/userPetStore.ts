@@ -80,7 +80,7 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
                 const oldUser = get().user
                 if (oldUser) {
                     set({ user: { ...oldUser, ...userData } })            
-                    CheckAchievementLevel(oldUser.level, userData.level);
+                    await CheckAchievementLevel(oldUser.level, userData.level);
                     CheckAchievementMoney(oldUser.money, userData.money || oldUser.money);     
                 }
             } else {
@@ -94,7 +94,7 @@ export const useUserPetStore = create<UserPetState>((set, get) => ({
     },
 
     updatePet: async (petId: string, petData: Partial<Pet>) => {
-        set({ loading: true, error: null })
+        // set({ loading: true, error: null })
         try {
             const success = await updatePet(petId, petData)
             if (success) {

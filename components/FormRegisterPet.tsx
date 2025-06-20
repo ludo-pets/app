@@ -94,7 +94,7 @@ export function FormRegisterPet() {
         })
 
         if (!newPet) {
-            console.error('Failed to create pet.')
+            console.log('Failed to create pet.')
             setIsLoading(false)
             return
         }

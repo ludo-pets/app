@@ -47,7 +47,7 @@ export const fetchQuestionById = async(questionId: string): Promise<Question> =>
             throw new Error(`Question with ID ${questionId} does not exist.`)
         }
     } catch (error) {
-        console.error('Error fetching question:', error)
+        console.log('Error fetching question:', error)
         throw new Error('Failed to fetch the question.')
     }
 }

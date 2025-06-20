@@ -63,7 +63,7 @@ export default function GoogleSigninButton() {
                     });
                 }
             } catch (error) {
-                console.error('Erro de autenticação:', error);
+                console.log('Erro de autenticação:', error);
             }
         };
 

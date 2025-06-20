@@ -79,7 +79,7 @@ export default function RootLayout() {
             const saved = await AsyncStorage.getItem('petNeeds')
             return saved ? JSON.parse(saved) : null
         } catch (err) {
-            console.error('Erro ao carregar dados do pet:', err)
+            console.log('Erro ao carregar dados do pet:', err)
             return null
         }
     }

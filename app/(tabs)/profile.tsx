@@ -46,7 +46,7 @@ export default function Profile() {
                 const achievements = await fetchAchievements()
                 setAchievements(achievements)
             } catch (err: any) {
-                console.error('Failed to fetch achievements:', err)
+                console.log('Failed to fetch achievements:', err)
                 setAchievements([])
             }
         }
@@ -92,7 +92,7 @@ export default function Profile() {
                 color: petColor,
             })
         } else {
-            console.error('Pet ID is undefined')
+            console.log('Pet ID is undefined')
         }
         setIsEditing(false)
     }
@@ -193,7 +193,11 @@ export default function Profile() {
 
                     {!isEditing && (
                         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                            {achievements.map((achievement) => (
+                            {achievements.sort((a, b) => {
+                                const aOwned = user?.achievements.includes(a.id) ? 0 : 1
+                                const bOwned = user?.achievements.includes(b.id) ? 0 : 1
+                                return aOwned - bOwned
+                            }).map((achievement) => (
                                 <View key={achievement.id}>
                                     <Achievement
                                         title={achievement.name}

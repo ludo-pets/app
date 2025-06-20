@@ -235,7 +235,7 @@ export const useGame = () => {
       if (err instanceof BoardFilled) {
         setGameOver(true);
       } else {
-        console.error(err);
+        console.log(err);
         throw err;
       }
     }

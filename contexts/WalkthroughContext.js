@@ -78,7 +78,7 @@ export const WalkthroughProvider = ({ children }) => {
                     setIsActive(false)
                 }
             } catch (e) {
-                console.error('Walkthrough: Failed to load status', e)
+                console.log('Walkthrough: Failed to load status', e)
                 setIsActive(false)
             } finally {
                 if (!cancelled) setHasCheckedStorage(true)
@@ -96,7 +96,7 @@ export const WalkthroughProvider = ({ children }) => {
         try {
             await AsyncStorage.setItem(ASYNC_STORAGE_KEY, 'true')
         } catch (e) {
-            console.error('Walkthrough: Failed to save status', e)
+            console.log('Walkthrough: Failed to save status', e)
         }
     }, [])
 

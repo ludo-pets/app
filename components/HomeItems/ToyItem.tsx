@@ -53,7 +53,7 @@ const ToyItem = ({ update, image }: ItemProps) => {
                 <Image
                     style={{
                         width: `100%`,
-                        height: `100%`,
+                        height: '100%',
                         resizeMode: `contain`,
                     }}
                     source={{ uri: image || require('@/assets/images/homescreen/brinquedo.png') }}
@@ -68,11 +68,11 @@ export default ToyItem
 const styles = StyleSheet.create({
     cbox: {
         width: '47%',
-        height: '41.7%',
+        height: '30%',
         position: 'absolute',
         bottom: Platform.OS === 'ios' ? height / 3.7 : height / 3.36,
         right: width / 1.99,
-        justifyContent: 'center',
+        justifyContent: 'flex-end',
         alignItems: 'center',
         display: 'flex',
     },

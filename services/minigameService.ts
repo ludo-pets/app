@@ -18,7 +18,7 @@ export const getMinigameByIdService = async (
         const minigameSnap = await getDoc(minigameRef)
 
         if (!minigameSnap.exists()) {
-            console.error('Minigame não encontrado')
+            console.log('Minigame não encontrado')
             return null
         }
 
@@ -34,7 +34,7 @@ export const getMinigameByIdService = async (
 
         return { minigame }
     } catch (error) {
-        console.error('Erro ao buscar minigame:', error)
+        console.log('Erro ao buscar minigame:', error)
         return null
     }
 }

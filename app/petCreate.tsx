@@ -8,7 +8,7 @@ export default function RegisterPetPage() {
     return (
         <View style={styles.containerBox}>
             <View style={styles.mainContent}>
-                <Image source={require('@/assets/images/logo.png')} />
+                <Image source={require('@/assets/images/ludopets.png')} style={styles.image} />
                 <FormRegisterPet />
                 <Pressable
                     onPress={() => {
@@ -44,4 +44,14 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
     },
+    image: {
+    width: 256,
+    height: 256,
+    borderRadius: 200,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 80,
+  },
 })

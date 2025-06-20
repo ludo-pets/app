@@ -10,7 +10,7 @@ export const getLessonByIdService = async (
         const lessonSnap = await getDoc(lessonRef)
 
         if (!lessonSnap.exists()) {
-            console.error('Lição não encontrada')
+            console.log('Lição não encontrada')
             return null
         }
 
@@ -20,7 +20,7 @@ export const getLessonByIdService = async (
 
         return { lesson }
     } catch (error) {
-        console.error('Erro ao buscar Lição por id:', error)
+        console.log('Erro ao buscar Lição por id:', error)
         return null
     }
 }
@@ -38,7 +38,7 @@ export const getAllLessonsService = async (): Promise<{
 
         return { lessons: lessons.sort((a, b) => a.order - b.order) }
     } catch (error) {
-        console.error('Erro ao buscar Lições:', error)
+        console.log('Erro ao buscar Lições:', error)
         return null
     }
 }
@@ -52,7 +52,7 @@ export const markLessonAsConcluded = async (
         const lessonRef = doc(db, 'Lesson', lessonId)
         await updateDoc(lessonRef, { concluded: true })
     } catch (error) {
-        console.error('Erro ao atualizar lição:', error)
+        console.log('Erro ao atualizar lição:', error)
         return false
     }
     return true

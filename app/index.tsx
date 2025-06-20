@@ -53,7 +53,7 @@ export default function AuthCheck() {
           setReady(true)
         }
       } catch (err) {
-        console.error('AuthCheck fatal:', err)
+        console.log('AuthCheck fatal:', err)
         setReady(true)
       } finally {
         SplashScreen.hideAsync().catch(() => {})

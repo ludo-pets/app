@@ -64,7 +64,7 @@ export default function MinigameScreen() {
 
                 setMinigames(fetchedMinigames)
             } catch (err: any) {
-                console.error('Failed to fetch minigames:', err)
+                console.log('Failed to fetch minigames:', err)
                 setError(
                     err.message || 'Failed to load minigames. Please try again.'
                 )

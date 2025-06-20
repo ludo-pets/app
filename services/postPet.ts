@@ -50,7 +50,7 @@ export const addPet = async (petData: CreatePetData): Promise<Pet | null> => {
 
         return createdPet
     } catch (error) {
-        console.error('Erro ao adicionar Pet:', error)
+        console.log('Erro ao adicionar Pet:', error)
         return null
     }
 }
