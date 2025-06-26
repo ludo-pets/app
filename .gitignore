@@ -41,7 +41,6 @@ yarn-error.*
 .qodo
 
 # build folders
-android/*
 ios/*
 
 # lock files
@@ -53,5 +52,3 @@ package-lock.json
 #Test coverage
 coverage/
 
-# Android build files
-android/*
