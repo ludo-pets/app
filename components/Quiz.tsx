@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
     },
     option: {
-        width: '48%',
+        width: '100%',
         borderWidth: 1,
         borderColor: '#ccc',
         paddingVertical: 12,
@@ -113,5 +113,10 @@ const styles = StyleSheet.create({
         color: '#333',
         fontSize: 16,
         fontWeight: '500',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
+        width: '100%',
     },
 })

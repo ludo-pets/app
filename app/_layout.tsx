@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import * as Notifications from 'expo-notifications'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as Device from 'expo-device'
-import { Platform } from 'react-native'
+import { LogBox, Platform } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import * as React from 'react'
 import * as SplashScreen from 'expo-splash-screen'
@@ -31,6 +31,10 @@ type PetNeeds = {
     lastCleaned: number
     lastPlayed: number
 }
+
+
+LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+LogBox.ignoreAllLogs();//Ignore all log notifications
 
 export default function RootLayout() {
     const [loaded, fontError] = useFonts({

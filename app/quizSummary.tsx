@@ -6,9 +6,9 @@ import { push } from "expo-router/build/global-state/routing";
 import { useEffect, useState } from "react";
 import { Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-export default function quizSummary(){
+export default function quizSummary() {
     const [endSummary, setEndSummary] = useState(false);
-     const {
+    const {
         loading,
         error,
         lesson,
@@ -18,83 +18,83 @@ export default function quizSummary(){
     } = useLessonStore()
 
     const onHandleNext = async () => {
-        if(currentQuestion && lesson) {
+        if (currentQuestion && lesson) {
             const hasNext = await changeToNextQuestion(currentQuestion.id, lesson.questions)
-            
-            if(!hasNext) {
+
+            if (!hasNext) {
                 setEndSummary(true)
             }
         }
-        
-            
+
+
     }
-    useEffect(()=>{
+    useEffect(() => {
         return () => {
             finishLesson(lesson!)
         };
     }, [])
-    useEffect(()=>{
+    useEffect(() => {
 
     }, [currentQuestion])
     return (lesson && currentQuestion) && (
-    <ScrollView 
-        contentContainerStyle={{flex: 1, justifyContent: "space-between"}}
-        showsVerticalScrollIndicator={false}> 
-        <View>
-            <Header
+        <ScrollView
+            contentContainerStyle={{ flex: 1, justifyContent: "space-between" }}
+            showsVerticalScrollIndicator={false}>
+            <View>
+                <Header
                     title="Quiz"
                     backgroundColor="#CFE2A8"
-                    showBackButton = {true}
-            ></Header>
-        </View>
-        <View style={styles.container}>
-            <Image style={styles.image}source={{uri: "https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/quiz-cat.png"}}/>    
-            <Text style={styles.title}>
-                {currentQuestion?.description}
-            </Text>
-            <View style={styles.answers}>
-                {<View style={styles.rightAnswer}>
+                    showBackButton={true}
+                ></Header>
+            </View>
+            <View style={styles.container}>
+                <Image style={styles.image} source={{ uri: "https://projeto-ludo-pets.s3.us-east-1.amazonaws.com/assets/quiz-cat.png" }} />
+                <Text style={styles.title}>
+                    {currentQuestion?.description}
+                </Text>
+                <View style={styles.answers}>
+                    {<View style={styles.rightAnswer}>
                         <Text>{currentQuestion?.answers[currentQuestion.rightAnswer]}</Text>
                     </View>
-                }
-                {currentQuestion?.answers
+                    }
+                    {currentQuestion?.answers
 
-                    .map((ans,index) => index != currentQuestion.rightAnswer && (
-                    <View key={index} style={styles.wrongAnswer}>
-                        <Text 
-                            adjustsFontSizeToFit
-                            numberOfLines={4}
-                            minimumFontScale={0.5}
-                            style={{ width: "100%", textAlign: "center" }}
-                            >
-                                {ans}
-                        </Text>
-                    </View>
-                ))}
-            </View>
-            <Text style={styles.summary}>
-                {currentQuestion?.explanation}
-            </Text>
-            <TouchableOpacity 
-                style={styles.button}
-                onPress={() => onHandleNext()}
-            >
-                <Text style={styles.buttonText}>Avançar</Text>
-            </TouchableOpacity>
-        </View>
-        {
-            endSummary && (<Dialog.Container>
-                <Dialog.Text content="Parabéns!!"/>
-                <Dialog.Text content="Você concluiu a revisão desta lição"/>
-                <Dialog.Button
-                    action={() => router.push("/quiz")}
-                    text="Voltar"
+                        .map((ans, index) => index != currentQuestion.rightAnswer && (
+                            <View key={index} style={styles.wrongAnswer}>
+                                <Text
+                                    adjustsFontSizeToFit
+                                    numberOfLines={4}
+                                    minimumFontScale={0.5}
+                                    style={{ width: "100%", textAlign: "center" }}
+                                >
+                                    {ans}
+                                </Text>
+                            </View>
+                        ))}
+                </View>
+                <Text style={styles.summary}>
+                    {currentQuestion?.explanation}
+                </Text>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => onHandleNext()}
                 >
+                    <Text style={styles.buttonText}>Avançar</Text>
+                </TouchableOpacity>
+            </View>
+            {
+                endSummary && (<Dialog.Container>
+                    <Dialog.Text content="Parabéns!!" />
+                    <Dialog.Text content="Você concluiu a revisão desta lição" />
+                    <Dialog.Button
+                        action={() => router.push("/quiz")}
+                        text="Voltar"
+                    >
 
-                </Dialog.Button>
-            </Dialog.Container>
-        )}
-    </ScrollView>
+                    </Dialog.Button>
+                </Dialog.Container>
+                )}
+        </ScrollView>
     )
 }
 
@@ -129,9 +129,11 @@ const styles = StyleSheet.create({
         width: "90%",
     },
     rightAnswer: {
-        backgroundColor :"#D9E8B9",
+        backgroundColor: "#D9E8B9",
         padding: 15,
         fontSize: 20,
+        display: "flex",
+        justifyContent: "center",
         alignItems: "center",
         color: "#5B5B5B",
         borderColor: "#5B5B5B",
@@ -142,7 +144,7 @@ const styles = StyleSheet.create({
         minHeight: 60,
     },
     wrongAnswer: {
-        backgroundColor :"#EDB0B0",
+        backgroundColor: "#EDB0B0",
         padding: 2,
         color: "#5B5B5B",
         fontSize: 14,
@@ -173,7 +175,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
 
         boxShadow: "rgba(0,0,0,0.15) 5px 5px 5px"
-        
+
     },
     buttonText: {
         color: "#fff",
