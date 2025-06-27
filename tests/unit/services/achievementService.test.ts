@@ -1,21 +1,21 @@
-const mockDb = { type: 'mockDatabase' }
-
-jest.doMock('firebase/firestore', () => ({
-    getFirestore: jest.fn().mockReturnValue(mockDb),
-    collection: jest.fn(),
-    getDocs: jest.fn(),
-}))
-
-import { fetchAchievements } from '@/services/achievementService'
 import {
+    getFirestore,
+    collection,
+    getDocs,
     QuerySnapshot,
     DocumentData,
-    getDocs,
-    collection,
 } from 'firebase/firestore'
+import { fetchAchievements } from '@/services/achievementService'
+import Achievement from '@/dtos/Achievement'
 
-const mockGetDocs = getDocs as jest.Mock<Promise<QuerySnapshot<DocumentData>>>
+jest.mock('@/firebaseConfig', () => ({
+    firebaseApp: {},
+}))
+jest.mock('firebase/firestore')
+
+const mockGetDocs = getDocs as jest.Mock
 const mockCollection = collection as jest.Mock
+const mockGetFirestore = getFirestore as jest.Mock
 
 describe('AchievementService', () => {
     beforeEach(() => {
@@ -23,17 +23,17 @@ describe('AchievementService', () => {
     })
 
     describe('fetchAchievements', () => {
-        it('should return a list of achievements on successful fetch', async () => {
-            const mockAchievementsData = [
+        it('deve retornar uma lista de conquistas em caso de sucesso', async () => {
+            const mockAchievementsData: Achievement[] = [
                 {
                     id: 'achiev1',
-                    name: 'First Step',
-                    message: 'You started your journey.',
+                    name: 'Iniciante',
+                    message: 'Primeira lição concluída.',
                 },
                 {
                     id: 'achiev2',
-                    name: 'Collector',
-                    message: 'You bought 10 items.',
+                    name: 'Mestre',
+                    message: 'Todas as lições concluídas.',
                 },
             ]
 
@@ -41,6 +41,7 @@ describe('AchievementService', () => {
                 data: () => achiev,
             }))
             mockGetDocs.mockResolvedValue({
+                docs: mockDocs,
                 forEach: (callback: (doc: any) => void) =>
                     mockDocs.forEach(callback),
             } as unknown as QuerySnapshot<DocumentData>)
@@ -48,25 +49,28 @@ describe('AchievementService', () => {
             const achievements = await fetchAchievements()
 
             expect(achievements).toHaveLength(2)
-            expect(achievements[0].name).toBe('First Step')
-            expect(mockCollection).toHaveBeenCalledWith(mockDb, 'Achievements')
+            expect(achievements[0].name).toBe('Iniciante')
+            expect(mockCollection).toHaveBeenCalledWith(
+                undefined,
+                'Achievements'
+            )
         })
 
-        it('should return an empty array if no achievements are found', async () => {
+        it('deve retornar um array vazio se nenhuma conquista for encontrada', async () => {
             mockGetDocs.mockResolvedValue({
-                forEach: (callback: (doc: any) => void) => {},
+                docs: [],
+                forEach: (callback: (doc: any) => void) => [].forEach(callback),
             } as unknown as QuerySnapshot<DocumentData>)
+
             const achievements = await fetchAchievements()
             expect(achievements).toEqual([])
         })
 
-        it('should throw an error if fetching fails', async () => {
-            mockGetDocs.mockRejectedValue(
-                new Error('Firestore connection error')
-            )
-            await expect(fetchAchievements()).rejects.toThrow(
-                'Failed to fetch achievements.'
-            )
+        it('deve lançar um erro se a busca no Firestore falhar', async () => {
+            const errorMessage = 'Failed to fetch achievements.'
+            mockGetDocs.mockRejectedValue(new Error(errorMessage))
+
+            await expect(fetchAchievements()).rejects.toThrow(errorMessage)
         })
     })
 })

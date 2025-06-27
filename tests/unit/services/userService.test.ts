@@ -2,6 +2,7 @@ import {
     getUserWithPetByEmail,
     getUserDataByEmail,
     updateUser,
+    createUser,
 } from '@/services/userService'
 import { getPetDataById } from '@/services/petService'
 import {
@@ -11,151 +12,188 @@ import {
     query,
     where,
     collection,
+    setDoc,
 } from 'firebase/firestore'
+import { showToast } from '@/utils/Toast'
 import User from '@/dtos/User'
 import { Pet } from '@/dtos/Pet'
 
 jest.mock('@/firebaseConfig', () => ({ db: {} }))
 jest.mock('firebase/firestore')
 jest.mock('@/services/petService')
+jest.mock('@/utils/Toast')
 
 const mockedGetDocs = getDocs as jest.Mock
-const mockedDoc = doc as jest.Mock
+const mockedSetDoc = setDoc as jest.Mock
 const mockedUpdateDoc = updateDoc as jest.Mock
 const mockedGetPetDataById = getPetDataById as jest.Mock
 const mockedQuery = query as jest.Mock
-const mockedWhere = where as jest.Mock
 const mockedCollection = collection as jest.Mock
+const mockedWhere = where as jest.Mock
+const mockedDoc = doc as jest.Mock
 
 describe('userService', () => {
+    let consoleSpy: jest.SpyInstance
+
     beforeEach(() => {
         jest.clearAllMocks()
+        consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {})
+    })
+
+    afterEach(() => {
+        consoleSpy.mockRestore()
     })
 
     describe('getUserWithPetByEmail', () => {
-        const email = 'test@example.com'
-        const mockUserWithPet: Partial<User> = {
-            email,
-            pet: 'pet1',
-        }
-        const mockUserWithoutPet: Partial<User> = {
-            email,
-            pet: undefined,
-        }
+        const email = 'dono@pet.com'
+        const mockUser: Partial<User> = { email, pet: 'pet1' }
         const mockPet: Partial<Pet> = { id: 'pet1', name: 'Rex' }
 
-        it('should return user and pet data on success', async () => {
+        it('deve retornar o usuário e o pet em caso de sucesso', async () => {
             mockedGetDocs.mockResolvedValue({
-                docs: [{ data: () => mockUserWithPet }],
+                docs: [{ data: () => mockUser }],
             })
             mockedGetPetDataById.mockResolvedValue(mockPet)
+
             const result = await getUserWithPetByEmail(email)
-            expect(result?.user).toEqual(mockUserWithPet)
+
+            expect(result).not.toBeNull()
+            expect(result?.user).toEqual(mockUser)
             expect(result?.pet).toEqual(mockPet)
         })
 
-        it('should return null if userData is not found', async () => {
+        it('deve retornar nulo se o usuário não for encontrado', async () => {
             mockedGetDocs.mockResolvedValue({ empty: true })
             const result = await getUserWithPetByEmail(email)
             expect(result).toBeNull()
         })
 
-        it('should return null if user has no pet reference', async () => {
+        it('deve retornar nulo se o usuário não tiver um pet associado', async () => {
             mockedGetDocs.mockResolvedValue({
-                docs: [{ data: () => mockUserWithoutPet }],
+                docs: [{ data: () => ({ ...mockUser, pet: null }) }],
             })
             const result = await getUserWithPetByEmail(email)
             expect(result).toBeNull()
-            expect(mockedGetPetDataById).not.toHaveBeenCalled()
         })
 
-        it('should return null if petData is not found', async () => {
+        it('deve retornar nulo se o pet associado não for encontrado', async () => {
             mockedGetDocs.mockResolvedValue({
-                docs: [{ data: () => mockUserWithPet }],
+                docs: [{ data: () => mockUser }],
             })
             mockedGetPetDataById.mockResolvedValue(null)
             const result = await getUserWithPetByEmail(email)
             expect(result).toBeNull()
         })
 
-        it('should return null and log error if a dependency throws an error', async () => {
-            const dbError = new Error('Database connection failed')
-            mockedGetDocs.mockRejectedValue(dbError)
-            const consoleSpy = jest
-                .spyOn(console, 'error')
-                .mockImplementation(() => {})
+        it('deve retornar nulo e registrar um erro se a busca falhar', async () => {
+            const error = new Error('Falha na rede')
+            mockedGetDocs.mockRejectedValue(error)
             const result = await getUserWithPetByEmail(email)
             expect(result).toBeNull()
             expect(consoleSpy).toHaveBeenCalledWith(
                 'Erro ao buscar User e Pet:',
-                dbError
+                error
             )
-            consoleSpy.mockRestore()
         })
     })
 
     describe('getUserDataByEmail', () => {
-        const validExistingEmail = 'valid@email.com'
-        const invalidEmail = 'invalid_email'
+        it('deve retornar os dados do usuário se o e-mail for válido e o usuário existir', async () => {
+            const mockUserData = { id: 'user1', email: 'user@example.com' }
+            mockedGetDocs.mockResolvedValue({
+                docs: [{ data: () => mockUserData }],
+                empty: false,
+            })
 
-        it('should reject invalid email format', async () => {
-            const consoleSpy = jest
-                .spyOn(console, 'error')
-                .mockImplementation(() => {})
-            const res = await getUserDataByEmail(invalidEmail)
-            expect(res).toBeNull()
+            const result = await getUserDataByEmail('user@example.com')
+            expect(result).toEqual(mockUserData)
+        })
+
+        it('deve retornar nulo para um formato de e-mail inválido', async () => {
+            const result = await getUserDataByEmail('emailinvalido')
+            expect(result).toBeNull()
             expect(consoleSpy).toHaveBeenCalledWith(
                 'Formato do e-mail inválido'
             )
-            consoleSpy.mockRestore()
         })
 
-        it('should return null when no user exists', async () => {
-            const consoleSpy = jest
-                .spyOn(console, 'error')
-                .mockImplementation(() => {})
-            mockedGetDocs.mockResolvedValueOnce({ empty: true })
-            const res = await getUserDataByEmail('valid_non_existing@email.com')
-            expect(res).toBeNull()
+        it('deve retornar nulo se o usuário não for encontrado no banco de dados', async () => {
+            mockedGetDocs.mockResolvedValue({ empty: true })
+            const result = await getUserDataByEmail('naoexiste@example.com')
+            expect(result).toBeNull()
             expect(consoleSpy).toHaveBeenCalledWith('User não encontrado')
-            consoleSpy.mockRestore()
+        })
+    })
+
+    describe('createUser', () => {
+        it('deve criar um novo usuário e retorná-lo', async () => {
+            const params = {
+                id: 'user123',
+                email: 'new@user.com',
+                newPetId: 'pet456',
+            }
+            mockedSetDoc.mockResolvedValue(undefined)
+            const result = await createUser(params)
+            expect(result?.email).toBe(params.email)
+            expect(mockedSetDoc).toHaveBeenCalled()
         })
 
-        it('should return user data when found', async () => {
-            const mockedUserData = { id: 'u1', email: validExistingEmail }
-            mockedGetDocs.mockResolvedValueOnce({
-                docs: [{ data: () => mockedUserData }],
-            })
-            const res = await getUserDataByEmail(validExistingEmail)
-            expect(res).toEqual(mockedUserData)
+        it('deve retornar nulo se a escrita no Firestore falhar', async () => {
+            const error = new Error('Falha de escrita')
+            mockedSetDoc.mockRejectedValue(error)
+            const params = {
+                id: 'user123',
+                email: 'new@user.com',
+                newPetId: 'pet456',
+            }
+            const result = await createUser(params)
+            expect(result).toBeNull()
+            expect(consoleSpy).toHaveBeenCalledWith(
+                'createUser: Firestore write failed ->',
+                error
+            )
         })
     })
 
     describe('updateUser', () => {
-        it('returns false for empty userId', async () => {
-            expect(await updateUser('', { money: 350 })).toBe(false)
+        it('deve retornar verdadeiro em caso de sucesso na atualização', async () => {
+            mockedUpdateDoc.mockResolvedValue(undefined)
+            const result = await updateUser('user1', { money: 500 })
+            expect(result).toBe(true)
+            expect(mockedUpdateDoc).toHaveBeenCalled()
         })
 
-        it('returns false for empty userData', async () => {
-            expect(await updateUser('u1', {})).toBe(false)
+        it('deve retornar falso se userId for nulo ou vazio', async () => {
+            const result = await updateUser('', { money: 100 })
+            expect(result).toBe(false)
+            expect(mockedUpdateDoc).not.toHaveBeenCalled()
         })
 
-        it('returns true when update succeeds', async () => {
-            mockedUpdateDoc.mockResolvedValueOnce(undefined)
-            expect(await updateUser('u1', { email: 'a@b.com' })).toBe(true)
+        it('deve retornar falso se userData for um objeto vazio', async () => {
+            const result = await updateUser('user1', {})
+            expect(result).toBe(false)
+            expect(mockedUpdateDoc).not.toHaveBeenCalled()
         })
 
-        it('returns false when updateDoc throws', async () => {
-            mockedUpdateDoc.mockRejectedValueOnce(new Error())
-            const consoleSpy = jest
-                .spyOn(console, 'error')
-                .mockImplementation(() => {})
-            expect(await updateUser('u1', { email: 'a@b.com' })).toBe(false)
+        it('deve retornar falso e chamar showToast após um erro de atualização', async () => {
+            jest.useFakeTimers()
+            const error = new Error('Falha na atualização')
+            mockedUpdateDoc.mockRejectedValue(error)
+            const result = await updateUser('u1', { money: 100 })
+
+            expect(result).toBe(false)
             expect(consoleSpy).toHaveBeenCalledWith(
                 'Erro ao atualizar User:',
-                expect.any(Error)
+                error
             )
-            consoleSpy.mockRestore()
+
+            jest.runAllTimers()
+
+            expect(showToast).toHaveBeenCalledWith(
+                'Erro ao atualizar usuário',
+                'error'
+            )
+            jest.useRealTimers()
         })
     })
 })

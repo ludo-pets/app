@@ -104,7 +104,7 @@ export async function duplicateDocument() {
 
     console.log(petSnap.data())
 
-    if (petSnap) {
+    if (petSnap.exists()) {
         const itemCollectionRef = collection(db, 'User')
 
         const newPet = await addDoc(itemCollectionRef, petSnap.data())

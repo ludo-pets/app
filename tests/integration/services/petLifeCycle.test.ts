@@ -1,5 +1,11 @@
 import { addPet, updatePet, CreatePetData } from '@/services/petService'
 import { Pet } from '@/dtos/Pet'
+import { updateDoc } from 'firebase/firestore'
+
+jest.mock('../../../firebaseConfig', () => ({
+    db: { type: 'mock-db' },
+    auth: { type: 'mock-auth' },
+}))
 
 const dbStore: { [key: string]: { [id: string]: any } } = {
     Pet: {},
@@ -7,11 +13,15 @@ const dbStore: { [key: string]: { [id: string]: any } } = {
 
 jest.mock('firebase/firestore', () => ({
     getFirestore: () => ({ type: 'mockDb' }),
-    doc: (_db: any, collection: string, id: string) => ({ collection, id }),
+    doc: (_db: any, collection: string, id: string) => ({
+        _path: `${collection}/${id}`,
+        collection,
+        id,
+    }),
     collection: (_db: any, name: string) => ({ name }),
     addDoc: jest.fn(async (collectionRef, data) => {
-        const id = `pet_${Math.random()}`
-        dbStore[collectionRef.name][id] = data
+        const id = 'new-pet-id-123'
+        dbStore[collectionRef.name][id] = { ...data, id }
         return { id }
     }),
     updateDoc: jest.fn(async (docRef, data) => {
@@ -21,7 +31,6 @@ jest.mock('firebase/firestore', () => ({
     }),
 }))
 
-import { updateDoc } from 'firebase/firestore'
 const mockUpdateDoc = updateDoc as jest.Mock
 
 describe('Integration Test: Pet Service Lifecycle', () => {
@@ -41,16 +50,21 @@ describe('Integration Test: Pet Service Lifecycle', () => {
 
         expect(createdPet).not.toBeNull()
         expect(createdPet?.name).toBe('Buddy')
+
         const petId = createdPet!.id
+
+        expect(dbStore.Pet[petId]).toBeDefined()
         expect(dbStore.Pet[petId].name).toBe('Buddy')
 
         const updatedData: Partial<Pet> = { name: 'Super Buddy' }
+
         const updateSuccess = await updatePet(petId, updatedData)
 
         expect(updateSuccess).toBe(true)
         expect(dbStore.Pet[petId].name).toBe('Super Buddy')
+        expect(mockUpdateDoc).toHaveBeenCalledTimes(1)
         expect(mockUpdateDoc).toHaveBeenCalledWith(
-            { collection: 'Pet', id: petId },
+            expect.objectContaining({ _path: `Pet/${petId}` }),
             updatedData
         )
     })

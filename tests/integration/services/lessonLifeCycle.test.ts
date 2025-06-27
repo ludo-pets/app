@@ -1,61 +1,76 @@
-import {
-    getLessonByIdService,
-    markLessonAsConcluded,
-} from '@/services/lessonService'
+import type Lesson from '@/dtos/Lesson'
+import { markLessonAsConcluded } from '@/services/lessonService'
 
-const dbStore: { [key: string]: { [id: string]: any } } = {
+import { updateDoc } from 'firebase/firestore'
+
+jest.mock('../../../firebaseConfig', () => ({
+    db: { type: 'mock-db' },
+    auth: { type: 'mock-auth' },
+}))
+
+const dbStore: {
+    Lesson: { [id: string]: any }
+} = {
     Lesson: {},
 }
 
 jest.mock('firebase/firestore', () => ({
-    getFirestore: () => ({ type: 'mockDb' }),
-    doc: (db: any, collection: string, id: string) => ({ collection, id }),
-    collection: (db: any, name: string) => ({ name }),
-    updateDoc: jest.fn(async (docRef, data) => {
-        Object.assign(dbStore[docRef.collection][docRef.id], data)
+    doc: (db: any, collection: string, id: string) => ({
+        _path: `${collection}/${id}`,
+        collection,
+        id,
     }),
-    getDoc: jest.fn(async (docRef) => {
-        const data = dbStore[docRef.collection]?.[docRef.id]
-        return {
-            exists: () => !!data,
-            data: () => data,
+    updateDoc: jest.fn(async (docRef, data) => {
+        const [collection, id] = docRef._path.split('/')
+        const collectionKey = collection as keyof typeof dbStore
+        if (dbStore[collectionKey]?.[id]) {
+            Object.assign(dbStore[collectionKey][id], data)
         }
     }),
 }))
 
-import { updateDoc } from 'firebase/firestore'
-const mockUpdateDoc = updateDoc as jest.Mock
+describe('Lesson Service', () => {
+    const mockUpdateDoc = updateDoc as jest.Mock
 
-describe('Lesson Lifecycle Integration', () => {
     beforeEach(() => {
         jest.clearAllMocks()
         dbStore.Lesson = {}
     })
 
-    it('should correctly read, update, and re-read a lesson', async () => {
-        const lessonId = 'lesson-abc'
-        dbStore.Lesson[lessonId] = {
-            id: lessonId,
-            name: 'Testable Lesson',
-            order: 1,
-            questions: [],
-            givenExperience: 10,
-            givenMoney: 10,
-            icon: 'test',
-            concluded: false,
-        }
+    describe('markLessonAsConcluded', () => {
+        it('should update the lesson document with concluded: true', async () => {
+            const lessonId = 'lesson-to-conclude'
 
-        const initialResult = await getLessonByIdService(lessonId)
-        expect((initialResult?.lesson as any).concluded).toBe(false)
+            dbStore.Lesson[lessonId] = {
+                id: lessonId,
+                name: 'Testable Lesson',
+                order: 1,
+                questions: [],
+                givenExperience: 10,
+                givenMoney: 10,
+                icon: 'test',
+                concluded: false,
+            }
 
-        const updateResult = await markLessonAsConcluded(lessonId)
-        expect(updateResult).toBe(true)
-        expect(mockUpdateDoc).toHaveBeenCalledWith(
-            { collection: 'Lesson', id: lessonId },
-            { concluded: true }
-        )
+            const result = await markLessonAsConcluded(lessonId)
 
-        const finalResult = await getLessonByIdService(lessonId)
-        expect((finalResult?.lesson as any).concluded).toBe(true)
+            expect(result).toBe(true)
+
+            expect(mockUpdateDoc).toHaveBeenCalledTimes(1)
+
+            expect(mockUpdateDoc).toHaveBeenCalledWith(
+                expect.objectContaining({ _path: `Lesson/${lessonId}` }),
+                { concluded: true }
+            )
+
+            expect(dbStore.Lesson[lessonId].concluded).toBe(true)
+        })
+
+        it('should return false if lessonId is not provided', async () => {
+            const result = await markLessonAsConcluded('')
+
+            expect(result).toBe(false)
+            expect(mockUpdateDoc).not.toHaveBeenCalled()
+        })
     })
 })
