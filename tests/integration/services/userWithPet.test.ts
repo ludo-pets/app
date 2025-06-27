@@ -1,45 +1,48 @@
-import '@/services/petService'
 import { getUserWithPetByEmail } from '@/services/userService'
 import { getDocs } from 'firebase/firestore'
+import type { Pet } from '@/dtos/Pet'
+import type User from '@/dtos/User'
 
-const dbStore: { [key: string]: { [id: string]: any } } = {
+jest.mock('../../../firebaseConfig', () => ({
+    db: { type: 'mock-db' },
+    auth: { type: 'mock-auth' },
+}))
+
+const dbStore: {
+    Pet: { [id: string]: Pet }
+    User: { [id: string]: User }
+} = {
     Pet: {},
     User: {},
 }
 
-jest.mock('firebase/firestore', () => {
-    const mockGetDocsFn = jest.fn(async (query) => {
-        const { collectionRef, whereClause } = query
-        const collectionData = dbStore[collectionRef.name] || {}
-        const results = Object.values(collectionData).filter(
-            (doc: any) => doc[whereClause.field] === whereClause.value
-        )
-        return {
-            empty: results.length === 0,
-            docs: results.map((doc) => ({ data: () => doc, id: doc.id })),
+jest.mock('firebase/firestore', () => ({
+    getFirestore: () => ({ type: 'mockDb' }),
+    doc: (_db: any, collection: string, id: string) => ({ collection, id }),
+    getDoc: jest.fn(async (docRef) => {
+        const data = dbStore[docRef.collection as 'User' | 'Pet']?.[docRef.id]
+        return { exists: () => !!data, data: () => data }
+    }),
+    collection: (_db: any, name: string) => ({ name }),
+    where: (field: string, op: string, value: any) => ({ field, op, value }),
+    query: (collectionRef: any, whereClause: any) => ({
+        collectionRef,
+        whereClause,
+    }),
+    getDocs: jest.fn(async (query) => {
+        if (query.collectionRef.name === 'User') {
+            const { whereClause } = query
+            const results = Object.values(dbStore.User).filter(
+                (doc) => (doc as any)[whereClause.field] === whereClause.value
+            )
+            return {
+                empty: results.length === 0,
+                docs: results.map((doc) => ({ data: () => doc, id: doc.id })),
+            }
         }
-    })
-
-    return {
-        getFirestore: () => ({ type: 'mockDb' }),
-        doc: (_db: any, collection: string, id: string) => ({ collection, id }),
-        getDoc: jest.fn(async (docRef) => {
-            const data = dbStore[docRef.collection]?.[docRef.id]
-            return { exists: () => !!data, data: () => data }
-        }),
-        collection: (_db: any, name: string) => ({ name }),
-        where: (field: string, op: string, value: any) => ({
-            field,
-            op,
-            value,
-        }),
-        query: (collectionRef: any, whereClause: any) => ({
-            collectionRef,
-            whereClause,
-        }),
-        getDocs: mockGetDocsFn,
-    }
-})
+        return { empty: true, docs: [] }
+    }),
+}))
 
 const mockGetDocs = getDocs as jest.Mock
 
@@ -67,6 +70,7 @@ describe('Integration Test: User and Pet Services', () => {
                 wc: 'w1',
                 floor: 'fl1',
                 wallpaper: 'wp1',
+                water: 'h2o',
             },
             purchasedItems: [],
             wellBeing: {
@@ -85,7 +89,7 @@ describe('Integration Test: User and Pet Services', () => {
             experience: 100,
             level: 5,
             money: 500,
-            lastLessonConcluded: '',
+            lastLessonConcluded: null,
             notifications: true,
         }
 
@@ -94,24 +98,33 @@ describe('Integration Test: User and Pet Services', () => {
         expect(result).not.toBeNull()
         expect(result?.user.email).toBe(userEmail)
         expect(result?.pet.name).toBe('Fido')
-        expect(result?.user.pet).toEqual(result?.pet.id)
+        expect(result?.user.pet).toBe(result?.pet.id)
     })
 
-    it('should return null if the database call fails', async () => {
-        const dbError = new Error('Firestore is offline')
-        mockGetDocs.mockRejectedValueOnce(dbError)
-        const consoleSpy = jest
-            .spyOn(console, 'error')
-            .mockImplementation(() => {})
-
-        const result = await getUserWithPetByEmail('any@email.com')
+    it('should return null if the user is not found', async () => {
+        const result = await getUserWithPetByEmail('nonexistent@email.com')
 
         expect(result).toBeNull()
-        expect(consoleSpy).toHaveBeenCalledWith(
-            'Erro ao buscar User e Pet:',
-            dbError
-        )
+    })
 
-        consoleSpy.mockRestore()
+    it('should return null if the pet associated with the user is not found', async () => {
+        const userId = 'user002'
+        const userEmail = 'owner-no-pet@tamagotchi.com'
+
+        dbStore.User[userId] = {
+            id: userId,
+            email: userEmail,
+            pet: 'nonexistent-pet-id',
+            achievements: [],
+            experience: 100,
+            level: 5,
+            money: 500,
+            lastLessonConcluded: null,
+            notifications: true,
+        }
+
+        const result = await getUserWithPetByEmail(userEmail)
+
+        expect(result).toBeNull()
     })
 })
